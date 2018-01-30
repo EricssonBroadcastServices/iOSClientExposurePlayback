@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 /// The device info object should be sent once per playback session, preferably at the start of the session.
 internal struct DeviceInfo {

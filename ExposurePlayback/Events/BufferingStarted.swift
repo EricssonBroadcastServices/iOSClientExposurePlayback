@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 extension Playback {
     /// Playback paused temporarily as the player ran out of data to show. 

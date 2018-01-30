@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 extension Playback {
     /// Player has resumed playing the asset that was paused.

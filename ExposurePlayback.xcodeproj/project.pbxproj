@@ -33,7 +33,6 @@
 		76A89C5A20207AB200C23579 /* ServerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C4520207AB100C23579 /* ServerTimeProvider.swift */; };
 		76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5D20207B2400C23579 /* ExposureFairplayRequester.swift */; };
 		76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5E20207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift */; };
-		76A89C6420207B2400C23579 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5F20207B2400C23579 /* HeartbeatsProvider.swift */; };
 		76A89C6520207B2400C23579 /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C6020207B2400C23579 /* Playable.swift */; };
 		76A89C8F2020808900C23579 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C922020808900C23579 /* Alamofire.framework */; };
 		76A89C902020808900C23579 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C932020808900C23579 /* Exposure.framework */; };
@@ -51,11 +50,9 @@
 		76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */; };
 		76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
 		76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */; };
-		76A89D652020F36400C23579 /* AnalyticsBatch+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */; };
 		76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D642020F36400C23579 /* UIDevice+Extensions.swift */; };
 		76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */; };
 		76A89D862020F41F00C23579 /* Aborted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6A2020F41F00C23579 /* Aborted.swift */; };
-		76A89D872020F41F00C23579 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */; };
 		76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */; };
 		76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6D2020F41F00C23579 /* BitrateChanged.swift */; };
 		76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6E2020F41F00C23579 /* BufferingStarted.swift */; };
@@ -135,7 +132,6 @@
 		76A89C4520207AB100C23579 /* ServerTimeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTimeProvider.swift; sourceTree = "<group>"; };
 		76A89C5D20207B2400C23579 /* ExposureFairplayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureFairplayRequester.swift; sourceTree = "<group>"; };
 		76A89C5E20207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureStreamingAnalyticsProvider.swift; sourceTree = "<group>"; };
-		76A89C5F20207B2400C23579 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
 		76A89C6020207B2400C23579 /* Playable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playable.swift; sourceTree = "<group>"; };
 		76A89C922020808900C23579 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A89C932020808900C23579 /* Exposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Exposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,11 +149,9 @@
 		76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
 		76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChannelSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
 		76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StartTime.swift"; sourceTree = "<group>"; };
-		76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnalyticsBatch+Extensions.swift"; sourceTree = "<group>"; };
 		76A89D642020F36400C23579 /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureAnalytics.swift; sourceTree = "<group>"; };
 		76A89D6A2020F41F00C23579 /* Aborted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aborted.swift; sourceTree = "<group>"; };
-		76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
 		76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetIdentifier.swift; sourceTree = "<group>"; };
 		76A89D6D2020F41F00C23579 /* BitrateChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitrateChanged.swift; sourceTree = "<group>"; };
 		76A89D6E2020F41F00C23579 /* BufferingStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStarted.swift; sourceTree = "<group>"; };
@@ -363,7 +357,6 @@
 			children = (
 				76A89C5D20207B2400C23579 /* ExposureFairplayRequester.swift */,
 				76A89C5E20207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift */,
-				76A89C5F20207B2400C23579 /* HeartbeatsProvider.swift */,
 				76A89C6020207B2400C23579 /* Playable.swift */,
 			);
 			path = Protocols;
@@ -397,7 +390,6 @@
 		76A89D622020F36400C23579 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */,
 				76A89D642020F36400C23579 /* UIDevice+Extensions.swift */,
 			);
 			path = Extensions;
@@ -407,7 +399,6 @@
 			isa = PBXGroup;
 			children = (
 				76A89D6A2020F41F00C23579 /* Aborted.swift */,
-				76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */,
 				76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */,
 				76A89D6D2020F41F00C23579 /* BitrateChanged.swift */,
 				76A89D6E2020F41F00C23579 /* BufferingStarted.swift */,
@@ -558,7 +549,6 @@
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
 				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
 				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,
-				76A89C6420207B2400C23579 /* HeartbeatsProvider.swift in Sources */,
 				76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */,
 				76A89C4A20207AB200C23579 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
@@ -582,7 +572,6 @@
 				76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */,
 				76A89C5320207AB200C23579 /* AssetSource.swift in Sources */,
 				76A89C5820207AB200C23579 /* MonotonicTimeService.swift in Sources */,
-				76A89D652020F36400C23579 /* AnalyticsBatch+Extensions.swift in Sources */,
 				76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A89D9B2020F41F00C23579 /* PlaybackOffset.swift in Sources */,
@@ -603,7 +592,6 @@
 				76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */,
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
 				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
-				76A89D872020F41F00C23579 /* AnalyticsEvent.swift in Sources */,
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
 				76A89C6520207B2400C23579 /* Playable.swift in Sources */,
 				76A89D952020F41F00C23579 /* Error.swift in Sources */,

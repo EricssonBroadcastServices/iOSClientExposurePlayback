@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Exposure
 
 extension Playback {
     /// Playback stopped because of an error.
