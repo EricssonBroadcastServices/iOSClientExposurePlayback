@@ -133,6 +133,5 @@ class ContractRestrictionsServiceSpec: QuickSpec {
             "productId":"productId"
         ]
         return json.decode(PlaybackEntitlement.self)!
-//        return PlaybackEntitlement(playTokenExpiration: "playTokenExpiration", mediaLocator: URL(string: "http://www.example.com")!, playSessionId: "playSessionId", live: false, ffEnabled: ffEnabled, timeshiftEnabled: timeshiftEnabled, rwEnabled: rwEnabled, airplayBlocked: false, playToken: nil, fairplay: nil, licenseExpiration: nil, licenseExpirationReason: nil, licenseActivation: nil, entitlementType: nil, minBitrate: nil, maxBitrate: nil, maxResHeight: nil, mdnRequestRouterUrl: nil, lastViewedOffset: nil, lastViewedTime: nil, liveTime: nil, productId: nil)
     }
 }

@@ -48,6 +48,9 @@
 		76A89CFC202098CA00C23579 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D01202098CA00C23579 /* Player.framework */; };
 		76A89CFD202098CA00C23579 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D02202098CA00C23579 /* Quick.framework */; };
 		76A89D0420209A2700C23579 /* JsonDecoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0320209A2700C23579 /* JsonDecoding.swift */; };
+		76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */; };
+		76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
+		76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +117,9 @@
 		76A89D01202098CA00C23579 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A89D02202098CA00C23579 /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A89D0320209A2700C23579 /* JsonDecoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDecoding.swift; sourceTree = "<group>"; };
+		76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
+		76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChannelSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
+		76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StartTime.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +194,7 @@
 				76A89CF52020958000C23579 /* ContractRestrictionsServiceSpec.swift */,
 				76A89CF32020958000C23579 /* MonotonicTimeServiceSpec.swift */,
 				76A89CF42020958000C23579 /* ProgramServiceSpec.swift */,
+				76A89D0520209E7400C23579 /* StartTime */,
 				76A89C0B202072D100C23579 /* Info.plist */,
 				76A89D0320209A2700C23579 /* JsonDecoding.swift */,
 			);
@@ -304,6 +311,16 @@
 				76A89C942020808900C23579 /* Player.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		76A89D0520209E7400C23579 /* StartTime */ = {
+			isa = PBXGroup;
+			children = (
+				76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */,
+				76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */,
+				76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */,
+			);
+			path = StartTime;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -451,10 +468,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */,
 				76A89D0420209A2700C23579 /* JsonDecoding.swift in Sources */,
 				76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */,
+				76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */,
 				76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */,
 				76A89CF82020958000C23579 /* ContractRestrictionsServiceSpec.swift in Sources */,
+				76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
