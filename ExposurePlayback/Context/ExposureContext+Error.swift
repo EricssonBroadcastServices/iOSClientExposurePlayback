@@ -1,9 +1,9 @@
 //
-//  ExposureContext.swift
-//  Exposure
+//  ExposureContext+Error.swift
+//  ExposurePlayback
 //
-//  Created by Fredrik Sjöberg on 2017-11-27.
-//  Copyright © 2017 emp. All rights reserved.
+//  Created by Fredrik Sjöberg on 2018-01-30.
+//  Copyright © 2018 emp. All rights reserved.
 //
 
 import Foundation
@@ -166,60 +166,5 @@ extension ExposureContext.Error.FairplayError {
         case .serverPlaybackContext(error: _): return 314
         case .contentInformationRequestMissing: return 315
         }
-    }
-}
-
-/// Defines the `MediaContext` to be used when contacting *Exposure*.
-///
-/// Allows retrieval and processing of `PlaybackEntitlement`s through designated extensions on `Player`.
-public class ExposureContext: MediaContext {
-    
-    public enum Warning: WarningMessage {
-        public var message: String { return "TODO" }
-    }
-    
-    public typealias ContextWarning = Warning
-    
-    /// *Exposure* related errors
-    public typealias ContextError = Error
-    
-    /// Source object encapsulating a fetched `PlaybackEntitlement`
-    public typealias Source = ExposureSource
-    
-    /// Generators used to produce the relevant `AnalyticsProvider`
-    public var analyticsGenerators: [(Source?) -> AnalyticsProvider] = []
-    
-    /// Exposure environment used for the active session.
-    public let environment: Environment
-    
-    /// Token identifying the active session.
-    public let sessionToken: SessionToken
-    
-    /// Service that handles synchronization of local device time with server time
-    public let monotonicTimeService: MonotonicTimeService
-    
-    /// Service that manages entitlement validation on currently active program
-    internal var programService: ProgramService?
-    
-    /// Service that manages contract restrictions
-    internal let contractRestrictionsService: ContractRestrictionsService
-    
-    /// Tracks the internal programChanged callback
-    internal var onProgramChanged: (Program?, Source) -> Void = { _,_ in }
-    
-    /// Tracks the internal entitlementResponse callback
-    internal var onEntitlementResponse: (PlaybackEntitlement, Source) -> Void = { _,_ in }
-    
-    internal var playbackProperties: PlaybackProperties = PlaybackProperties()
-    
-    public init(environment: Environment, sessionToken: SessionToken) {
-        self.environment = environment
-        self.sessionToken = sessionToken
-        self.monotonicTimeService = MonotonicTimeService(environment: environment)
-        self.contractRestrictionsService = ContractRestrictionsService()
-    }
-    
-    deinit {
-        print("ExposureContext deinit")
     }
 }
