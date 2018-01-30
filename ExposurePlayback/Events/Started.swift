@@ -1,0 +1,108 @@
+//
+//  Started.swift
+//  Analytics
+//
+//  Created by Fredrik Sjöberg on 2017-07-17.
+//  Copyright © 2017 emp. All rights reserved.
+//
+
+import Foundation
+import Exposure
+
+extension Playback {
+    /// Signals that the player has successfully started playback of the asset/channel.
+    internal struct Started {
+        let timestamp: Int64
+        
+        /// One of the following: vod, live, offline
+        internal var playMode: String {
+            switch requiredAssetData {
+            case .vod(assetId: _): return "vod"
+            case .live(channelId: _): return "live"
+            case .program(programId: _, channelId: _): return "vod"
+            case .offline(assetId: _): return "offline"
+            case .download(assetId: _): return "vod"
+            }
+        }
+        
+        internal var assetData: PlaybackIdentifier? {
+            return requiredAssetData
+        }
+        internal let requiredAssetData: PlaybackIdentifier
+        
+        /// Implementation specific identity of the media the player is playing. This should be the media locator as received from the call to the entitlement service. This is a string of proprietary format that corresponds to the MRR Media ID if applicable, but can contain implementation specific strings for other streaming formats.
+        /// Example: 1458209835_fai-hls_IkCMxd
+        internal let mediaId: String
+        
+        /// Offset in the video sequence (in milliseconds) where playback started. For playback of live streams, this is the offset from the start of the current program. Even if the player does not support millisecond precision, the offset should still be reported in milliseconds (rather than seconds).
+        internal let offsetTime: Int64
+        
+        /// Length of the vod asset or the live TV show. In milliseconds.
+        internal let videoLength: Int64?
+        
+        /// Initial playback bitrate, measured in kbit/s.
+        internal let bitrate: Int64?
+        
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64, videoLength: Int64? = nil, bitrate: Int64? = nil) {
+            self.timestamp = timestamp
+            self.requiredAssetData = assetData
+            self.mediaId = mediaId
+            self.offsetTime = offsetTime
+            self.videoLength = videoLength
+            self.bitrate = bitrate
+        }
+    }
+}
+
+extension Playback.Started: AssetIdentifier { }
+extension Playback.Started: PlaybackOffset { }
+extension Playback.Started: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.Started"
+    }
+    
+    internal var jsonPayload: [String : Any] {
+        var params: [String: Any] = [
+            JSONKeys.eventType.rawValue: eventType,
+            JSONKeys.timestamp.rawValue: timestamp,
+            JSONKeys.playMode.rawValue: playMode,
+            JSONKeys.mediaId.rawValue: mediaId,
+            JSONKeys.offsetTime.rawValue: offsetTime
+        ]
+        
+        if let assetId = assetId {
+            params[JSONKeys.assetId.rawValue] = assetId
+        }
+        
+        if let channelId = channelId {
+            params[JSONKeys.channelId.rawValue] = channelId
+        }
+        
+        if let programId = programId {
+            params[JSONKeys.programId.rawValue] = programId
+        }
+        
+        if let videoLength = videoLength {
+            params[JSONKeys.videoLength.rawValue] = videoLength
+        }
+        
+        if let bitrate = bitrate {
+            params[JSONKeys.bitrate.rawValue] = bitrate
+        }
+        
+        return params
+    }
+    
+    internal enum JSONKeys: String {
+        case eventType = "EventType"
+        case timestamp = "Timestamp"
+        case playMode = "PlayMode"
+        case mediaId = "MediaId"
+        case assetId = "AssetId"
+        case channelId = "ChannelId"
+        case programId = "ProgramId"
+        case offsetTime = "OffsetTime"
+        case videoLength = "VideoLength"
+        case bitrate = "Bitrate"
+    }
+}

@@ -51,6 +51,37 @@
 		76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */; };
 		76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
 		76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */; };
+		76A89D652020F36400C23579 /* AnalyticsBatch+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */; };
+		76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D642020F36400C23579 /* UIDevice+Extensions.swift */; };
+		76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */; };
+		76A89D862020F41F00C23579 /* Aborted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6A2020F41F00C23579 /* Aborted.swift */; };
+		76A89D872020F41F00C23579 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */; };
+		76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */; };
+		76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6D2020F41F00C23579 /* BitrateChanged.swift */; };
+		76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6E2020F41F00C23579 /* BufferingStarted.swift */; };
+		76A89D8B2020F41F00C23579 /* BufferingStopped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6F2020F41F00C23579 /* BufferingStopped.swift */; };
+		76A89D8C2020F41F00C23579 /* Completed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D702020F41F00C23579 /* Completed.swift */; };
+		76A89D8D2020F41F00C23579 /* Created.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D712020F41F00C23579 /* Created.swift */; };
+		76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D722020F41F00C23579 /* DeviceInfo.swift */; };
+		76A89D8F2020F41F00C23579 /* DownloadCancelled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D732020F41F00C23579 /* DownloadCancelled.swift */; };
+		76A89D902020F41F00C23579 /* DownloadCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D742020F41F00C23579 /* DownloadCompleted.swift */; };
+		76A89D912020F41F00C23579 /* DownloadPaused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D752020F41F00C23579 /* DownloadPaused.swift */; };
+		76A89D922020F41F00C23579 /* DownloadResumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D762020F41F00C23579 /* DownloadResumed.swift */; };
+		76A89D932020F41F00C23579 /* DownloadStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D772020F41F00C23579 /* DownloadStarted.swift */; };
+		76A89D942020F41F00C23579 /* DownloadStopped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D782020F41F00C23579 /* DownloadStopped.swift */; };
+		76A89D952020F41F00C23579 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D792020F41F00C23579 /* Error.swift */; };
+		76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */; };
+		76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7B2020F41F00C23579 /* Heartbeat.swift */; };
+		76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7C2020F41F00C23579 /* InitCompleted.swift */; };
+		76A89D992020F41F00C23579 /* Paused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7D2020F41F00C23579 /* Paused.swift */; };
+		76A89D9A2020F41F00C23579 /* Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7E2020F41F00C23579 /* Playback.swift */; };
+		76A89D9B2020F41F00C23579 /* PlaybackOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7F2020F41F00C23579 /* PlaybackOffset.swift */; };
+		76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D802020F41F00C23579 /* PlayReady.swift */; };
+		76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D812020F41F00C23579 /* ProgramChanged.swift */; };
+		76A89D9E2020F41F00C23579 /* Resumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D822020F41F00C23579 /* Resumed.swift */; };
+		76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D832020F41F00C23579 /* ScrubbedTo.swift */; };
+		76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D842020F41F00C23579 /* StartCasting.swift */; };
+		76A89DA12020F41F00C23579 /* Started.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D852020F41F00C23579 /* Started.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +151,37 @@
 		76A89D0620209E7400C23579 /* AssetSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
 		76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChannelSourceSpec+StartTime.swift"; sourceTree = "<group>"; };
 		76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StartTime.swift"; sourceTree = "<group>"; };
+		76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnalyticsBatch+Extensions.swift"; sourceTree = "<group>"; };
+		76A89D642020F36400C23579 /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
+		76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureAnalytics.swift; sourceTree = "<group>"; };
+		76A89D6A2020F41F00C23579 /* Aborted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aborted.swift; sourceTree = "<group>"; };
+		76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetIdentifier.swift; sourceTree = "<group>"; };
+		76A89D6D2020F41F00C23579 /* BitrateChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitrateChanged.swift; sourceTree = "<group>"; };
+		76A89D6E2020F41F00C23579 /* BufferingStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStarted.swift; sourceTree = "<group>"; };
+		76A89D6F2020F41F00C23579 /* BufferingStopped.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStopped.swift; sourceTree = "<group>"; };
+		76A89D702020F41F00C23579 /* Completed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Completed.swift; sourceTree = "<group>"; };
+		76A89D712020F41F00C23579 /* Created.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Created.swift; sourceTree = "<group>"; };
+		76A89D722020F41F00C23579 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		76A89D732020F41F00C23579 /* DownloadCancelled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCancelled.swift; sourceTree = "<group>"; };
+		76A89D742020F41F00C23579 /* DownloadCompleted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCompleted.swift; sourceTree = "<group>"; };
+		76A89D752020F41F00C23579 /* DownloadPaused.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPaused.swift; sourceTree = "<group>"; };
+		76A89D762020F41F00C23579 /* DownloadResumed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadResumed.swift; sourceTree = "<group>"; };
+		76A89D772020F41F00C23579 /* DownloadStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStarted.swift; sourceTree = "<group>"; };
+		76A89D782020F41F00C23579 /* DownloadStopped.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStopped.swift; sourceTree = "<group>"; };
+		76A89D792020F41F00C23579 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandshakeStarted.swift; sourceTree = "<group>"; };
+		76A89D7B2020F41F00C23579 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
+		76A89D7C2020F41F00C23579 /* InitCompleted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitCompleted.swift; sourceTree = "<group>"; };
+		76A89D7D2020F41F00C23579 /* Paused.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paused.swift; sourceTree = "<group>"; };
+		76A89D7E2020F41F00C23579 /* Playback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playback.swift; sourceTree = "<group>"; };
+		76A89D7F2020F41F00C23579 /* PlaybackOffset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackOffset.swift; sourceTree = "<group>"; };
+		76A89D802020F41F00C23579 /* PlayReady.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayReady.swift; sourceTree = "<group>"; };
+		76A89D812020F41F00C23579 /* ProgramChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramChanged.swift; sourceTree = "<group>"; };
+		76A89D822020F41F00C23579 /* Resumed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resumed.swift; sourceTree = "<group>"; };
+		76A89D832020F41F00C23579 /* ScrubbedTo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrubbedTo.swift; sourceTree = "<group>"; };
+		76A89D842020F41F00C23579 /* StartCasting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCasting.swift; sourceTree = "<group>"; };
+		76A89D852020F41F00C23579 /* Started.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Started.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,9 +243,11 @@
 				76A89BFE202072D100C23579 /* ExposurePlayback.h */,
 				76A89BFF202072D100C23579 /* Info.plist */,
 				76A89CE5202084D900C23579 /* Warning.swift */,
+				76A89D622020F36400C23579 /* Extensions */,
 				76A89C5B20207B2400C23579 /* Protocols */,
 				76A89C2C20207AB100C23579 /* Player */,
 				76A89C4120207AB100C23579 /* Services */,
+				76A89D692020F41F00C23579 /* Events */,
 			);
 			path = ExposurePlayback;
 			sourceTree = "<group>";
@@ -280,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				76A89C4220207AB100C23579 /* ContractRestrictionsService.swift */,
+				76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */,
 				76A89C4320207AB100C23579 /* MonotonicTimeService.swift */,
 				76A89C4420207AB100C23579 /* ProgramService.swift */,
 				76A89C4520207AB100C23579 /* ServerTimeProvider.swift */,
@@ -321,6 +386,50 @@
 				76A89D0820209E7400C23579 /* ProgramSource+StartTime.swift */,
 			);
 			path = StartTime;
+			sourceTree = "<group>";
+		};
+		76A89D622020F36400C23579 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				76A89D632020F36400C23579 /* AnalyticsBatch+Extensions.swift */,
+				76A89D642020F36400C23579 /* UIDevice+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		76A89D692020F41F00C23579 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				76A89D6A2020F41F00C23579 /* Aborted.swift */,
+				76A89D6B2020F41F00C23579 /* AnalyticsEvent.swift */,
+				76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */,
+				76A89D6D2020F41F00C23579 /* BitrateChanged.swift */,
+				76A89D6E2020F41F00C23579 /* BufferingStarted.swift */,
+				76A89D6F2020F41F00C23579 /* BufferingStopped.swift */,
+				76A89D702020F41F00C23579 /* Completed.swift */,
+				76A89D712020F41F00C23579 /* Created.swift */,
+				76A89D722020F41F00C23579 /* DeviceInfo.swift */,
+				76A89D732020F41F00C23579 /* DownloadCancelled.swift */,
+				76A89D742020F41F00C23579 /* DownloadCompleted.swift */,
+				76A89D752020F41F00C23579 /* DownloadPaused.swift */,
+				76A89D762020F41F00C23579 /* DownloadResumed.swift */,
+				76A89D772020F41F00C23579 /* DownloadStarted.swift */,
+				76A89D782020F41F00C23579 /* DownloadStopped.swift */,
+				76A89D792020F41F00C23579 /* Error.swift */,
+				76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */,
+				76A89D7B2020F41F00C23579 /* Heartbeat.swift */,
+				76A89D7C2020F41F00C23579 /* InitCompleted.swift */,
+				76A89D7D2020F41F00C23579 /* Paused.swift */,
+				76A89D7E2020F41F00C23579 /* Playback.swift */,
+				76A89D7F2020F41F00C23579 /* PlaybackOffset.swift */,
+				76A89D802020F41F00C23579 /* PlayReady.swift */,
+				76A89D812020F41F00C23579 /* ProgramChanged.swift */,
+				76A89D822020F41F00C23579 /* Resumed.swift */,
+				76A89D832020F41F00C23579 /* ScrubbedTo.swift */,
+				76A89D842020F41F00C23579 /* StartCasting.swift */,
+				76A89D852020F41F00C23579 /* Started.swift */,
+			);
+			path = Events;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -436,31 +545,62 @@
 			buildActionMask = 2147483647;
 			files = (
 				76A89C4E20207AB200C23579 /* ExposureStreamFairplayRequester.swift in Sources */,
+				76A89D992020F41F00C23579 /* Paused.swift in Sources */,
 				76A89C5020207AB200C23579 /* ChannelPlayable.swift in Sources */,
+				76A89D932020F41F00C23579 /* DownloadStarted.swift in Sources */,
 				76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */,
+				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
+				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
+				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,
 				76A89C6420207B2400C23579 /* HeartbeatsProvider.swift in Sources */,
 				76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */,
+				76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */,
 				76A89C4A20207AB200C23579 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
+				76A89D902020F41F00C23579 /* DownloadCompleted.swift in Sources */,
+				76A89D8B2020F41F00C23579 /* BufferingStopped.swift in Sources */,
 				76A89C4F20207AB200C23579 /* AssetPlayable.swift in Sources */,
+				76A89D8F2020F41F00C23579 /* DownloadCancelled.swift in Sources */,
 				76A89C5A20207AB200C23579 /* ServerTimeProvider.swift in Sources */,
+				76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */,
+				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
 				76A89C5220207AB200C23579 /* PlaybackProperties.swift in Sources */,
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
+				76A89D922020F41F00C23579 /* DownloadResumed.swift in Sources */,
+				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
 				76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
+				76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */,
+				76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */,
 				76A89C5320207AB200C23579 /* AssetSource.swift in Sources */,
 				76A89C5820207AB200C23579 /* MonotonicTimeService.swift in Sources */,
+				76A89D652020F36400C23579 /* AnalyticsBatch+Extensions.swift in Sources */,
 				76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
+				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
+				76A89D9B2020F41F00C23579 /* PlaybackOffset.swift in Sources */,
+				76A89D912020F41F00C23579 /* DownloadPaused.swift in Sources */,
+				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
 				76A89C4C20207AB200C23579 /* HLSNative+HeartbeatsProvider.swift in Sources */,
+				76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */,
 				76A89C4620207AB200C23579 /* HLSNative+ExposureContext+Creation.swift in Sources */,
 				76A89CE6202084D900C23579 /* Warning.swift in Sources */,
 				76A89C5420207AB200C23579 /* ChannelSource.swift in Sources */,
 				76A89C4920207AB200C23579 /* HLSNative+ExposureContext+Seek.swift in Sources */,
+				76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */,
+				76A89D9E2020F41F00C23579 /* Resumed.swift in Sources */,
 				76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */,
+				76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */,
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
+				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
+				76A89D872020F41F00C23579 /* AnalyticsEvent.swift in Sources */,
+				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
 				76A89C6520207B2400C23579 /* Playable.swift in Sources */,
+				76A89D952020F41F00C23579 /* Error.swift in Sources */,
+				76A89DA12020F41F00C23579 /* Started.swift in Sources */,
+				76A89D942020F41F00C23579 /* DownloadStopped.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
