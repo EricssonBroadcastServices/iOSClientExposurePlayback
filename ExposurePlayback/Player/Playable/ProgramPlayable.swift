@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 public struct ProgramPlayable: Playable {
     public let assetId: String

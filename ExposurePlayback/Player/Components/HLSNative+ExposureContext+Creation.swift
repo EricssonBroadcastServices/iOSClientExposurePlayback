@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 
 /// Extends `Player` using `HLSNative` tech in an `ExposureContext` with a convenience initializer
 extension Player where Tech == HLSNative<ExposureContext> {

@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
 public class ExposureSource: MediaSource {
@@ -67,7 +68,8 @@ extension ExposureSource {
         if let param:String = entitlement
             .mediaLocator
             .queryParam(for: UnifiedPackageParams.tParam.rawValue) {
-            let formatter = Program.exposureDateFormatter
+            let formatter = DateFormatter()
+            formatter.timeZone = TimeZone(abbreviation: "UTC")
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
             if let ms = formatter.date(from: param)?.millisecondsSince1970 {
                 return (ms, nil)

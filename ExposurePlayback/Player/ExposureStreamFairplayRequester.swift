@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import Player
+import Exposure
 
 /// *Exposure* specific implementation of the `FairplayRequester` protocol for streaming purposes.
 ///

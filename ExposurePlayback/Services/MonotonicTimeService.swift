@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 /// Service that syncs local device clock with server time
 public class MonotonicTimeService {

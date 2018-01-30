@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 /// Internal protocol defining a provider supplying `ServerTime`.
 internal protocol ServerTimeProvider {

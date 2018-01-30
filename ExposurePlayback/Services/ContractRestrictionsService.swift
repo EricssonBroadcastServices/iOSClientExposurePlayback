@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 internal class ContractRestrictionsService {
     

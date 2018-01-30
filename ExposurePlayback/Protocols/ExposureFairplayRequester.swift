@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import Player
 import Alamofire
+import Exposure
 
 internal protocol ExposureFairplayRequester: class {
     /// Entitlement related to this specific *Fairplay* request.
@@ -80,7 +81,7 @@ extension ExposureFairplayRequester {
         guard let url = resourceLoadingRequest.request.url,
             let assetIDString = url.host,
             let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
-                resourceLoadingRequest.finishLoading(with: ExposureError.fairplay(reason: .invalidContentIdentifier))
+                resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .invalidContentIdentifier))
                 return
         }
         
@@ -113,14 +114,14 @@ extension ExposureFairplayRequester {
                         }
                         
                         guard let dataRequest = resourceLoadingRequest.dataRequest else {
-                            print("dataRequest Error",ExposureError.fairplay(reason: .missingDataRequest).message)
-                            resourceLoadingRequest.finishLoading(with: ExposureError.fairplay(reason: .missingDataRequest))
+                            print("dataRequest Error",ExposureContext.Error.fairplay(reason: .missingDataRequest).message)
+                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingDataRequest))
                             return
                         }
                         
                         guard let ckcBase64 = ckcBase64 else {
-                            print("ckcBase64 Error",ExposureError.fairplay(reason: .missingContentKeyContext).message)
-                            resourceLoadingRequest.finishLoading(with: ExposureError.fairplay(reason: .missingContentKeyContext))
+                            print("ckcBase64 Error",ExposureContext.Error.fairplay(reason: .missingContentKeyContext).message)
+                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingContentKeyContext))
                             return
                         }
                         
@@ -150,7 +151,7 @@ extension ExposureFairplayRequester {
                     //                    -42681 The version list supplied to SPC creation is not valid.
                     //                    -42783 The certificate supplied for SPC is not valid and is possibly revoked.
                     print("SPC - ",error.localizedDescription)
-                    resourceLoadingRequest.finishLoading(with: ExposureError.fairplay(reason: .serverPlaybackContext(error: error)))
+                    resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .serverPlaybackContext(error: error)))
                     return
                 }
             }
@@ -164,7 +165,7 @@ extension ExposureFairplayRequester {
     ///
     /// - note: This method uses a specialized function for parsing the retrieved *Application Certificate* from an *MRR specific* format.
     /// - parameter callback: fires when the certificate is fetched or when an `error` occurs.
-    fileprivate func fetchApplicationCertificate(callback: @escaping (Data?, ExposureError?) -> Void) {
+    fileprivate func fetchApplicationCertificate(callback: @escaping (Data?, ExposureContext.Error?) -> Void) {
         guard let url = certificateUrl else {
             callback(nil, .fairplay(reason: .missingApplicationCertificateUrl))
             return
@@ -186,7 +187,7 @@ extension ExposureFairplayRequester {
                     }
                     catch {
                         // parseApplicationCertificate will only throw PlayerError
-                        callback(nil, error as? ExposureError)
+                        callback(nil, error as? ExposureContext.Error)
                     }
                 }
         }
@@ -229,7 +230,7 @@ extension ExposureFairplayRequester {
         if let certString = xml["fps"]["cert"].element?.text {
             // http://iosdevelopertips.com/core-services/encode-decode-using-base64.html
             guard let base64 = Data(base64Encoded: certString, options: Data.Base64DecodingOptions.ignoreUnknownCharacters) else {
-                throw ExposureError.fairplay(reason: .applicationCertificateDataFormatInvalid)
+                throw ExposureContext.Error.fairplay(reason: .applicationCertificateDataFormatInvalid)
             }
             return base64
         }
@@ -237,9 +238,9 @@ extension ExposureFairplayRequester {
             let code = Int(codeString),
             let message = xml["error"]["message"].element?.text {
             
-            throw ExposureError.fairplay(reason: .applicationCertificateServer(code: code, message: message))
+            throw ExposureContext.Error.fairplay(reason: .applicationCertificateServer(code: code, message: message))
         }
-        throw ExposureError.fairplay(reason: .applicationCertificateParsing)
+        throw ExposureContext.Error.fairplay(reason: .applicationCertificateParsing)
     }
 }
 
@@ -251,7 +252,7 @@ extension ExposureFairplayRequester {
     ///
     /// - parameter spc: *Server Playback Context*
     /// - parameter callback: fires when `CKC` is fetched or when an `error` occurs.
-    fileprivate func fetchContentKeyContext(spc: Data, callback: @escaping (Data?, ExposureError?) -> Void) {
+    fileprivate func fetchContentKeyContext(spc: Data, callback: @escaping (Data?, ExposureContext.Error?) -> Void) {
         guard let url = licenseUrl else {
             callback(nil, .fairplay(reason: .missingContentKeyContextUrl))
             return
@@ -284,7 +285,7 @@ extension ExposureFairplayRequester {
                     }
                     catch {
                         // parseContentKeyContext will only throw PlayerError
-                        callback(nil, error as? ExposureError)
+                        callback(nil, error as? ExposureContext.Error)
                     }
                 }
         }
@@ -326,7 +327,7 @@ extension ExposureFairplayRequester {
         if let ckc = xml["fps"]["ckc"].element?.text {
             // http://iosdevelopertips.com/core-services/encode-decode-using-base64.html
             guard let base64 = Data(base64Encoded: ckc, options: Data.Base64DecodingOptions.ignoreUnknownCharacters) else {
-                throw ExposureError.fairplay(reason: .contentKeyContextDataFormatInvalid)
+                throw ExposureContext.Error.fairplay(reason: .contentKeyContextDataFormatInvalid)
             }
             return base64
         }
@@ -334,9 +335,9 @@ extension ExposureFairplayRequester {
             let code = Int(codeString),
             let message = xml["error"]["message"].element?.text {
             
-            throw ExposureError.fairplay(reason: .contentKeyContextServer(code: code, message: message))
+            throw ExposureContext.Error.fairplay(reason: .contentKeyContextServer(code: code, message: message))
         }
-        throw ExposureError.fairplay(reason: .contentKeyContextParsing)
+        throw ExposureContext.Error.fairplay(reason: .contentKeyContextParsing)
     }
     
 }

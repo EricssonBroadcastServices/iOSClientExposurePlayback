@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 
 // MARK: - Program Data
 extension Player where Tech == HLSNative<ExposureContext> {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 public struct ChannelPlayable: Playable {
     public var assetId: String

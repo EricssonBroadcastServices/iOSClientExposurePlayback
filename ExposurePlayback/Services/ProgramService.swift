@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 internal protocol ProgramProvider {
     func fetchProgram(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
@@ -33,7 +34,7 @@ internal class ProgramService {
     
     fileprivate let refreshInterval: Int = 1000 * 3
     
-    internal var currentPlayheadTime: () -> Int64? = { _ in return nil }
+    internal var currentPlayheadTime: () -> Int64? = { return nil }
     internal var onNotEntitled: (String) -> Void = { _ in}
     internal var onProgramChanged: (Program?) -> Void = { _ in }
     

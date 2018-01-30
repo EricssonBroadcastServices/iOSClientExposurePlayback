@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 
 extension Player where Tech == HLSNative<ExposureContext> {
     /// Initiates a playback session with the supplied `Playable`
@@ -81,7 +82,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         
         if let error = error {
             /// Deliver error
-            let contextError = PlayerError<Tech, ExposureContext>.context(error: error)
+            let contextError = PlayerError<Tech, ExposureContext>.context(error: .exposure(reason: error))
             let nilSource: ExposureSource? = nil
             providers.forEach{ $0.onError(tech: tech, source: nilSource, error: contextError) }
             tech.eventDispatcher.onError(tech, nilSource, contextError)

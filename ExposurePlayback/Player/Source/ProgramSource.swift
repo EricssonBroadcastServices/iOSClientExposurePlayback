@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 
 public class ProgramSource: ExposureSource {
     public let channelId: String
