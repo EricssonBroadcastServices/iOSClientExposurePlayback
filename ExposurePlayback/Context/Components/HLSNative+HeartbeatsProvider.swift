@@ -8,17 +8,12 @@
 
 import Foundation
 import Player
-
+import Exposure
 
 extension HLSNative: HeartbeatsProvider {
-    internal struct PlayerHeartbeatData: HeartbeatData {
-        let timestamp: Int64
-        let payload: [String: Any]
-    }
-    
     /// Configure a `Heartbeat` with associated data.
-    public func requestHeatbeat() -> HeartbeatData {
-        return PlayerHeartbeatData(timestamp: Date().millisecondsSince1970, payload: ["OffsetTime": self.playheadPosition])
+    public func requestHeatbeat() -> AnalyticsEvent {
+        return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: self.playheadPosition)
     }
 }
 

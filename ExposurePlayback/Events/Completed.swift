@@ -11,7 +11,9 @@ import Exposure
 
 extension Playback {
     /// Playback stopped because it reached the end of the asset. If playback stopped due to user intervention or errors, a Playback.Aborted or Playback.Error should be sent instead.
-    internal struct Completed {
+    internal struct Completed: AnalyticsEvent {
+        internal let eventType: String = "Playback.Completed"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was stopped. This would typically be equal to the length of the asset in milliseconds.
@@ -25,11 +27,7 @@ extension Playback {
 }
 
 extension Playback.Completed: PlaybackOffset { }
-extension Playback.Completed: AnalyticsEvent {
-    var eventType: String {
-        return "Playback.Completed"
-    }
-    
+extension Playback.Completed {
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

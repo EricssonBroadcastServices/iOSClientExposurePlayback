@@ -11,7 +11,9 @@ import Exposure
 
 extension Playback {
     /// Playback resumed after the player has enough data buffered. 
-    internal struct BufferingStopped {
+    internal struct BufferingStopped: AnalyticsEvent {
+        internal let eventType: String = "Playback.BufferingStopped"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback resumed after a buffering event.
@@ -25,11 +27,7 @@ extension Playback {
 }
 
 extension Playback.BufferingStopped: PlaybackOffset { }
-extension Playback.BufferingStopped: AnalyticsEvent {
-    var eventType: String {
-        return "Playback.BufferingStopped"
-    }
-    
+extension Playback.BufferingStopped {
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

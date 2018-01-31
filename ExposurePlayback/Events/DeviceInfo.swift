@@ -10,8 +10,10 @@ import Foundation
 import Exposure
 
 /// The device info object should be sent once per playback session, preferably at the start of the session.
-internal struct DeviceInfo {
-    internal var timestamp: Int64
+internal struct DeviceInfo: AnalyticsEvent {
+    internal let eventType: String = "Device.Info"
+    internal let bufferLimit: Int64 = 3000
+    internal let timestamp: Int64
     
 }
 
@@ -67,11 +69,7 @@ extension DeviceInfo {
     }
 }
 
-extension DeviceInfo: AnalyticsEvent {
-    internal var eventType: String {
-        return "Device.Info"
-    }
-    
+extension DeviceInfo {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,

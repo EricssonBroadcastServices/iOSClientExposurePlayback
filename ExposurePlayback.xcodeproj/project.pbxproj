@@ -81,6 +81,30 @@
 		76A89DA12020F41F00C23579 /* Started.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D852020F41F00C23579 /* Started.swift */; };
 		76A89DA32020F9A300C23579 /* ExposureContext+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DA22020F9A300C23579 /* ExposureContext+Error.swift */; };
 		76A89DA52020F9E800C23579 /* ExposureContext+Warning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DA42020F9E800C23579 /* ExposureContext+Warning.swift */; };
+		76A89DE32021CCC000C23579 /* AbortedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCB2021CCC000C23579 /* AbortedSpec.swift */; };
+		76A89DE42021CCC000C23579 /* BitrateChangedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */; };
+		76A89DE52021CCC000C23579 /* BufferingStartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCD2021CCC000C23579 /* BufferingStartedSpec.swift */; };
+		76A89DE62021CCC000C23579 /* BufferingStoppedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCE2021CCC000C23579 /* BufferingStoppedSpec.swift */; };
+		76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCF2021CCC000C23579 /* CompletedSpec.swift */; };
+		76A89DE82021CCC000C23579 /* CreatedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD02021CCC000C23579 /* CreatedSpec.swift */; };
+		76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */; };
+		76A89DEA2021CCC000C23579 /* DownloadCancelledSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */; };
+		76A89DEB2021CCC000C23579 /* DownloadCompletedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */; };
+		76A89DEC2021CCC000C23579 /* DownloadPausedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */; };
+		76A89DED2021CCC000C23579 /* DownloadResumedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */; };
+		76A89DEE2021CCC000C23579 /* DownloadStartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */; };
+		76A89DEF2021CCC000C23579 /* DownloadStoppedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */; };
+		76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD82021CCC000C23579 /* ErrorSpec.swift */; };
+		76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */; };
+		76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */; };
+		76A89DF32021CCC000C23579 /* InitCompletedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDB2021CCC000C23579 /* InitCompletedSpec.swift */; };
+		76A89DF42021CCC000C23579 /* PausedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDC2021CCC000C23579 /* PausedSpec.swift */; };
+		76A89DF52021CCC000C23579 /* PlayReadySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDD2021CCC000C23579 /* PlayReadySpec.swift */; };
+		76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDE2021CCC000C23579 /* ProgramChangedSpec.swift */; };
+		76A89DF72021CCC000C23579 /* ResumedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDF2021CCC000C23579 /* ResumedSpec.swift */; };
+		76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE02021CCC000C23579 /* ScrubbedToSpec.swift */; };
+		76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE12021CCC000C23579 /* StartCastingSpec.swift */; };
+		76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE22021CCC000C23579 /* StartedSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +204,30 @@
 		76A89D852020F41F00C23579 /* Started.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Started.swift; sourceTree = "<group>"; };
 		76A89DA22020F9A300C23579 /* ExposureContext+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExposureContext+Error.swift"; sourceTree = "<group>"; };
 		76A89DA42020F9E800C23579 /* ExposureContext+Warning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExposureContext+Warning.swift"; sourceTree = "<group>"; };
+		76A89DCB2021CCC000C23579 /* AbortedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbortedSpec.swift; sourceTree = "<group>"; };
+		76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitrateChangedSpec.swift; sourceTree = "<group>"; };
+		76A89DCD2021CCC000C23579 /* BufferingStartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStartedSpec.swift; sourceTree = "<group>"; };
+		76A89DCE2021CCC000C23579 /* BufferingStoppedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStoppedSpec.swift; sourceTree = "<group>"; };
+		76A89DCF2021CCC000C23579 /* CompletedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletedSpec.swift; sourceTree = "<group>"; };
+		76A89DD02021CCC000C23579 /* CreatedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedSpec.swift; sourceTree = "<group>"; };
+		76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfoSpec.swift; sourceTree = "<group>"; };
+		76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCancelledSpec.swift; sourceTree = "<group>"; };
+		76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCompletedSpec.swift; sourceTree = "<group>"; };
+		76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPausedSpec.swift; sourceTree = "<group>"; };
+		76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadResumedSpec.swift; sourceTree = "<group>"; };
+		76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStartedSpec.swift; sourceTree = "<group>"; };
+		76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStoppedSpec.swift; sourceTree = "<group>"; };
+		76A89DD82021CCC000C23579 /* ErrorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorSpec.swift; sourceTree = "<group>"; };
+		76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandshakeStartedSpec.swift; sourceTree = "<group>"; };
+		76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatSpec.swift; sourceTree = "<group>"; };
+		76A89DDB2021CCC000C23579 /* InitCompletedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitCompletedSpec.swift; sourceTree = "<group>"; };
+		76A89DDC2021CCC000C23579 /* PausedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PausedSpec.swift; sourceTree = "<group>"; };
+		76A89DDD2021CCC000C23579 /* PlayReadySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayReadySpec.swift; sourceTree = "<group>"; };
+		76A89DDE2021CCC000C23579 /* ProgramChangedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramChangedSpec.swift; sourceTree = "<group>"; };
+		76A89DDF2021CCC000C23579 /* ResumedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResumedSpec.swift; sourceTree = "<group>"; };
+		76A89DE02021CCC000C23579 /* ScrubbedToSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrubbedToSpec.swift; sourceTree = "<group>"; };
+		76A89DE12021CCC000C23579 /* StartCastingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCastingSpec.swift; sourceTree = "<group>"; };
+		76A89DE22021CCC000C23579 /* StartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartedSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +304,7 @@
 				76A89CF52020958000C23579 /* ContractRestrictionsServiceSpec.swift */,
 				76A89CF32020958000C23579 /* MonotonicTimeServiceSpec.swift */,
 				76A89CF42020958000C23579 /* ProgramServiceSpec.swift */,
+				76A89DCA2021CCC000C23579 /* Event Tests */,
 				76A89D0520209E7400C23579 /* StartTime */,
 				76A89C0B202072D100C23579 /* Info.plist */,
 				76A89D0320209A2700C23579 /* JsonDecoding.swift */,
@@ -427,6 +476,37 @@
 				76A89D852020F41F00C23579 /* Started.swift */,
 			);
 			path = Events;
+			sourceTree = "<group>";
+		};
+		76A89DCA2021CCC000C23579 /* Event Tests */ = {
+			isa = PBXGroup;
+			children = (
+				76A89DCB2021CCC000C23579 /* AbortedSpec.swift */,
+				76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */,
+				76A89DCD2021CCC000C23579 /* BufferingStartedSpec.swift */,
+				76A89DCE2021CCC000C23579 /* BufferingStoppedSpec.swift */,
+				76A89DCF2021CCC000C23579 /* CompletedSpec.swift */,
+				76A89DD02021CCC000C23579 /* CreatedSpec.swift */,
+				76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */,
+				76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */,
+				76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */,
+				76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */,
+				76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */,
+				76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */,
+				76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */,
+				76A89DD82021CCC000C23579 /* ErrorSpec.swift */,
+				76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */,
+				76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */,
+				76A89DDB2021CCC000C23579 /* InitCompletedSpec.swift */,
+				76A89DDC2021CCC000C23579 /* PausedSpec.swift */,
+				76A89DDD2021CCC000C23579 /* PlayReadySpec.swift */,
+				76A89DDE2021CCC000C23579 /* ProgramChangedSpec.swift */,
+				76A89DDF2021CCC000C23579 /* ResumedSpec.swift */,
+				76A89DE02021CCC000C23579 /* ScrubbedToSpec.swift */,
+				76A89DE12021CCC000C23579 /* StartCastingSpec.swift */,
+				76A89DE22021CCC000C23579 /* StartedSpec.swift */,
+			);
+			path = "Event Tests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -604,13 +684,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */,
+				76A89DEC2021CCC000C23579 /* DownloadPausedSpec.swift in Sources */,
+				76A89DF52021CCC000C23579 /* PlayReadySpec.swift in Sources */,
+				76A89DEF2021CCC000C23579 /* DownloadStoppedSpec.swift in Sources */,
+				76A89DE32021CCC000C23579 /* AbortedSpec.swift in Sources */,
+				76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */,
 				76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */,
 				76A89D0420209A2700C23579 /* JsonDecoding.swift in Sources */,
+				76A89DF32021CCC000C23579 /* InitCompletedSpec.swift in Sources */,
+				76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */,
+				76A89DEE2021CCC000C23579 /* DownloadStartedSpec.swift in Sources */,
+				76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */,
+				76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */,
+				76A89DF72021CCC000C23579 /* ResumedSpec.swift in Sources */,
+				76A89DE52021CCC000C23579 /* BufferingStartedSpec.swift in Sources */,
 				76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */,
+				76A89DEB2021CCC000C23579 /* DownloadCompletedSpec.swift in Sources */,
+				76A89DE62021CCC000C23579 /* BufferingStoppedSpec.swift in Sources */,
+				76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */,
 				76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */,
+				76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */,
+				76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */,
+				76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */,
+				76A89DF42021CCC000C23579 /* PausedSpec.swift in Sources */,
+				76A89DEA2021CCC000C23579 /* DownloadCancelledSpec.swift in Sources */,
+				76A89DED2021CCC000C23579 /* DownloadResumedSpec.swift in Sources */,
 				76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */,
 				76A89CF82020958000C23579 /* ContractRestrictionsServiceSpec.swift in Sources */,
 				76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */,
+				76A89DE42021CCC000C23579 /* BitrateChangedSpec.swift in Sources */,
+				76A89DE82021CCC000C23579 /* CreatedSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

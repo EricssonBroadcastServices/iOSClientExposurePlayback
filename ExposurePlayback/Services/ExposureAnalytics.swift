@@ -146,109 +146,109 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     }
 }
 
-extension ExposureAnalytics: ExposureDownloadAnalyticsProvider {
-    public func onEntitlementRequested(tech: ExposureDownloadTask, assetId: String) {
-        /// 1. Created
-        let created = Playback.Created(timestamp: Date().millisecondsSince1970,
-                                       version: version(for: "com.emp.Analytics"),
-                                       revision: version(for: "com.emp.Download"),
-                                       assetData: PlaybackIdentifier.download(assetId: assetId),
-                                       autoPlay: false)
-        
-        /// 2. DeviceInfo
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970)
-        
-        /// 3. Store startup events
-        var current = startupEvents
-        current.append(created)
-        current.append(deviceInfo)
-        startup = .notStarted(events: current)
-    }
-    
-    public func onHandshakeStarted(tech: ExposureDownloadTask, source: PlaybackEntitlement, assetId: String) {
-        let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
-                                              assetData: PlaybackIdentifier.download(assetId: assetId),
-                                              mediaId: source.mediaLocator.path)
-        
-        /// 3. Store startup events
-        var current = startupEvents
-        current.append(event)
-        startup = .notStarted(events: current)
-    }
-    
-    public func finalizePreparation(assetId: String, with entitlement: PlaybackEntitlement, heartbeatsProvider: HeartbeatsProvider) {
-        let events = startupEvents
-        
-        dispatcher = Dispatcher(environment: environment,
-                                sessionToken: sessionToken,
-                                playSessionId: entitlement.playSessionId,
-                                startupEvents: events,
-                                heartbeatsProvider: heartbeatsProvider)
-        dispatcher?.flushTrigger(enabled: true)
-    }
-    
-    public func downloadStartedEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadStarted(timestamp: Date().millisecondsSince1970,
-                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                             downloadedSize: task.estimatedDownloadedSize,
-                                             mediaSize: task.estimatedSize,
-                                             videoLength: task.duration)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    public func downloadPausedEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadPaused(timestamp: Date().millisecondsSince1970,
-                                            assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                            downloadedSize: task.estimatedDownloadedSize,
-                                            mediaSize: task.estimatedSize)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    public func downloadResumedEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadResumed(timestamp: Date().millisecondsSince1970,
-                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                             downloadedSize: task.estimatedDownloadedSize,
-                                             mediaSize: task.estimatedSize)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    public func downloadCancelledEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadCancelled(timestamp: Date().millisecondsSince1970,
-                                               assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                               downloadedSize: task.estimatedDownloadedSize,
-                                               mediaSize: task.estimatedSize)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    public func downloadStoppedEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadStopped(timestamp: Date().millisecondsSince1970,
-                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                             downloadedSize: task.estimatedDownloadedSize,
-                                             mediaSize: task.estimatedSize)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    public func downloadCompletedEvent(task: ExposureDownloadTask) {
-        let event = Playback.DownloadCompleted(timestamp: Date().millisecondsSince1970,
-                                               assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
-                                               downloadedSize: task.estimatedDownloadedSize,
-                                               mediaSize: task.estimatedSize)
-        dispatcher?.enqueue(event: event)
-    }
-    
-    
-    /// Triggered if the download process encounters an error during its lifetime
-    ///
-    /// - parameter ExposureDownloadTask: `ExposureDownloadTask` broadcasting the event
-    /// - parameter error: `ExposureError` causing the event to fire
-    public func downloadErrorEvent(task: ExposureDownloadTask, error: ExposureError) {
-        let event = Playback.Error(timestamp: Date().millisecondsSince1970,
-                                   offsetTime: 0,
-                                   message: error.message,
-                                   code: error.code)
-        dispatcher?.enqueue(event: event)
-    }
-}
+//extension ExposureAnalytics: ExposureDownloadAnalyticsProvider {
+//    public func onEntitlementRequested(tech: ExposureDownloadTask, assetId: String) {
+//        /// 1. Created
+//        let created = Playback.Created(timestamp: Date().millisecondsSince1970,
+//                                       version: version(for: "com.emp.Analytics"),
+//                                       revision: version(for: "com.emp.Download"),
+//                                       assetData: PlaybackIdentifier.download(assetId: assetId),
+//                                       autoPlay: false)
+//
+//        /// 2. DeviceInfo
+//        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970)
+//
+//        /// 3. Store startup events
+//        var current = startupEvents
+//        current.append(created)
+//        current.append(deviceInfo)
+//        startup = .notStarted(events: current)
+//    }
+//
+//    public func onHandshakeStarted(tech: ExposureDownloadTask, source: PlaybackEntitlement, assetId: String) {
+//        let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
+//                                              assetData: PlaybackIdentifier.download(assetId: assetId),
+//                                              mediaId: source.mediaLocator.path)
+//
+//        /// 3. Store startup events
+//        var current = startupEvents
+//        current.append(event)
+//        startup = .notStarted(events: current)
+//    }
+//
+//    public func finalizePreparation(assetId: String, with entitlement: PlaybackEntitlement, heartbeatsProvider: HeartbeatsProvider) {
+//        let events = startupEvents
+//
+//        dispatcher = Dispatcher(environment: environment,
+//                                sessionToken: sessionToken,
+//                                playSessionId: entitlement.playSessionId,
+//                                startupEvents: events,
+//                                heartbeatsProvider: heartbeatsProvider)
+//        dispatcher?.flushTrigger(enabled: true)
+//    }
+//
+//    public func downloadStartedEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadStarted(timestamp: Date().millisecondsSince1970,
+//                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                             downloadedSize: task.estimatedDownloadedSize,
+//                                             mediaSize: task.estimatedSize,
+//                                             videoLength: task.duration)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//    public func downloadPausedEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadPaused(timestamp: Date().millisecondsSince1970,
+//                                            assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                            downloadedSize: task.estimatedDownloadedSize,
+//                                            mediaSize: task.estimatedSize)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//    public func downloadResumedEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadResumed(timestamp: Date().millisecondsSince1970,
+//                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                             downloadedSize: task.estimatedDownloadedSize,
+//                                             mediaSize: task.estimatedSize)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//    public func downloadCancelledEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadCancelled(timestamp: Date().millisecondsSince1970,
+//                                               assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                               downloadedSize: task.estimatedDownloadedSize,
+//                                               mediaSize: task.estimatedSize)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//    public func downloadStoppedEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadStopped(timestamp: Date().millisecondsSince1970,
+//                                             assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                             downloadedSize: task.estimatedDownloadedSize,
+//                                             mediaSize: task.estimatedSize)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//    public func downloadCompletedEvent(task: ExposureDownloadTask) {
+//        let event = Playback.DownloadCompleted(timestamp: Date().millisecondsSince1970,
+//                                               assetData: PlaybackIdentifier.download(assetId: task.configuration.identifier),
+//                                               downloadedSize: task.estimatedDownloadedSize,
+//                                               mediaSize: task.estimatedSize)
+//        dispatcher?.enqueue(event: event)
+//    }
+//
+//
+//    /// Triggered if the download process encounters an error during its lifetime
+//    ///
+//    /// - parameter ExposureDownloadTask: `ExposureDownloadTask` broadcasting the event
+//    /// - parameter error: `ExposureError` causing the event to fire
+//    public func downloadErrorEvent(task: ExposureDownloadTask, error: ExposureError) {
+//        let event = Playback.Error(timestamp: Date().millisecondsSince1970,
+//                                   offsetTime: 0,
+//                                   message: error.message,
+//                                   code: error.code)
+//        dispatcher?.enqueue(event: event)
+//    }
+//}
 
 extension ExposureAnalytics: AnalyticsProvider {
     public func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {

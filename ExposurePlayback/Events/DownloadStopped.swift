@@ -10,7 +10,9 @@ import Foundation
 import Exposure
 
 extension Playback {
-    internal struct DownloadStopped {
+    internal struct DownloadStopped: AnalyticsEvent {
+        internal let eventType: String = "Playback.DownloadStopped"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         /// *EMP* asset id of the video being downloaded.
@@ -35,11 +37,7 @@ extension Playback {
 }
 
 extension Playback.DownloadStopped: AssetIdentifier { }
-extension Playback.DownloadStopped: AnalyticsEvent {
-    internal var eventType: String {
-        return "Playback.DownloadStopped"
-    }
-    
+extension Playback.DownloadStopped {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,

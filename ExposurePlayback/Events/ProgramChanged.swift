@@ -10,7 +10,9 @@ import Foundation
 import Exposure
 
 extension Playback {
-    internal struct ProgramChanged {
+    internal struct ProgramChanged: AnalyticsEvent {
+        internal let eventType: String = "Playback.ProgramChanged"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the player was at the time the event was emitted
@@ -32,11 +34,7 @@ extension Playback {
     }
 }
 
-extension Playback.ProgramChanged: AnalyticsEvent {
-    var eventType: String {
-        return "Playback.ProgramChanged"
-    }
-    
+extension Playback.ProgramChanged {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,

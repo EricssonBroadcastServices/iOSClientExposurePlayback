@@ -11,7 +11,9 @@ import Exposure
 
 extension Playback {
     /// If the player was created but not supposed to automatically play the asset as soon as possible, the HandshakeStarted event indicates that the player is preparing for playback now.
-    internal struct HandshakeStarted {
+    internal struct HandshakeStarted: AnalyticsEvent {
+        internal let eventType: String = "Playback.HandshakeStarted"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         internal let assetData: PlaybackIdentifier?
@@ -32,12 +34,7 @@ extension Playback.HandshakeStarted: AssetIdentifier {
     
 }
 
-extension Playback.HandshakeStarted: AnalyticsEvent {
-    var eventType: String {
-        return "Playback.HandshakeStarted"
-    }
-    
-    
+extension Playback.HandshakeStarted {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,

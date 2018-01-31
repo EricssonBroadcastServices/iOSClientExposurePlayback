@@ -11,7 +11,9 @@ import Exposure
 
 extension Playback {
     /// Playback stopped because of an error.
-    internal struct Error {
+    internal struct Error: AnalyticsEvent {
+        internal let eventType: String = "Playback.Error"
+        internal let bufferLimit: Int64 = 3000
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was aborted.
@@ -34,11 +36,7 @@ extension Playback {
 }
 
 extension Playback.Error: PlaybackOffset { }
-extension Playback.Error: AnalyticsEvent {
-    var eventType: String {
-        return "Playback.Error"
-    }
-    
+extension Playback.Error {
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
