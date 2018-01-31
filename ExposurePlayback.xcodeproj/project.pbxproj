@@ -60,12 +60,6 @@
 		76A89D8C2020F41F00C23579 /* Completed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D702020F41F00C23579 /* Completed.swift */; };
 		76A89D8D2020F41F00C23579 /* Created.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D712020F41F00C23579 /* Created.swift */; };
 		76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D722020F41F00C23579 /* DeviceInfo.swift */; };
-		76A89D8F2020F41F00C23579 /* DownloadCancelled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D732020F41F00C23579 /* DownloadCancelled.swift */; };
-		76A89D902020F41F00C23579 /* DownloadCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D742020F41F00C23579 /* DownloadCompleted.swift */; };
-		76A89D912020F41F00C23579 /* DownloadPaused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D752020F41F00C23579 /* DownloadPaused.swift */; };
-		76A89D922020F41F00C23579 /* DownloadResumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D762020F41F00C23579 /* DownloadResumed.swift */; };
-		76A89D932020F41F00C23579 /* DownloadStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D772020F41F00C23579 /* DownloadStarted.swift */; };
-		76A89D942020F41F00C23579 /* DownloadStopped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D782020F41F00C23579 /* DownloadStopped.swift */; };
 		76A89D952020F41F00C23579 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D792020F41F00C23579 /* Error.swift */; };
 		76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */; };
 		76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D7B2020F41F00C23579 /* Heartbeat.swift */; };
@@ -88,12 +82,6 @@
 		76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCF2021CCC000C23579 /* CompletedSpec.swift */; };
 		76A89DE82021CCC000C23579 /* CreatedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD02021CCC000C23579 /* CreatedSpec.swift */; };
 		76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */; };
-		76A89DEA2021CCC000C23579 /* DownloadCancelledSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */; };
-		76A89DEB2021CCC000C23579 /* DownloadCompletedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */; };
-		76A89DEC2021CCC000C23579 /* DownloadPausedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */; };
-		76A89DED2021CCC000C23579 /* DownloadResumedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */; };
-		76A89DEE2021CCC000C23579 /* DownloadStartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */; };
-		76A89DEF2021CCC000C23579 /* DownloadStoppedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */; };
 		76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD82021CCC000C23579 /* ErrorSpec.swift */; };
 		76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */; };
 		76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */; };
@@ -183,12 +171,6 @@
 		76A89D702020F41F00C23579 /* Completed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Completed.swift; sourceTree = "<group>"; };
 		76A89D712020F41F00C23579 /* Created.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Created.swift; sourceTree = "<group>"; };
 		76A89D722020F41F00C23579 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
-		76A89D732020F41F00C23579 /* DownloadCancelled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCancelled.swift; sourceTree = "<group>"; };
-		76A89D742020F41F00C23579 /* DownloadCompleted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCompleted.swift; sourceTree = "<group>"; };
-		76A89D752020F41F00C23579 /* DownloadPaused.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPaused.swift; sourceTree = "<group>"; };
-		76A89D762020F41F00C23579 /* DownloadResumed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadResumed.swift; sourceTree = "<group>"; };
-		76A89D772020F41F00C23579 /* DownloadStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStarted.swift; sourceTree = "<group>"; };
-		76A89D782020F41F00C23579 /* DownloadStopped.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStopped.swift; sourceTree = "<group>"; };
 		76A89D792020F41F00C23579 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandshakeStarted.swift; sourceTree = "<group>"; };
 		76A89D7B2020F41F00C23579 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
@@ -211,12 +193,6 @@
 		76A89DCF2021CCC000C23579 /* CompletedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletedSpec.swift; sourceTree = "<group>"; };
 		76A89DD02021CCC000C23579 /* CreatedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatedSpec.swift; sourceTree = "<group>"; };
 		76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfoSpec.swift; sourceTree = "<group>"; };
-		76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCancelledSpec.swift; sourceTree = "<group>"; };
-		76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCompletedSpec.swift; sourceTree = "<group>"; };
-		76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPausedSpec.swift; sourceTree = "<group>"; };
-		76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadResumedSpec.swift; sourceTree = "<group>"; };
-		76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStartedSpec.swift; sourceTree = "<group>"; };
-		76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStoppedSpec.swift; sourceTree = "<group>"; };
 		76A89DD82021CCC000C23579 /* ErrorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorSpec.swift; sourceTree = "<group>"; };
 		76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandshakeStartedSpec.swift; sourceTree = "<group>"; };
 		76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatSpec.swift; sourceTree = "<group>"; };
@@ -455,12 +431,6 @@
 				76A89D702020F41F00C23579 /* Completed.swift */,
 				76A89D712020F41F00C23579 /* Created.swift */,
 				76A89D722020F41F00C23579 /* DeviceInfo.swift */,
-				76A89D732020F41F00C23579 /* DownloadCancelled.swift */,
-				76A89D742020F41F00C23579 /* DownloadCompleted.swift */,
-				76A89D752020F41F00C23579 /* DownloadPaused.swift */,
-				76A89D762020F41F00C23579 /* DownloadResumed.swift */,
-				76A89D772020F41F00C23579 /* DownloadStarted.swift */,
-				76A89D782020F41F00C23579 /* DownloadStopped.swift */,
 				76A89D792020F41F00C23579 /* Error.swift */,
 				76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */,
 				76A89D7B2020F41F00C23579 /* Heartbeat.swift */,
@@ -488,12 +458,6 @@
 				76A89DCF2021CCC000C23579 /* CompletedSpec.swift */,
 				76A89DD02021CCC000C23579 /* CreatedSpec.swift */,
 				76A89DD12021CCC000C23579 /* DeviceInfoSpec.swift */,
-				76A89DD22021CCC000C23579 /* DownloadCancelledSpec.swift */,
-				76A89DD32021CCC000C23579 /* DownloadCompletedSpec.swift */,
-				76A89DD42021CCC000C23579 /* DownloadPausedSpec.swift */,
-				76A89DD52021CCC000C23579 /* DownloadResumedSpec.swift */,
-				76A89DD62021CCC000C23579 /* DownloadStartedSpec.swift */,
-				76A89DD72021CCC000C23579 /* DownloadStoppedSpec.swift */,
 				76A89DD82021CCC000C23579 /* ErrorSpec.swift */,
 				76A89DD92021CCC000C23579 /* HandshakeStartedSpec.swift */,
 				76A89DDA2021CCC000C23579 /* HeartbeatSpec.swift */,
@@ -624,7 +588,6 @@
 				76A89C4E20207AB200C23579 /* ExposureStreamFairplayRequester.swift in Sources */,
 				76A89D992020F41F00C23579 /* Paused.swift in Sources */,
 				76A89C5020207AB200C23579 /* ChannelPlayable.swift in Sources */,
-				76A89D932020F41F00C23579 /* DownloadStarted.swift in Sources */,
 				76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */,
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
 				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
@@ -632,17 +595,14 @@
 				76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */,
 				76A89C4A20207AB200C23579 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
-				76A89D902020F41F00C23579 /* DownloadCompleted.swift in Sources */,
 				76A89D8B2020F41F00C23579 /* BufferingStopped.swift in Sources */,
 				76A89C4F20207AB200C23579 /* AssetPlayable.swift in Sources */,
-				76A89D8F2020F41F00C23579 /* DownloadCancelled.swift in Sources */,
 				76A89C5A20207AB200C23579 /* ServerTimeProvider.swift in Sources */,
 				76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */,
 				76A89DA52020F9E800C23579 /* ExposureContext+Warning.swift in Sources */,
 				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
 				76A89C5220207AB200C23579 /* PlaybackProperties.swift in Sources */,
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
-				76A89D922020F41F00C23579 /* DownloadResumed.swift in Sources */,
 				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
@@ -655,7 +615,6 @@
 				76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A89D9B2020F41F00C23579 /* PlaybackOffset.swift in Sources */,
-				76A89D912020F41F00C23579 /* DownloadPaused.swift in Sources */,
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
@@ -676,7 +635,6 @@
 				76A89C6520207B2400C23579 /* Playable.swift in Sources */,
 				76A89D952020F41F00C23579 /* Error.swift in Sources */,
 				76A89DA12020F41F00C23579 /* Started.swift in Sources */,
-				76A89D942020F41F00C23579 /* DownloadStopped.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,22 +643,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */,
-				76A89DEC2021CCC000C23579 /* DownloadPausedSpec.swift in Sources */,
 				76A89DF52021CCC000C23579 /* PlayReadySpec.swift in Sources */,
-				76A89DEF2021CCC000C23579 /* DownloadStoppedSpec.swift in Sources */,
 				76A89DE32021CCC000C23579 /* AbortedSpec.swift in Sources */,
 				76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */,
 				76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */,
 				76A89D0420209A2700C23579 /* JsonDecoding.swift in Sources */,
 				76A89DF32021CCC000C23579 /* InitCompletedSpec.swift in Sources */,
 				76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */,
-				76A89DEE2021CCC000C23579 /* DownloadStartedSpec.swift in Sources */,
 				76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */,
 				76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */,
 				76A89DF72021CCC000C23579 /* ResumedSpec.swift in Sources */,
 				76A89DE52021CCC000C23579 /* BufferingStartedSpec.swift in Sources */,
 				76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */,
-				76A89DEB2021CCC000C23579 /* DownloadCompletedSpec.swift in Sources */,
 				76A89DE62021CCC000C23579 /* BufferingStoppedSpec.swift in Sources */,
 				76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */,
 				76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */,
@@ -708,8 +662,6 @@
 				76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */,
 				76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */,
 				76A89DF42021CCC000C23579 /* PausedSpec.swift in Sources */,
-				76A89DEA2021CCC000C23579 /* DownloadCancelledSpec.swift in Sources */,
-				76A89DED2021CCC000C23579 /* DownloadResumedSpec.swift in Sources */,
 				76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */,
 				76A89CF82020958000C23579 /* ContractRestrictionsServiceSpec.swift in Sources */,
 				76A89D0A20209E7400C23579 /* ChannelSourceSpec+StartTime.swift in Sources */,
