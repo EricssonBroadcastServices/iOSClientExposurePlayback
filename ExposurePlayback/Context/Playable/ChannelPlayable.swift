@@ -35,7 +35,7 @@ extension ChannelPlayable {
                     // Workaround until EMP-10023 is fixed
                     if case let .exposureResponse(reason: reason) = error, (reason.httpCode == 403 && reason.message == "NO_MEDIA_ON_CHANNEL") {
                         entitlement
-                            .use(drm: .unencrypted)
+                            .use(drm: "UNENCRYPTED")
                             .request()
                             .response{
                                 if let entitlement = $0.value {
