@@ -37,6 +37,10 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         return "Playback.HandshakeStarted"
     }
     
+    var bufferLimit: Int64 {
+        return 3000
+    }
+    
     
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [

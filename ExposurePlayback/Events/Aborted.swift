@@ -30,6 +30,10 @@ extension Playback.Aborted: AnalyticsEvent {
         return "Playback.Aborted"
     }
     
+    var bufferLimit: Int64 {
+        return 3000
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

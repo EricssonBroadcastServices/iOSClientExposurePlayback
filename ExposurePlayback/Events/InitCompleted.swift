@@ -25,6 +25,10 @@ extension Playback.InitCompleted: AnalyticsEvent {
         return "Playback.InitCompleted"
     }
     
+    var bufferLimit: Int64 {
+        return 3000
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

@@ -72,6 +72,10 @@ extension DeviceInfo: AnalyticsEvent {
         return "Device.Info"
     }
     
+    var bufferLimit: Int64 {
+        return 3000
+    }
+    
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
