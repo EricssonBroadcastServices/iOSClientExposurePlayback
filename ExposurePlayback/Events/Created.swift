@@ -10,10 +10,8 @@ import Foundation
 import Exposure
 
 extension Playback {
-    /// This event is sent when the player is instantiated, or invoked for the first time during the playback session. 
-    internal struct Created: AnalyticsEvent {
-        internal let eventType: String = "Playback.Created"
-        internal let bufferLimit: Int64 = 3000
+    /// This event is sent when the player is instantiated, or invoked for the first time during the playback session.
+    internal struct Created {
         internal let timestamp: Int64
         
         /// Id string of the player/sdk.
@@ -64,7 +62,11 @@ extension Playback {
 
 extension Playback.Created: AssetIdentifier { }
 
-extension Playback.Created {
+extension Playback.Created: AnalyticsEvent {
+    internal var eventType: String {
+        return "Playback.Created"
+    }
+    
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
@@ -118,3 +120,4 @@ extension Playback.Created {
         case mediaId = "MediaId"
     }
 }
+

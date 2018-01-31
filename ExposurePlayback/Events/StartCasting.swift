@@ -11,9 +11,7 @@ import Exposure
 
 extension Playback {
     /// Player started ChromeCasting.
-    internal struct StartCasting: AnalyticsEvent {
-        internal let eventType: String = "Playback.StartCasting"
-        internal let bufferLimit: Int64 = 3000
+    internal struct StartCasting {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was started at in milliseconds.
@@ -27,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.StartCasting: PlaybackOffset { }
-extension Playback.StartCasting {
+extension Playback.StartCasting: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.StartCasting"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
@@ -42,3 +44,4 @@ extension Playback.StartCasting {
         case offsetTime = "OffsetTime"
     }
 }
+

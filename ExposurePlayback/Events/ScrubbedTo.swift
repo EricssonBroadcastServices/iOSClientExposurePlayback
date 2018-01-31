@@ -11,10 +11,8 @@ import Exposure
 
 extension Playback {
     /// Player has been instructed to scrub to a new position in the stream.
-    internal struct ScrubbedTo: AnalyticsEvent {
-        internal let bufferLimit: Int64 = 3000
+    internal struct ScrubbedTo {
         internal let timestamp: Int64
-        internal let eventType: String = "Playback.ScrubbedTo"
         
         /// Offset in the video sequence where the player should start playing
         internal let offsetTime: Int64
@@ -27,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.ScrubbedTo: PlaybackOffset { }
-extension Playback.ScrubbedTo {
+extension Playback.ScrubbedTo: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.ScrubbedTo"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

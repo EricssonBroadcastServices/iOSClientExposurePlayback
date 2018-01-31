@@ -10,11 +10,10 @@ import Foundation
 import Exposure
 
 extension Playback {
-    /// Playback paused temporarily as the player ran out of data to show. 
-    internal struct BufferingStarted: AnalyticsEvent {
-        internal let eventType: String = "Playback.BufferingStarted"
-        internal let bufferLimit: Int64 = 3000
+    /// Playback paused temporarily as the player ran out of data to show.
+    internal struct BufferingStarted {
         internal let timestamp: Int64
+        
         /// Offset in the video sequence where the playback stopped due to buffer underrun.
         internal let offsetTime: Int64
         
@@ -27,7 +26,11 @@ extension Playback {
 
 
 extension Playback.BufferingStarted: PlaybackOffset { }
-extension Playback.BufferingStarted {
+extension Playback.BufferingStarted: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.BufferingStarted"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
@@ -42,3 +45,4 @@ extension Playback.BufferingStarted {
         case offsetTime = "OffsetTime"
     }
 }
+

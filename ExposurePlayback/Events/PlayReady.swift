@@ -11,9 +11,7 @@ import Exposure
 
 extension Playback {
     /// Player has resumed playing the asset that was paused.
-    internal struct PlayReady: AnalyticsEvent {
-        internal let eventType: String = "Playback.PlayReady"
-        internal let bufferLimit: Int64 = 3000
+    internal struct PlayReady {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was started at in milliseconds.
@@ -27,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.PlayReady: PlaybackOffset { }
-extension Playback.PlayReady {
+extension Playback.PlayReady: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.PlayReady"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

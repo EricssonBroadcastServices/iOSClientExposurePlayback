@@ -9,47 +9,7 @@
 import Foundation
 import Exposure
 
-internal enum PlaybackIdentifier: Codable {
-    internal init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        let asset = try container.decode(String.self, forKey: .asset)
-        let type = try container.decode(Types.self, forKey: .type)
-        switch type {
-        case .vod: self = .vod(assetId: asset)
-        case .live: self = .live(channelId: asset)
-        case .program:
-            let channel = try container.decode(String.self, forKey: .channel)
-            self = .program(programId: asset, channelId: channel)
-        case .offline: self = .offline(assetId: asset)
-        case .download: self = .download(assetId: asset)
-        }
-        
-    }
-    
-    internal func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self {
-        case .vod(assetId: let asset):
-            try container.encode(asset, forKey: .asset)
-            try container.encode(Types.vod, forKey: .type)
-        case .live(channelId: let asset):
-            try container.encode(asset, forKey: .asset)
-            try container.encode(Types.live, forKey: .type)
-        case .program(programId: let asset, channelId: let channel):
-            try container.encode(asset, forKey: .asset)
-            try container.encode(Types.program, forKey: .type)
-            try container.encode(channel, forKey: .channel)
-        case .offline(assetId: let asset):
-            try container.encode(asset, forKey: .asset)
-            try container.encode(Types.offline, forKey: .type)
-        case .download(assetId: let asset):
-            try container.encode(asset, forKey: .asset)
-            try container.encode(Types.download, forKey: .type)
-        }
-    }
-    
+internal enum PlaybackIdentifier {
     case vod(assetId: String)
     case live(channelId: String)
     case program(programId: String, channelId: String)
@@ -81,27 +41,13 @@ internal enum PlaybackIdentifier: Codable {
         }
         return .vod(assetId: playable.assetId)
     }
-    
-    internal enum CodingKeys: CodingKey {
-        case asset
-        case channel
-        case type
-    }
-    
-    internal enum Types: String, Codable {
-        case vod
-        case live
-        case program
-        case offline
-        case download
-    }
 }
 
 internal protocol AssetIdentifier {
     /// For vod or offline playback, contains the EMP AssetId of the video being played.
     ///
     /// For live playback, contains the EMP ChannelID of the video being played.
-    /// 
+    ///
     /// For live playback, contains the program initially being played. If the program changes during the session, a Playback.ProgramChanged event should be issued to signal this.
     ///
     /// Example: 1458209835_IkCMxd

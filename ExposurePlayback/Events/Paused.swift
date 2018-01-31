@@ -11,10 +11,7 @@ import Exposure
 
 extension Playback {
     /// Playback has temporarily stopped, but the playback session is still active. It is assumed that the video was paused due to user intervention. If the pausing was caused by a buffer underrun, the Playback.BufferingStarted event should be used instead.
-    internal struct Paused: AnalyticsEvent {
-        let bufferLimit: Int64 = 3000
-        
-        internal let eventType: String = "Playback.Paused"
+    internal struct Paused {
         internal let timestamp: Int64
         
         /// Offset in the video sequence (in milliseconds) where playback paused. For vod or offline viewing, this is the offset from the start of the asset, and for live, this is measured from the start of the program according to the EPG.
@@ -28,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.Paused: PlaybackOffset { }
-extension Playback.Paused  {
+extension Playback.Paused: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.Paused"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

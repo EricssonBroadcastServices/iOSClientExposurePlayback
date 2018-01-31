@@ -11,10 +11,8 @@ import Exposure
 
 extension Playback {
     /// Signals that the player has successfully started playback of the asset/channel.
-    internal struct Started: AnalyticsEvent {
-        internal let eventType: String = "Playback.Started"
-        internal let bufferLimit: Int64 = 3000
-        internal let timestamp: Int64
+    internal struct Started {
+        let timestamp: Int64
         
         /// One of the following: vod, live, offline
         internal var playMode: String {
@@ -58,7 +56,11 @@ extension Playback {
 
 extension Playback.Started: AssetIdentifier { }
 extension Playback.Started: PlaybackOffset { }
-extension Playback.Started {
+extension Playback.Started: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.Started"
+    }
+    
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
@@ -104,3 +106,4 @@ extension Playback.Started {
         case bitrate = "Bitrate"
     }
 }
+

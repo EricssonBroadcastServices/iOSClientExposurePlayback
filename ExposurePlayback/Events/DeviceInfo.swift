@@ -10,10 +10,8 @@ import Foundation
 import Exposure
 
 /// The device info object should be sent once per playback session, preferably at the start of the session.
-internal struct DeviceInfo: AnalyticsEvent {
-    internal let eventType: String = "Device.Info"
-    internal let bufferLimit: Int64 = 3000
-    internal let timestamp: Int64
+internal struct DeviceInfo {
+    internal var timestamp: Int64
     
 }
 
@@ -22,7 +20,7 @@ extension DeviceInfo {
     ///
     /// NOTE: Implementation details for "identifierForVendor" states this:
     /// "If the value is nil, wait and get the value again later. This happens, for example, after the device has been restarted but before the user has unlocked the device."
-    /// 
+    ///
     /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround.
     internal var deviceId: String {
         return UIDevice.current.identifierForVendor!.uuidString
@@ -38,7 +36,7 @@ extension DeviceInfo {
         return String(cString: machine)
     }
     
-    /// String identifying the CPU of the device playing the media	armeabi-v7a
+    /// String identifying the CPU of the device playing the media    armeabi-v7a
     internal var cpuType: String? {
         // TODO: Not implemented yet
         return nil
@@ -54,13 +52,13 @@ extension DeviceInfo {
     /// Example: 8.1
     internal var osVersion: String {
         return UIDevice.current.systemVersion
-//        let components = UIDevice.current.systemVersion.components(separatedBy: ".")
-//        switch components.count {
-//        case 0: return nil
-//        case 1: return components.first! + ".0"
-//        case 2: return components.joined(separator: ".")
-//        default: return components[0] + "." + components[1]
-//        }
+        //        let components = UIDevice.current.systemVersion.components(separatedBy: ".")
+        //        switch components.count {
+        //        case 0: return nil
+        //        case 1: return components.first! + ".0"
+        //        case 2: return components.joined(separator: ".")
+        //        default: return components[0] + "." + components[1]
+        //        }
     }
     
     /// Company that built/created/marketed the device
@@ -69,7 +67,11 @@ extension DeviceInfo {
     }
 }
 
-extension DeviceInfo {
+extension DeviceInfo: AnalyticsEvent {
+    internal var eventType: String {
+        return "Device.Info"
+    }
+    
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,

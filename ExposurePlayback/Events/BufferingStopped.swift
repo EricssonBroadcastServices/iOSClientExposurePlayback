@@ -6,14 +6,13 @@
 //  Copyright © 2017 emp. All rights reserved.
 //
 
+
 import Foundation
 import Exposure
 
 extension Playback {
-    /// Playback resumed after the player has enough data buffered. 
-    internal struct BufferingStopped: AnalyticsEvent {
-        internal let eventType: String = "Playback.BufferingStopped"
-        internal let bufferLimit: Int64 = 3000
+    /// Playback resumed after the player has enough data buffered.
+    internal struct BufferingStopped {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback resumed after a buffering event.
@@ -27,7 +26,11 @@ extension Playback {
 }
 
 extension Playback.BufferingStopped: PlaybackOffset { }
-extension Playback.BufferingStopped {
+extension Playback.BufferingStopped: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.BufferingStopped"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
@@ -42,4 +45,5 @@ extension Playback.BufferingStopped {
         case offsetTime = "OffsetTime"
     }
 }
+
 

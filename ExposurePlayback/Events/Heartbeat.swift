@@ -11,9 +11,7 @@ import Exposure
 
 extension Playback {
     /// Sent to tell the server that the client is still around, and the playback session is active. In case the server, based on lack of heartbeats, detects that a client has disappeared, it should issue a Playback.Aborted message to signal that the playback is not ongoing anymore. If there are other recent events sent by the player, there is no need to send the heartbeat in addition to them.
-    internal struct Heartbeat: AnalyticsEvent {
-        internal let eventType: String = "Playback.Heartbeat"
-        internal let bufferLimit: Int64 = 3000
+    internal struct Heartbeat {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was started at in milliseconds.
@@ -27,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.Heartbeat: PlaybackOffset { }
-extension Playback.Heartbeat {
+extension Playback.Heartbeat: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.Heartbeat"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,

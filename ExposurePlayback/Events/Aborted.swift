@@ -11,9 +11,7 @@ import Exposure
 
 extension Playback {
     /// Playback stopped because of user intervention.
-    internal struct Aborted: AnalyticsEvent {
-        internal let eventType: String = "Playback.Aborted"
-        internal let bufferLimit: Int64 = 3000
+    internal struct Aborted {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was aborted.
@@ -27,7 +25,11 @@ extension Playback {
 }
 
 extension Playback.Aborted: PlaybackOffset { }
-extension Playback.Aborted {
+extension Playback.Aborted: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.Aborted"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
@@ -42,3 +44,4 @@ extension Playback.Aborted {
         case offsetTime = "OffsetTime"
     }
 }
+

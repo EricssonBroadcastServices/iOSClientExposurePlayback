@@ -11,9 +11,7 @@ import Exposure
 
 extension Playback {
     /// Playback switched to a different bitrate.
-    internal struct BitrateChanged: AnalyticsEvent {
-        internal let eventType: String = "Playback.BitrateChanged"
-        internal let bufferLimit: Int64 = 3000
+    internal struct BitrateChanged {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback switched to a different bitrate
@@ -32,7 +30,11 @@ extension Playback {
 
 
 extension Playback.BitrateChanged: PlaybackOffset { }
-extension Playback.BitrateChanged {
+extension Playback.BitrateChanged: AnalyticsEvent {
+    var eventType: String {
+        return "Playback.BitrateChanged"
+    }
+    
     internal var jsonPayload: [String : Any] {
         return [
             JSONKeys.eventType.rawValue: eventType,
