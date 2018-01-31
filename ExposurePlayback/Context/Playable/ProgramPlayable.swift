@@ -28,6 +28,7 @@ extension ProgramPlayable {
         
         entitlement
             .request()
+            .validate()
             .response{
                 if let error = $0.error {
                     // Workaround until EMP-10023 is fixed
@@ -35,6 +36,7 @@ extension ProgramPlayable {
                         entitlement
                             .use(drm: "UNENCRYPTED")
                             .request()
+                            .validate()
                             .response{
                                 if let entitlement = $0.value {
                                     callback(ProgramSource(entitlement: entitlement, assetId: self.assetId, channelId: self.channelId), nil)

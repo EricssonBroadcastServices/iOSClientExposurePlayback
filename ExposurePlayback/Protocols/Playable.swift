@@ -46,6 +46,6 @@ public protocol ProgramPlayConvertible {
 
 extension Program: ProgramPlayConvertible {
     public var programPlayable: ProgramPlayable {
-        return ProgramPlayable(assetId: assetId, channelId: channelId)
+        return ProgramPlayable(assetId: programId, channelId: channelId)
     }
 }

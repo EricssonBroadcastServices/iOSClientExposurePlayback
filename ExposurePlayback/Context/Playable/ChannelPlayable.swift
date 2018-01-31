@@ -30,6 +30,7 @@ extension ChannelPlayable {
         
         entitlement
             .request()
+            .validate()
             .response{
                 if let error = $0.error {
                     // Workaround until EMP-10023 is fixed
@@ -37,6 +38,7 @@ extension ChannelPlayable {
                         entitlement
                             .use(drm: "UNENCRYPTED")
                             .request()
+                            .validate()
                             .response{
                                 if let entitlement = $0.value {
                                     callback(ChannelSource(entitlement: entitlement, assetId: self.assetId), nil)
