@@ -10,6 +10,7 @@
     - [Getting Started](#getting-started)
     - [Playback through `Player` using `ExposureContext`](#playback-through-player-using-exposurecontext)
     - [Program Service](#program-service)
+    - [Enabling Analytics](#enabling-analytics)
     - [Fairplay Integration](#fairplay-integration)
     - [Error Handling](#error-handling)
 * [Release Notes](#release-notes)
@@ -23,6 +24,7 @@
 - [x] Program Service
 - [x] Program based seeking
 - [x] Contract Restrictions
+- [x] Analytics Provider
 
 ## Requirements
 
@@ -92,6 +94,16 @@ player.onProgramChanged { tech, source, program in
     // Update userfacing program information
 }
 ```
+
+### Enabling Analytics
+Client applications can integrate `ExposureAnalytics` out of the box when using `HLSNative` and `ExposureContext` by using the `ExposurePlayback` supplied *convenience init* when creating the `Player` object.
+
+```Swift
+player = Player<HLSNative<ExposureContext>(environment: env,
+sessionToken: token)
+```
+
+This method will prepare the player to dispatch analytics in `env` using `token`.
 
 ### Fairplay Integration
 `Exposure` provides out of the box integration for managing *EMP* configured *Fairplay* `DRM` protection. By using the `Player.startPlayback(...)` function to engage playback the framework automatically configures `player` to use an `ExposureStreamFairplayRequester` as its `FairplayRequester`.
