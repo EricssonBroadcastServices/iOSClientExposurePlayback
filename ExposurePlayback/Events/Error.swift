@@ -15,7 +15,7 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was aborted.
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
         /// Human readable error message
         /// Example: "Unable to parse HLS manifest"
@@ -24,7 +24,7 @@ extension Playback {
         /// Platform-dependent error code
         internal let code: Int
         
-        internal init(timestamp: Int64, offsetTime: Int64, message: String, code: Int) {
+        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.message = message
@@ -33,7 +33,6 @@ extension Playback {
     }
 }
 
-extension Playback.Error: PlaybackOffset { }
 extension Playback.Error: AnalyticsEvent {
     var eventType: String {
         return "Playback.Error"
@@ -44,13 +43,18 @@ extension Playback.Error: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime,
             JSONKeys.message.rawValue: message,
             JSONKeys.code.rawValue: code
         ]
+        
+        if let offset = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = offsetTime
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {
