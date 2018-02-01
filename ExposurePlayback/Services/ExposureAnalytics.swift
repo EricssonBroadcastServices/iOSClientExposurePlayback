@@ -92,19 +92,17 @@ extension ExposureAnalytics {
         }
         
         if exposureSource.isUnifiedPackager {
-            if let source = exposureSource as? ChannelSource {
-                return tech.playheadTime ?? 0
+            if exposureSource is ChannelSource {
+                return tech.playheadTime ?? 0 // TODO: How do we handle when there is no playheadTime available?
             }
-            else if let source = exposureSource as? ProgramSource {
-                return tech.playheadTime ?? 0
+            else if exposureSource is ProgramSource {
+                return tech.playheadTime ?? 0 // TODO: How do we handle when there is no playheadTime available?
             }
-            else {
+            else if exposureSource is AssetSource {
                 return tech.playheadPosition
             }
         }
-        else {
-            return tech.playheadPosition
-        }
+        return tech.playheadPosition
     }
 }
 
