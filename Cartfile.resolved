@@ -1,6 +1,6 @@
 github "Alamofire/Alamofire" "4.4.0"
-github "EricssonBroadcastServices/iOSClientExposure" "5c7ad3f0f31e9affc7ae22e65751032fc543e0d3"
-github "EricssonBroadcastServices/iOSClientPlayer" "06cce99013cdc972675a2d936d0ce1fe54f83260"
+github "EricssonBroadcastServices/iOSClientExposure" "4cdb02d2b3a8f12bc7ef7ac60ff936117bf24fc8"
+github "EricssonBroadcastServices/iOSClientPlayer" "e30e6b0b722215b4a0b39c0c070d62dd809a7d44"
 github "FredrikSjoberg/Mockingjay" "2.0.3"
 github "Quick/Nimble" "v7.0.1"
 github "Quick/Quick" "v1.1.0"
