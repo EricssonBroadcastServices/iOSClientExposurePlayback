@@ -10,8 +10,17 @@ import Foundation
 import Player
 import Exposure
 
+internal protocol Seekable {
+    func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
+    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
+}
+
+internal protocol StartTimeConfigurable {
+    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext)
+}
+
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
-public class ExposureSource: MediaSource {
+public class ExposureSource: MediaSource, Seekable, StartTimeConfigurable {
     internal static let segmentLength: Int64 = 6000
     
     /// Connector used to process Analytics Events
@@ -43,6 +52,14 @@ public class ExposureSource: MediaSource {
     }
     
     internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+        
+    }
+    
+    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        
+    }
+    
+    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         
     }
 }

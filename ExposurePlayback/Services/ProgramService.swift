@@ -91,6 +91,7 @@ extension ProgramService {
             print("ProgramService: fetchProgram",timestamp,self.channelId)
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
+                callback(nil)
                 return
             }
             

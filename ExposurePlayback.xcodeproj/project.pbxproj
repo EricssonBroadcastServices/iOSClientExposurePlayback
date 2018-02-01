@@ -357,9 +357,9 @@
 		76A89C3C20207AB100C23579 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				76A89C3F20207AB100C23579 /* ExposureSource.swift */,
 				76A89C3D20207AB100C23579 /* AssetSource.swift */,
 				76A89C3E20207AB100C23579 /* ChannelSource.swift */,
-				76A89C3F20207AB100C23579 /* ExposureSource.swift */,
 				76A89C4020207AB100C23579 /* ProgramSource.swift */,
 			);
 			path = Source;

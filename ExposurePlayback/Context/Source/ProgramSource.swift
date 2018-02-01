@@ -16,6 +16,7 @@ public class ProgramSource: ExposureSource {
         self.channelId = channelId
         super.init(entitlement: entitlement, assetId: assetId)
     }
+    
     internal override func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
