@@ -95,7 +95,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     public func onEntitlementRequested<Tech>(tech: Tech, playable: Playable) where Tech : PlaybackTech {
         /// 1. Created
         let created = Playback.Created(timestamp: Date().millisecondsSince1970,
-                                       version: version(for: "com.emp.Analytics"),
+                                       version: version(for: "com.emp.ExposurePlayback"),
                                        revision: version(for: "com.emp.Player"),
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
