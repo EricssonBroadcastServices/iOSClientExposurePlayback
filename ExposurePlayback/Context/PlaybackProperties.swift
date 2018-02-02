@@ -22,7 +22,7 @@ public struct PlaybackProperties {
     public let playFrom: PlayFrom
     
     
-    public init(autoplay: Bool = true, playFrom: PlayFrom = .bookmark) {
+    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour) {
         self.autoplay = autoplay
         self.playFrom = playFrom
     }
