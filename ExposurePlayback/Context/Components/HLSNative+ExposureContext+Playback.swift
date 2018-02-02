@@ -101,7 +101,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - returns: `Self`
     @discardableResult
     public func onEntitlementResponse(callback: @escaping (Player<Tech>, ExposureContext.Source, PlaybackEntitlement) -> Void) -> Self {
-        context.onEntitlementResponse = { entitlement, source in
+        context.onEntitlementResponse = { [weak self] entitlement, source in
+            guard let `self` = self else { return }
             callback(self,source,entitlement)
         }
         return self
