@@ -16,8 +16,13 @@ public class ProgramSource: ExposureSource {
         self.channelId = channelId
         super.init(entitlement: entitlement, assetId: assetId)
     }
-    
-    internal override func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+}
+
+extension ProgramSource: ContextTimeSeekable {
+    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        
+        // TODO: LOOK OVER!
+        
         // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
         
         let ranges = player.seekableTimeRanges
@@ -80,8 +85,16 @@ public class ProgramSource: ExposureSource {
             }
         }
     }
-    
-    internal override func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+}
+
+extension ProgramSource: ContextPositionSeekable {
+    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // TODO: Convert position to wallclock time and call `handleSeek(toTime:for:in:)`
+    }
+}
+
+extension ProgramSource: ContextStartTime {
+    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
             defaultStartTime(for: tech, in: context)

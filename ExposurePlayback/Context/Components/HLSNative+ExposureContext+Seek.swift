@@ -19,6 +19,8 @@ extension CMTime {
         self.init(value: milliseconds, timescale: 1000)
     }
 }
+
+
 // MARK: - Playhead Time
 extension Player where Tech == HLSNative<ExposureContext> {
     
@@ -40,56 +42,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
         guard let currentTimestamp = playheadTime else { return }
         guard context.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement) else { return }
         
-        source.handleSeek(toTime: timeInterval, for: self, in: context)
-//
-//
-//        /// Check Seekable Range
-//        let ranges = seekableTimeRanges
-//        guard !ranges.isEmpty else { return }
-//        if ranges.count == 1 {
-//            let first = ranges.first!.start.milliseconds
-//            let last = ranges.first!.end.milliseconds
-//            if timeInterval < first {
-//                // Before seekable range, new entitlement request required
-//                handleProgramServiceBasedSeek(timestamp: timeInterval)
-//            }
-//            else if timeInterval > last {
-//                // ProgramSource
-//                //  * Live program
-//                //      * GOTO-LIVE (live edge)
-//                //  * Cathcup program
-//                //      *
-//
-//                // ChannelSource (live manifest)
-//                //  * GOTO-LIVE (live edge)
-//
-//
-//                // After seekable range. If this is a live manifest, we asume the intention is to find the livepoint. Ignore other seeks
-//                if let programService = context.programService {
-//                    // TODO: Should always be possible to "GO-LIVE"
-//                    programService.isEntitled(toPlay: last) { [weak self] in
-//                        self?.tech.seek(toTime: last)
-//                    }
-//                }
-//            }
-//            else {
-//                // Within bounds
-//                guard let source = tech.currentSource else { return }
-//                guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: timeInterval, using: source.entitlement) else { return }
-//
-//                if let programService = context.programService {
-//                    programService.isEntitled(toPlay: timeInterval) { [weak self] in
-//                        self?.tech.seek(toTime: timeInterval)
-//                    }
-//                }
-//                else {
-//                    self.seek(toTime: timeInterval)
-//                }
-//            }
-//        }
-//        else {
-//            // TODO: How do we handle discontinuous time ranges?
-//        }
+        if let contextSeekable = source as? ContextTimeSeekable {
+            contextSeekable.handleSeek(toTime: timeInterval, for: self, in: context)
+        }
+        else {
+            tech.seek(toTime: timeInterval)
+        }
     }
     
     /// Moves the playhead position to the specified offset in the players buffer
@@ -98,36 +56,46 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter position: target offset in milliseconds
     public func seek(toPosition position: Int64) {
-        /// Check Seekable Range
-        let ranges = seekableRanges
-        guard !ranges.isEmpty else { return }
-        if ranges.count == 1 {
-            let first = ranges.first!.start.milliseconds
-            let last = ranges.first!.end.milliseconds
-            
-            if position < first || position > last {
-                if let timeInterval = timestamp(relatedTo: position) {
-                    seek(toTime: timeInterval)
-                }
-            }
-            else {
-                // Within bounds
-                guard let source = tech.currentSource else { return }
-                guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement) else { return }
-                
-                if let programService = context.programService, let timeInterval = timestamp(relatedTo: position) {
-                    programService.isEntitled(toPlay: timeInterval) { [weak self] in
-                        self?.tech.seek(toTime: timeInterval)
-                    }
-                }
-                else {
-                    self.seek(toPosition: position)
-                }
-            }
+        guard let source = tech.currentSource else { return }
+        guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement) else { return }
+        
+        if let contextSeekable = source as? ContextPositionSeekable {
+            contextSeekable.handleSeek(toPosition: position, for: self, in: context)
         }
         else {
-            // TODO: How do we handle discontinuous time ranges?
+            tech.seek(toPosition: position)
         }
+//        
+//        /// Check Seekable Range
+//        let ranges = seekableRanges
+//        guard !ranges.isEmpty else { return }
+//        if ranges.count == 1 {
+//            let first = ranges.first!.start.milliseconds
+//            let last = ranges.first!.end.milliseconds
+//            
+//            if position < first || position > last {
+//                if let timeInterval = timestamp(relatedTo: position) {
+//                    seek(toTime: timeInterval)
+//                }
+//            }
+//            else {
+//                // Within bounds
+//                guard let source = tech.currentSource else { return }
+//                guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement) else { return }
+//                
+//                if let programService = context.programService, let timeInterval = timestamp(relatedTo: position) {
+//                    programService.isEntitled(toPlay: timeInterval) { [weak self] in
+//                        self?.tech.seek(toTime: timeInterval)
+//                    }
+//                }
+//                else {
+//                    self.seek(toPosition: position)
+//                }
+//            }
+//        }
+//        else {
+//            // TODO: How do we handle discontinuous time ranges?
+//        }
     }
     
     internal func handleProgramServiceBasedSeek(timestamp: Int64) {

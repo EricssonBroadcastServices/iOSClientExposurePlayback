@@ -10,7 +10,17 @@ import Foundation
 import Player
 
 public class AssetSource: ExposureSource {
-    internal override func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+    
+}
+
+extension AssetSource: ContextPositionSeekable {
+    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // TODO: Handle assert source seek to position
+    }
+}
+
+extension AssetSource: ContextStartTime {
+    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
             defaultStartTime(for: tech, in: context)

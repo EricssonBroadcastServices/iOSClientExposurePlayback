@@ -10,17 +10,20 @@ import Foundation
 import Player
 import Exposure
 
-internal protocol Seekable {
+internal protocol ContextTimeSeekable {
     func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
+}
+
+internal protocol ContextPositionSeekable {
     func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
 }
 
-internal protocol StartTimeConfigurable {
+internal protocol ContextStartTime {
     func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext)
 }
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
-public class ExposureSource: MediaSource, Seekable, StartTimeConfigurable {
+public class ExposureSource: MediaSource {
     internal static let segmentLength: Int64 = 6000
     
     /// Connector used to process Analytics Events
@@ -51,17 +54,17 @@ public class ExposureSource: MediaSource, Seekable, StartTimeConfigurable {
         print("ExposureSource deinit")
     }
     
-    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
-        
-    }
-    
-    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        
-    }
-    
-    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        
-    }
+//    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+//        
+//    }
+//    
+//    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+//        
+//    }
+//    
+//    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+//        
+//    }
 }
 
 extension ExposureSource {
