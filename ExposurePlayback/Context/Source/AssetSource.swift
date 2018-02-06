@@ -35,9 +35,12 @@ extension AssetSource: ContextStartTime {
             else {
                 defaultStartTime(for: tech, in: context)
             }
-        case .custom(offset: let offset):
+        case .customPosition(position: let offset):
             // Use the custom supplied offset
             tech.startOffset(atPosition: offset)
+        case .customTime(timestamp: let offset):
+            // Use the custom supplied offset
+            tech.startOffset(atTime: offset)
         }
     }
     

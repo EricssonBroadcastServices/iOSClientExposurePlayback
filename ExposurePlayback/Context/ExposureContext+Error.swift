@@ -128,8 +128,8 @@ extension ExposureContext.Error.FairplayError {
 extension ExposureContext.Error {
     public var message: String {
         switch self {
-        case .fairplay(reason: let reason): return "Fairplay: " + reason.message
-        case .exposure(reason: let error): return "Exposure: " + error.message
+        case .fairplay(reason: let reason): return reason.message
+        case .exposure(reason: let error): return error.message
         }
     }
 }

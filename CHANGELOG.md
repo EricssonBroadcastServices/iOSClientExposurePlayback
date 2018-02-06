@@ -1,8 +1,8 @@
 # CHANGELOG
 
-* `0.76.x` Releases - [0.76.0](#0760)
+* `0.77.x` Releases - [0.77.0](#0770)
 
-## 0.76.0
+## 0.77.0
 
 #### Features
 * `EMP-10646` `ExposureContext` exposes cached server walltime.
@@ -11,6 +11,8 @@
 * Introduced `PlaybackProperties` to manage additional configuration of playback.
 * Added `onEntitlementResponse` callback
 * *fastForward*, *rewind* and *timeshift* contract restrictions enforced.
+* Context aware `seekTo` api enabling automatic entitlement renewal and enforcement.
+* Added `onWarning` callback which broadcasts *warnings* to interested parties.
 
 #### Changes
 * `EMP-10852` API changes to `ExposureContext` playback extensions starting playback by *EMP* assetId has been renamed.

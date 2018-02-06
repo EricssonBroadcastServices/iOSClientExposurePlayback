@@ -13,55 +13,54 @@ public class ChannelSource: ExposureSource {
     
 }
 
-extension ChannelSource: ContextTimeSeekable {
-    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
-        
-        let ranges = player.seekableTimeRanges
+extension Player where Tech == HLSNative<ExposureContext> {
+    
+    internal func checkBounds(timestamp: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
+        let ranges = seekableTimeRanges
         guard !ranges.isEmpty else {
-            // TODO: Send WARNIG.seekFailedNoSeekableTimeRange
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
+            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
             return
         }
         
         if ranges.count > 1 {
-            // TODO: Send WARNING.discontinuousSeekableTimeRanges
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
+            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
         }
+        
         
         let first = ranges.first!.start.milliseconds
         let last = ranges.first!.end.milliseconds
-        if timeInterval < first {
-            // Before seekable range, new entitlement request required
-            player.handleProgramServiceBasedSeek(timestamp: timeInterval)
+        
+        if timestamp < first {
+            // Before seekable range
+            ifBefore()
         }
-        else if timeInterval > last {
+        else if timestamp > (last - ExposureSource.segmentLength) {
             // After seekable range.
-            //
-            // ChannelSource is always considered to be live which means seeking beyond the last seekable range would be impossible.
-            //
-            // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
-            //
-            // Note: `delta` in this aspect is the *time behind live*
-            let delta = player.timeBehindLive ?? 0
-            if (timeInterval - delta) <= last {
-                if let programService = player.context.programService {
-                    programService.isEntitled(toPlay: last) {
-                        // NOTE: If `callback` is NOT fired:
-                        //      * Playback is not entitled
-                        //      * `onError` will be dispatched with message
-                        //      * playback will be stopped and unloaded
-                        player.tech.seek(toTime: last)
-                    }
-                }
-                else {
-                    player.tech.seek(toTime: last)
-                }
-            }
-            else {
-                // TODO: Dispatch onWarning => Seek beyond livepoint
-            }
-            
+            ifAfter(last)
         }
         else {
+            // Within bounds
+            ifWithin()
+        }
+    }
+    
+}
+
+extension ContextTimeSeekable {
+    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext, onAfter: @escaping (Int64) -> Void) {
+        guard let playheadTime = player.playheadTime else {
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning
+                .timeBasedSeekRequestInNonTimeBasedSource(timestamp: timeInterval))
+            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            return
+        }
+        
+        player.checkBounds(timestamp: timeInterval, ifBefore: {
+            // Before seekable range, new entitlement request required
+            player.handleProgramServiceBasedSeek(timestamp: timeInterval)
+        }, ifWithin: {
             // Within bounds
             if let service = context.programService {
                 service.isEntitled(toPlay: timeInterval) {
@@ -75,13 +74,53 @@ extension ChannelSource: ContextTimeSeekable {
             else {
                 player.tech.seek(toTime: timeInterval)
             }
+        }) { lastTimestamp in
+            // After seekable range.
+            onAfter(lastTimestamp)
+        }
+    }
+}
+
+extension ChannelSource: ContextTimeSeekable {
+    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
+        handleSeek(toTime: timeInterval, for: player, in: context) { lastTimestamp in
+            // After seekable range.
+            //
+            // ChannelSource is always considered to be live which means seeking beyond the last seekable range would be impossible.
+            //
+            // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
+            //
+            // Note: `delta` in this aspect is the *time behind live*
+            let delta = player.timeBehindLive ?? 0
+            if (timeInterval - delta) <= lastTimestamp {
+                if let programService = player.context.programService {
+                    programService.isEntitled(toPlay: lastTimestamp) {
+                        // NOTE: If `callback` is NOT fired:
+                        //      * Playback is not entitled
+                        //      * `onError` will be dispatched with message
+                        //      * playback will be stopped and unloaded
+                        player.tech.seek(toTime: lastTimestamp)
+                    }
+                }
+                else {
+                    player.tech.seek(toTime: lastTimestamp)
+                }
+            }
+            else {
+                let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
+                player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            }
         }
     }
 }
 
 extension ChannelSource: ContextPositionSeekable {
     func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        // TODO: Convert position to wallclock time and call `handleSeek(toTime:for:in:)`
+        if let playheadTime = player.playheadTime {
+            let timeInterval = position.timestampFrom(referenceTime: playheadTime, referencePosition: player.playheadPosition)
+            handleSeek(toTime: timeInterval, for: player, in: context)
+        }
     }
 }
 
@@ -114,16 +153,12 @@ extension ChannelSource: ContextStartTime {
             else {
                 defaultStartTime(for: tech, in: context)
             }
-        case .custom(offset: let offset):
+        case .customPosition(position: let offset):
             // Use the custom supplied offset
-            if isUnifiedPackager {
-                // Wallclock timestamp
-                tech.startOffset(atTime: offset)
-            }
-            else {
-                // 0 based offset
-                tech.startOffset(atPosition: offset)
-            }
+            tech.startOffset(atPosition: offset)
+        case .customTime(timestamp: let offset):
+            // Use the custom supplied offset
+            tech.startOffset(atTime: offset)
         }
     }
     
@@ -137,8 +172,40 @@ extension ChannelSource: ContextStartTime {
             tech.startOffset(atPosition: nil)
         }
     }
+    
 }
 
+extension ChannelSource: ContextGoLive {
+    internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        guard let serverTime = player.serverTime else {
+            // TODO: WARNING
+//            player.tech.eventDispatcher.onWarning(player.tech, self, <#T##PlayerWarning<HLSNative<ExposureContext>, ExposureContext>#>)
+            return
+        }
+        
+        
+        
+//        if isUnifiedPackager {
+//            // Since this is a live manifest by design, the last bufferPosition is the live offset
+//            
+//            if let programService = player.context.programService {
+//                programService.isEntitled(toPlay: last) {
+//                    // NOTE: If `callback` is NOT fired:
+//                    //      * Playback is not entitled
+//                    //      * `onError` will be dispatched with message
+//                    //      * playback will be stopped and unloaded
+//                    player.tech.seek(toTime: last)
+//                }
+//            }
+//            else {
+//                player.tech.seek(toTime: last)
+//            }
+//        }
+//        else {
+//            
+//        }
+    }
+}
 extension ChannelSource: ProgramServiceEnabled {
     public var programServiceChannelId: String {
         return assetId

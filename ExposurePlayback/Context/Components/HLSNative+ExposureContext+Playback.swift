@@ -87,6 +87,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let contextError = PlayerError<Tech, ExposureContext>.context(error: .exposure(reason: error))
             let nilSource: ExposureSource? = nil
             providers.forEach{ $0.onError(tech: tech, source: nilSource, error: contextError) }
+            tech.stop()
             tech.eventDispatcher.onError(tech, nilSource, contextError)
         }
     }
@@ -112,22 +113,32 @@ extension Player where Tech == HLSNative<ExposureContext> {
 extension Player where Tech == HLSNative<ExposureContext> {
     fileprivate func prepareProgramService(source: ExposureSource) {
         guard let serviceEnabled = source as? ProgramServiceEnabled else { return }
+        print("prepareProgramService")
         let service = ProgramService(environment: context.environment, sessionToken: context.sessionToken, channelId: serviceEnabled.programServiceChannelId)
         
         context.programService = service
         
         service.currentPlayheadTime = { [weak self] in return self?.playheadTime }
         service.onProgramChanged = { [weak self] program in
+            print(">> service.onProgramChanged",program?.programId, program?.startDate)
             guard let `self` = self else { return }
             self.context.onProgramChanged(program, source)
         }
-        service.onNotEntitled = { message in
-            // TODO: Stop playback and unload source
-            print("NOT ENTITLED",message)
+        service.onNotEntitled = { [weak self] message in
+            guard let `self` = self else { return }
+            let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message))
+            let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
+            
+            self.tech.eventDispatcher.onError(self.tech, source, contextError)
+            source.analyticsConnector.onError(tech: self.tech, source: source, error: contextError)
+            self.tech.stop()
+        }
+        service.onWarning = { [weak self] warning in
+            guard let `self` = self else { return }
+            let contextWarning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning.programService(reason: warning))
+            self.tech.eventDispatcher.onWarning(self.tech, source, contextWarning)
         }
         
-        
-        // TODO: Should be started once playback has started.
         service.startMonitoring()
     }
 }

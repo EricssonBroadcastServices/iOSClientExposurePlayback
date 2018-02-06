@@ -8,6 +8,7 @@
 
 import Foundation
 import Player
+import Exposure
 import AVFoundation
 
 extension CMTime {
@@ -20,7 +21,6 @@ extension CMTime {
     }
 }
 
-
 // MARK: - Playhead Time
 extension Player where Tech == HLSNative<ExposureContext> {
     
@@ -30,6 +30,13 @@ extension Player where Tech == HLSNative<ExposureContext> {
             return last-serverTime
         }
         return 0
+    }
+    
+    public func seekToLive() {
+        guard let source = tech.currentSource else { return }
+        if let source = source as? ContextGoLive {
+            source.handleGoLive(player: self, in: context)
+        }
     }
     
     /// For playback content that is associated with a range of dates, move the playhead to point within that range.
@@ -65,67 +72,39 @@ extension Player where Tech == HLSNative<ExposureContext> {
         else {
             tech.seek(toPosition: position)
         }
-//        
-//        /// Check Seekable Range
-//        let ranges = seekableRanges
-//        guard !ranges.isEmpty else { return }
-//        if ranges.count == 1 {
-//            let first = ranges.first!.start.milliseconds
-//            let last = ranges.first!.end.milliseconds
-//            
-//            if position < first || position > last {
-//                if let timeInterval = timestamp(relatedTo: position) {
-//                    seek(toTime: timeInterval)
-//                }
-//            }
-//            else {
-//                // Within bounds
-//                guard let source = tech.currentSource else { return }
-//                guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement) else { return }
-//                
-//                if let programService = context.programService, let timeInterval = timestamp(relatedTo: position) {
-//                    programService.isEntitled(toPlay: timeInterval) { [weak self] in
-//                        self?.tech.seek(toTime: timeInterval)
-//                    }
-//                }
-//                else {
-//                    self.seek(toPosition: position)
-//                }
-//            }
-//        }
-//        else {
-//            // TODO: How do we handle discontinuous time ranges?
-//        }
     }
     
     internal func handleProgramServiceBasedSeek(timestamp: Int64) {
         guard let programService = context.programService else {
-            // TODO: What happens then?
+            // TODO: WARNING
+//            tech.eventDispatcher.onWarning(tech, tech.currentSource, <#T##PlayerWarning<HLSNative<ExposureContext>, ExposureContext>#>)
             return
         }
         
         programService.currentProgram(for: timestamp) { [weak self] program, error in
             guard let `self` = self else { return }
-            if let program = program {
-                let properties = PlaybackProperties(autoplay: self.context.playbackProperties.autoplay, playFrom: PlaybackProperties.PlayFrom.custom(offset: timestamp))
-                self.startPlayback(channelId: programService.channelId, programId: program.assetId, properties: properties)
+            guard let program = program else {
+                // Unable to fetch the program required for the `timestamp`
+                if let error = error {
+                    // Error fetching EPG, ignoring the seek
+                    let warning = ExposureContext.Warning.programService(reason: .fetchingCurrentProgramFailed(timestamp: timestamp, channelId: programService.channelId, error: error))
+                    let contextWarning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: warning)
+                    self.tech.eventDispatcher.onWarning(self.tech, self.tech.currentSource, contextWarning)
+                }
+                else {
+                    // Gap in EPG, ignoring the seek
+                    let warning = ExposureContext.Warning.programService(reason: .gapInEpg(timestamp: timestamp, channelId: programService.channelId))
+                    let contextWarning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: warning)
+                    self.tech.eventDispatcher.onWarning(self.tech, self.tech.currentSource, contextWarning)
+                }
+                return
             }
             
-            // TODO: Do we ignore seek if no program is found or do we stop playback?
-            // Do we send Playback.WARNING?
-//            if let error = error {
-//                let playerError = PlayerError<Tech, Tech.Context>.context(error: error)
-//                guard let currentSource = self.tech.currentSource else { return }
-//                self.tech.eventDispatcher.onError(self.tech, currentSource, playerError)
-//                currentSource.analyticsConnector.onError(tech: self.tech, source: currentSource, error: playerError)
-//                self.tech.stop()
-//            }
+            self.stop()
+            let properties = PlaybackProperties(autoplay: self.context.playbackProperties.autoplay, playFrom: PlaybackProperties.PlayFrom.customTime(timestamp: timestamp))
+            self.startPlayback(playable: program.programPlayable, properties: properties)
+//            self.startPlayback(channelId: programService.channelId, programId: program.programId, properties: properties)
         }
-    }
-    
-    fileprivate func timestamp(relatedTo position: Int64) -> Int64? {
-        guard let time = playheadTime else { return nil }
-        return time - playheadPosition + position
     }
 }
 

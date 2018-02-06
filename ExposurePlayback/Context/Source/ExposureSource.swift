@@ -10,6 +10,10 @@ import Foundation
 import Player
 import Exposure
 
+internal protocol ContextGoLive {
+    func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
+}
+
 internal protocol ContextTimeSeekable {
     func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
 }
@@ -85,16 +89,21 @@ extension ExposureSource {
     }
     
     internal var tParameter: (Int64, Int64?)? {
-        if let param:String = entitlement
+        guard let param:String = entitlement
             .mediaLocator
-            .queryParam(for: UnifiedPackageParams.tParam.rawValue) {
-            let formatter = DateFormatter()
-            formatter.timeZone = TimeZone(abbreviation: "UTC")
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            if let ms = formatter.date(from: param)?.millisecondsSince1970 {
-                return (ms, nil)
-            }
-            return nil
+            .queryParam(for: UnifiedPackageParams.tParam.rawValue) else  { return nil }
+        let comp = param.components(separatedBy: "-")
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        if comp.count == 3 {
+            guard let first = formatter.date(from: comp[0...2].joined(separator: "-"))?.millisecondsSince1970 else { return nil }
+            return (first,nil)
+        }
+        else if comp.count == 6 {
+            guard let first = formatter.date(from: comp[0...2].joined(separator: "-"))?.millisecondsSince1970 else { return nil }
+            let second = formatter.date(from: comp[3...5].joined(separator: "-"))?.millisecondsSince1970
+            return (first,second)
         }
         return nil
     }
@@ -107,10 +116,6 @@ extension ExposureSource {
     }
     
     /// Specifies the timeshift delay *in seconds* (if available).
-    ///
-    /// Negative timeshift delays will be clamped at zero.
-    ///
-    /// - note: Requires a *Unified Packager* sourced stream.
     internal var timeshiftDelay: Int64? {
         return entitlement
             .mediaLocator
