@@ -218,7 +218,7 @@ extension ProgramService {
         let delta = Int(end - timestamp)
         stopTimer()
         timer = DispatchSource.makeTimerSource(queue: queue)
-        timer?.scheduleOneshot(deadline: .now() + .milliseconds(delta))
+        timer?.schedule(deadline: .now() + .milliseconds(delta))
         print("ProgramService: startValidationTimer schedule")
         timer?.setEventHandler { [weak self] in
             print("ProgramService: startValidationTimer eventHandler")

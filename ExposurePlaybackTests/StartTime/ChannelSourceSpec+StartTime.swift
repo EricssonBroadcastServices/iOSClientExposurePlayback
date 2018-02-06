@@ -215,10 +215,10 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                 }
             }
             
-            context(".custom") {
+            context(".customTime") {
                 context("USP") {
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .custom(offset: 300))
+                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customTime(timestamp: 300))
                     it("should use custom value if lastViewedOffset if specified") {
                         let entitlement = buildEntitlement(lastViewedOffset: 100)
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
@@ -249,14 +249,14 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                 
                 context("old pipe") {
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .custom(offset: 300))
+                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customTime(timestamp: 300))
                     it("should use custom value if lastViewedOffset if specified") {
                         let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(equal(300))
+                        expect(tech.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if lastViewedTime specified") {
@@ -264,8 +264,8 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(equal(300))
+                        expect(tech.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if no bookmarks specified") {
@@ -273,8 +273,71 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
-                        expect(tech.startTime).to(beNil())
+                        expect(tech.startTime).to(equal(300))
+                        expect(tech.startPosition).to(beNil())
+                    }
+                }
+            }
+            context(".customPosition") {
+                context("USP") {
+                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
+                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customPosition(position: 300))
+                    it("should use custom value if lastViewedOffset if specified") {
+                        let entitlement = buildEntitlement(lastViewedOffset: 100)
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
                         expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
+                    }
+                    
+                    it("should use custom value if lastViewedTime specified") {
+                        let entitlement = buildEntitlement(lastViewedTime: 100)
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
+                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
+                    }
+                    
+                    it("should use custom value if no bookmarks specified") {
+                        let entitlement = buildEntitlement()
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
+                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
+                    }
+                }
+                
+                context("old pipe") {
+                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
+                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customPosition(position: 300))
+                    it("should use custom value if lastViewedOffset if specified") {
+                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
+                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
+                    }
+                    
+                    it("should use custom value if lastViewedTime specified") {
+                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
+                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
+                    }
+                    
+                    it("should use custom value if no bookmarks specified") {
+                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
+                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
+                        source.handleStartTime(for: tech, in: exposureContext)
+                        
+                        expect(tech.startPosition).to(equal(300))
+                        expect(tech.startTime).to(beNil())
                     }
                 }
             }

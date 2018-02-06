@@ -41,10 +41,10 @@ class MockedProgramProvider: ProgramProvider {
         else if channelId == "validationTrigger" {
             if fetchNumber == 0 {
                 fetchNumber += 1
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId" ,assetId: "validationTriggerFirstProgram"),nil)
+                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId1" ,assetId: "validationTriggerFirstProgram"),nil)
             }
             else {
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId", assetId: "validationTriggerSecondProgram"),nil)
+                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId2", assetId: "validationTriggerSecondProgram"),nil)
             }
         }
         else if channelId == "validationTriggerNotEntitled" {
@@ -59,10 +59,10 @@ class MockedProgramProvider: ProgramProvider {
         else if channelId == "errorOnProgramValidation" {
             if fetchNumber == 0 {
                 fetchNumber += 1
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId", assetId: "errorOnProgramValidationFirstProgram"),nil)
+                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "errorOnProgramValidationFirstProgram", assetId: "errorOnProgramValidationFirstProgram"),nil)
             }
             else {
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId", assetId: "errorOnProgramValidationSecondProgram"),nil)
+                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "errorOnProgramValidationSecondProgram", assetId: "errorOnProgramValidationSecondProgram"),nil)
             }
         }
         else if channelId == "timestampWithinActiveProgram" {
@@ -130,7 +130,7 @@ class ProgramServiceSpec: QuickSpec {
         let sessionToken = SessionToken(value: "someToken")
         
         describe("ProgramServiceSpec") {
-            
+
             it("Should retry start monitoring if no playheadTime exists") {
                 let channelId = "retryStartMonitoring"
                 var counter = 0
@@ -180,7 +180,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring()
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 2)
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 3)
                     expect(notEntitledMessage).toEventually(beNil())
                     expect(programs.count).toEventually(equal(2))
                     expect(programs.last?.assetId).toEventually(equal(service.currentProgram?.assetId))
@@ -289,68 +289,68 @@ class ProgramServiceSpec: QuickSpec {
                     expect(programs.count).toEventually(equal(2), timeout: 3)
                 }
             }
-            
+
             context("Should not validate again") {
                 it("if timestamp is within active program bounds") {
                     let channelId = "timestampWithinActiveProgram"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                     let provider = MockedProgramProvider()
                     service.provider = provider
-                    
+
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-                    
+
                     var programs: [Program] = []
                     service.onProgramChanged = { program in
                         if let program = program {
                             programs.append(program)
                         }
                     }
-                    
+
                     var notEntitledMessage: String? = nil
                     service.onNotEntitled = { message in
                         notEntitledMessage = message
                     }
-                    
+
                     service.startMonitoring()
-                    
+
                     var successCalled = false
                     service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) {
                         successCalled = true
                     }
-                    
+
                     expect(notEntitledMessage).toEventually(beNil(), timeout: 3)
                     expect(successCalled).toEventually(beTrue(), timeout: 3)
                     expect(programs.count).toEventually(equal(1), timeout: 3)
                 }
             }
-            
+
             it("Should message if isEntitled returns not entitled") {
                 let channelId = "isEntitledNotEntitled"
                 let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                 let provider = MockedProgramProvider()
                 service.provider = provider
-                
+
                 service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-                
+
                 var programs: [Program] = []
                 service.onProgramChanged = { program in
                     if let program = program {
                         programs.append(program)
                     }
                 }
-                
+
                 var notEntitledMessage: String? = nil
                 service.onNotEntitled = { message in
                     notEntitledMessage = message
                 }
-                
+
                 service.startMonitoring()
-                
+
                 var successCalled = false
                 service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) {
                     successCalled = true
                 }
-                
+
                 expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 3)
                 expect(successCalled).toEventually(beFalse(), timeout: 3)
                 expect(programs.count).toEventually(equal(1), timeout: 3)
