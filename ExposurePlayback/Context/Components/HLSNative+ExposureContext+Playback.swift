@@ -68,6 +68,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
                 source.handleStartTime(for: tech, in: context)
             }
             
+            /// Update tech autoplay settings from PlaybackProperties
+            tech.autoplay = context.playbackProperties.autoplay
+            
             /// Start ProgramService
             prepareProgramService(source: source)
             
@@ -101,11 +104,17 @@ extension Player where Tech == HLSNative<ExposureContext> {
         context.programService = service
         
         service.currentPlayheadTime = { [weak self] in return self?.playheadTime }
+        
         service.onProgramChanged = { [weak self] program in
-            print(">> service.onProgramChanged",program?.programId, program?.startDate)
             guard let `self` = self else { return }
+            source.analyticsConnector.providers.forEach{
+                if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                    exposureProvider.onProgramChanged(tech: self.tech, source: source, program: program)
+                }
+            }
             self.context.onProgramChanged(program, source)
         }
+        
         service.onNotEntitled = { [weak self] message in
             guard let `self` = self else { return }
             let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message))
@@ -115,6 +124,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             source.analyticsConnector.onError(tech: self.tech, source: source, error: contextError)
             self.tech.stop()
         }
+        
         service.onWarning = { [weak self] warning in
             guard let `self` = self else { return }
             let contextWarning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning.programService(reason: warning))

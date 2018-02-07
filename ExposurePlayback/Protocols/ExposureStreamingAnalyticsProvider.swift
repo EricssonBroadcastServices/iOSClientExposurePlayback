@@ -46,5 +46,14 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     /// - parameter playSessionId: Unique identifier for the current playback session.
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
     func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: HeartbeatsProvider) where Tech: PlaybackTech, Source: MediaSource
+    
+    /// Sent if the current program changes during the session.
+    ///
+    /// `program` may be nil if there is for example a gap in the *Epg*
+    ///
+    /// - parameter tech: `PlaybackTech` to be used for playback
+    /// - parameter source: `MediaSource` used to load the request
+    /// - parameter playSessionId: Unique identifier for the current playback session.
+    func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource
 }
 

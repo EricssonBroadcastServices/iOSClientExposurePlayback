@@ -66,7 +66,11 @@ public class ExposureAnalytics {
         dispatcher?.terminate()
     }
     
+    /// Tracks if chromecasting was started
     internal var startedChromeCasting = false
+    
+    /// ProgramChanged events are sent as soon as an Epg has been detected. We should not send `Playback.ProgramChanged` for this initial "onProgramChanged` event since the request was made for that program.
+    internal var lastKnownProgramId: String? = nil
     
     /// Instruct the player is transitioning from local playback to `ChromeCasting`
     public func startedCasting() {
@@ -163,6 +167,19 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                 startupEvents: events,
                                 heartbeatsProvider: heartbeatsProvider)
         dispatcher?.flushTrigger(enabled: true)
+    }
+    
+    
+    public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource {
+        let currentProgramId = lastKnownProgramId
+        lastKnownProgramId = program?.programId
+        if let program = program, program.programId != currentProgramId {
+            let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
+                                                offsetTime: offsetTime(for: source, using: tech),
+                                                programId: program.programId,
+                                                videoLength: tech.duration)
+            dispatcher?.enqueue(event: event)
+        }
     }
 }
 
