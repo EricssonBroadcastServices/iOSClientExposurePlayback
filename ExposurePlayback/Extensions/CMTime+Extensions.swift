@@ -10,7 +10,7 @@ import AVFoundation
 
 extension CMTime {
     public var milliseconds: Int64? {
-        guard !isIndefinite else {
+        guard !isIndefinite && isValid else {
             return nil
         }
         return Int64(seconds*1000)
