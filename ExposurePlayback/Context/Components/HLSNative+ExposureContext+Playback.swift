@@ -91,27 +91,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
             tech.eventDispatcher.onError(tech, nilSource, contextError)
         }
     }
-}
-
-// MARK: Entitlement response
-extension Player where Tech == HLSNative<ExposureContext> {
     
-    /// Sets the callback to fire once an entitlement response is received
-    ///
-    /// - parameter callback: callback to fire once the event is fired.
-    /// - returns: `Self`
-    @discardableResult
-    public func onEntitlementResponse(callback: @escaping (Player<Tech>, ExposureContext.Source, PlaybackEntitlement) -> Void) -> Self {
-        context.onEntitlementResponse = { [weak self] entitlement, source in
-            guard let `self` = self else { return }
-            callback(self,source,entitlement)
-        }
-        return self
-    }
-}
-
-extension Player where Tech == HLSNative<ExposureContext> {
-    fileprivate func prepareProgramService(source: ExposureSource) {
+    
+    private func prepareProgramService(source: ExposureSource) {
         guard let serviceEnabled = source as? ProgramServiceEnabled else { return }
         print("prepareProgramService")
         let service = ProgramService(environment: context.environment, sessionToken: context.sessionToken, channelId: serviceEnabled.programServiceChannelId)

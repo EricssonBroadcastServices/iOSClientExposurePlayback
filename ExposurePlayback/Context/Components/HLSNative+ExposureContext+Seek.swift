@@ -11,16 +11,6 @@ import Player
 import Exposure
 import AVFoundation
 
-extension CMTime {
-    public var milliseconds: Int64 {
-        return Int64(seconds*1000)
-    }
-    
-    public init(milliseconds: Int64) {
-        self.init(value: milliseconds, timescale: 1000)
-    }
-}
-
 // MARK: - Playhead Time
 extension Player where Tech == HLSNative<ExposureContext> {
     
@@ -108,3 +98,32 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
 }
 
+
+extension Player where Tech == HLSNative<ExposureContext> {
+    internal func checkBounds(timestamp: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
+        let ranges = seekableTimeRanges
+        guard !ranges.isEmpty, let first = ranges.first?.start.milliseconds, let last = ranges.last?.end.milliseconds else {
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
+            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
+            return
+        }
+        
+        if ranges.count > 1 {
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
+            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
+        }
+        
+        if timestamp < first {
+            // Before seekable range
+            ifBefore()
+        }
+        else if timestamp > (last - ExposureSource.segmentLength) {
+            // After seekable range.
+            ifAfter(last)
+        }
+        else {
+            // Within bounds
+            ifWithin()
+        }
+    }
+}

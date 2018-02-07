@@ -15,7 +15,7 @@ public class AssetSource: ExposureSource {
 
 extension AssetSource: ContextPositionSeekable {
     func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        // TODO: Handle assert source seek to position
+        player.tech.seek(toPosition: position)
     }
 }
 

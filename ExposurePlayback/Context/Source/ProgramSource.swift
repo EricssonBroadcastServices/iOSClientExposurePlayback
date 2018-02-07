@@ -125,6 +125,8 @@ extension ProgramSource: ContextStartTime {
     }
 }
 
+extension ProgramSource: ContextGoLive { }
+
 extension ProgramSource: ProgramServiceEnabled {
     public var programServiceChannelId: String {
         return channelId

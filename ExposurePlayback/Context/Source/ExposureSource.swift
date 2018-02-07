@@ -10,22 +10,6 @@ import Foundation
 import Player
 import Exposure
 
-internal protocol ContextGoLive {
-    func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
-}
-
-internal protocol ContextTimeSeekable {
-    func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
-}
-
-internal protocol ContextPositionSeekable {
-    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext)
-}
-
-internal protocol ContextStartTime {
-    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext)
-}
-
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
 public class ExposureSource: MediaSource {
     internal static let segmentLength: Int64 = 6000
@@ -57,18 +41,6 @@ public class ExposureSource: MediaSource {
     deinit {
         print("ExposureSource deinit")
     }
-    
-//    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
-//        
-//    }
-//    
-//    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-//        
-//    }
-//    
-//    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-//        
-//    }
 }
 
 extension ExposureSource {
@@ -123,6 +95,7 @@ extension ExposureSource {
     }
 }
 
+// MARK: - HLSNativeConfigurable
 extension ExposureSource: HLSNativeConfigurable {
     public var hlsNativeConfiguration: HLSNativeConfiguration {
         let drmAgent = ExposureStreamFairplayRequester(entitlement: entitlement)

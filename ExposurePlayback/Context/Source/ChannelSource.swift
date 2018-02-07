@@ -13,41 +13,6 @@ public class ChannelSource: ExposureSource {
     
 }
 
-extension Player where Tech == HLSNative<ExposureContext> {
-    
-    internal func checkBounds(timestamp: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
-        let ranges = seekableTimeRanges
-        guard !ranges.isEmpty else {
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
-            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
-            return
-        }
-        
-        if ranges.count > 1 {
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
-            tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
-        }
-        
-        
-        let first = ranges.first!.start.milliseconds
-        let last = ranges.first!.end.milliseconds
-        
-        if timestamp < first {
-            // Before seekable range
-            ifBefore()
-        }
-        else if timestamp > (last - ExposureSource.segmentLength) {
-            // After seekable range.
-            ifAfter(last)
-        }
-        else {
-            // Within bounds
-            ifWithin()
-        }
-    }
-    
-}
-
 extension ContextTimeSeekable {
     internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext, onAfter: @escaping (Int64) -> Void) {
         guard let playheadTime = player.playheadTime else {
@@ -176,36 +141,9 @@ extension ChannelSource: ContextStartTime {
 }
 
 extension ChannelSource: ContextGoLive {
-    internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        guard let serverTime = player.serverTime else {
-            // TODO: WARNING
-//            player.tech.eventDispatcher.onWarning(player.tech, self, <#T##PlayerWarning<HLSNative<ExposureContext>, ExposureContext>#>)
-            return
-        }
-        
-        
-        
-//        if isUnifiedPackager {
-//            // Since this is a live manifest by design, the last bufferPosition is the live offset
-//            
-//            if let programService = player.context.programService {
-//                programService.isEntitled(toPlay: last) {
-//                    // NOTE: If `callback` is NOT fired:
-//                    //      * Playback is not entitled
-//                    //      * `onError` will be dispatched with message
-//                    //      * playback will be stopped and unloaded
-//                    player.tech.seek(toTime: last)
-//                }
-//            }
-//            else {
-//                player.tech.seek(toTime: last)
-//            }
-//        }
-//        else {
-//            
-//        }
-    }
+    
 }
+
 extension ChannelSource: ProgramServiceEnabled {
     public var programServiceChannelId: String {
         return assetId
