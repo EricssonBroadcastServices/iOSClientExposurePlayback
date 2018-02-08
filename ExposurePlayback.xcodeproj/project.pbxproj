@@ -99,6 +99,7 @@
 		76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE02021CCC000C23579 /* ScrubbedToSpec.swift */; };
 		76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE12021CCC000C23579 /* StartCastingSpec.swift */; };
 		76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE22021CCC000C23579 /* StartedSpec.swift */; };
+		76CD5AEC202CA25A00941ABC /* HLSNative+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AEB202CA25A00941ABC /* HLSNative+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +217,7 @@
 		76A89DE02021CCC000C23579 /* ScrubbedToSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrubbedToSpec.swift; sourceTree = "<group>"; };
 		76A89DE12021CCC000C23579 /* StartCastingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCastingSpec.swift; sourceTree = "<group>"; };
 		76A89DE22021CCC000C23579 /* StartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartedSpec.swift; sourceTree = "<group>"; };
+		76CD5AEB202CA25A00941ABC /* HLSNative+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -434,6 +436,7 @@
 				76A89D642020F36400C23579 /* UIDevice+Extensions.swift */,
 				7635AEBE2029AF94001512BF /* Int64+Extensions.swift */,
 				7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */,
+				76CD5AEB202CA25A00941ABC /* HLSNative+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
 				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
+				76CD5AEC202CA25A00941ABC /* HLSNative+Extensions.swift in Sources */,
 				76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */,
 				76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */,

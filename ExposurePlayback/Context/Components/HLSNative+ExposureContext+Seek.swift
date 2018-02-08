@@ -93,7 +93,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
             self.stop()
             let properties = PlaybackProperties(autoplay: self.context.playbackProperties.autoplay, playFrom: PlaybackProperties.PlayFrom.customTime(timestamp: timestamp))
             self.startPlayback(playable: program.programPlayable, properties: properties)
-//            self.startPlayback(channelId: programService.channelId, programId: program.programId, properties: properties)
         }
     }
 }

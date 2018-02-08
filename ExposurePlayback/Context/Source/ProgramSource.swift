@@ -23,7 +23,9 @@ extension ProgramSource: ContextTimeSeekable {
         // NOTE: ProgramSource playback can be either *dynamic catchup*, ie a growing manifest, or *static catchup*, ie a vod manifest
         handleSeek(toTime: timeInterval, for: player, in: context) { lastTimestamp in
             // After seekable range.
-            if let type = player.tech.playbackType, type == "Live" {
+            
+            // TODO: Check fragility of checking for `playbackType`
+            if player.tech.dynamicManifest {
                 // ProgreamSource is considered to be live which means seeking beyond the last seekable range would be impossible.
                 //
                 // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
@@ -125,7 +127,17 @@ extension ProgramSource: ContextStartTime {
     }
 }
 
-extension ProgramSource: ContextGoLive { }
+extension ProgramSource: ContextGoLive {
+    
+    internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        if player.tech.dynamicManifest {
+            goToLiveDynamicManifest(player: player, in: context)
+        }
+        else {
+            goToLiveStaticManifest(player: player, in: context)
+        }
+    }
+}
 
 extension ProgramSource: ProgramServiceEnabled {
     public var programServiceChannelId: String {

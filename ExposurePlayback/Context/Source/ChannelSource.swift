@@ -141,7 +141,9 @@ extension ChannelSource: ContextStartTime {
 }
 
 extension ChannelSource: ContextGoLive {
-    
+    internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        goToLiveDynamicManifest(player: player, in: context)
+    }
 }
 
 extension ChannelSource: ProgramServiceEnabled {
