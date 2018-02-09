@@ -9,8 +9,31 @@
 import Foundation
 import Exposure
 
+internal protocol AssetEntitlementProvider {
+    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void)
+}
+
 public struct AssetPlayable: Playable {
-    public var assetId: String
+    public let assetId: String
+    
+    internal var entitlementProvider: AssetEntitlementProvider = AlamofireEntitlementProvider()
+    
+    internal struct AlamofireEntitlementProvider: AssetEntitlementProvider {
+        func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void) {
+            Entitlement(environment: environment,
+                        sessionToken: sessionToken)
+                .vod(assetId: assetId)
+                .request()
+                .validate()
+                .response{ callback($0.value, $0.error) }
+        }
+    }
+}
+
+extension AssetPlayable {
+    public init(assetId: String) {
+        self.assetId = assetId
+    }
 }
 
 extension AssetPlayable {
@@ -24,18 +47,13 @@ extension AssetPlayable {
     }
     
     internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        Entitlement(environment: environment,
-                    sessionToken: sessionToken)
-            .vod(assetId: assetId)
-            .request()
-            .validate()
-            .response{
-                if let entitlement = $0.value {
-                    callback(AssetSource(entitlement: entitlement, assetId: self.assetId), nil)
-                }
-                else {
-                    callback(nil,$0.error!)
-                }
+        entitlementProvider.requestEntitlement(assetId: assetId, using: sessionToken, in: environment) { entitlement, error in
+            if let entitlement = entitlement {
+                callback(AssetSource(entitlement: entitlement, assetId: self.assetId), nil)
+            }
+            else {
+                callback(nil,error!)
+            }
         }
     }
 }

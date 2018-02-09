@@ -100,6 +100,9 @@
 		76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE12021CCC000C23579 /* StartCastingSpec.swift */; };
 		76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE22021CCC000C23579 /* StartedSpec.swift */; };
 		76CD5AEC202CA25A00941ABC /* HLSNative+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AEB202CA25A00941ABC /* HLSNative+Extensions.swift */; };
+		76CD5AF0202DA57000941ABC /* AssetPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */; };
+		76CD5AF2202DBD4F00941ABC /* ChannelPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */; };
+		76CD5AF4202DBF2300941ABC /* ProgramPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,6 +221,9 @@
 		76A89DE12021CCC000C23579 /* StartCastingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCastingSpec.swift; sourceTree = "<group>"; };
 		76A89DE22021CCC000C23579 /* StartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartedSpec.swift; sourceTree = "<group>"; };
 		76CD5AEB202CA25A00941ABC /* HLSNative+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+Extensions.swift"; sourceTree = "<group>"; };
+		76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPlayableSpec.swift; sourceTree = "<group>"; };
+		76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPlayableSpec.swift; sourceTree = "<group>"; };
+		76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramPlayableSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,6 +299,7 @@
 				76A89CF52020958000C23579 /* ContractRestrictionsServiceSpec.swift */,
 				76A89CF32020958000C23579 /* MonotonicTimeServiceSpec.swift */,
 				76A89CF42020958000C23579 /* ProgramServiceSpec.swift */,
+				76CD5AF5202DC6A300941ABC /* Playable */,
 				76A89DCA2021CCC000C23579 /* Event Tests */,
 				76A89D0520209E7400C23579 /* StartTime */,
 				76A89C0B202072D100C23579 /* Info.plist */,
@@ -494,6 +501,16 @@
 			path = "Event Tests";
 			sourceTree = "<group>";
 		};
+		76CD5AF5202DC6A300941ABC /* Playable */ = {
+			isa = PBXGroup;
+			children = (
+				76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */,
+				76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */,
+				76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */,
+			);
+			path = Playable;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -677,9 +694,11 @@
 				76A89D0920209E7400C23579 /* AssetSourceSpec+StartTime.swift in Sources */,
 				76A89D0420209A2700C23579 /* JsonDecoding.swift in Sources */,
 				76A89DF32021CCC000C23579 /* InitCompletedSpec.swift in Sources */,
+				76CD5AF2202DBD4F00941ABC /* ChannelPlayableSpec.swift in Sources */,
 				76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */,
 				76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */,
 				76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */,
+				76CD5AF0202DA57000941ABC /* AssetPlayableSpec.swift in Sources */,
 				76A89DF72021CCC000C23579 /* ResumedSpec.swift in Sources */,
 				76A89DE52021CCC000C23579 /* BufferingStartedSpec.swift in Sources */,
 				76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */,
@@ -689,6 +708,7 @@
 				76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */,
 				76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */,
 				76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */,
+				76CD5AF4202DBF2300941ABC /* ProgramPlayableSpec.swift in Sources */,
 				76A89DF42021CCC000C23579 /* PausedSpec.swift in Sources */,
 				76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */,
 				76A89CF82020958000C23579 /* ContractRestrictionsServiceSpec.swift in Sources */,
