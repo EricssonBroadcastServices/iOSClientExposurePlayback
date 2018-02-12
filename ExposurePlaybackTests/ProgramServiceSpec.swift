@@ -16,21 +16,10 @@ import Foundation
 
 class MockedProgramProvider: ProgramProvider {
     func program(for channelId: String, start: Int64, end: Int64, programId: String, assetId: String = "anAssetId") -> Program {
-        let currentTime = Date().millisecondsSince1970
-        let formatter = DateFormatter()
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        let startTime = formatter.string(from: Date(milliseconds: start))
-        let endTime = formatter.string(from: Date(milliseconds: end))
-        let json: [String: Codable] = [
-            "programId": programId,
-            "assetId": assetId,
-            "channelId": channelId,
-            "startTime":startTime,
-            "endTime": endTime
-        ]
-        return json.decode(Program.self)!
-//        return Program(created: nil, changed: nil, programId: programId, assetId: assetId, channelId: channelId, startTime: start, endTime: end, vodAvailable: nil, catchup: nil, catchupBlocked: nil, asset: nil, blackout: nil)
+        return Program
+            .validJson(programId: programId, channelId: channelId, assetId: assetId)
+            .timestamp(starting: start, ending: end)
+            .decode(Program.self)!
     }
     
     var fetchNumber: Int = 0
@@ -69,7 +58,7 @@ class MockedProgramProvider: ProgramProvider {
             callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 30*60*1000, programId: "programId", assetId: "timestampWithinActiveProgram"),nil)
         }
         else if channelId == "isEntitledNotEntitled" {
-            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId", assetId: "isEntitledNotEntitledProgram"),nil)
+            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 60 * 1000, programId: "programId", assetId: "isEntitledNotEntitledProgram"),nil)
         }
     }
     
@@ -153,7 +142,7 @@ class ProgramServiceSpec: QuickSpec {
                     newProgram = program
                 }
 
-                service.startMonitoring()
+                service.startMonitoring(epgOffset: 10 * 1000)
 
                 expect(newProgram).toEventuallyNot(beNil(), timeout: 3)
             }
@@ -179,7 +168,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 0)
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 3)
                     expect(notEntitledMessage).toEventually(beNil())
                     expect(programs.count).toEventually(equal(2))
@@ -206,7 +195,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 0)
                     expect(service.currentProgram?.assetId).toEventually(equal("notEntitledProgram"), timeout: 1)
                     expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 2)
                     expect(programs.count).toEventually(equal(1))
@@ -233,7 +222,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 10 * 1000)
 
                     expect(notEntitledMessage).toEventually(beNil(), timeout: 1)
                     expect(newProgram).toEventually(beNil(), timeout: 1)
@@ -257,7 +246,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 10 * 1000)
 
                     expect(notEntitledMessage).toEventually(beNil(), timeout: 1)
                     expect(newProgram).toEventually(beNil(), timeout: 1)
@@ -283,7 +272,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 0)
 
                     expect(notEntitledMessage).toEventually(beNil(), timeout: 3)
                     expect(programs.count).toEventually(equal(2), timeout: 3)
@@ -311,7 +300,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(epgOffset: 10 * 1000)
 
                     var successCalled = false
                     service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) {
@@ -344,10 +333,10 @@ class ProgramServiceSpec: QuickSpec {
                     notEntitledMessage = message
                 }
 
-                service.startMonitoring()
+                service.startMonitoring(epgOffset: 10 * 1000)
 
                 var successCalled = false
-                service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) {
+                service.isEntitled(toPlay: Date().millisecondsSince1970 + 120 * 1000) {
                     successCalled = true
                 }
 

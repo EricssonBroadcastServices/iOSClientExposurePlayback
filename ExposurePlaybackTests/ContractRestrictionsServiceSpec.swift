@@ -109,29 +109,12 @@ class ContractRestrictionsServiceSpec: QuickSpec {
     
     
     func buildEntitlement(ffEnabled: Bool = true, rwEnabled: Bool = true, timeshiftEnabled: Bool = true) -> PlaybackEntitlement {
-        let json:[String: Codable] = [
-            "playToken":"playToken",
-            "mediaLocator":"http://www.example.com",
-            "licenseExpiration":"licenseExpiration",
-            "licenseExpirationReason":"NOT_ENTITLED",
-            "licenseActivation":"licenseActivation",
-            "playTokenExpiration":"playTokenExpiration",
-            "entitlementType":"TVOD",
-            "live":false,
-            "playSessionId":"playSessionId",
-            "ffEnabled":ffEnabled,
-            "timeshiftEnabled":timeshiftEnabled,
-            "rwEnabled":rwEnabled,
-            "minBitrate":10,
-            "maxBitrate":20,
-            "maxResHeight":30,
-            "airplayBlocked":false,
-            "mdnRequestRouterUrl":"mdnRequestRouterUrl",
-            "lastViewedOffset":10,
-            "lastViewedTime":10,
-            "liveTime":10,
-            "productId":"productId"
-        ]
+        
+        var json = PlaybackEntitlement.validJson
+        json["ffEnabled"] = ffEnabled
+        json["timeshiftEnabled"] = timeshiftEnabled
+        json["rwEnabled"] = rwEnabled
+        
         return json.decode(PlaybackEntitlement.self)!
     }
 }

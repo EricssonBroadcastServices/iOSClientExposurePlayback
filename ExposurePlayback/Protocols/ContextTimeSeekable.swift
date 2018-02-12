@@ -15,13 +15,6 @@ internal protocol ContextTimeSeekable {
 
 extension ContextTimeSeekable {
     internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext, onAfter: @escaping (Int64) -> Void) {
-        guard let playheadTime = player.playheadTime else {
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning
-                .timeBasedSeekRequestInNonTimeBasedSource(timestamp: timeInterval))
-            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
-            return
-        }
-        
         player.checkBounds(timestamp: timeInterval, ifBefore: {
             // Before seekable range, new entitlement request required
             player.handleProgramServiceBasedSeek(timestamp: timeInterval)
@@ -35,6 +28,7 @@ extension ContextTimeSeekable {
                     //      * playback will be stopped and unloaded
                     player.tech.seek(toTime: timeInterval)
                 }
+                
             }
             else {
                 player.tech.seek(toTime: timeInterval)

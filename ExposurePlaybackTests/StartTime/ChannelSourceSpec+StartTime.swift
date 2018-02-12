@@ -344,26 +344,8 @@ class ChannelSourceStartTimeSpec: QuickSpec {
         }
         
         func buildEntitlement(pipe: String = "http://www.example.com/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int? = nil) -> PlaybackEntitlement {
-            var json:[String: Codable] = [
-                "playToken":"playTokenExpiration",
-                "mediaLocator":pipe,
-                "licenseExpiration":"licenseExpiration",
-                "licenseExpirationReason":"NOT_ENTITLED",
-                "licenseActivation":"licenseActivation",
-                "playTokenExpiration":"playTokenExpiration",
-                "entitlementType":"TVOD",
-                "live":false,
-                "ffEnabled":false,
-                "rwEnabled":false,
-                "timeshiftEnabled":false,
-                "playSessionId":"playSessionId",
-                "minBitrate":10,
-                "maxBitrate":20,
-                "maxResHeight":30,
-                "airplayBlocked":false,
-                "mdnRequestRouterUrl":"mdnRequestRouterUrl",
-                "productId":"productId"
-            ]
+            var json = PlaybackEntitlement.requiedJson
+            json["mediaLocator"] = pipe
             
             if let offset = lastViewedOffset {
                 json["lastViewedOffset"] = offset
@@ -373,7 +355,6 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                 json["lastViewedTime"] = offset
             }
             return json.decode(PlaybackEntitlement.self)!
-//            return PlaybackEntitlement(playTokenExpiration: "playTokenExpiration", mediaLocator: URL(string: pipe)!, playSessionId: "playSessionId", live: false, ffEnabled: false, timeshiftEnabled: false, rwEnabled: false, airplayBlocked: false, playToken: nil, fairplay: nil, licenseExpiration: nil, licenseExpirationReason: nil, licenseActivation: nil, entitlementType: nil, minBitrate: nil, maxBitrate: nil, maxResHeight: nil, mdnRequestRouterUrl: nil, lastViewedOffset: lastViewedOffset, lastViewedTime: lastViewedTime, liveTime: nil, productId: nil)
         }
     }
 }

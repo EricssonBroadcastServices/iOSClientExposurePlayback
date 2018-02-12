@@ -95,11 +95,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
         }
     }
     
-    
     private func prepareProgramService(source: ExposureSource) {
         guard let serviceEnabled = source as? ProgramServiceEnabled else { return }
-        print("prepareProgramService")
-        let service = ProgramService(environment: context.environment, sessionToken: context.sessionToken, channelId: serviceEnabled.programServiceChannelId)
+        let service = context.programServiceGenerator(context.environment, context.sessionToken, serviceEnabled.programServiceChannelId)
         
         context.programService = service
         
@@ -131,7 +129,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
             self.tech.eventDispatcher.onWarning(self.tech, source, contextWarning)
         }
         
-        service.startMonitoring()
+        // We request the epg for the currentTimestamp + a short offset into the future. This will solve issues where the first segment in manifest start
+        service.startMonitoring(epgOffset: 10 * 1000)
     }
 }
 

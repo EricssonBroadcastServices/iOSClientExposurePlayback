@@ -14,47 +14,17 @@ import Foundation
 @testable import ExposurePlayback
 
 internal class MockedProgramEntitlementProvider: ProgramEntitlementProvider {
-    var shouldFail = false
+    var mockedRequestEntitlement: (String, String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?) -> Void) -> Void = { _,_,_,_,_ in }
     func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void) {
-        if !shouldFail {
-            guard let result = entitlement() else {
-                callback(nil,ExposureError.generalError(error: MockedError.generalError))
-                return
-            }
-            callback(result,nil)
-        }
-        else {
-            callback(nil,ExposureError.generalError(error: MockedError.generalError))
-        }
-    }
-    
-    enum MockedError: Error {
-        case generalError
-    }
-    
-    func entitlement() -> PlaybackEntitlement? {
-        let requiredJson:[String: Codable] = [
-            "mediaLocator":"mediaLocator",
-            "playTokenExpiration":"playTokenExpiration",
-            "playSessionId":"playSessionId",
-            "live":false,
-            "ffEnabled":false,
-            "timeshiftEnabled":false,
-            "rwEnabled":false,
-            "airplayBlocked":false,
-            ]
-        return requiredJson.decode(PlaybackEntitlement.self)
-    }
-}
-
-internal class MockedProgramPlayable: ProgramPlayConvertible {
-    var programPlayable: ProgramPlayable {
-        let provider = MockedProgramEntitlementProvider()
-        return ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)
+        mockedRequestEntitlement(programId, channelId, sessionToken, environment, callback)
     }
 }
 
 class ProgramPlayableSpec: QuickSpec {
+    
+    enum MockedError: Error {
+        case generalError
+    }
     
     override func spec() {
         super.spec()
@@ -65,7 +35,16 @@ class ProgramPlayableSpec: QuickSpec {
         describe("ProgramPlayble") {
             
             it("Should prepare source with valid entitlement response") {
-                let playable = MockedProgramPlayable().programPlayable
+                let provider = MockedProgramEntitlementProvider()
+                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                    guard let result = PlaybackEntitlement.validJson.decode(PlaybackEntitlement.self) else {
+                        callback(nil,ExposureError.generalError(error: MockedError.generalError))
+                        return
+                    }
+                    callback(result,nil)
+                }
+                let playable = ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)
+                
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
                 playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
@@ -79,9 +58,11 @@ class ProgramPlayableSpec: QuickSpec {
             
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedProgramEntitlementProvider()
-                var playable = ProgramPlayable(assetId: "programId", channelId: "channelId")
-                playable.entitlementProvider = provider
-                provider.shouldFail = true
+                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                    callback(nil,ExposureError.generalError(error: MockedError.generalError))
+                }
+                let playable = ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)
+                
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
                 playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in

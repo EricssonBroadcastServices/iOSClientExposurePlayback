@@ -178,7 +178,7 @@ extension ProgramService {
         }
     }
     
-    internal func startMonitoring() {
+    internal func startMonitoring(epgOffset: Int64) {
         guard let timestamp =  currentPlayheadTime() else {
             print("ProgramService: startMonitoring.retry",Date().millisecondsSince1970)
             /// Retry untill we receive a current playhead time. This is only possible when playback has started
@@ -186,14 +186,14 @@ extension ProgramService {
             timer = DispatchSource.makeTimerSource(queue: queue)
             timer?.schedule(deadline: .now() + .milliseconds(2000))
             timer?.setEventHandler { [weak self] in
-                self?.startMonitoring()
+                self?.startMonitoring(epgOffset: epgOffset)
             }
             timer?.resume()
             return
         }
         
         stopTimer()
-        provider.fetchProgram(on: channelId, timestamp: timestamp, using: environment) { [weak self] program, error in
+        provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
             print("ProgramService: timestamp",timestamp,program?.programId,error?.code,error?.localizedDescription)
             guard error == nil else {
