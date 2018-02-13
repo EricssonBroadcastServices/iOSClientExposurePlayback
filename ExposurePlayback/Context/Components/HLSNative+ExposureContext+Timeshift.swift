@@ -13,7 +13,13 @@ import Player
 extension Player where Tech == HLSNative<ExposureContext> {
     public func pause() {
         guard let source = tech.currentSource else { return }
-        guard context.contractRestrictionsService.canPause(entitlement: source.entitlement) else { return }
+        let pauseDisabled = context.contractRestrictionsService.canPause(entitlement: source.entitlement)
+        guard pauseDisabled == nil else {
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: pauseDisabled!)
+            tech.eventDispatcher.onWarning(tech, source, warning)
+            return
+        }
+        
         tech.pause()
     }
     

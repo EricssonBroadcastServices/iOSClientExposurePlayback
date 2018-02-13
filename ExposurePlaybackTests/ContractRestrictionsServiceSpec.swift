@@ -29,9 +29,13 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beFalse())
-                    expect(rw).to(beFalse())
-                    expect(pause).to(beFalse())
+                    expect(ff).toNot(beNil())
+                    expect(rw).toNot(beNil())
+                    expect(pause).toNot(beNil())
+                    
+                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
+                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
+                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
                 }
             }
             
@@ -43,9 +47,12 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beTrue())
-                    expect(rw).to(beFalse())
-                    expect(pause).to(beFalse())
+                    expect(ff).to(beNil())
+                    expect(rw).toNot(beNil())
+                    expect(pause).toNot(beNil())
+                    
+                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
+                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
                 }
             }
             
@@ -57,9 +64,12 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beFalse())
-                    expect(rw).to(beTrue())
-                    expect(pause).to(beFalse())
+                    expect(ff).toNot(beNil())
+                    expect(rw).to(beNil())
+                    expect(pause).toNot(beNil())
+                    
+                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
+                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
                 }
             }
             
@@ -71,9 +81,12 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beFalse())
-                    expect(rw).to(beFalse())
-                    expect(pause).to(beTrue())
+                    expect(ff).toNot(beNil())
+                    expect(rw).toNot(beNil())
+                    expect(pause).to(beNil())
+                    
+                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
+                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
                 }
             }
             
@@ -85,9 +98,11 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beTrue())
-                    expect(rw).to(beTrue())
-                    expect(pause).to(beFalse())
+                    expect(ff).to(beNil())
+                    expect(rw).to(beNil())
+                    expect(pause).toNot(beNil())
+                    
+                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
                 }
             }
             
@@ -99,9 +114,9 @@ class ContractRestrictionsServiceSpec: QuickSpec {
                     let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
                     let pause = service.canPause(entitlement: noneEnabled)
                     
-                    expect(ff).to(beTrue())
-                    expect(rw).to(beTrue())
-                    expect(pause).to(beTrue())
+                    expect(ff).to(beNil())
+                    expect(rw).to(beNil())
+                    expect(pause).to(beNil())
                 }
             }
         }

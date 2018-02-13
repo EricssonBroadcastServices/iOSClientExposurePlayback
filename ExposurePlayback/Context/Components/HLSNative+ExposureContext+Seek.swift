@@ -37,7 +37,13 @@ extension Player where Tech == HLSNative<ExposureContext> {
     public func seek(toTime timeInterval: Int64) {
         guard let source = tech.currentSource else { return }
         guard let currentTimestamp = playheadTime else { return }
-        guard context.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement) else { return }
+        let seekDisabled = context.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement)
+        guard seekDisabled == nil else {
+            // Seeking is disabled. Trigger warning and ignore the seek atempt
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
+            tech.eventDispatcher.onWarning(tech, source, warning)
+            return
+        }
         
         if let contextSeekable = source as? ContextTimeSeekable {
             contextSeekable.handleSeek(toTime: timeInterval, for: self, in: context)
@@ -54,7 +60,13 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter position: target offset in milliseconds
     public func seek(toPosition position: Int64) {
         guard let source = tech.currentSource else { return }
-        guard context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement) else { return }
+        let seekDisabled = context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement)
+        guard seekDisabled == nil else {
+            // Seeking is disabled. Trigger warning and ignore the seek atempt
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
+            tech.eventDispatcher.onWarning(tech, source, warning)
+            return
+        }
         
         if let contextSeekable = source as? ContextPositionSeekable {
             contextSeekable.handleSeek(toPosition: position, for: self, in: context)

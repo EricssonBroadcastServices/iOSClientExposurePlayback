@@ -14,18 +14,18 @@ internal class ContractRestrictionsService {
 }
 
 extension ContractRestrictionsService {
-    internal func canSeek(from origin: Int64, to destination: Int64, using entitlement: PlaybackEntitlement) -> Bool {
-        if destination < origin {
-            return entitlement.rwEnabled
+    internal func canSeek(from origin: Int64, to destination: Int64, using entitlement: PlaybackEntitlement) -> ExposureContext.Warning? {
+        if destination < origin && !entitlement.rwEnabled {
+            return ExposureContext.Warning.contractRestrictions(reason: .rewindDisabled)
         }
         
-        if destination > origin {
-            return entitlement.ffEnabled
+        if destination > origin && !entitlement.ffEnabled {
+            return ExposureContext.Warning.contractRestrictions(reason: .fastForwardDisabled)
         }
-        return true
+        return nil
     }
     
-    internal func canPause(entitlement: PlaybackEntitlement) -> Bool {
-        return entitlement.timeshiftEnabled
+    internal func canPause(entitlement: PlaybackEntitlement) -> ExposureContext.Warning? {
+        return entitlement.timeshiftEnabled ? nil : ExposureContext.Warning.contractRestrictions(reason: .timeshiftDisabled)
     }
 }

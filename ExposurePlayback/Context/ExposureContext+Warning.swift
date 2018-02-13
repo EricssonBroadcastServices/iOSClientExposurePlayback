@@ -15,6 +15,8 @@ extension ExposureContext {
         case timeBasedSeekRequestInNonTimeBasedSource(timestamp: Int64)
         
         case programService(reason: ExposureContext.Warning.ProgramService)
+        
+        case contractRestrictions(reason: ExposureContext.Warning.ContractRestrictions)
     }
 }
 
@@ -23,6 +25,7 @@ extension ExposureContext.Warning {
         switch self {
         case .timeBasedSeekRequestInNonTimeBasedSource(timestamp: let timestamp): return "Seeking by unix timestamp \(timestamp) in a non-timebased source."
         case .programService(reason: let service): return service.message
+        case .contractRestrictions(reason: let restriction): return restriction.message
         }
     }
 }
@@ -45,3 +48,21 @@ extension ExposureContext.Warning.ProgramService {
     }
 }
 
+extension ExposureContext.Warning {
+    public enum ContractRestrictions: WarningMessage {
+        case fastForwardDisabled
+        case rewindDisabled
+        case timeshiftDisabled
+    }
+}
+
+
+extension ExposureContext.Warning.ContractRestrictions {
+    public var message: String {
+        switch self {
+        case .fastForwardDisabled: return "Contract restrictions disables fast forwarding"
+        case .rewindDisabled: return "Contract restrictions disabled rewinding"
+        case .timeshiftDisabled: return "Contract restrictions disabled timeshifting"
+        }
+    }
+}
