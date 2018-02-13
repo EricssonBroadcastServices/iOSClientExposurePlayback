@@ -773,6 +773,9 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 let provider = MockedProgramEntitlementProvider()
                                 provider.mockedRequestEntitlement = { _,_,_,_, callback in
                                     var json = PlaybackEntitlement.requiedJson
+                                    json["ffEnabled"] = false
+                                    json["rwEnabled"] = false
+                                    json["timeshiftEnabled"] = false
                                     json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
                                     json["playToken"] = "ProgramSevicedFetchedEntitlement"
                                     callback(json.decode(PlaybackEntitlement.self), nil)
@@ -785,7 +788,9 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             provider.mockedRequestEntitlement = { _,_,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["ffEnabled"] = true
                                 json["rwEnabled"] = true
+                                json["timeshiftEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
@@ -794,9 +799,30 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             // Initiate test
                             env.player.startPlayback(playable: playable, properties: properties)
                             let seekTarget = currentDate - hour * 1/4
+                            var ffDisabledWarning = false
+                            var rwDisabledWarning = false
+                            var timeshiftDisabledWarning = false
                             env.player
                                 .onProgramChanged { player, source, program in
-                                    player.seek(toTime: seekTarget)
+                                    if program?.programId == "program0" {
+                                        player.seek(toTime: seekTarget)
+                                    }
+                                    else if program?.programId == "program1" {
+                                        player.seek(toTime: seekTarget - hour)
+                                        player.seek(toTime: seekTarget + hour)
+                                        player.pause()
+                                    }
+                                }
+                                .onWarning{ player, source, warning in
+                                    if warning.message == ExposureContext.Warning.ContractRestrictions.fastForwardDisabled.message {
+                                        ffDisabledWarning = true
+                                    }
+                                    else if warning.message == ExposureContext.Warning.ContractRestrictions.rewindDisabled.message {
+                                        rwDisabledWarning = true
+                                    }
+                                    else if warning.message == ExposureContext.Warning.ContractRestrictions.timeshiftDisabled.message {
+                                        timeshiftDisabledWarning = true
+                                    }
                             }
 
 
@@ -804,6 +830,9 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: 3)
                             expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: 3)
+                            expect(ffDisabledWarning).toEventually(beTrue(), timeout: 3)
+                            expect(rwDisabledWarning).toEventually(beTrue(), timeout: 3)
+                            expect(timeshiftDisabledWarning).toEventually(beTrue(), timeout: 3)
                         }
                     }
                 }
