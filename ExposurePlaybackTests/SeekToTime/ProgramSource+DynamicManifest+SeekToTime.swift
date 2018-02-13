@@ -38,6 +38,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     ///  s1 -----> s2
                     it("should allow seek") {
                         let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
@@ -91,6 +92,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("ENTITLED") {
                         it("should allow seek if entitled") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -148,6 +150,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("Error fetching EPG") {
                         it("should allow seek with warning message") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -205,6 +208,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("Error validating entitlement") {
                         it("should allow seek with warning message") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -268,6 +272,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("Gap in EPG"){
                         it("should allow seek if encountering epg gap") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -326,6 +331,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("NOT_ENTITLED") {
                         it("should stop with error if not entitled") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -544,6 +550,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                 context("Error fetching EPG") {
                     it("should ignore seek with warning message") {
                         let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
@@ -601,6 +608,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                 context("Gap in EPG"){
                     it("should ignore seek if encountering epg gap") {
                         let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
@@ -662,6 +670,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("Error making playcall") {
                         it("should stop playback with warning") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
@@ -732,6 +741,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     context("ENTITLED") {
                         it("should allow playback") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService

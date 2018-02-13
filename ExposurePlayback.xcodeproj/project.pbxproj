@@ -113,6 +113,7 @@
 		76D5C9E22030559D0056BFF8 /* Program+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D5C9E12030559D0056BFF8 /* Program+Extensions.swift */; };
 		76D5C9E4203199DF0056BFF8 /* EntitlementValidation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */; };
 		76DE495B2033041B006801B4 /* MockedExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */; };
+		76DE495D20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -244,6 +245,7 @@
 		76D5C9E12030559D0056BFF8 /* Program+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Program+Extensions.swift"; sourceTree = "<group>"; };
 		76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementValidation+Extensions.swift"; sourceTree = "<group>"; };
 		76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedExposureAnalytics.swift; sourceTree = "<group>"; };
+		76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StaticManifest+SeekToTime.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +280,7 @@
 			children = (
 				76D5C9DB202DC9490056BFF8 /* ChannelSource+SeekToTime.swift */,
 				7636CAA02032E5E200F914D1 /* ProgramSource+DynamicManifest+SeekToTime.swift */,
+				76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */,
 				7636CAA22032E5F200F914D1 /* SeekToTimeProvider.swift */,
 				7636CAA42032E61500F914D1 /* SeekToTimeEnv.swift */,
 			);
@@ -724,6 +727,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76DE495D20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */,
 				76D5C9DE20304C1E0056BFF8 /* MockedAVPlayer.swift in Sources */,
 				7636CAA52032E61500F914D1 /* SeekToTimeEnv.swift in Sources */,
 				76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */,
