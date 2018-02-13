@@ -119,7 +119,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             // Before seekable range
             ifBefore()
         }
-        else if timestamp > (last - ExposureSource.segmentLength) {
+        else if timestamp > (last) {
             // After seekable range.
             ifAfter(last)
         }

@@ -60,6 +60,11 @@ public class ExposureContext: MediaContext {
         return ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
     }
     
+    internal var isDynamicManifest: (HLSNative<ExposureContext>, ExposureSource) -> Bool = { tech, source in
+        guard let type = tech.playbackType else { return false }
+        return (type == "LIVE" || type == "Live")
+    }
+    
     public init(environment: Environment, sessionToken: SessionToken) {
         self.environment = environment
         self.sessionToken = sessionToken

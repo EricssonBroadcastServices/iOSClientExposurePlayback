@@ -64,7 +64,7 @@ extension ChannelSource: ContextStartTime {
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0 + ExposureSource.segmentLength)
+                tech.startOffset(atPosition: 0)
             }
             else {
                 // Relies on traditional vod manifest

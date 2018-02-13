@@ -16,7 +16,6 @@ import Exposure
 class ChannelSourceStartTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
-        let segmentLength:Int64 = 6000
         describe("ChannelSource") {
             let environment = Environment(baseUrl: "url", customer: "customer", businessUnit: "businessUnit")
             let sessionToken = SessionToken(value: "token")
@@ -91,31 +90,31 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                 context("USP") {
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
                     exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
-                    it("should start from segmentLength with lastViewedOffset specified") {
+                    it("should start from zero with lastViewedOffset specified") {
                         let entitlement = buildEntitlement(lastViewedOffset: 100)
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                     
-                    it("should start from segmentLength with lastViewedTime specified") {
+                    it("should start from zero with lastViewedTime specified") {
                         let entitlement = buildEntitlement(lastViewedTime: 100)
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                     
-                    it("should start from segmentLength with no bookmarks specified") {
+                    it("should start from zero with no bookmarks specified") {
                         let entitlement = buildEntitlement()
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                 }
                 
