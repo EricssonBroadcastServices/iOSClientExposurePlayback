@@ -16,8 +16,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     
     public var timeBehindLive: Int64? {
         if let last = seekableTimeRanges.last?.end.milliseconds, let serverTime = serverTime {
-            print("timeBehindLive",(last-serverTime)/1000)
-            return last-serverTime
+            print("timeBehindLive",(serverTime-last)/1000)
+            return serverTime-last
         }
         return 0
     }
@@ -92,7 +92,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
             
             self.stop()
             let properties = PlaybackProperties(autoplay: self.context.playbackProperties.autoplay, playFrom: PlaybackProperties.PlayFrom.customTime(timestamp: timestamp))
-            self.startPlayback(playable: program.programPlayable, properties: properties)
+            
+            /// Generating the playable through the `ExposureContext` instead of directly from the `Program` allows us to inject specialized `ProgramEntitlementProvider`s which will simplify testing.
+            let playable = self.context.programPlayableGenerator(program)
+            self.startPlayback(playable: playable, properties: properties)
         }
     }
 }
@@ -116,7 +119,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             // Before seekable range
             ifBefore()
         }
-        else if timestamp > (last - ExposureSource.segmentLength) {
+        else if timestamp > (last) {
             // After seekable range.
             ifAfter(last)
         }

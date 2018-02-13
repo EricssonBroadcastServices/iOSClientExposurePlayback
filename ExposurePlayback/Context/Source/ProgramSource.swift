@@ -25,7 +25,7 @@ extension ProgramSource: ContextTimeSeekable {
             // After seekable range.
             
             // TODO: Check fragility of checking for `playbackType`
-            if player.tech.dynamicManifest {
+            if context.isDynamicManifest(player.tech, self) {
                 // ProgreamSource is considered to be live which means seeking beyond the last seekable range would be impossible.
                 //
                 // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
@@ -78,7 +78,7 @@ extension ProgramSource: ContextStartTime {
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0 + ExposureSource.segmentLength)
+                tech.startOffset(atPosition: 0)
             }
             else {
                 // Relies on traditional vod manifest
@@ -117,7 +117,7 @@ extension ProgramSource: ContextStartTime {
             }
             else {
                 // Start from program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0 + ExposureSource.segmentLength)
+                tech.startOffset(atPosition: 0)
             }
         }
         else {
@@ -130,7 +130,7 @@ extension ProgramSource: ContextStartTime {
 extension ProgramSource: ContextGoLive {
     
     internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        if player.tech.dynamicManifest {
+        if context.isDynamicManifest(player.tech, self) {
             goToLiveDynamicManifest(player: player, in: context)
         }
         else {

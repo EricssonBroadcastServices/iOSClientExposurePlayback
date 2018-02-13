@@ -12,8 +12,6 @@ import Exposure
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
 public class ExposureSource: MediaSource {
-    internal static let segmentLength: Int64 = 6000
-    
     /// Connector used to process Analytics Events
     public var analyticsConnector: AnalyticsConnector = PassThroughConnector()
     

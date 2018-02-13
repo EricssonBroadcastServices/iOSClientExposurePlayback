@@ -15,6 +15,13 @@ import Foundation
 @testable import ExposurePlayback
 
 class MockedServerTimeProvider: ServerTimeProvider {
+    var mockedFetchServerTime: (Environment, (ServerTime?, ExposureError?) -> Void) -> Void = { _,_ in }
+    func fetchServerTime(using environment: Environment, callback: @escaping (ServerTime?, ExposureError?) -> Void) {
+        mockedFetchServerTime(environment,callback)
+    }
+}
+
+class MockedMonotonicServerTimeProvider: ServerTimeProvider {
     var mode: Mode = .delayFirstRequest(first: true)
     enum Mode {
         case delayFirstRequest(first: Bool)
@@ -77,7 +84,7 @@ class MonotonicTimeServiceSpec: QuickSpec {
             context("synchronous serverTime") {
                 let service = MonotonicTimeService(environment: environment, refreshInterval: 500)
                 service.onErrorPolicy = .retry(attempts: 5, interval: 100)
-                let provider = MockedServerTimeProvider()
+                let provider = MockedMonotonicServerTimeProvider()
                 service.serverTimeProvider = provider
 
                 it("should return no current time if not started") {
@@ -93,7 +100,7 @@ class MonotonicTimeServiceSpec: QuickSpec {
                 it("should apply retry policy if active") {
                     let service = MonotonicTimeService(environment: self.environment, refreshInterval: 500)
                     service.onErrorPolicy = .retry(attempts: 2, interval: 100)
-                    let provider = MockedServerTimeProvider()
+                    let provider = MockedMonotonicServerTimeProvider()
                     service.serverTimeProvider = provider
                     provider.mode = .errorFirstRequest
 
@@ -108,7 +115,7 @@ class MonotonicTimeServiceSpec: QuickSpec {
                 it("should retain default refresh policy if active") {
                     let service = MonotonicTimeService(environment: self.environment, refreshInterval: 500)
                     service.onErrorPolicy = .retainRefreshInterval
-                    let provider = MockedServerTimeProvider()
+                    let provider = MockedMonotonicServerTimeProvider()
                     service.serverTimeProvider = provider
                     provider.mode = .errorFirstRequest
 
@@ -125,7 +132,7 @@ class MonotonicTimeServiceSpec: QuickSpec {
                 it("should not do network call when no server time is cached") {
                     let service = MonotonicTimeService(environment: self.environment, refreshInterval: 100)
                     service.onErrorPolicy = .retry(attempts: 5, interval: 100)
-                    let provider = MockedServerTimeProvider()
+                    let provider = MockedMonotonicServerTimeProvider()
                     service.serverTimeProvider = provider
 
                     var times: [Int64] = []
@@ -149,7 +156,7 @@ class MonotonicTimeServiceSpec: QuickSpec {
             context("forcing updates enabled") {
                 let service = MonotonicTimeService(environment: environment, refreshInterval: 100)
                 service.onErrorPolicy = .retry(attempts: 5, interval: 100)
-                let provider = MockedServerTimeProvider()
+                let provider = MockedMonotonicServerTimeProvider()
                 service.serverTimeProvider = provider
 
                 it("should do network call when no server time is cached") {

@@ -16,7 +16,6 @@ import Exposure
 class ProgramSourceStartTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
-        let segmentLength:Int64 = 6000
         describe("ProgramSource") {
             let environment = Environment(baseUrl: "url", customer: "customer", businessUnit: "businessUnit")
             let sessionToken = SessionToken(value: "token")
@@ -62,7 +61,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(segmentLength))
+                            expect(tech.startPosition).to(equal(0))
                         }
                         
                         it("should use default behavior with lastViewedTime specified") {
@@ -71,7 +70,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(segmentLength))
+                            expect(tech.startPosition).to(equal(0))
                         }
                         
                         it("should use default behavior with no bookmarks specified") {
@@ -80,7 +79,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(segmentLength))
+                            expect(tech.startPosition).to(equal(0))
                         }
                     }
                 }
@@ -122,31 +121,31 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                 context("USP") {
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
                     exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
-                    it("should start from segmentLength with lastViewedOffset specified") {
+                    it("should start from zero with lastViewedOffset specified") {
                         let entitlement = buildEntitlement(lastViewedOffset: 100)
                         let source = ProgramSource(entitlement: entitlement, assetId: "assetId", channelId: "channelId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                     
-                    it("should start from segmentLength with lastViewedTime specified") {
+                    it("should start from zero with lastViewedTime specified") {
                         let entitlement = buildEntitlement(lastViewedTime: 100)
                         let source = ProgramSource(entitlement: entitlement, assetId: "assetId", channelId: "channelId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                     
-                    it("should start from segmentLength with no bookmarks specified") {
+                    it("should start from zero with no bookmarks specified") {
                         let entitlement = buildEntitlement()
                         let source = ProgramSource(entitlement: entitlement, assetId: "assetId", channelId: "channelId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                 }
                 
@@ -201,7 +200,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        expect(tech.startPosition).to(equal(0))
                     }
                     
                     context("live program") {
@@ -222,7 +221,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(segmentLength))
+                            expect(tech.startPosition).to(equal(0))
                         }
                     }
                 }
@@ -388,27 +387,10 @@ class ProgramSourceStartTimeSpec: QuickSpec {
         }
         
         func buildEntitlement(pipe: String = "http://www.example.com/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int? = nil, isLive: Bool = false) -> PlaybackEntitlement {
-            var json:[String: Codable] = [
-                "playToken":"playTokenExpiration",
-                "mediaLocator":pipe,
-                "licenseExpiration":"licenseExpiration",
-                "licenseExpirationReason":"NOT_ENTITLED",
-                "licenseActivation":"licenseActivation",
-                "playTokenExpiration":"playTokenExpiration",
-                "entitlementType":"TVOD",
-                "live":isLive,
-                "ffEnabled":false,
-                "rwEnabled":false,
-                "timeshiftEnabled":false,
-                "playSessionId":"playSessionId",
-                "minBitrate":10,
-                "maxBitrate":20,
-                "maxResHeight":30,
-                "airplayBlocked":false,
-                "mdnRequestRouterUrl":"mdnRequestRouterUrl",
-                "productId":"productId"
-            ]
-            
+            var json = PlaybackEntitlement.requiedJson
+            json["mediaLocator"] = pipe
+            json["live"] = isLive
+                
             if let offset = lastViewedOffset {
                 json["lastViewedOffset"] = offset
             }
@@ -417,7 +399,6 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                 json["lastViewedTime"] = offset
             }
             return json.decode(PlaybackEntitlement.self)!
-//            return PlaybackEntitlement(playTokenExpiration: "playTokenExpiration", mediaLocator: URL(string: pipe)!, playSessionId: "playSessionId", live: isLive, ffEnabled: false, timeshiftEnabled: false, rwEnabled: false, airplayBlocked: false, playToken: nil, fairplay: nil, licenseExpiration: nil, licenseExpirationReason: nil, licenseActivation: nil, entitlementType: nil, minBitrate: nil, maxBitrate: nil, maxResHeight: nil, mdnRequestRouterUrl: nil, lastViewedOffset: lastViewedOffset, lastViewedTime: lastViewedTime, liveTime: nil, productId: nil)
         }
     }
 }

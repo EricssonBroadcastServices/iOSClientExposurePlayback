@@ -13,39 +13,6 @@ public class ChannelSource: ExposureSource {
     
 }
 
-extension ContextTimeSeekable {
-    internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext, onAfter: @escaping (Int64) -> Void) {
-        guard let playheadTime = player.playheadTime else {
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning
-                .timeBasedSeekRequestInNonTimeBasedSource(timestamp: timeInterval))
-            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
-            return
-        }
-        
-        player.checkBounds(timestamp: timeInterval, ifBefore: {
-            // Before seekable range, new entitlement request required
-            player.handleProgramServiceBasedSeek(timestamp: timeInterval)
-        }, ifWithin: {
-            // Within bounds
-            if let service = context.programService {
-                service.isEntitled(toPlay: timeInterval) {
-                    // NOTE: If `callback` is NOT fired:
-                    //      * Playback is not entitled
-                    //      * `onError` will be dispatched with message
-                    //      * playback will be stopped and unloaded
-                    player.tech.seek(toTime: timeInterval)
-                }
-            }
-            else {
-                player.tech.seek(toTime: timeInterval)
-            }
-        }) { lastTimestamp in
-            // After seekable range.
-            onAfter(lastTimestamp)
-        }
-    }
-}
-
 extension ChannelSource: ContextTimeSeekable {
     internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
@@ -97,7 +64,7 @@ extension ChannelSource: ContextStartTime {
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0 + ExposureSource.segmentLength)
+                tech.startOffset(atPosition: 0)
             }
             else {
                 // Relies on traditional vod manifest
