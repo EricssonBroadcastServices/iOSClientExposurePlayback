@@ -81,7 +81,6 @@ extension ProgramService {
     fileprivate func validate(timestamp: Int64, callback: @escaping (String?) -> Void) {
         if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
-                print("ProgramService: validate inBounds",start,timestamp,end)
                 startValidationTimer(onTimestamp: timestamp, for: current)
                 callback(nil)
                 return
@@ -91,7 +90,6 @@ extension ProgramService {
         // We do not have a current program or the timestamp in question is outside the program bounds
         provider.fetchProgram(on: channelId, timestamp: timestamp, using: environment) { [weak self] newProgram, error in
             guard let `self` = self else { return }
-            print("ProgramService: fetchProgram",timestamp,self.channelId)
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
@@ -107,7 +105,6 @@ extension ProgramService {
                 
                 self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken) { [weak self] validation, error in
                     guard let `self` = self else { return }
-                    print("ProgramService: validate",timestamp,validation?.status)
                     guard let expirationReason = validation?.status else {
                         // We are permissive on validation errors, allow playback to continue.
                         DispatchQueue.main.async { [weak self] in
@@ -125,7 +122,6 @@ extension ProgramService {
                     }
                     
                     /// Success, playback is validated
-                    print("ProgramService: VALID")
                     callback(nil)
                 }
             }
@@ -149,7 +145,6 @@ extension ProgramService {
     
     fileprivate func handleProgramChanged(program: Program?) {
         let current = activeProgram
-        print("ProgramService: handleProgramChanged",current?.programId,"-->",program?.programId,"|",current?.startDate,"-->",program?.startDate)
         activeProgram = program
         if current?.programId != program?.programId {
             onProgramChanged(program)
@@ -164,9 +159,7 @@ extension ProgramService {
     }
     
     internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping () -> Void) {
-        print("ProgramService: isEntitled",timestamp)
         validate(timestamp: timestamp) { message in
-            print("ProgramService: isEntitled.validate",timestamp,message)
             DispatchQueue.main.async { [weak self] in
                 if let notEntitledMessage = message {
                     self?.onNotEntitled(notEntitledMessage)
@@ -180,7 +173,6 @@ extension ProgramService {
     
     internal func startMonitoring(epgOffset: Int64) {
         guard let timestamp =  currentPlayheadTime() else {
-            print("ProgramService: startMonitoring.retry",Date().millisecondsSince1970)
             /// Retry untill we receive a current playhead time. This is only possible when playback has started
             stopTimer()
             timer = DispatchSource.makeTimerSource(queue: queue)
@@ -195,7 +187,6 @@ extension ProgramService {
         stopTimer()
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
-            print("ProgramService: timestamp",timestamp,program?.programId,error?.code,error?.localizedDescription)
             guard error == nil else {
                 // We are permissive on errors, allow playback
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
@@ -208,7 +199,6 @@ extension ProgramService {
     }
     
     fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program?) {
-        print("ProgramService: startValidationTimer.start",timestamp,program?.programId)
         guard let end = program?.endDate?.millisecondsSince1970 else {
             // There is no program, validation can not occur, allow playback
             onWarning(.gapInEpg(timestamp: timestamp, channelId: channelId))
@@ -219,13 +209,10 @@ extension ProgramService {
         stopTimer()
         timer = DispatchSource.makeTimerSource(queue: queue)
         timer?.schedule(deadline: .now() + .milliseconds(delta))
-        print("ProgramService: startValidationTimer schedule")
         timer?.setEventHandler { [weak self] in
-            print("ProgramService: startValidationTimer eventHandler")
             guard let `self` = self else { return }
             guard let timestamp = self.currentPlayheadTime() else { return }
             self.validate(timestamp: timestamp) { invalidMessage in
-                print("ProgramService: startValidationTimer.validate",invalidMessage)
                 if let invalidMessage = invalidMessage {
                     DispatchQueue.main.async { [weak self] in
                         // The user is not entitled to play this program
