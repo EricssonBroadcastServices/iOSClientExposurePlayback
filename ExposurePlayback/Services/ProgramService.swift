@@ -178,7 +178,9 @@ extension ProgramService {
             timer = DispatchSource.makeTimerSource(queue: queue)
             timer?.schedule(deadline: .now() + .milliseconds(2000))
             timer?.setEventHandler { [weak self] in
-                self?.startMonitoring(epgOffset: epgOffset)
+                DispatchQueue.main.async {
+                    self?.startMonitoring(epgOffset: epgOffset)
+                }
             }
             timer?.resume()
             return
@@ -189,6 +191,7 @@ extension ProgramService {
             guard let `self` = self else { return }
             guard error == nil else {
                 // We are permissive on errors, allow playback
+                
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
                 return
             }

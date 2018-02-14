@@ -20,7 +20,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
         
-        describe("ProgramSource") {
+        describe("SeekToTime Dyanmic ProgramSource") {
             let currentDate = Date().unixEpoch
             let hour: Int64 = 60 * 60 * 1000
             

@@ -55,6 +55,11 @@ public class ExposureContext: MediaContext {
     /// Generating the playable instead of converting it directly from the `Program` allows us to inject specialized `ProgramEntitlementProvider`s which will simplify testing.
     internal var programPlayableGenerator: (Program) -> ProgramPlayable = { return $0.programPlayable }
     
+    /// Used to generate a fresh `ChannelPlayable` from the specfied `channelId`.
+    ///
+    /// Generating the playable instead of converting it directly from the `channelId` allows us to inject specialized `ChannelEntitlementProvider`s which will simplify testing.
+    internal var channelPlayableGenerator: (String) -> ChannelPlayable = { return ChannelPlayable(assetId: $0) }
+    
     /// Used to generate a fresh `ProgramService` for a channel-based source.
     internal var programServiceGenerator: (Environment, SessionToken, String) -> ProgramService = { environment, sessionToken, channelId in
         return ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
