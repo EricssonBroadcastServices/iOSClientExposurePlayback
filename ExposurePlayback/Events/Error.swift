@@ -51,7 +51,7 @@ extension Playback.Error: AnalyticsEvent {
         ]
         
         if let offset = offsetTime {
-            json[JSONKeys.offsetTime.rawValue] = offsetTime
+            json[JSONKeys.offsetTime.rawValue] = offset
         }
         
         return json

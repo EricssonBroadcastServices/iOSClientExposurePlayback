@@ -178,7 +178,7 @@ extension ProgramService {
             timer = DispatchSource.makeTimerSource(queue: queue)
             timer?.schedule(deadline: .now() + .milliseconds(2000))
             timer?.setEventHandler { [weak self] in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     self?.startMonitoring(epgOffset: epgOffset)
                 }
             }

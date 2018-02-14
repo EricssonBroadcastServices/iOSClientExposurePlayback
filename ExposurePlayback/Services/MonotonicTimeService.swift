@@ -148,30 +148,30 @@ extension MonotonicTimeService {
     internal func startTimer() {
         guard state == .notStarted else { return }
         timer = DispatchSource.makeTimerSource(queue: queue)
-        timer?.scheduleRepeating(deadline: .now(), interval: .milliseconds(refreshInterval))
+        timer?.schedule(deadline: .now(), repeating: .milliseconds(refreshInterval))
         state = .running
         timer?.setEventHandler{ [weak self] in
             guard let `self` = self else { return }
             self.fetchServerTime{ [weak self] difference, error in
-                guard let `self` = self else { return }
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else { return }
                     if let difference = difference {
                         self.currentDifference = difference
                         
-                        self.timer?.scheduleOneshot(deadline: .now() + .milliseconds(self.refreshInterval))
+                        self.timer?.schedule(deadline: .now() + .milliseconds(self.refreshInterval))
                     }
                     else {
                         switch self.onErrorPolicy {
                         case .retainRefreshInterval:
-                            self.timer?.scheduleOneshot(deadline: .now() + .milliseconds(self.refreshInterval))
+                            self.timer?.schedule(deadline: .now() + .milliseconds(self.refreshInterval))
                             return
                         case .retry(attempts: let attempts, interval: let interval):
                             if self.currentRetryAttempt < attempts {
-                                self.timer?.scheduleOneshot(deadline: .now() + .milliseconds(interval))
+                                self.timer?.schedule(deadline: .now() + .milliseconds(interval))
                                 self.currentRetryAttempt += 1
                             }
                             else {
-                                self.timer?.scheduleOneshot(deadline: .now() + .milliseconds(self.refreshInterval))
+                                self.timer?.schedule(deadline: .now() + .milliseconds(self.refreshInterval))
                                 self.currentRetryAttempt = 0
                             }
                         }
