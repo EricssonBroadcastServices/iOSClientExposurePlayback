@@ -453,7 +453,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + livePointOffet)) : nil }.toEventually(beLessThan(2000), timeout: 3)
                     }
                 }
                 
