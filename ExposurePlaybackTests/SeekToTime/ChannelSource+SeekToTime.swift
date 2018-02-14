@@ -20,7 +20,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
         
-        describe("ChannelSource") {
+        describe("SeekToTime ChannelSource") {
             let currentDate = Date().unixEpoch
             let hour: Int64 = 60 * 60 * 1000
             
@@ -381,8 +381,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     error = err
                             }
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.code).toEventually(equal(403))
                             expect(error?.message).toEventually(equal("NOT_ENTITLED"))
@@ -455,7 +453,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + livePointOffet)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + livePointOffet)) : nil }.toEventually(beLessThan(2000), timeout: 3)
                     }
                 }
                 
@@ -657,7 +655,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 context("ProgramService based seek") {
                     // MARK: ++ Error making playcall
                     context("Error making playcall") {
-                        it("should stop playback with warning") {
+                        it("should stop playback with error") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
@@ -717,9 +715,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ player, source, err in
                                     error = err
                             }
-
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
+                            
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
                             expect(error?.code).toEventually(equal(404), timeout: 3)
@@ -764,6 +760,9 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     var json = PlaybackEntitlement.requiedJson
                                     json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
                                     json["playToken"] = "ProgramSevicedFetchedEntitlement"
+                                    json["ffEnabled"] = false
+                                    json["rwEnabled"] = false
+                                    json["timeshiftEnabled"] = false
                                     callback(json.decode(PlaybackEntitlement.self), nil)
                                 }
                                 return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
@@ -774,7 +773,9 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["ffEnabled"] = true
                                 json["rwEnabled"] = true
+                                json["timeshiftEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
@@ -782,17 +783,41 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
 
                             // Initiate test
                             env.player.startPlayback(playable: playable)
+                            var ffDisabledWarning = false
+                            var rwDisabledWarning = false
+                            var timeshiftDisabledWarning = false
                             let seekTarget = currentDate - hour * 1/4
                             env.player
                                 .onProgramChanged { player, source, program in
-                                    player.seek(toTime: seekTarget)
+                                    if program?.programId == "program0" {
+                                        player.seek(toTime: seekTarget)
+                                    }
+                                    else if program?.programId == "program1" {
+                                        player.seek(toTime: seekTarget - hour)
+                                        player.seek(toTime: seekTarget + hour)
+                                        player.pause()
+                                    }
                                 }
+                                .onWarning{ player, source, warning in
+                                    if warning.message == ExposureContext.Warning.ContractRestrictions.fastForwardDisabled.message {
+                                        ffDisabledWarning = true
+                                    }
+                                    else if warning.message == ExposureContext.Warning.ContractRestrictions.rewindDisabled.message {
+                                        rwDisabledWarning = true
+                                    }
+                                    else if warning.message == ExposureContext.Warning.ContractRestrictions.timeshiftDisabled.message {
+                                        timeshiftDisabledWarning = true
+                                    }
+                            }
 
 
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: 3)
                             expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: 3)
+                            expect(ffDisabledWarning).toEventually(beTrue(), timeout: 3)
+                            expect(rwDisabledWarning).toEventually(beTrue(), timeout: 3)
+                            expect(timeshiftDisabledWarning).toEventually(beTrue(), timeout: 3)
                         }
                     }
                 }

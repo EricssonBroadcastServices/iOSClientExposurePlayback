@@ -20,7 +20,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
         
-        describe("ProgramSource") {
+        describe("SeekToTime Dyanmic ProgramSource") {
             let currentDate = Date().unixEpoch
             let hour: Int64 = 60 * 60 * 1000
             
@@ -387,9 +387,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ tech, source, err in
                                     error = err
                             }
-
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
+                            
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.code).toEventually(equal(403))
                             expect(error?.message).toEventually(equal("NOT_ENTITLED"))
@@ -450,7 +448,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
-                        
+
                         // ServerTime is required for LiveDelay to work properly
                         _ = env.player.serverTime
 
@@ -463,7 +461,6 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
 
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + livePointOffet)) : nil }.toEventually(beLessThan(1000), timeout: 3)
                     }
                 }
 
@@ -668,7 +665,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                 context("ProgramService based seek") {
                     // MARK: ++ Error making playcall
                     context("Error making playcall") {
-                        it("should stop playback with warning") {
+                        it("should stop playback with error") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
@@ -729,8 +726,6 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                     error = err
                             }
 
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
                             expect(error?.code).toEventually(equal(404), timeout: 3)

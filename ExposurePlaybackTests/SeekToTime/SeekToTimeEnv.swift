@@ -104,6 +104,10 @@ class SeekToTimeEnv {
         player.context.programPlayableGenerator = callback
     }
     
+    func mockSeekToLiveChannelPlayable(callback: @escaping (String) -> ChannelPlayable) {
+        player.context.channelPlayableGenerator = callback
+    }
+    
     func mockProgramService(callback: @escaping (Environment, SessionToken, String) -> ProgramService) {
         player.context.programServiceGenerator = callback
     }

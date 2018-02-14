@@ -42,12 +42,7 @@ extension ContextGoLive {
         guard let channelId = context.programService?.channelId else {
             return
         }
-        player.startPlayback(channelId: channelId)
-        
-//        guard let timeNow = player.serverTime else {
-//            // TODO: Use Date().now?
-//            return
-//        }
-//        player.handleProgramServiceBasedSeek(timestamp: timeNow, timestampAsStartTime: false)
+        let playable = context.channelPlayableGenerator(channelId)
+        player.startPlayback(playable: playable)
     }
 }
