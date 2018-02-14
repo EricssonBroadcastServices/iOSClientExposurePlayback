@@ -96,7 +96,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
                 }
             }
-            // MARK: ++ Error fetching EPG
+            // MARK: + Error fetching EPG
             context("Error fetching EPG") {
                 it("should allow seek to live with warning message") {
                     let env = SeekToTimeEnv(environment: env, sessionToken: token)
@@ -159,7 +159,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                 }
             }
             
-            // MARK: ++ Error validating entitlement
+            // MARK: + Error validating entitlement
             context("Error validating entitlement") {
                 it("should allow seek to live with warning message") {
                     let env = SeekToTimeEnv(environment: env, sessionToken: token)
@@ -228,7 +228,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                 }
             }
             
-            // MARK: ++ Gap in EPG
+            // MARK: + Gap in EPG
             context("Gap in EPG"){
                 it("should allow seek to live if encountering epg gap") {
                     let env = SeekToTimeEnv(environment: env, sessionToken: token)
@@ -291,7 +291,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                 }
             }
             
-            // MARK: ++ NOT_ENTITLED
+            // MARK: + NOT_ENTITLED
             context("NOT_ENTITLED") {
                 it("should stop with error if not entitled") {
                     let env = SeekToTimeEnv(environment: env, sessionToken: token)

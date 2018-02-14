@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7624D5FA20344BE300CD1835 /* ChannelSource+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */; };
 		7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEBE2029AF94001512BF /* Int64+Extensions.swift */; };
 		7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */; };
 		7635AEC5202ADFDE001512BF /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */; };
@@ -129,6 +130,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSource+SeekToLive.swift"; sourceTree = "<group>"; };
 		7635AEBE2029AF94001512BF /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
 		7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Entitlements.swift"; sourceTree = "<group>"; };
 		7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
@@ -552,6 +554,7 @@
 			children = (
 				76D38E6720334420000400A8 /* ProgramSource+StaticManifest+SeekToLive.swift */,
 				76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */,
+				7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */,
 			);
 			path = SeekToLive;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 				76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */,
 				76D5C9E020304EBA0056BFF8 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				76A89DF02021CCC000C23579 /* ErrorSpec.swift in Sources */,
+				7624D5FA20344BE300CD1835 /* ChannelSource+SeekToLive.swift in Sources */,
 				76DE495B2033041B006801B4 /* MockedExposureAnalytics.swift in Sources */,
 				76D5C9E4203199DF0056BFF8 /* EntitlementValidation+Extensions.swift in Sources */,
 				76CD5AF0202DA57000941ABC /* AssetPlayableSpec.swift in Sources */,
