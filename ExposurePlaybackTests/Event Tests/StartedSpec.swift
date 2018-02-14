@@ -83,7 +83,7 @@ class StartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("vodAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json["MediaId"] as? String).to(equal("mediaId"))
+                expect(json["MediaLocator"] as? String).to(equal("mediaId"))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
@@ -91,7 +91,7 @@ class StartedSpec: QuickSpec {
             }
             
             it("Should produce correct Live jsonPayload") {
-                let json = Playback.Started(timestamp: timeStamp, assetData: liveId, mediaId: mediaId, offsetTime: offset, videoLength: videoLength, bitrate: bitrate).jsonPayload
+                let json = Playback.Started(timestamp: timeStamp, assetData: liveId, mediaId: mediaId, offsetTime: offset, videoLength: videoLength, bitrate: bitrate, referenceTime: 0).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
@@ -99,15 +99,16 @@ class StartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(beNil())
                 expect(json["ChannelId"] as? String).to(equal("liveAsset"))
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json["MediaId"] as? String).to(equal("mediaId"))
+                expect(json["MediaLocator"] as? String).to(equal("mediaId"))
+                expect(json["ReferenceTime"] as? Int64).to(equal(0))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(8))
+                expect(json.count).to(equal(9))
             }
             
             it("Should produce correct Program jsonPayload") {
-                let json = Playback.Started(timestamp: timeStamp, assetData: programId, mediaId: mediaId, offsetTime: offset, videoLength: videoLength, bitrate: bitrate).jsonPayload
+                let json = Playback.Started(timestamp: timeStamp, assetData: programId, mediaId: mediaId, offsetTime: offset, videoLength: videoLength, bitrate: bitrate, referenceTime: 0).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
@@ -115,11 +116,12 @@ class StartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(beNil())
                 expect(json["ChannelId"] as? String).to(equal("liveAsset"))
                 expect(json["ProgramId"] as? String).to(equal("programAsset"))
-                expect(json["MediaId"] as? String).to(equal("mediaId"))
+                expect(json["MediaLocator"] as? String).to(equal("mediaId"))
+                expect(json["ReferenceTime"] as? Int64).to(equal(0))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(9))
+                expect(json.count).to(equal(10))
             }
             
             it("Should produce correct Offline jsonPayload") {
@@ -131,7 +133,7 @@ class StartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("offlineAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json["MediaId"] as? String).to(equal("mediaId"))
+                expect(json["MediaLocator"] as? String).to(equal("mediaId"))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
@@ -147,7 +149,7 @@ class StartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("downloadAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json["MediaId"] as? String).to(equal("mediaId"))
+                expect(json["MediaLocator"] as? String).to(equal("mediaId"))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))

@@ -86,7 +86,7 @@ class ChannelSourceStartTimeSpec: QuickSpec {
             }
             
             context(".beginning") {
-                
+                let segmentLength: Int64 = 6000
                 context("USP") {
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
                     exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
@@ -96,7 +96,7 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with lastViewedTime specified") {
@@ -105,7 +105,7 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with no bookmarks specified") {
@@ -114,7 +114,7 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                 }
                 

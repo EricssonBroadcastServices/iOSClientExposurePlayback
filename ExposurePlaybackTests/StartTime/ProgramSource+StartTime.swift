@@ -55,13 +55,14 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                     }
                     
                     context("catchup program") {
+                        let segmentLength: Int64 = 6000
                         it("should use default behavior with lastViewedOffset specified") {
                             let entitlement = buildEntitlement(lastViewedOffset: 100)
                             let source = ProgramSource(entitlement: entitlement, assetId: "assetId", channelId: "channelId")
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(0))
+                            expect(tech.startPosition).to(equal(segmentLength))
                         }
                         
                         it("should use default behavior with lastViewedTime specified") {
@@ -70,7 +71,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(0))
+                            expect(tech.startPosition).to(equal(segmentLength))
                         }
                         
                         it("should use default behavior with no bookmarks specified") {
@@ -79,7 +80,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(0))
+                            expect(tech.startPosition).to(equal(segmentLength))
                         }
                     }
                 }
@@ -119,6 +120,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
             context(".beginning") {
                 
                 context("USP") {
+                    let segmentLength: Int64 = 6000
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
                     exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
                     it("should start from zero with lastViewedOffset specified") {
@@ -127,7 +129,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with lastViewedTime specified") {
@@ -136,7 +138,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with no bookmarks specified") {
@@ -145,7 +147,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                 }
                 
@@ -183,6 +185,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
             
             context(".bookmark") {
                 context("USP") {
+                    let segmentLength: Int64 = 6000
                     let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
                     exposureContext.playbackProperties = PlaybackProperties(playFrom: .bookmark)
                     it("should pick up lastViewedOffset if specified") {
@@ -200,7 +203,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         source.handleStartTime(for: tech, in: exposureContext)
                         
                         expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(0))
+                        expect(tech.startPosition).to(equal(segmentLength))
                     }
                     
                     context("live program") {
@@ -221,7 +224,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             source.handleStartTime(for: tech, in: exposureContext)
                             
                             expect(tech.startTime).to(beNil())
-                            expect(tech.startPosition).to(equal(0))
+                            expect(tech.startPosition).to(equal(segmentLength))
                         }
                     }
                 }
