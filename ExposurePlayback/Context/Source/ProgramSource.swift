@@ -35,18 +35,6 @@ extension ProgramSource: ContextTimeSeekable {
                 let delta = player.timeBehindLive ?? 0
                 if (timeInterval - delta) <= lastTimestamp {
                     self.handleGoLive(player: player, in: context)
-//                    if let programService = player.context.programService {
-//                        programService.isEntitled(toPlay: lastTimestamp) {
-//                            // NOTE: If `callback` is NOT fired:
-//                            //      * Playback is not entitled
-//                            //      * `onError` will be dispatched with message
-//                            //      * playback will be stopped and unloaded
-//                            player.tech.seek(toTime: lastTimestamp)
-//                        }
-//                    }
-//                    else {
-//                        player.tech.seek(toTime: lastTimestamp)
-//                    }
                 }
                 else {
                     let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
@@ -80,7 +68,7 @@ extension ProgramSource: ContextStartTime {
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0)
+                tech.startOffset(atPosition: ExposureSource.segmentLength)
             }
             else {
                 // Relies on traditional vod manifest
@@ -90,9 +78,8 @@ extension ProgramSource: ContextStartTime {
             // Use *EMP* supplied bookmark
             if let offset = entitlement.lastViewedOffset {
                 if isUnifiedPackager {
+                    // 0 based offset
                     tech.startOffset(atPosition: Int64(offset))
-                    // Wallclock timestamp
-                    //                    tech.startOffset(atTime: Int64(offset))
                 }
                 else {
                     // 0 based offset
@@ -119,7 +106,7 @@ extension ProgramSource: ContextStartTime {
             }
             else {
                 // Start from program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0)
+                tech.startOffset(atPosition: ExposureSource.segmentLength)
             }
         }
         else {
@@ -130,7 +117,6 @@ extension ProgramSource: ContextStartTime {
 }
 
 extension ProgramSource: ContextGoLive {
-    
     internal func handleGoLive(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         if context.isDynamicManifest(player.tech, self) {
             goToLiveDynamicManifest(player: player, in: context)

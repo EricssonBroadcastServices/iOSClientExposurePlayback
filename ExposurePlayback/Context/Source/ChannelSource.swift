@@ -27,18 +27,6 @@ extension ChannelSource: ContextTimeSeekable {
             let delta = player.timeBehindLive ?? 0
             if (timeInterval - delta) <= lastTimestamp {
                 self?.handleGoLive(player: player, in: context)
-//                if let programService = player.context.programService {
-//                    programService.isEntitled(toPlay: lastTimestamp) {
-//                        // NOTE: If `callback` is NOT fired:
-//                        //      * Playback is not entitled
-//                        //      * `onError` will be dispatched with message
-//                        //      * playback will be stopped and unloaded
-//                        player.tech.seek(toTime: lastTimestamp)
-//                    }
-//                }
-//                else {
-//                    player.tech.seek(toTime: lastTimestamp)
-//                }
             }
             else {
                 let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
@@ -65,7 +53,7 @@ extension ChannelSource: ContextStartTime {
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: 0)
+                tech.startOffset(atPosition: ExposureSource.segmentLength)
             }
             else {
                 // Relies on traditional vod manifest

@@ -182,7 +182,15 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         }
     }
 }
-
+extension URL {
+    func cleanQuery() -> String? {
+        if var urlcomponents = URLComponents(url: self, resolvingAgainstBaseURL: false) {
+            urlcomponents.query = nil
+            return urlcomponents.string
+        }
+        return nil
+    }
+}
 extension ExposureAnalytics: AnalyticsProvider {
     public func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// Created/DeviceInfo/Handshake will be sent before entitlement request
@@ -203,12 +211,14 @@ extension ExposureAnalytics: AnalyticsProvider {
     
     public func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
+            let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source),
-                                         mediaId: source.url.path,
+                                         mediaId: source.url.cleanQuery() ?? source.url.path,
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
-                                         bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil)
+                                         bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil,
+                                         referenceTime: referenceTime)
             dispatcher?.enqueue(event: event)
             dispatcher?.heartbeat(enabled: true)
         }

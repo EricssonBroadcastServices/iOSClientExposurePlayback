@@ -43,13 +43,16 @@ extension Playback {
         /// Initial playback bitrate, measured in kbit/s.
         internal let bitrate: Int64?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64, videoLength: Int64? = nil, bitrate: Int64? = nil) {
+        internal let referenceTime: Int64?
+        
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
             self.timestamp = timestamp
             self.requiredAssetData = assetData
             self.mediaId = mediaId
             self.offsetTime = offsetTime
             self.videoLength = videoLength
             self.bitrate = bitrate
+            self.referenceTime = referenceTime
         }
     }
 }
@@ -94,6 +97,10 @@ extension Playback.Started: AnalyticsEvent {
             params[JSONKeys.bitrate.rawValue] = bitrate
         }
         
+        if let referenceTime = referenceTime {
+            params[JSONKeys.referenceTime.rawValue] = referenceTime
+        }
+        
         return params
     }
     
@@ -101,13 +108,14 @@ extension Playback.Started: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case playMode = "PlayMode"
-        case mediaId = "MediaId"
+        case mediaId = "MediaLocator"
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
         case offsetTime = "OffsetTime"
         case videoLength = "VideoLength"
         case bitrate = "Bitrate"
+        case referenceTime = "ReferenceTime"
     }
 }
 
