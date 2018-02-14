@@ -64,7 +64,7 @@ internal class ProgramService {
                 .filter(onlyPublished: true)
                 .request()
                 .validate()
-                .response{ callback($0.value?.programs?.first, $0.error) }
+                .response{ callback($0.value?.programs?.last, $0.error) }
         }
         
         func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {

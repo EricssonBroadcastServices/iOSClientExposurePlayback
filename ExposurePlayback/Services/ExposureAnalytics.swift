@@ -171,12 +171,11 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
     
     public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource {
-        let currentProgramId = lastKnownProgramId
-        lastKnownProgramId = program?.programId
-        if let program = program, program.programId != currentProgramId {
+        if let programId = program?.programId, lastKnownProgramId != nil {
+            lastKnownProgramId = program?.programId
             let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
                                                 offsetTime: offsetTime(for: source, using: tech),
-                                                programId: program.programId,
+                                                programId: programId,
                                                 videoLength: tech.duration)
             dispatcher?.enqueue(event: event)
         }
