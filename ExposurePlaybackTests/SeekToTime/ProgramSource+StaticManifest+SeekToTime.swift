@@ -218,8 +218,6 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                     error = err
                             }
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
                             expect(error?.code).toEventually(equal(404), timeout: 3)

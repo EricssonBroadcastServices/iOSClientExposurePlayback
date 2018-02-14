@@ -71,11 +71,14 @@ extension Player where Tech == HLSNative<ExposureContext> {
             /// Update tech autoplay settings from PlaybackProperties
             tech.autoplay = context.playbackProperties.autoplay
             
-            /// Start ProgramService
-            prepareProgramService(source: source)
             
             /// Load tech
-            tech.load(source: source)
+            tech.load(source: source) { [weak self] in
+                /// Start ProgramService
+                self?.prepareProgramService(source: source)
+            }
+            
+            
             source.analyticsConnector.providers = providers
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {

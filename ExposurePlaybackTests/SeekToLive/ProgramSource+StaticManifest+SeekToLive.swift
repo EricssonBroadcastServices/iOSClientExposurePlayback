@@ -83,7 +83,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
@@ -165,7 +165,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                                 item?.mockedCurrentDate = Date(unixEpoch: currentDate + hour * 3/4)
                             }
                         }
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }

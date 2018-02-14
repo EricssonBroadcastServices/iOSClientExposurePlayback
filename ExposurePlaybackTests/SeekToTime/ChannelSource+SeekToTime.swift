@@ -381,8 +381,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     error = err
                             }
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.code).toEventually(equal(403))
                             expect(error?.message).toEventually(equal("NOT_ENTITLED"))
@@ -657,7 +655,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 context("ProgramService based seek") {
                     // MARK: ++ Error making playcall
                     context("Error making playcall") {
-                        it("should stop playback with warning") {
+                        it("should stop playback with error") {
                             let env = SeekToTimeEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
@@ -717,9 +715,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ player, source, err in
                                     error = err
                             }
-
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
+                            
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
                             expect(error?.code).toEventually(equal(404), timeout: 3)

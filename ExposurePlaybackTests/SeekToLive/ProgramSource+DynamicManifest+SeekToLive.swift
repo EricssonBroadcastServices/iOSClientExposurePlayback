@@ -85,7 +85,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     // Initiate test
                     env.player.startPlayback(playable: playable, properties: properties)
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
@@ -142,7 +142,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
@@ -211,7 +211,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
@@ -274,7 +274,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
@@ -348,7 +348,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
-                        .onPlaybackReady{ player, source in
+                        .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
