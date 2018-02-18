@@ -170,16 +170,17 @@ extension ExposureFairplayRequester {
             return
         }
         
-        Alamofire
+        SessionManager
+            .default
             .request(url, method: .get)
-            .responseData{ [weak self] response in
-                
-                if let error = response.error {
+            .validate()
+            .rawResponse{ [weak self] _, _, data, error in
+                if let error = error {
                     callback(nil, .fairplay(reason: .networking(error: error)))
                     return
                 }
-                
-                if let success = response.value {
+
+                if let success = data {
                     do {
                         let certificate = try self?.parseApplicationCertificate(response: success)
                         callback(certificate, nil)
@@ -262,22 +263,25 @@ extension ExposureFairplayRequester {
             return
         }
         
-        let headers = ["AzukiApp": playToken, // May not be needed
-            "Content-type": "application/octet-stream"]
+        let headers = [
+            "AzukiApp": playToken, // May not be needed
+            "Content-type": "application/octet-stream"
+        ]
         
-        Alamofire
-            .upload(spc,
-                    to: url,
-                    method: .post,
-                    headers: headers)
+        SessionManager
+            .default
+            .request(url,
+                     method: .post,
+                     data: spc,
+                     headers: headers)
             .validate()
-            .responseData{ response in
-                if let error = response.error {
+            .rawResponse{ _,_, data, error in
+                if let error = error {
                     callback(nil, .fairplay(reason:.networking(error: error)))
                     return
                 }
                 
-                if let success = response.value {
+                if let success = data {
                     do {
                         let ckc = try self.parseContentKeyContext(response: success)
                         callback(ckc, nil)
