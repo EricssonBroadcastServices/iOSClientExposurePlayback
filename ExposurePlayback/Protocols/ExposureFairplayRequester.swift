@@ -9,7 +9,6 @@
 import Foundation
 import AVFoundation
 import Player
-import Alamofire
 import Exposure
 
 internal protocol ExposureFairplayRequester: class {
