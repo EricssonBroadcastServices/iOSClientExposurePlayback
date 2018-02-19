@@ -47,7 +47,6 @@
 		76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5D20207B2400C23579 /* ExposureFairplayRequester.swift */; };
 		76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5E20207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift */; };
 		76A89C6520207B2400C23579 /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C6020207B2400C23579 /* Playable.swift */; };
-		76A89C8F2020808900C23579 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C922020808900C23579 /* Alamofire.framework */; };
 		76A89C902020808900C23579 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C932020808900C23579 /* Exposure.framework */; };
 		76A89C912020808900C23579 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C942020808900C23579 /* Player.framework */; };
 		76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89CF32020958000C23579 /* MonotonicTimeServiceSpec.swift */; };
@@ -259,7 +258,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76A89C8F2020808900C23579 /* Alamofire.framework in Frameworks */,
 				76A89C902020808900C23579 /* Exposure.framework in Frameworks */,
 				76A89C912020808900C23579 /* Player.framework in Frameworks */,
 			);
