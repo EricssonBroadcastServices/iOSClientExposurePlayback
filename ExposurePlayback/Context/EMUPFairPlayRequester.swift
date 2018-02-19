@@ -87,34 +87,25 @@ extension EMUPFairPlayRequester {
     /// For more information regarding *Fairplay* validation, please see Apple's documentation regarding *Fairplay Streaming*.
     fileprivate func handle(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
         
-        guard let url = resourceLoadingRequest.request.url,
-            let assetIDString = url.host,
-            let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
-                resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .invalidContentIdentifier))
-                return
+        guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
+            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .invalidContentIdentifier))
+            return
         }
-        
-        
-        
-        print(url, " - ",assetIDString)
         
         fetchApplicationCertificate{ [weak self] certificate, certificateError in
             guard let `self` = self else { return }
-            print("fetchApplicationCertificate")
             if let certificateError = certificateError {
-                print("fetchApplicationCertificate ",certificateError.localizedDescription)
+                print("Certificate Error",certificateError.localizedDescription)
                 resourceLoadingRequest.finishLoading(with: certificateError)
                 return
             }
             
             if let certificate = certificate {
-                print("prepare SPC")
                 do {
                     let spcData = try resourceLoadingRequest.streamingContentKeyRequestData(forApp: certificate, contentIdentifier: contentIdentifier, options: self.resourceLoadingRequestOptions)
                     
                     self.fetchContentKeyContext(spc: spcData) { [weak self] ckcBase64, ckcError in
                         guard let `self` = self else { return }
-                        print("fetchContentKeyContext")
                         if let ckcError = ckcError {
                             print("CKC Error",ckcError.localizedDescription)
                             resourceLoadingRequest.finishLoading(with: ckcError)
@@ -122,13 +113,11 @@ extension EMUPFairPlayRequester {
                         }
                         
                         guard let dataRequest = resourceLoadingRequest.dataRequest else {
-                            print("dataRequest Error",ExposureContext.Error.fairplay(reason: .missingDataRequest).localizedDescription)
                             resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingDataRequest))
                             return
                         }
                         
                         guard let ckcBase64 = ckcBase64 else {
-                            print("ckcBase64 Error",ExposureContext.Error.fairplay(reason: .missingContentKeyContext).localizedDescription)
                             resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingContentKeyContext))
                             return
                         }
@@ -142,7 +131,6 @@ extension EMUPFairPlayRequester {
                             resourceLoadingRequest.finishLoading() // Treat the processing of the request as complete.
                         }
                         catch {
-                            print("onSuccessfulRetrieval Error",error)
                             resourceLoadingRequest.finishLoading(with: error)
                         }
                     }
@@ -158,8 +146,7 @@ extension EMUPFairPlayRequester {
                     //                    -42679 The certificate supplied for SPC creation is not valid.
                     //                    -42681 The version list supplied to SPC creation is not valid.
                     //                    -42783 The certificate supplied for SPC is not valid and is possibly revoked.
-                    print("SPC - ",error.localizedDescription)
-                    print("SPC - ",error)
+                    print("SPC Error ",error.localizedDescription)
                     resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .serverPlaybackContext(error: error)))
                     return
                 }
