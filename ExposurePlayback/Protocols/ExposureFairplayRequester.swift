@@ -12,7 +12,7 @@ import Player
 import Alamofire
 import Exposure
 
-internal protocol ExposureFairplayRequester: class {
+internal protocol ExposureFairplayRequester: class, FairplayRequester {
     /// Entitlement related to this specific *Fairplay* request.
     var entitlement: PlaybackEntitlement { get }
     

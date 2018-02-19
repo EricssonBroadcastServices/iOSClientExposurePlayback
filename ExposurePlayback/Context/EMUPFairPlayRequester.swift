@@ -12,14 +12,14 @@ import Player
 import Alamofire
 import Exposure
 
-internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester, FairplayRequester {
+internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     
     init(entitlement: PlaybackEntitlement) {
         self.entitlement = entitlement
     }
     
     internal let entitlement: PlaybackEntitlement
-    internal let resourceLoadingRequestQueue = DispatchQueue(label: "com.emp.exposure.streaming.fairplay.requests")
+    internal let resourceLoadingRequestQueue = DispatchQueue(label: "com.emp.exposurePlayback.fairplay.emup.requests")
     internal let customScheme = "skd"
     internal let resourceLoadingRequestOptions: [String : AnyObject]? = nil
     
@@ -55,7 +55,7 @@ extension EMUPFairPlayRequester {
             return false
         }
         
-        //EMPFairplayRequester only should handle FPS Content Key requests.
+        // Should handle FPS Content Key requests.
         if url.scheme != customScheme {
             return false
         }
@@ -99,7 +99,8 @@ extension EMUPFairPlayRequester {
         
         print(url, " - ",assetIDString)
         
-        fetchApplicationCertificate{ [unowned self] certificate, certificateError in
+        fetchApplicationCertificate{ [weak self] certificate, certificateError in
+            guard let `self` = self else { return }
             print("fetchApplicationCertificate")
             if let certificateError = certificateError {
                 print("fetchApplicationCertificate ",certificateError.localizedDescription)
@@ -112,10 +113,8 @@ extension EMUPFairPlayRequester {
                 do {
                     let spcData = try resourceLoadingRequest.streamingContentKeyRequestData(forApp: certificate, contentIdentifier: contentIdentifier, options: self.resourceLoadingRequestOptions)
                     
-                    // Content Key Context fetch from licenseUrl requires base64 encoded data
-                    let spcBase64 = spcData//.base64EncodedData(options: Data.Base64EncodingOptions.endLineWithLineFeed)
-                    
-                    self.fetchContentKeyContext(spc: spcBase64) { ckcBase64, ckcError in
+                    self.fetchContentKeyContext(spc: spcData) { [weak self] ckcBase64, ckcError in
+                        guard let `self` = self else { return }
                         print("fetchContentKeyContext")
                         if let ckcError = ckcError {
                             print("CKC Error",ckcError.localizedDescription)
@@ -184,6 +183,7 @@ extension EMUPFairPlayRequester {
         
         Alamofire
             .request(url, method: .get)
+            .validate()
             .responseData{ [weak self] response in
                 
                 if let error = response.error {
@@ -211,33 +211,11 @@ extension EMUPFairPlayRequester {
     }
     
     fileprivate func parseApplicationCertificate(response data: Data) throws -> Data {
-        return data.base64EncodedData()
-//        let cert = try JSONDecoder().decode(TempCert.self, from: data)
-//        guard let base64 = Data(base64Encoded: cert.certificate, options: Data.Base64DecodingOptions.ignoreUnknownCharacters) else {
-//            throw ExposureContext.Error.fairplay(reason: .applicationCertificateDataFormatInvalid)
-//        }
-//        return base64
+        return data
     }
     
 }
 
-//struct TempCert: Decodable {
-//    let certificate: String
-//}
-//
-//struct TempCKC: Decodable {
-//    let ckc: String
-//
-//    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        print(container.allKeys, container.contains(.ckc))
-//        ckc = try container.decode(String.self, forKey: .ckc)
-//    }
-//
-//    enum CodingKeys: CodingKey {
-//        case ckc
-//    }
-//}
 
 // MARK: - Content Key Context
 extension EMUPFairPlayRequester {
@@ -252,20 +230,13 @@ extension EMUPFairPlayRequester {
             callback(nil, .fairplay(reason: .missingContentKeyContextUrl))
             return
         }
-//        let spcString = spc.base64EncodedString()
-//        let params = [
-//            "mediaId":"",
-//            "spc":spcString
-//        ]
-//        print("spcString",spcString)
         
         Alamofire
-            .request(url,
-                     method: .post)
-//            .request(url,
-//                     method: .post,
-//                     parameters: params,
-//                     encoding: JSONEncoding.default)
+            .upload(spc,
+                    to: url,
+                    method: .post,
+                    headers: ["Content-type": "application/octet-stream"])
+            .validate()
             .responseData{ response in
                 if let error = response.error {
                     callback(nil, .fairplay(reason:.networking(error: error)))
@@ -273,24 +244,8 @@ extension EMUPFairPlayRequester {
                 }
                 
                 if let success = response.value {
-                    let base64 = success.base64EncodedData()
+                    let base64 = success
                     callback(base64,nil)
-//                    do {
-//                        print(success)
-//
-//                        let json = try JSONSerialization.jsonObject(with: success, options: JSONSerialization.ReadingOptions.allowFragments)
-//                        print(json)
-//                        let ckc = try JSONDecoder().decode(TempCKC.self,
-//                                                           from: success)
-//                        guard let base64 = Data(base64Encoded: ckc.ckc, options: Data.Base64DecodingOptions.ignoreUnknownCharacters) else {
-//                            callback(nil,ExposureContext.Error.fairplay(reason: .contentKeyContextDataFormatInvalid))
-//                            return
-//                        }
-//                        callback(base64,nil)
-//                    }
-//                    catch {
-//                        callback(nil,ExposureContext.Error.exposure(reason: .generalError(error: error)))
-//                    }
                 }
         }
         

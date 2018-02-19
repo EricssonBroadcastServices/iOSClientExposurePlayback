@@ -71,7 +71,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
             /// Update tech autoplay settings from PlaybackProperties
             tech.autoplay = context.playbackProperties.autoplay
             
-            
             /// Load tech
             tech.load(source: source) { [weak self] in
                 /// Start ProgramService
