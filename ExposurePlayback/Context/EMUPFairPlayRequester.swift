@@ -9,7 +9,6 @@
 import Foundation
 import AVFoundation
 import Player
-import Alamofire
 import Exposure
 
 internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
@@ -181,23 +180,24 @@ extension EMUPFairPlayRequester {
             return
         }
         
-        Alamofire
-            .request(url, method: .get)
+        SessionManager
+            .default
+            .request(url,
+                     method: .get)
             .validate()
-            .responseData{ [weak self] response in
-                
-                if let error = response.error {
+            .rawResponse { [weak self] _,_, data, error in
+                guard let `self` = self else { return }
+                if let error = error {
                     callback(nil, .fairplay(reason: .networking(error: error)))
                     return
                 }
                 
-                if let success = response.value {
+                if let success = data {
                     do {
-                        let certificate = try self?.parseApplicationCertificate(response: success)
+                        let certificate = try self.parseApplicationCertificate(response: success)
                         callback(certificate, nil)
                     }
                     catch {
-                        // parseApplicationCertificate will only throw PlayerError
                         callback(nil, error as? ExposureContext.Error)
                     }
                 }
@@ -231,24 +231,23 @@ extension EMUPFairPlayRequester {
             return
         }
         
-        Alamofire
-            .upload(spc,
-                    to: url,
-                    method: .post,
-                    headers: ["Content-type": "application/octet-stream"])
+        SessionManager
+            .default
+            .request(url,
+                     method: .post,
+                     data: spc,
+                     headers: ["Content-type": "application/octet-stream"])
             .validate()
-            .responseData{ response in
-                if let error = response.error {
+            .rawResponse { _,_, data, error in
+                if let error = error {
                     callback(nil, .fairplay(reason:.networking(error: error)))
                     return
                 }
                 
-                if let success = response.value {
-                    let base64 = success
-                    callback(base64,nil)
+                if let success = data {
+                    callback(success,nil)
                 }
         }
-        
     }
     
     /// Retrieve the `licenseUrl` by parsing the *entitlement*.
