@@ -18,7 +18,7 @@
 		7635AECD202AE0D2001512BF /* ContextStartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AECC202AE0D2001512BF /* ContextStartTime.swift */; };
 		7636CA9E2031DB9A00F914D1 /* ServerTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CA9D2031DB9A00F914D1 /* ServerTime+Extensions.swift */; };
 		7636CAA12032E5E200F914D1 /* ProgramSource+DynamicManifest+SeekToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA02032E5E200F914D1 /* ProgramSource+DynamicManifest+SeekToTime.swift */; };
-		7636CAA32032E5F200F914D1 /* SeekToTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA22032E5F200F914D1 /* SeekToTimeProvider.swift */; };
+		7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */; };
 		7636CAA52032E61500F914D1 /* TestEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA42032E61500F914D1 /* TestEnv.swift */; };
 		7636CAA72032E63E00F914D1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA62032E63E00F914D1 /* Date+Extensions.swift */; };
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
@@ -142,7 +142,7 @@
 		7635AECC202AE0D2001512BF /* ContextStartTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextStartTime.swift; sourceTree = "<group>"; };
 		7636CA9D2031DB9A00F914D1 /* ServerTime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServerTime+Extensions.swift"; sourceTree = "<group>"; };
 		7636CAA02032E5E200F914D1 /* ProgramSource+DynamicManifest+SeekToTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+DynamicManifest+SeekToTime.swift"; sourceTree = "<group>"; };
-		7636CAA22032E5F200F914D1 /* SeekToTimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToTimeProvider.swift; sourceTree = "<group>"; };
+		7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedProgramProvider.swift; sourceTree = "<group>"; };
 		7636CAA42032E61500F914D1 /* TestEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnv.swift; sourceTree = "<group>"; };
 		7636CAA62032E63E00F914D1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
@@ -289,7 +289,6 @@
 				76D5C9DB202DC9490056BFF8 /* ChannelSource+SeekToTime.swift */,
 				7636CAA02032E5E200F914D1 /* ProgramSource+DynamicManifest+SeekToTime.swift */,
 				76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */,
-				7636CAA22032E5F200F914D1 /* SeekToTimeProvider.swift */,
 			);
 			path = SeekToTime;
 			sourceTree = "<group>";
@@ -354,6 +353,7 @@
 				7636CA9D2031DB9A00F914D1 /* ServerTime+Extensions.swift */,
 				7636CAA62032E63E00F914D1 /* Date+Extensions.swift */,
 				7636CAA42032E61500F914D1 /* TestEnv.swift */,
+				7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */,
 				76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */,
 			);
 			path = ExposurePlaybackTests;
@@ -779,7 +779,7 @@
 				76A89DE62021CCC000C23579 /* BufferingStoppedSpec.swift in Sources */,
 				76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */,
 				76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */,
-				7636CAA32032E5F200F914D1 /* SeekToTimeProvider.swift in Sources */,
+				7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */,
 				76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */,
 				76A89DF22021CCC000C23579 /* HeartbeatSpec.swift in Sources */,
 				76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */,

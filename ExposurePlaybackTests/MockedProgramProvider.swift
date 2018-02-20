@@ -1,5 +1,5 @@
 //
-//  SeekToTimeProvider.swift
+//  MockedProgramProvider.swift
 //  ExposurePlaybackTests
 //
 //  Created by Fredrik Sjöberg on 2018-02-13.
