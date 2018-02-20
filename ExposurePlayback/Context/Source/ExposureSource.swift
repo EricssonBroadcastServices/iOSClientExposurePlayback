@@ -38,7 +38,7 @@ public class ExposureSource: MediaSource {
     public init(entitlement: PlaybackEntitlement, assetId: String) {
         self.entitlement = entitlement
         self.assetId = assetId
-        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : ExposureStreamFairplayRequester(entitlement: entitlement)
+        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
     }
     
     deinit {

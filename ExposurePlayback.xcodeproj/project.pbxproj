@@ -33,7 +33,7 @@
 		76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3320207AB100C23579 /* HLSNative+ExposureContext+Timeshift.swift */; };
 		76A89C4C20207AB200C23579 /* HLSNative+HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3420207AB100C23579 /* HLSNative+HeartbeatsProvider.swift */; };
 		76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3520207AB100C23579 /* ExposureContext.swift */; };
-		76A89C4E20207AB200C23579 /* ExposureStreamFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3620207AB100C23579 /* ExposureStreamFairplayRequester.swift */; };
+		76A89C4E20207AB200C23579 /* MRRFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3620207AB100C23579 /* MRRFairplayRequester.swift */; };
 		76A89C4F20207AB200C23579 /* AssetPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3820207AB100C23579 /* AssetPlayable.swift */; };
 		76A89C5020207AB200C23579 /* ChannelPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3920207AB100C23579 /* ChannelPlayable.swift */; };
 		76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3A20207AB100C23579 /* ProgramPlayable.swift */; };
@@ -169,7 +169,7 @@
 		76A89C3320207AB100C23579 /* HLSNative+ExposureContext+Timeshift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Timeshift.swift"; sourceTree = "<group>"; };
 		76A89C3420207AB100C23579 /* HLSNative+HeartbeatsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+HeartbeatsProvider.swift"; sourceTree = "<group>"; };
 		76A89C3520207AB100C23579 /* ExposureContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureContext.swift; sourceTree = "<group>"; };
-		76A89C3620207AB100C23579 /* ExposureStreamFairplayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureStreamFairplayRequester.swift; sourceTree = "<group>"; };
+		76A89C3620207AB100C23579 /* MRRFairplayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRRFairplayRequester.swift; sourceTree = "<group>"; };
 		76A89C3820207AB100C23579 /* AssetPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetPlayable.swift; sourceTree = "<group>"; };
 		76A89C3920207AB100C23579 /* ChannelPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelPlayable.swift; sourceTree = "<group>"; };
 		76A89C3A20207AB100C23579 /* ProgramPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramPlayable.swift; sourceTree = "<group>"; };
@@ -390,14 +390,14 @@
 			isa = PBXGroup;
 			children = (
 				76A89C3520207AB100C23579 /* ExposureContext.swift */,
-				76A89C3620207AB100C23579 /* ExposureStreamFairplayRequester.swift */,
+				760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */,
+				76A89C3620207AB100C23579 /* MRRFairplayRequester.swift */,
 				76A89C3B20207AB100C23579 /* PlaybackProperties.swift */,
 				76A89DA22020F9A300C23579 /* ExposureContext+Error.swift */,
 				76A89DA42020F9E800C23579 /* ExposureContext+Warning.swift */,
 				76A89C2D20207AB100C23579 /* Components */,
 				76A89C3C20207AB100C23579 /* Source */,
 				76A89C3720207AB100C23579 /* Playable */,
-				760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */,
 			);
 			path = Context;
 			sourceTree = "<group>";
@@ -685,7 +685,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76A89C4E20207AB200C23579 /* ExposureStreamFairplayRequester.swift in Sources */,
+				76A89C4E20207AB200C23579 /* MRRFairplayRequester.swift in Sources */,
 				76A89D992020F41F00C23579 /* Paused.swift in Sources */,
 				76A89C5020207AB200C23579 /* ChannelPlayable.swift in Sources */,
 				7635AECD202AE0D2001512BF /* ContextStartTime.swift in Sources */,
