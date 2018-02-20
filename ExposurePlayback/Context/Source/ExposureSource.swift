@@ -33,9 +33,12 @@ public class ExposureSource: MediaSource {
     /// *EMP* assetId
     public let assetId: String
     
+    internal let fairplayRequester: ExposureFairplayRequester
+    
     public init(entitlement: PlaybackEntitlement, assetId: String) {
         self.entitlement = entitlement
         self.assetId = assetId
+        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
     }
     
     deinit {
@@ -46,10 +49,7 @@ public class ExposureSource: MediaSource {
 extension ExposureSource {
     /// Checks if the manifest comes from the *Unified Packager*
     internal var isUnifiedPackager: Bool {
-        return entitlement
-            .mediaLocator
-            .pathComponents
-            .reduce(false) { $0 || $1.contains(".isml") }
+        return entitlement.isUnifiedPackager
     }
 }
 
@@ -98,9 +98,8 @@ extension ExposureSource {
 // MARK: - HLSNativeConfigurable
 extension ExposureSource: HLSNativeConfigurable {
     public var hlsNativeConfiguration: HLSNativeConfiguration {
-        let drmAgent = ExposureStreamFairplayRequester(entitlement: entitlement)
         return HLSNativeConfiguration(url: url,
                                       playSessionId: entitlement.playSessionId,
-                                      drm: drmAgent)
+                                      drm: fairplayRequester)
     }
 }
