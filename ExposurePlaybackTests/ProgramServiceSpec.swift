@@ -144,7 +144,7 @@ class ProgramServiceSpec: QuickSpec {
 
                 service.startMonitoring(epgOffset: 10 * 1000)
 
-                expect(newProgram).toEventuallyNot(beNil(), timeout: 3)
+                expect(newProgram).toEventuallyNot(beNil(), timeout: 20)
             }
 
             context("Validation timer on program end timestamp") {
@@ -303,7 +303,7 @@ class ProgramServiceSpec: QuickSpec {
                     service.startMonitoring(epgOffset: 10 * 1000)
 
                     var successCalled = false
-                    service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) {
+                    service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) { program in
                         successCalled = true
                     }
 
@@ -336,7 +336,7 @@ class ProgramServiceSpec: QuickSpec {
                 service.startMonitoring(epgOffset: 10 * 1000)
 
                 var successCalled = false
-                service.isEntitled(toPlay: Date().millisecondsSince1970 + 120 * 1000) {
+                service.isEntitled(toPlay: Date().millisecondsSince1970 + 120 * 1000) { program in
                     successCalled = true
                 }
 

@@ -179,7 +179,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                             }
                             else {
                                 let program = Program
-                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_err_val")
                                     .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
                                     .decode(Program.self)
                                 callback(program,nil)
@@ -220,11 +220,8 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                             warning = warn
                     }
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
                     expect(warning).toEventuallyNot(beNil(), timeout: 3)
                     expect(warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
                 }
             }
             
@@ -311,14 +308,14 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                             }
                             else {
                                 let program = Program
-                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_not_entitled")
                                     .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
                                     .decode(Program.self)
                                 callback(program,nil)
                             }
                         }
                         provider.mockedValidate = { assetId, environment, sessionToken, callback in
-                            if assetId == "asset2" {
+                            if assetId == "asset2_not_entitled" {
                                 callback(EntitlementValidation.validJson(status: "NOT_ENTITLED").decode(EntitlementValidation.self),nil)
                             }
                             else {

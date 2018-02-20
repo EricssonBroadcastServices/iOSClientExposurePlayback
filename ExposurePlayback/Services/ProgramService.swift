@@ -213,15 +213,14 @@ extension ProgramService {
         timer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
             guard let timestamp = self.currentPlayheadTime() else { return }
-            self.validate(timestamp: timestamp) { [weak self] program, invalidMessage in
-                if let invalidMessage = invalidMessage {
-                    DispatchQueue.main.async { [weak self] in
+            self.validate(timestamp: timestamp) { program, invalidMessage in
+                DispatchQueue.main.async { [weak self] in
+                    if let invalidMessage = invalidMessage {
                         // The user is not entitled to play this program
                         self?.onNotEntitled(invalidMessage)
                     }
+                    self?.handleProgramChanged(program: program)
                 }
-                
-                self?.handleProgramChanged(program: program)
             }
         }
         timer?.resume()

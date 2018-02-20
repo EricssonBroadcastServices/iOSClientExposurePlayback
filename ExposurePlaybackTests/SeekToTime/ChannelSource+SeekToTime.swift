@@ -106,7 +106,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     }
                                     else {
                                         let program = Program
-                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_entitled")
                                             .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
                                             .decode(Program.self)
                                         callback(program,nil)
@@ -220,7 +220,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     }
                                     else {
                                         let program = Program
-                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_error_validating")
                                             .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
                                             .decode(Program.self)
                                         callback(program,nil)
@@ -341,14 +341,14 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                     }
                                     else {
                                         let program = Program
-                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                            .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_not_entitled")
                                             .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
                                             .decode(Program.self)
                                         callback(program,nil)
                                     }
                                 }
                                 provider.mockedValidate = { assetId, environment, sessionToken, callback in
-                                    if assetId == "asset2" {
+                                    if assetId == "asset2_not_entitled" {
                                         callback(EntitlementValidation.validJson(status: "NOT_ENTITLED").decode(EntitlementValidation.self),nil)
                                     }
                                     else {
