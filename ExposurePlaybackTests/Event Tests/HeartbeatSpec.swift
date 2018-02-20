@@ -37,17 +37,6 @@ class HeartbeatSpec: QuickSpec {
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["OffsetTime"] as? Int64).to(equal(10))
             }
-            
-            let assetId = "assetId"
-            let sessionToken = SessionToken(value: "token")
-            let environment = Environment(baseUrl: "anUrl", customer: "customer", businessUnit: "businessUnit")
-            
-            it("Should deliver correct metaData for HLSNative") {
-                let player = Player<HLSNative<ExposureContext>>(environment: environment, sessionToken: sessionToken, analytics: ExposureAnalytics.self)
-                let heartbeat = player.tech.requestHeatbeat()
-                expect(heartbeat.eventType).to(equal(type))
-                expect(heartbeat.bufferLimit).to(equal(3000))
-            }
         }
     }
 }

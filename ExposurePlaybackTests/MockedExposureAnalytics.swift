@@ -30,7 +30,7 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: HeartbeatsProvider) where Tech : PlaybackTech, Source : MediaSource {
+    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     
