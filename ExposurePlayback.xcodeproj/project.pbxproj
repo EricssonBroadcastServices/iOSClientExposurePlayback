@@ -118,6 +118,7 @@
 		76D5C9E4203199DF0056BFF8 /* EntitlementValidation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */; };
 		76DE495B2033041B006801B4 /* MockedExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */; };
 		76DE495D20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */; };
+		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,6 +256,7 @@
 		76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementValidation+Extensions.swift"; sourceTree = "<group>"; };
 		76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedExposureAnalytics.swift; sourceTree = "<group>"; };
 		76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StaticManifest+SeekToTime.swift"; sourceTree = "<group>"; };
+		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +414,7 @@
 				76A89C3220207AB100C23579 /* HLSNative+ExposureContext+ServerTime.swift */,
 				76A89C3320207AB100C23579 /* HLSNative+ExposureContext+Timeshift.swift */,
 				7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */,
+				76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -692,6 +695,7 @@
 				76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */,
 				7635AEC5202ADFDE001512BF /* CMTime+Extensions.swift in Sources */,
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
+				76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				7635AEC9202AE0A2001512BF /* ContextTimeSeekable.swift in Sources */,
 				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
 				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,

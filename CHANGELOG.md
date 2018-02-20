@@ -5,6 +5,9 @@
 
 ## 2.0.78
 
+#### Features
+* Track selection for `HLSNative` when using `ExposureContext`
+
 #### Changes
 * Standalone networking
 * `HeartbeatsProvider` as a closure instead of a protocol
