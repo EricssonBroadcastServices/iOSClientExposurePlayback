@@ -78,11 +78,11 @@ internal class ProgramService {
 }
 
 extension ProgramService {
-    fileprivate func validate(timestamp: Int64, callback: @escaping (String?) -> Void) {
+    fileprivate func validate(timestamp: Int64, callback: @escaping (Program?, String?) -> Void) {
         if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
-                callback(nil)
+                callback(current, nil)
                 return
             }
         }
@@ -93,13 +93,12 @@ extension ProgramService {
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
-                callback(nil)
+                callback(nil, nil)
                 return
             }
             
             if let program = newProgram {
                 DispatchQueue.main.async { [weak self] in
-                    self?.handleProgramChanged(program: program)
                     self?.startValidationTimer(onTimestamp: timestamp, for: program)
                 }
                 
@@ -111,43 +110,42 @@ extension ProgramService {
                             guard let `self` = self else { return }
                             self.onWarning(.entitlementValidationFailed(programId: program.assetId, channelId: self.channelId, error: error))
                         }
-                        callback(nil)
+                        callback(program, nil)
                         return
                     }
                     
                     guard expirationReason == "SUCCESS" else {
                         /// Failure, playback is no longer allowed
-                        callback(expirationReason)
+                        callback(program, expirationReason)
                         return
                     }
                     
                     /// Success, playback is validated
-                    callback(nil)
+                    callback(program, nil)
                 }
             }
             else {
                 /// Validation on program level requires the channel has Epg attached.
                 ///
                 /// If we are missing Epg, playback is allowed to continue.
-                
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
-                    self.handleProgramChanged(program: nil)
+                    callback(nil, nil)
                     self.startValidationTimer(onTimestamp: timestamp, for: nil)
                     self.onWarning(.gapInEpg(timestamp: timestamp, channelId: self.channelId))
                 }
-                callback(nil)
-                
-                /// TODO: Should we *retry* after a certain amount of time to check if Epg eventually exists for the channel?
             }
         }
     }
     
-    fileprivate func handleProgramChanged(program: Program?) {
-        let current = activeProgram
-        activeProgram = program
-        if current?.programId != program?.programId {
-            onProgramChanged(program)
+    internal func handleProgramChanged(program: Program?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
+            let current = self.activeProgram
+            self.activeProgram = program
+            if current?.programId != program?.programId {
+                self.onProgramChanged(program)
+            }
         }
     }
 }
@@ -158,14 +156,14 @@ extension ProgramService {
         timer?.cancel()
     }
     
-    internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping () -> Void) {
-        validate(timestamp: timestamp) { message in
+    internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping (Program?) -> Void) {
+        validate(timestamp: timestamp) { [weak self] program, message in
             DispatchQueue.main.async { [weak self] in
                 if let notEntitledMessage = message {
                     self?.onNotEntitled(notEntitledMessage)
                 }
                 else {
-                    onSuccess()
+                    onSuccess(program)
                 }
             }
         }
@@ -215,13 +213,15 @@ extension ProgramService {
         timer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
             guard let timestamp = self.currentPlayheadTime() else { return }
-            self.validate(timestamp: timestamp) { invalidMessage in
+            self.validate(timestamp: timestamp) { [weak self] program, invalidMessage in
                 if let invalidMessage = invalidMessage {
                     DispatchQueue.main.async { [weak self] in
                         // The user is not entitled to play this program
                         self?.onNotEntitled(invalidMessage)
                     }
                 }
+                
+                self?.handleProgramChanged(program: program)
             }
         }
         timer?.resume()
