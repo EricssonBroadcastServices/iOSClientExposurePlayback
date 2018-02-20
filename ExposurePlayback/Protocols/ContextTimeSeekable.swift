@@ -21,12 +21,15 @@ extension ContextTimeSeekable {
         }, ifWithin: {
             // Within bounds
             if let service = context.programService {
-                service.isEntitled(toPlay: timeInterval) {
+                service.isEntitled(toPlay: timeInterval) { program in
                     // NOTE: If `callback` is NOT fired:
                     //      * Playback is not entitled
                     //      * `onError` will be dispatched with message
                     //      * playback will be stopped and unloaded
-                    player.tech.seek(toTime: timeInterval)
+                    player.tech.seek(toTime: timeInterval) { [weak service] success in
+                        // We should not send programChanged event until we have actually arrived at the target timestamp
+                        if success { service?.handleProgramChanged(program: program) }
+                    }
                 }
                 
             }

@@ -28,8 +28,15 @@ extension ContextGoLive {
         }
         
         if let programService = player.context.programService {
-            programService.isEntitled(toPlay: last) {
-                player.tech.seek(toTime: last)
+            programService.isEntitled(toPlay: last) { program in
+                // NOTE: If `callback` is NOT fired:
+                //      * Playback is not entitled
+                //      * `onError` will be dispatched with message
+                //      * playback will be stopped and unloaded
+                player.tech.seek(toTime: last) { [weak programService] success in
+                    // We should not send programChanged event until we have actually arrived at the target timestamp
+                    if success { programService?.handleProgramChanged(program: program) }
+                }
             }
         }
         else {
