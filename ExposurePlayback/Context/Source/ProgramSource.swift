@@ -132,3 +132,14 @@ extension ProgramSource: ProgramServiceEnabled {
         return channelId
     }
 }
+
+extension ProgramSource: HeartbeatsProvider {
+    internal func heartbeat(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> Playback.Heartbeat {
+        if isUnifiedPackager {
+            return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadTime ?? tech.playheadPosition)
+        }
+        else {
+            return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadPosition)
+        }
+    }
+}

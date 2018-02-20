@@ -158,7 +158,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     /// - parameter asset: *EMP* asset identifiers.
     /// - parameter entitlement: The entitlement this session concerns
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
-    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: HeartbeatsProvider) where Tech : PlaybackTech, Source : MediaSource {
+    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         let events = startupEvents
         
         dispatcher = Dispatcher(environment: environment,

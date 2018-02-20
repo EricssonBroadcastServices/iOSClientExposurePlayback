@@ -49,3 +49,9 @@ extension AssetSource: ContextStartTime {
         tech.startOffset(atPosition: nil)
     }
 }
+
+extension AssetSource: HeartbeatsProvider {
+    internal func heartbeat(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> Playback.Heartbeat {
+        return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadPosition)
+    }
+}
