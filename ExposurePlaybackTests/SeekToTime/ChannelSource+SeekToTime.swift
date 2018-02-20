@@ -37,13 +37,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     ///  r1        |           r2
                     ///  s1 -----> s2
                     it("should allow seek") {
-                        let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        let env = TestEnv(environment: env, sessionToken: token)
                         env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
                         env.mockProgramService{ environment, sessionToken, channelId in
-                            let provider = SeekToTimeProgramProvider()
+                            let provider = MockedProgramProvider()
                             provider.mockedFetchProgram = { _,_,_, callback in
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "assetId")
@@ -89,13 +89,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ ENTITLED
                     context("ENTITLED") {
                         it("should allow seek if entitled") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                             
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate + hour / 2 {
                                         let program = Program
@@ -146,13 +146,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ Error fetching EPG
                     context("Error fetching EPG") {
                         it("should allow seek with warning message") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                             
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate + hour / 2 {
                                         let program = Program
@@ -203,13 +203,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ Error validating entitlement
                     context("Error validating entitlement") {
                         it("should allow seek with warning message") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                             
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate + hour / 2 {
                                         let program = Program
@@ -266,13 +266,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ Gap in EPG
                     context("Gap in EPG"){
                         it("should allow seek if encountering epg gap") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                             
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate + hour / 2 {
                                         let program = Program
@@ -324,13 +324,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ NOT_ENTITLED
                     context("NOT_ENTITLED") {
                         it("should stop with error if not entitled") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                             
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate + hour / 2 {
                                         let program = Program
@@ -402,7 +402,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     ///  s1 ----------> s2
                     let closeToLivePoint: Int64 = 10 * 1000
                     it("should seek to live point") {
-                        let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        let env = TestEnv(environment: env, sessionToken: token)
                         env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: livePointOffet))
                         
@@ -418,7 +418,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         
                         // Mock the ProgramService
                         env.mockProgramService{ environment, sessionToken, channelId in
-                            let provider = SeekToTimeProgramProvider()
+                            let provider = MockedProgramProvider()
                             provider.mockedFetchProgram = { _,_,_, callback in
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "assetId")
@@ -464,7 +464,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     ///  s1 --------------------> s2
                     let farAheadOfLivePoint: Int64 = 100 * 1000
                     it("should ignore seek and deliver warning") {
-                        let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        let env = TestEnv(environment: env, sessionToken: token)
                         env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: livePointOffet))
 
@@ -480,7 +480,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
 
                         // Mock the ProgramService
                         env.mockProgramService{ environment, sessionToken, channelId in
-                            let provider = SeekToTimeProgramProvider()
+                            let provider = MockedProgramProvider()
                             provider.mockedFetchProgram = { _,_,_, callback in
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "assetId")
@@ -538,13 +538,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 // MARK: + Error fetching EPG
                 context("Error fetching EPG") {
                     it("should ignore seek with warning message") {
-                        let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        let env = TestEnv(environment: env, sessionToken: token)
                         env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
                         env.mockProgramService{ environment, sessionToken, channelId in
-                            let provider = SeekToTimeProgramProvider()
+                            let provider = MockedProgramProvider()
                             provider.mockedFetchProgram = { _,timestamp,_, callback in
                                 if timestamp < currentDate {
                                     callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 401, message: "SOME_ERROR")))
@@ -595,13 +595,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 // MARK: + Gap in EPG
                 context("Gap in EPG"){
                     it("should ignore seek if encountering epg gap") {
-                        let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                        let env = TestEnv(environment: env, sessionToken: token)
                         env.player.context.isDynamicManifest = { _,_ in return true }
                         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                         // Mock the ProgramService
                         env.mockProgramService{ environment, sessionToken, channelId in
-                            let provider = SeekToTimeProgramProvider()
+                            let provider = MockedProgramProvider()
                             provider.mockedFetchProgram = { _,timestamp,_, callback in
                                 if timestamp < currentDate {
                                     // GAP IN EPG
@@ -655,13 +655,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ Error making playcall
                     context("Error making playcall") {
                         it("should stop playback with error") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate {
                                         let program = Program
@@ -724,13 +724,13 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     // MARK: ++ ENTITLED
                     context("ENTITLED") {
                         it("should allow playback") {
-                            let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                            let env = TestEnv(environment: env, sessionToken: token)
                             env.player.context.isDynamicManifest = { _,_ in return true }
                             env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                             // Mock the ProgramService
                             env.mockProgramService{ environment, sessionToken, channelId in
-                                let provider = SeekToTimeProgramProvider()
+                                let provider = MockedProgramProvider()
                                 provider.mockedFetchProgram = { _,timestamp,_, callback in
                                     if timestamp < currentDate {
                                         let program = Program

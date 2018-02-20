@@ -37,13 +37,13 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
             // MARK: + Error making playcall
             context("Error making playcall") {
                 it("should stop playback with error") {
-                    let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                    let env = TestEnv(environment: env, sessionToken: token)
                     env.player.context.isDynamicManifest = { _,_ in return false }
                     env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour/2))
 
                     // Mock the ProgramService
                     env.mockProgramService{ environment, sessionToken, channelId in
-                        let provider = SeekToTimeProgramProvider()
+                        let provider = MockedProgramProvider()
                         provider.mockedFetchProgram = { _,_,_, callback in
                             let program = Program
                                 .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
@@ -101,13 +101,13 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
             // MARK: + ENTITLED
             context("ENTITLED") {
                 it("should allow playback") {
-                    let env = SeekToTimeEnv(environment: env, sessionToken: token)
+                    let env = TestEnv(environment: env, sessionToken: token)
                     env.player.context.isDynamicManifest = { _,_ in return false }
                     env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
                     
                     // Mock the ProgramService
                     env.mockProgramService{ environment, sessionToken, channelId in
-                        let provider = SeekToTimeProgramProvider()
+                        let provider = MockedProgramProvider()
                         provider.mockedFetchProgram = { _,timestamp,_, callback in
                             if timestamp > currentDate + hour/2 {
                                 let program = Program

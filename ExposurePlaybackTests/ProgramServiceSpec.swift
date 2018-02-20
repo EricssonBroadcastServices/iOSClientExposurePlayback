@@ -14,7 +14,7 @@ import Foundation
 
 @testable import ExposurePlayback
 
-class MockedProgramProvider: ProgramProvider {
+class MockedProgramServiceProvider: ProgramProvider {
     func program(for channelId: String, start: Int64, end: Int64, programId: String, assetId: String = "anAssetId") -> Program {
         return Program
             .validJson(programId: programId, channelId: channelId, assetId: assetId)
@@ -124,7 +124,7 @@ class ProgramServiceSpec: QuickSpec {
                 let channelId = "retryStartMonitoring"
                 var counter = 0
                 let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                let provider = MockedProgramProvider()
+                let provider = MockedProgramServiceProvider()
                 service.provider = provider
 
                 service.currentPlayheadTime = {
@@ -151,7 +151,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("Should continue while entitled") {
                     let channelId = "validationTrigger"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -178,7 +178,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("Should send message when not entitled") {
                     let channelId = "validationTriggerNotEntitled"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -207,7 +207,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("if EPG is missing") {
                     let channelId = "noEpgChannel"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -231,7 +231,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("if error on program fetch at startup") {
                     let channelId = "errorOnProgramFetch"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -255,7 +255,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("if error on program validation") {
                     let channelId = "errorOnProgramValidation"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -283,7 +283,7 @@ class ProgramServiceSpec: QuickSpec {
                 it("if timestamp is within active program bounds") {
                     let channelId = "timestampWithinActiveProgram"
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramProvider()
+                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
                     service.currentPlayheadTime = { return Date().millisecondsSince1970 }
@@ -316,7 +316,7 @@ class ProgramServiceSpec: QuickSpec {
             it("Should message if isEntitled returns not entitled") {
                 let channelId = "isEntitledNotEntitled"
                 let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                let provider = MockedProgramProvider()
+                let provider = MockedProgramServiceProvider()
                 service.provider = provider
 
                 service.currentPlayheadTime = { return Date().millisecondsSince1970 }

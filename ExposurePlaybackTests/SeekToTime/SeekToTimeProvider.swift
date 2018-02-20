@@ -11,7 +11,7 @@ import Exposure
 
 @testable import ExposurePlayback
 
-class SeekToTimeProgramProvider: ProgramProvider {
+class MockedProgramProvider: ProgramProvider {
     public init() { }
     
     var mockedFetchProgram: (String, Int64, Environment, (Program?, ExposureError?) -> Void) -> Void = { _,_,_,_ in }

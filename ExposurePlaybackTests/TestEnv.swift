@@ -1,5 +1,5 @@
 //
-//  SeekToTimeEnv.swift
+//  TestEnv.swift
 //  ExposurePlaybackTests
 //
 //  Created by Fredrik Sjöberg on 2018-02-13.
@@ -13,7 +13,7 @@ import AVFoundation
 @testable import Player
 @testable import ExposurePlayback
 
-class SeekToTimeEnv {
+class TestEnv {
     enum MockedError: Error {
         case generalError
     }
