@@ -71,6 +71,20 @@ extension Player where Tech == HLSNative<ExposureContext> {
             /// Update tech autoplay settings from PlaybackProperties
             tech.autoplay = context.playbackProperties.autoplay
             
+            /// Assign language preferences
+            switch context.playbackProperties.language {
+            case .defaultBehaviour:
+                print("context.playbackProperties.language.defaultBehaviour")
+            case .userLocale:
+                print("context.playbackProperties.language.userLocale",Locale.current.languageCode)
+                let locale = Locale.current.languageCode
+                tech.preferredTextLanguage = locale
+                tech.preferredAudioLanguage = locale
+            case let .custom(text: text, audio: audio):
+                tech.preferredTextLanguage = text
+                tech.preferredAudioLanguage = audio
+            }
+            
             /// Load tech
             tech.load(source: source) { [weak self] in
                 /// Start ProgramService
