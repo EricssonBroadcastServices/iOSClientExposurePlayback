@@ -7,6 +7,7 @@
 
 #### Features
 * Track selection for `HLSNative` when using `ExposureContext`
+* Preferred track option added in `PlaybackProperties`
 
 #### Changes
 * Standalone networking
