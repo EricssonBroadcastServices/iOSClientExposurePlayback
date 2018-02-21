@@ -22,9 +22,13 @@ public struct PlaybackProperties {
     public let playFrom: PlayFrom
     
     
-    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour) {
+    public let language: LanguagePreferences
+    
+    
+    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .userLocale) {
         self.autoplay = autoplay
         self.playFrom = playFrom
+        self.language = language
     }
     
     /// Governs where the playback should start from.
@@ -45,5 +49,11 @@ public struct PlaybackProperties {
         
         /// Specify a custom  *wallclock unix time stamp* offset
         case customTime(timestamp: Int64)
+    }
+    
+    public enum LanguagePreferences {
+        case defaultBehaviour
+        case userLocale
+        case custom(text: String?, audio: String?)
     }
 }
