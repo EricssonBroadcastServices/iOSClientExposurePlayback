@@ -180,6 +180,7 @@ extension ProgramService {
                     self?.startMonitoring(epgOffset: epgOffset)
                 }
             }
+            print("~~~~~ startMonitoring RETRY")
             timer?.resume()
             return
         }
@@ -193,7 +194,7 @@ extension ProgramService {
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
                 return
             }
-            
+            print("~~~~~ startMonitoring handleProgramChanged", program?.programId)
             self.handleProgramChanged(program: program)
             self.startValidationTimer(onTimestamp: timestamp, for: program)
         }

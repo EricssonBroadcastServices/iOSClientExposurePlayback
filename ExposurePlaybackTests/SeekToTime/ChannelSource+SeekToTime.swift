@@ -67,11 +67,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
                         // Initiate test
-                        env.player.startPlayback(playable: playable)
                         let seekTarget = currentDate + 10 * 60 * 1000
                         env.player.onProgramChanged { player, source, program in
                             player.seek(toTime: seekTarget)
                         }
+                        env.player.startPlayback(playable: playable)
 
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -131,11 +131,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate + hour * 3/4
                             env.player.onProgramChanged { player, source, program in
                                 player.seek(toTime: seekTarget)
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -182,7 +182,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate + hour * 3/4
                             var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player.onProgramChanged { player, source, program in
@@ -191,6 +190,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onWarning{ player, source, warn in
                                     warning = warn
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -245,7 +245,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate + hour * 3/4
                             var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player.onProgramChanged { player, source, program in
@@ -254,6 +253,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onWarning{ player, source, warn in
                                     warning = warn
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -302,7 +302,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate + hour * 3/4
                             var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player
@@ -312,6 +311,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onWarning{ player, source, warn in
                                     warning = warn
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                             expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -371,7 +371,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate + hour * 3/4
                             var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player.onProgramChanged { player, source, program in
@@ -380,6 +379,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ tech, source, err in
                                     error = err
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.code).toEventually(equal(403))
@@ -445,11 +445,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         _ = env.player.serverTime
                         
                         // Initiate test
-                        env.player.startPlayback(playable: playable)
                         let seekTarget = currentDate + livePointOffet + closeToLivePoint
                         env.player.onProgramChanged { player, source, program in
                             player.seek(toTime: seekTarget)
                         }
+                        env.player.startPlayback(playable: playable)
                         
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -507,7 +507,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         _ = env.player.serverTime
 
                         // Initiate test
-                        env.player.startPlayback(playable: playable)
                         let seekTarget = currentDate + livePointOffet + farAheadOfLivePoint
                         var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                         env.player.onProgramChanged { player, source, program in
@@ -516,6 +515,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             .onWarning{ player, source, warn in
                                 warning = warn
                         }
+                        env.player.startPlayback(playable: playable)
 
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -574,7 +574,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
                         // Initiate test
-                        env.player.startPlayback(playable: playable)
                         let seekTarget = currentDate - hour * 1/4
                         var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                         env.player.onProgramChanged { player, source, program in
@@ -583,6 +582,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             .onWarning{ player, source, warn in
                                 warning = warn
                         }
+                        env.player.startPlayback(playable: playable)
 
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -631,7 +631,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
                         // Initiate test
-                        env.player.startPlayback(playable: playable)
                         let seekTarget = currentDate - hour * 1/4
                         var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                         env.player
@@ -641,6 +640,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             .onWarning{ player, source, warn in
                                 warning = warn
                         }
+                        env.player.startPlayback(playable: playable)
 
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
@@ -704,7 +704,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
 
 
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             let seekTarget = currentDate - hour * 1/4
                             var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player
@@ -714,6 +713,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ player, source, err in
                                     error = err
                             }
+                            env.player.startPlayback(playable: playable)
                             
                             expect(error).toEventuallyNot(beNil(), timeout: 3)
                             expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
@@ -781,7 +781,6 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
 
 
                             // Initiate test
-                            env.player.startPlayback(playable: playable)
                             var ffDisabledWarning = false
                             var rwDisabledWarning = false
                             var timeshiftDisabledWarning = false
@@ -808,6 +807,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                         timeshiftDisabledWarning = true
                                     }
                             }
+                            env.player.startPlayback(playable: playable)
 
 
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)

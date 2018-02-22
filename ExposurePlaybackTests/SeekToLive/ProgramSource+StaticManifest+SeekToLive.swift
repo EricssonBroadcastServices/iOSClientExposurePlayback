@@ -80,7 +80,6 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
 
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
                         .onProgramChanged { player, source, program in
@@ -91,6 +90,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         .onError{ player, source, err in
                             error = err
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
 
                     expect(error).toEventuallyNot(beNil(), timeout: 3)
                     expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
@@ -156,7 +156,6 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     env.player
                         .onEntitlementResponse{ player, source, entitlement in
                             if entitlement.playSessionId == "SeekToLiveFetchedEntitlement" {
@@ -170,6 +169,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                                 player.seekToLive()
                             }
                         }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
                     
                     expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)

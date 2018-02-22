@@ -49,6 +49,7 @@ class TestEnv {
     
     func defaultAssetMock(currentDate: Int64, bufferDuration: Int64) -> (ExposureSource, HLSNativeConfiguration) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource> {
         return { source, configuration in
+            print("~~~~~ defaultAssetMock")
             // MediaAsset
             let media = HLSNative<ExposureContext>.MediaAsset<ExposureSource>(source: source, configuration: configuration)
             
