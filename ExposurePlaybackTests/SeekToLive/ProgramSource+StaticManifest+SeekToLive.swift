@@ -92,9 +92,9 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
 
-                    expect(error).toEventuallyNot(beNil(), timeout: 3)
-                    expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
-                    expect(error?.code).toEventually(equal(404), timeout: 3)
+                    expect(error).toEventuallyNot(beNil(), timeout: 5)
+                    expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 5)
+                    expect(error?.code).toEventually(equal(404), timeout: 5)
                 }
             }
             
@@ -172,9 +172,9 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player.startPlayback(playable: playable, properties: properties)
                     
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.tech.currentSource?.entitlement.playSessionId).toEventually(equal("SeekToLiveFetchedEntitlement"), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.tech.currentSource?.entitlement.playSessionId).toEventually(equal("SeekToLiveFetchedEntitlement"), timeout: 5)
                 }
             }
         }

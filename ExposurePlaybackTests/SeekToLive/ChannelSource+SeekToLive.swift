@@ -91,9 +91,9 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
             
@@ -152,11 +152,11 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
 
@@ -221,8 +221,8 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 3)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
             }
             
@@ -281,11 +281,11 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
 
@@ -355,7 +355,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(error).toEventuallyNot(beNil(), timeout: 3)
+                    expect(error).toEventuallyNot(beNil(), timeout: 5)
                     expect(error?.code).toEventually(equal(403))
                     expect(error?.message).toEventually(equal("NOT_ENTITLED"))
                 }
