@@ -75,7 +75,6 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                         
                         // Initiate test
-                        env.player.startPlayback(playable: playable, properties: properties)
                         let seekTarget = currentDate + hour * 3/4
                         var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                         env.player.onProgramChanged { player, source, program in
@@ -84,12 +83,13 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             .onWarning{ player, source, warn in
                                 warning = warn
                         }
+                        env.player.startPlayback(playable: playable, properties: properties)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                        expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                        expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 3)
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 4)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                        expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
+                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 5)
                     }
                 }
                 
@@ -133,7 +133,6 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                         
                         // Initiate test
-                        env.player.startPlayback(playable: playable, properties: properties)
                         let seekTarget = currentDate + hour * 3/4
                         var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                         env.player
@@ -144,12 +143,13 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                 print(warn.message)
                                 warning = warn
                         }
+                        env.player.startPlayback(playable: playable, properties: properties)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                        expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                        expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 3)
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 4)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                        expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
+                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 5)
                     }
                 }
                 
@@ -207,7 +207,6 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable, properties: properties)
                             let seekTarget = currentDate + hour * 3/4
                             var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                             env.player
@@ -217,10 +216,11 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                 .onError{ player, source, err in
                                     error = err
                             }
+                            env.player.startPlayback(playable: playable, properties: properties)
                             
-                            expect(error).toEventuallyNot(beNil(), timeout: 3)
-                            expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 3)
-                            expect(error?.code).toEventually(equal(404), timeout: 3)
+                            expect(error).toEventuallyNot(beNil(), timeout: 5)
+                            expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 5)
+                            expect(error?.code).toEventually(equal(404), timeout: 5)
                         }
                     }
                     
@@ -284,7 +284,6 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                             
                             // Initiate test
-                            env.player.startPlayback(playable: playable, properties: properties)
                             var ffDisabledWarning = false
                             var rwDisabledWarning = false
                             var timeshiftDisabledWarning = false
@@ -311,15 +310,13 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                         timeshiftDisabledWarning = true
                                     }
                             }
+                            env.player.startPlayback(playable: playable, properties: properties)
                             
-                            
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                            expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: 3)
-                            expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: 3)
-                            expect(ffDisabledWarning).toEventually(beTrue(), timeout: 3)
-                            expect(rwDisabledWarning).toEventually(beTrue(), timeout: 3)
-                            expect(timeshiftDisabledWarning).toEventually(beTrue(), timeout: 3)
+                            expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: 5)
+                            expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(ffDisabledWarning).toEventually(beTrue(), timeout: 5)
+                            expect(rwDisabledWarning).toEventually(beTrue(), timeout: 5)
+                            expect(timeshiftDisabledWarning).toEventually(beTrue(), timeout: 5)
                         }
                     }
                 }

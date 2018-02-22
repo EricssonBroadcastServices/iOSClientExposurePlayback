@@ -193,7 +193,6 @@ extension ProgramService {
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
                 return
             }
-            
             self.handleProgramChanged(program: program)
             self.startValidationTimer(onTimestamp: timestamp, for: program)
         }

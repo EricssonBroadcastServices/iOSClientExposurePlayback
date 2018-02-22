@@ -85,8 +85,11 @@ extension Player where Tech == HLSNative<ExposureContext> {
                 tech.preferredAudioLanguage = audio
             }
             
+            /// Create HLS configuration
+            let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
+                                                       preferredMaxBitrate: context.playbackProperties.maxBitrate)
             /// Load tech
-            tech.load(source: source) { [weak self] in
+            tech.load(source: source, configuration: configuration) { [weak self] in
                 /// Start ProgramService
                 self?.prepareProgramService(source: source)
             }

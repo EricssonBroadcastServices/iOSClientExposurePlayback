@@ -83,17 +83,17 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     env.player
                         .onProgramChanged { player, source, program in
                             if source.entitlement.playSessionId == "SeekToLiveTrigger" {
                                 player.seekToLive()
                             }
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
             // MARK: + Error fetching EPG
@@ -139,7 +139,6 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
                         .onProgramChanged { player, source, program in
@@ -150,12 +149,13 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                         .onWarning{ player, source, warn in
                             warning = warn
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
             
@@ -208,7 +208,6 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
                         .onProgramChanged { player, source, program in
@@ -219,9 +218,10 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                         .onWarning{ player, source, warn in
                             warning = warn
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 3)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
             }
             
@@ -268,7 +268,6 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
                         .onProgramChanged { player, source, program in
@@ -279,12 +278,13 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                         .onWarning{ player, source, warn in
                             warning = warn
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 3)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning).toEventuallyNot(beNil(), timeout: 3)
-                    expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 3)
-                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 3)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning).toEventuallyNot(beNil(), timeout: 5)
+                    expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
+                    expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - (currentDate + hour)) : nil }.toEventually(beLessThan(1000), timeout: 5)
                 }
             }
             
@@ -342,7 +342,6 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                     
                     // Initiate test
-                    env.player.startPlayback(playable: playable, properties: properties)
                     var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>? = nil
                     env.player
                         .onProgramChanged { player, source, program in
@@ -353,8 +352,9 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                         .onError{ tech, source, err in
                             error = err
                     }
+                    env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(error).toEventuallyNot(beNil(), timeout: 3)
+                    expect(error).toEventuallyNot(beNil(), timeout: 5)
                     expect(error?.code).toEventually(equal(403))
                     expect(error?.message).toEventually(equal("NOT_ENTITLED"))
                 }

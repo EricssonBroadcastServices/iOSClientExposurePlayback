@@ -169,7 +169,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring(epgOffset: 0)
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 3)
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
                     expect(notEntitledMessage).toEventually(beNil())
                     expect(programs.count).toEventually(equal(2))
                     expect(programs.last?.assetId).toEventually(equal(service.currentProgram?.assetId))
@@ -274,8 +274,8 @@ class ProgramServiceSpec: QuickSpec {
 
                     service.startMonitoring(epgOffset: 0)
 
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 3)
-                    expect(programs.count).toEventually(equal(2), timeout: 3)
+                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
+                    expect(programs.count).toEventually(equal(2), timeout: 5)
                 }
             }
 
@@ -307,9 +307,9 @@ class ProgramServiceSpec: QuickSpec {
                         successCalled = true
                     }
 
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 3)
-                    expect(successCalled).toEventually(beTrue(), timeout: 3)
-                    expect(programs.count).toEventually(equal(1), timeout: 3)
+                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
+                    expect(successCalled).toEventually(beTrue(), timeout: 5)
+                    expect(programs.count).toEventually(equal(1), timeout: 5)
                 }
             }
 
@@ -340,9 +340,9 @@ class ProgramServiceSpec: QuickSpec {
                     successCalled = true
                 }
 
-                expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 3)
-                expect(successCalled).toEventually(beFalse(), timeout: 3)
-                expect(programs.count).toEventually(equal(1), timeout: 3)
+                expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
+                expect(successCalled).toEventually(beFalse(), timeout: 5)
+                expect(programs.count).toEventually(equal(1), timeout: 5)
             }
         }
     }
