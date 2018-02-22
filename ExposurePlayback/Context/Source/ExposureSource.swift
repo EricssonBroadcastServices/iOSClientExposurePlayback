@@ -95,11 +95,3 @@ extension ExposureSource {
     }
 }
 
-// MARK: - HLSNativeConfigurable
-extension ExposureSource: HLSNativeConfigurable {
-    public var hlsNativeConfiguration: HLSNativeConfiguration {
-        return HLSNativeConfiguration(url: url,
-                                      playSessionId: entitlement.playSessionId,
-                                      drm: fairplayRequester)
-    }
-}

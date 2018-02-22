@@ -24,11 +24,19 @@ public struct PlaybackProperties {
     
     public let language: LanguagePreferences
     
+    /// The desired limit, in bits per second, of network bandwidth consumption for this item.
+    ///
+    /// Setting a non-zero value will indicate the player should attempt to limit playback to that bitrate. If network bandwidth consumption cannot be lowered to meet the preferredPeakBitRate, it will be reduced as much as possible while continuing to play the item.
+    ///
+    /// `nil` indicates no restrictions should be applied.
+    public let maxBitrate: Int64?
     
-    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .userLocale) {
+    
+    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .userLocale, maxBitrate: Int64? = nil) {
         self.autoplay = autoplay
         self.playFrom = playFrom
         self.language = language
+        self.maxBitrate = maxBitrate
     }
     
     /// Governs where the playback should start from.
