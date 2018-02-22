@@ -21,6 +21,7 @@
 		7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */; };
 		7636CAA52032E61500F914D1 /* TestEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA42032E61500F914D1 /* TestEnv.swift */; };
 		7636CAA72032E63E00F914D1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA62032E63E00F914D1 /* Date+Extensions.swift */; };
+		765EAF82203F322F00DD6C94 /* BitrateRestrictionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */; };
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
 		766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */; };
 		76A89C05202072D100C23579 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89BFB202072D100C23579 /* ExposurePlayback.framework */; };
@@ -146,6 +147,7 @@
 		7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedProgramProvider.swift; sourceTree = "<group>"; };
 		7636CAA42032E61500F914D1 /* TestEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnv.swift; sourceTree = "<group>"; };
 		7636CAA62032E63E00F914D1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitrateRestrictionsSpec.swift; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
 		766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
 		76A89BFB202072D100C23579 /* ExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -348,6 +350,7 @@
 				76A89D0520209E7400C23579 /* StartTime */,
 				76A89C0B202072D100C23579 /* Info.plist */,
 				76A89D0320209A2700C23579 /* JsonDecoding.swift */,
+				765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */,
 				76D5C9DD20304C1E0056BFF8 /* MockedAVPlayer.swift */,
 				76D5C9DF20304EBA0056BFF8 /* PlaybackEntitlement+Extensions.swift */,
 				76D5C9E12030559D0056BFF8 /* Program+Extensions.swift */,
@@ -757,6 +760,7 @@
 				76DE495D20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */,
 				76D5C9DE20304C1E0056BFF8 /* MockedAVPlayer.swift in Sources */,
 				7636CAA52032E61500F914D1 /* TestEnv.swift in Sources */,
+				765EAF82203F322F00DD6C94 /* BitrateRestrictionsSpec.swift in Sources */,
 				76A89DE92021CCC000C23579 /* DeviceInfoSpec.swift in Sources */,
 				76A89DF52021CCC000C23579 /* PlayReadySpec.swift in Sources */,
 				76A89DE32021CCC000C23579 /* AbortedSpec.swift in Sources */,

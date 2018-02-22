@@ -29,12 +29,12 @@ class TestEnv {
         // Mock the AVPlayer
         let mockedPlayer = MockedAVPlayer()
         mockedPlayer.mockedReplaceCurrentItem = { [weak mockedPlayer] item in
-            DispatchQueue.main.async {
+            DispatchQueue(label: "test", qos: .userInteractive, attributes: .concurrent).sync {
+                print("mockedReplaceCurrentItem")
                 if let mockedItem = item as? MockedAVPlayerItem {
                     // We try to fake the loading scheme by dispatching KVO notifications when replace is called. This should trigger .readyToPlay
                     mockedItem.associatedWithPlayer = mockedPlayer
-                    mockedItem.willChangeValue(for: \MockedAVPlayerItem.status)
-                    mockedItem.didChangeValue(for: \MockedAVPlayerItem.status)
+                    mockedItem.mockedStatus = .readyToPlay
                 }
             }
         }
@@ -56,14 +56,6 @@ class TestEnv {
             
             // AVPlayerItem
             let item = MockedAVPlayerItem(mockedUrl: source.entitlement.mediaLocator)
-            item.mockedStatus = { [unowned item] in
-                if item.associatedWithPlayer == nil {
-                    return .unknown
-                }
-                else {
-                    return .readyToPlay
-                }
-            }
             item.mockedCurrentTime = CMTime(milliseconds: 0)
             item.mockedCurrentDate = Date(unixEpoch: currentDate)
             let start = CMTime(milliseconds: 0)
@@ -85,6 +77,9 @@ class TestEnv {
             item.mockedSeekToTime = { _, callback in
                 callback?(true)
             }
+            // Transfer the bitrate settings from the real object to the mocked object
+            let realPlayerItem = media.playerItem
+            item.preferredPeakBitRate = realPlayerItem.preferredPeakBitRate
             media.playerItem = item
             
             // AVURLAsset

@@ -79,9 +79,16 @@ class MockedAVPlayerItem: AVPlayerItem {
         return mockedDuration
     }
     
-    var mockedStatus: () -> AVPlayerItemStatus = { return AVPlayerItemStatus.unknown }
+    var mockedStatus: AVPlayerItemStatus = .unknown {
+        willSet {
+            self.willChangeValue(forKey: "status")
+        }
+        didSet {
+            self.didChangeValue(forKey: "status")
+        }
+    }
     override var status: AVPlayerItemStatus {
-        return mockedStatus()
+        return mockedStatus
     }
 }
 
