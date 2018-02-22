@@ -90,8 +90,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             
             /// Create HLS configuration
             let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
-                                                       preferredMaxBitrate: tech.preferredMaxBitrate,
-                                                       allowCellularAccess: tech.allowCellularAccess)
+                                                       preferredMaxBitrate: tech.preferredMaxBitrate)
             /// Load tech
             tech.load(source: source, configuration: configuration) { [weak self] in
                 /// Start ProgramService
