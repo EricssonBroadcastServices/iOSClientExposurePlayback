@@ -47,13 +47,23 @@ class TestEnv {
         player.tech.assetGenerator = callback
     }
     
-    func defaultAssetMock(currentDate: Int64, bufferDuration: Int64) -> (ExposureSource, HLSNativeConfiguration) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource> {
+    func defaultAssetMock(currentDate: Int64, bufferDuration: Int64, callback: @escaping (MockedAVURLAsset, MockedAVPlayerItem) -> Void = { _,_ in }) -> (ExposureSource, HLSNativeConfiguration) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource> {
         return { source, configuration in
             // MediaAsset
             let media = HLSNative<ExposureContext>.MediaAsset<ExposureSource>(source: source, configuration: configuration)
             
+            // AVURLAsset
+            let urlAsset = MockedAVURLAsset(url: source.entitlement.mediaLocator)
+            urlAsset.mockedLoadValuesAsynchronously = { keys, handler in
+                handler?()
+            }
+            urlAsset.mockedStatusOfValue = { key, outError in
+                return .loaded
+            }
+            media.urlAsset = urlAsset
+            
             // AVPlayerItem
-            let item = MockedAVPlayerItem(mockedUrl: source.entitlement.mediaLocator)
+            let item = MockedAVPlayerItem(mockedAVAsset: urlAsset)
             item.mockedCurrentTime = CMTime(milliseconds: 0)
             item.mockedCurrentDate = Date(unixEpoch: currentDate)
             let start = CMTime(milliseconds: 0)
@@ -80,15 +90,8 @@ class TestEnv {
             item.preferredPeakBitRate = realPlayerItem.preferredPeakBitRate
             media.playerItem = item
             
-            // AVURLAsset
-            let urlAsset = MockedAVURLAsset(url: source.entitlement.mediaLocator)
-            urlAsset.mockedLoadValuesAsynchronously = { keys, handler in
-                handler?()
-            }
-            urlAsset.mockedStatusOfValue = { key, outError in
-                return .loaded
-            }
-            media.urlAsset = urlAsset
+            
+            callback(urlAsset, item)
             
             return media
         }

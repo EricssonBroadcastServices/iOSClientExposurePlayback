@@ -74,7 +74,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             /// Assign language preferences
             switch context.playbackProperties.language {
             case .defaultBehaviour:
-                print("context.playbackProperties.language.defaultBehaviour")
+                print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
             case .userLocale:
                 print("context.playbackProperties.language.userLocale",Locale.current.languageCode)
                 let locale = Locale.current.languageCode

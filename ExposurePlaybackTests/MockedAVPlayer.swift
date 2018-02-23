@@ -40,8 +40,8 @@ class MockedAVPlayer: AVPlayer {
 class MockedAVPlayerItem: AVPlayerItem {
     weak var associatedWithPlayer: MockedAVPlayer?
     
-    init(mockedUrl: URL) {
-        super.init(asset: AVAsset(url: mockedUrl), automaticallyLoadedAssetKeys: nil)
+    init(mockedAVAsset: MockedAVURLAsset) {
+        super.init(asset: mockedAVAsset, automaticallyLoadedAssetKeys: nil)
     }
     
     var mockedSeekToTime: (CMTime, ((Bool) -> Void)?) -> Void = { _,_ in }
@@ -92,6 +92,15 @@ class MockedAVPlayerItem: AVPlayerItem {
     override var status: AVPlayerItemStatus {
         return mockedStatus
     }
+    
+    var mockedSelectedMediaOption: [AVMediaSelectionGroup: AVMediaSelectionOption] = [:]
+    override func selectedMediaOption(in mediaSelectionGroup: AVMediaSelectionGroup) -> AVMediaSelectionOption? {
+        return mockedSelectedMediaOption[mediaSelectionGroup]
+    }
+    
+    override func select(_ mediaSelectionOption: AVMediaSelectionOption?, in mediaSelectionGroup: AVMediaSelectionGroup) {
+        mockedSelectedMediaOption[mediaSelectionGroup] = mediaSelectionOption
+    }
 }
 
 class MockedAVURLAsset: AVURLAsset {
@@ -111,5 +120,45 @@ class MockedAVURLAsset: AVURLAsset {
     var mockedIsPlayable: () -> Bool = { return true }
     override var isPlayable: Bool {
         return mockedIsPlayable()
+    }
+    
+    var mockedMediaSelectionGroup: [AVMediaCharacteristic: AVMediaSelectionGroup] = [:]
+    override func mediaSelectionGroup(forMediaCharacteristic mediaCharacteristic: AVMediaCharacteristic) -> AVMediaSelectionGroup? {
+        return mockedMediaSelectionGroup[mediaCharacteristic]
+    }
+}
+
+class MockedAVMediaSelectionGroup: AVMediaSelectionGroup {
+    var mockedOptions: [AVMediaSelectionOption] = []
+    override var options: [AVMediaSelectionOption] {
+        return mockedOptions
+    }
+    
+    var mockedDefaultOption: AVMediaSelectionOption? = nil
+    override var defaultOption: AVMediaSelectionOption? {
+        return mockedDefaultOption
+    }
+    
+    var mockedAllowsEmptySelection: Bool = false
+    override var allowsEmptySelection: Bool {
+        print("allowsEmptySelection",mockedAllowsEmptySelection)
+        return mockedAllowsEmptySelection
+    }
+}
+
+class MockedAVMediaSelectionOption: AVMediaSelectionOption {
+    var mockedMediaType: String = "mediaType"
+    override var mediaType: String {
+        return mockedMediaType
+    }
+    
+    var mockedDisplayName: String = "Display Name"
+    override var displayName: String {
+        return mockedDisplayName
+    }
+    
+    var mockedExtendedLanguageTag: String = "extendedLanguageTag"
+    override var extendedLanguageTag: String {
+        return mockedExtendedLanguageTag
     }
 }
