@@ -21,7 +21,7 @@ public struct PlaybackProperties {
     /// Please see the `startPlayback(...)` methods for more in depth information
     public let playFrom: PlayFrom
     
-    
+    /// Specifies language preferences to use.
     public let language: LanguagePreferences
     
     /// The desired limit, in bits per second, of network bandwidth consumption for this item.
@@ -32,7 +32,7 @@ public struct PlaybackProperties {
     public let maxBitrate: Int64?
     
     
-    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .userLocale, maxBitrate: Int64? = nil) {
+    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .defaultBehaviour, maxBitrate: Int64? = nil) {
         self.autoplay = autoplay
         self.playFrom = playFrom
         self.language = language
@@ -60,8 +60,15 @@ public struct PlaybackProperties {
     }
     
     public enum LanguagePreferences {
+        /// Subtitle and audio selection defaults to `Tech` behavior.
         case defaultBehaviour
+        
+        /// Attempts to apply device specified `UserLocale` settings
         case userLocale
+        
+        /// Applies a custom default selection for `text` and `audio`.
+        ///
+        /// The supplied language definitions should be *RFC 4646* compliant
         case custom(text: String?, audio: String?)
     }
 }

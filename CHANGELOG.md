@@ -7,7 +7,7 @@
 
 #### Features
 * Track selection for `HLSNative` when using `ExposureContext`
-* Preferred track option added in `PlaybackProperties`
+* Preferred language selection added in `PlaybackProperties`
 * Preferred bitrate limitation added in `PlaybackProperties`
 
 #### Changes
