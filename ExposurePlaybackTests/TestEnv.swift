@@ -29,13 +29,11 @@ class TestEnv {
         // Mock the AVPlayer
         let mockedPlayer = MockedAVPlayer()
         mockedPlayer.mockedReplaceCurrentItem = { [weak mockedPlayer] item in
-            DispatchQueue(label: "test", qos: .userInteractive, attributes: .concurrent).sync {
-                print("mockedReplaceCurrentItem")
-                if let mockedItem = item as? MockedAVPlayerItem {
-                    // We try to fake the loading scheme by dispatching KVO notifications when replace is called. This should trigger .readyToPlay
-                    mockedItem.associatedWithPlayer = mockedPlayer
-                    mockedItem.mockedStatus = .readyToPlay
-                }
+            print("mockedReplaceCurrentItem")
+            if let mockedItem = item as? MockedAVPlayerItem {
+                // We try to fake the loading scheme by dispatching KVO notifications when replace is called. This should trigger .readyToPlay
+                mockedItem.associatedWithPlayer = mockedPlayer
+                mockedItem.mockedStatus = .readyToPlay
             }
         }
         player.tech.avPlayer = mockedPlayer

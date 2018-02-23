@@ -81,9 +81,11 @@ class MockedAVPlayerItem: AVPlayerItem {
     
     var mockedStatus: AVPlayerItemStatus = .unknown {
         willSet {
+            print("willChangeValue")
             self.willChangeValue(forKey: "status")
         }
         didSet {
+            print("didChangeValue")
             self.didChangeValue(forKey: "status")
         }
     }
@@ -95,7 +97,10 @@ class MockedAVPlayerItem: AVPlayerItem {
 class MockedAVURLAsset: AVURLAsset {
     var mockedLoadValuesAsynchronously: ([String], (() -> Void)?) -> Void = { _,_ in }
     override func loadValuesAsynchronously(forKeys keys: [String], completionHandler handler: (() -> Void)? = nil) {
-        mockedLoadValuesAsynchronously(keys, handler)
+        DispatchQueue(label: "mockedLoadValuesAsynchronously", qos: DispatchQoS.background, attributes: DispatchQueue.Attributes.concurrent).async { [weak self] in
+            print("mockedLoadValuesAsynchronously")
+            self?.mockedLoadValuesAsynchronously(keys, handler)
+        }
     }
     
     var mockedStatusOfValue: (String, NSErrorPointer) -> AVKeyValueStatus = { _,_ in return AVKeyValueStatus.unknown }
