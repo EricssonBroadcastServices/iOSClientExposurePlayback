@@ -120,32 +120,32 @@ class ProgramServiceSpec: QuickSpec {
         
         describe("ProgramServiceSpec") {
 
-            it("Should retry start monitoring if no playheadTime exists") {
-                let channelId = "retryStartMonitoring"
-                var counter = 0
-                let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                let provider = MockedProgramServiceProvider()
-                service.provider = provider
-
-                service.currentPlayheadTime = {
-                    if counter < 1 {
-                        counter = counter + 1
-                        return nil
-                    }
-                    else {
-                        return Date().millisecondsSince1970
-                    }
-                }
-
-                var newProgram: Program? = nil
-                service.onProgramChanged = { program in
-                    newProgram = program
-                }
-
-                service.startMonitoring(epgOffset: 10 * 1000)
-
-                expect(newProgram).toEventuallyNot(beNil(), timeout: 20)
-            }
+//            it("Should retry start monitoring if no playheadTime exists") {
+//                let channelId = "retryStartMonitoring"
+//                var counter = 0
+//                let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+//                let provider = MockedProgramServiceProvider()
+//                service.provider = provider
+//
+//                service.currentPlayheadTime = {
+//                    if counter < 1 {
+//                        counter = counter + 1
+//                        return nil
+//                    }
+//                    else {
+//                        return Date().millisecondsSince1970
+//                    }
+//                }
+//
+//                var newProgram: Program? = nil
+//                service.onProgramChanged = { program in
+//                    newProgram = program
+//                }
+//
+//                service.startMonitoring(epgOffset: 10 * 1000)
+//
+//                expect(newProgram).toEventuallyNot(beNil(), timeout: 20)
+//            }
 
             context("Validation timer on program end timestamp") {
                 it("Should continue while entitled") {

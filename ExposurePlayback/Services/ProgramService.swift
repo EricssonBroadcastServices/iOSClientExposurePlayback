@@ -38,17 +38,56 @@ public class ProgramService {
     /// Values in milliseconds.
     ///
     /// - important: A minimum value of `30000` is enforced
-    public var fuzzyFactor: Int {
+    public var fuzzyFactor: UInt32 {
         get {
-            return privateFuzzyFactor
+            return fuzzyConfiguration.fuzzyFactor
         }
         set {
-            let acceptableValue = newValue > ProgramService.minimumFuzzyFactor ? newValue : ProgramService.minimumFuzzyFactor
-            privateFuzzyFactor = acceptableValue
+            let acceptableValue = newValue > ProgramService.FuzzyFactor.minimumFuzzyFactor ? newValue : ProgramService.FuzzyFactor.minimumFuzzyFactor
+            fuzzyConfiguration.fuzzyFactor = acceptableValue
         }
     }
-    internal var privateFuzzyFactor: Int = ProgramService.minimumFuzzyFactor
-    internal static let minimumFuzzyFactor: Int = 30 * 1000
+    internal var fuzzyConfiguration: FuzzyFactor = FuzzyFactor()
+    internal struct FuzzyFactor {
+        internal static let minimumFuzzyFactor: UInt32 = 30 * 1000
+        
+        /// ---+----x--------xxx+-->
+        ///    |    |        xxx|
+        ///    |    |        xxx|
+        ///    |    |        xxx|
+        ///    |    x........xxx+
+        ///    t    b    f   c  p2
+        ///
+        /// t: Timestamp
+        /// f: fuzzy factor (b-->c)
+        /// c: cutoff (c-->p2)
+        
+        
+        internal var fuzzyFactor: UInt32 = ProgramService.FuzzyFactor.minimumFuzzyFactor
+        internal let cutoff: UInt32 = 2 * 1000
+        internal var fuzzyRange: UInt32 {
+            return fuzzyFactor + cutoff
+        }
+        
+        internal func fuzzyOffset(for timestamp: Int64, end: Int64) -> (Int, Int) {
+            let range = UInt32(end - timestamp)
+            if range > fuzzyRange {
+                /// Offset range by fuzzy factor
+                let fuzzy = arc4random_uniform(fuzzyRange)
+                return (Int(range - fuzzy), Int(fuzzy))
+            }
+            else {
+                if range < cutoff {
+                    return (Int(range / 2), Int(range / 2))
+                }
+                else {
+                    /// Offset by range
+                    let fuzzy = arc4random_uniform(range - cutoff)
+                    return (Int(fuzzy), Int(range - fuzzy))
+                }
+            }
+        }
+    }
     
     internal var currentPlayheadTime: () -> Int64? = { return nil }
     internal var onNotEntitled: (String) -> Void = { _ in }
@@ -64,7 +103,6 @@ public class ProgramService {
         self.queue = DispatchQueue(label: "com.emp.exposure.programService",
                                    qos: DispatchQoS.background,
                                    attributes: DispatchQueue.Attributes.concurrent)
-        self.privateFuzzyFactor = fuzzyFactor
     }
     
     deinit {
@@ -95,8 +133,8 @@ public class ProgramService {
 }
 
 extension ProgramService {
-    fileprivate func validate(timestamp: Int64, callback: @escaping (Program?, String?) -> Void) {
-        if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
+    fileprivate func validate(timestamp: Int64, forced: Bool = false, callback: @escaping (Program?, String?) -> Void) {
+        if !forced, let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
                 callback(current, nil)
@@ -171,6 +209,10 @@ extension ProgramService {
         timer?.setEventHandler{}
         timer?.cancel()
     }
+    fileprivate func stopFuzzyTimer() {
+        fuzzyFetchTimer?.setEventHandler{}
+        fuzzyFetchTimer?.cancel()
+    }
     
     internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping (Program?) -> Void) {
         validate(timestamp: timestamp) { [weak self] program, message in
@@ -185,22 +227,29 @@ extension ProgramService {
         }
     }
     
+    internal func pause() {
+        stopTimer()
+        stopFuzzyTimer()
+    }
+    
     internal func startMonitoring(epgOffset: Int64) {
         guard let timestamp =  currentPlayheadTime() else {
-            /// Retry untill we receive a current playhead time. This is only possible when playback has started
-            stopTimer()
-            timer = DispatchSource.makeTimerSource(queue: queue)
-            timer?.schedule(deadline: .now() + .milliseconds(2000))
-            timer?.setEventHandler { [weak self] in
-                DispatchQueue.main.async { [weak self] in
-                    self?.startMonitoring(epgOffset: epgOffset)
-                }
-            }
-            timer?.resume()
+//            //Retry untill we receive a current playhead time. This is only possible when playback has started
+//            stopTimer()
+//            timer = DispatchSource.makeTimerSource(queue: queue)
+//            timer?.schedule(deadline: .now() + .milliseconds(2000))
+//            timer?.setEventHandler { [weak self] in
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.startMonitoring(epgOffset: epgOffset)
+//                }
+//            }
+//            timer?.resume()
             return
         }
         
         stopTimer()
+        stopFuzzyTimer()
+        
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
             guard error == nil else {
@@ -214,6 +263,7 @@ extension ProgramService {
         }
     }
     
+    
     fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program?) {
         guard let end = program?.endDate?.millisecondsSince1970 else {
             // There is no program, validation can not occur, allow playback
@@ -221,22 +271,32 @@ extension ProgramService {
             return
         }
         
+        let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: end)
         
-        
-        let delta = Int(end - timestamp)
         stopTimer()
+        stopFuzzyTimer()
+        
         timer = DispatchSource.makeTimerSource(queue: queue)
-        timer?.schedule(deadline: .now() + .milliseconds(delta))
+        timer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         timer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
-            guard let timestamp = self.currentPlayheadTime() else { return }
-            self.validate(timestamp: timestamp) { program, invalidMessage in
+            self.validate(timestamp: end, forced: true) { program, invalidMessage in
                 DispatchQueue.main.async { [weak self] in
-                    if let invalidMessage = invalidMessage {
-                        // The user is not entitled to play this program
-                        self?.onNotEntitled(invalidMessage)
+                    guard let `self` = self else { return }
+                    self.stopFuzzyTimer()
+                    self.fuzzyFetchTimer = DispatchSource.makeTimerSource(queue: self.queue)
+                    self.fuzzyFetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
+                    self.fuzzyFetchTimer?.setEventHandler{ [weak self] in
+                        DispatchQueue.main.async { [weak self] in
+                            guard let `self` = self else { return }
+                            if let invalidMessage = invalidMessage {
+                                // The user is not entitled to play this program
+                                self.onNotEntitled(invalidMessage)
+                            }
+                            self.handleProgramChanged(program: program)
+                        }
                     }
-                    self?.handleProgramChanged(program: program)
+                    self.fuzzyFetchTimer?.resume()
                 }
             }
         }
