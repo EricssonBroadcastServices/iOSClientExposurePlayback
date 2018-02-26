@@ -18,7 +18,7 @@ public protocol ProgramServiceEnabled {
     var programServiceChannelId: String { get }
 }
 
-internal class ProgramService {
+public class ProgramService {
     /// `Environment` to use when requesting program data
     fileprivate var environment: Environment
     
@@ -31,8 +31,24 @@ internal class ProgramService {
     fileprivate let queue: DispatchQueue
     
     fileprivate var timer: DispatchSourceTimer?
+    fileprivate var fuzzyFetchTimer: DispatchSourceTimer?
     
-    fileprivate let refreshInterval: Int = 1000 * 3
+    /// Applies a fuzzy factor to the validation logic in order ease backend load.
+    ///
+    /// Values in milliseconds.
+    ///
+    /// - important: A minimum value of `30000` is enforced
+    public var fuzzyFactor: Int {
+        get {
+            return privateFuzzyFactor
+        }
+        set {
+            let acceptableValue = newValue > ProgramService.minimumFuzzyFactor ? newValue : ProgramService.minimumFuzzyFactor
+            privateFuzzyFactor = acceptableValue
+        }
+    }
+    internal var privateFuzzyFactor: Int = ProgramService.minimumFuzzyFactor
+    internal static let minimumFuzzyFactor: Int = 30 * 1000
     
     internal var currentPlayheadTime: () -> Int64? = { return nil }
     internal var onNotEntitled: (String) -> Void = { _ in }
@@ -48,6 +64,7 @@ internal class ProgramService {
         self.queue = DispatchQueue(label: "com.emp.exposure.programService",
                                    qos: DispatchQoS.background,
                                    attributes: DispatchQueue.Attributes.concurrent)
+        self.privateFuzzyFactor = fuzzyFactor
     }
     
     deinit {
@@ -131,7 +148,6 @@ extension ProgramService {
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
                     callback(nil, nil)
-                    self.startValidationTimer(onTimestamp: timestamp, for: nil)
                     self.onWarning(.gapInEpg(timestamp: timestamp, channelId: self.channelId))
                 }
             }
@@ -204,6 +220,8 @@ extension ProgramService {
             onWarning(.gapInEpg(timestamp: timestamp, channelId: channelId))
             return
         }
+        
+        
         
         let delta = Int(end - timestamp)
         stopTimer()

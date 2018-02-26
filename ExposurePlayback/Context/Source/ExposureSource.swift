@@ -66,6 +66,7 @@ extension ExposureSource {
             .queryParam(for: UnifiedPackageParams.tParam.rawValue) else  { return nil }
         let comp = param.components(separatedBy: "-")
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
         formatter.timeZone = TimeZone(abbreviation: "UTC")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         if comp.count == 3 {
