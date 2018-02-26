@@ -233,6 +233,9 @@ extension ProgramService {
     }
     
     internal func startMonitoring(epgOffset: Int64) {
+        stopTimer()
+        stopFuzzyTimer()
+        
         guard let timestamp =  currentPlayheadTime() else {
 //            //Retry untill we receive a current playhead time. This is only possible when playback has started
 //            stopTimer()
@@ -246,9 +249,6 @@ extension ProgramService {
 //            timer?.resume()
             return
         }
-        
-        stopTimer()
-        stopFuzzyTimer()
         
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
