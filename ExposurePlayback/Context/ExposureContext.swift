@@ -36,7 +36,7 @@ public class ExposureContext: MediaContext {
     public let monotonicTimeService: MonotonicTimeService
     
     /// Service that manages entitlement validation on currently active program
-    internal var programService: ProgramService?
+    public var programService: ProgramService?
     
     /// Service that manages contract restrictions
     internal let contractRestrictionsService: ContractRestrictionsService

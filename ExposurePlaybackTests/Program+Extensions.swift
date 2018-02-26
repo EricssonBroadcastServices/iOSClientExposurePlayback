@@ -27,6 +27,7 @@ extension Dictionary where Key == String, Value == Codable {
         let end = Date(milliseconds: ending)
         
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
         formatter.timeZone = TimeZone(abbreviation: "UTC")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         old["startTime"] = formatter.string(from: start)
