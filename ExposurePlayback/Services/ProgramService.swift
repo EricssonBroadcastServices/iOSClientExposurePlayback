@@ -8,6 +8,7 @@
 
 import Foundation
 import Exposure
+import Player
 
 internal protocol ProgramProvider {
     func fetchProgram(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
@@ -32,6 +33,8 @@ public class ProgramService {
     
     fileprivate var timer: DispatchSourceTimer?
     fileprivate var fuzzyFetchTimer: DispatchSourceTimer?
+    
+    var playbackRateObserver: RateObserver?
     
     /// Applies a fuzzy factor to the validation logic in order ease backend load.
     ///
@@ -90,6 +93,7 @@ public class ProgramService {
     }
     
     internal var currentPlayheadTime: () -> Int64? = { return nil }
+    internal var isPlaying: () -> Bool = { return false }
     internal var onNotEntitled: (String) -> Void = { _ in }
     internal var onWarning: (ExposureContext.Warning.ProgramService) -> Void = { _ in }
     internal var onProgramChanged: (Program?) -> Void = { _ in }
@@ -108,6 +112,7 @@ public class ProgramService {
     deinit {
         timer?.setEventHandler{}
         timer?.cancel()
+        playbackRateObserver?.cancel()
     }
     
     internal var provider: ProgramProvider
@@ -236,19 +241,7 @@ extension ProgramService {
         stopTimer()
         stopFuzzyTimer()
         
-        guard let timestamp =  currentPlayheadTime() else {
-//            //Retry untill we receive a current playhead time. This is only possible when playback has started
-//            stopTimer()
-//            timer = DispatchSource.makeTimerSource(queue: queue)
-//            timer?.schedule(deadline: .now() + .milliseconds(2000))
-//            timer?.setEventHandler { [weak self] in
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.startMonitoring(epgOffset: epgOffset)
-//                }
-//            }
-//            timer?.resume()
-            return
-        }
+        guard let timestamp =  currentPlayheadTime() else { return }
         
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
@@ -265,6 +258,8 @@ extension ProgramService {
     
     
     fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program?) {
+        guard isPlaying() else { return }
+        
         guard let end = program?.endDate?.millisecondsSince1970 else {
             // There is no program, validation can not occur, allow playback
             onWarning(.gapInEpg(timestamp: timestamp, channelId: channelId))
@@ -275,7 +270,6 @@ extension ProgramService {
         
         stopTimer()
         stopFuzzyTimer()
-        
         timer = DispatchSource.makeTimerSource(queue: queue)
         timer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         timer?.setEventHandler { [weak self] in
