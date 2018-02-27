@@ -126,6 +126,17 @@ extension Player where Tech == HLSNative<ExposureContext> {
         
         service.currentPlayheadTime = { [weak self] in return self?.playheadTime }
         
+        service.isPlaying = { [weak self] in return self?.isPlaying ?? false }
+        
+        service.playbackRateObserver = tech.observeRateChanges { [weak service] tech, source, rate in
+            if tech.isPlaying {
+                service?.startMonitoring(epgOffset: 0)
+            }
+            else {
+                service?.pause()
+            }
+        }
+        
         service.onProgramChanged = { [weak self] program in
             guard let `self` = self else { return }
             source.analyticsConnector.providers.forEach{

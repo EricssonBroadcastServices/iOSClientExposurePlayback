@@ -19,13 +19,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             tech.eventDispatcher.onWarning(tech, source, warning)
             return
         }
-        context.programService?.pause()
         tech.pause()
-    }
-    
-    public func play() {
-        context.programService?.startMonitoring(epgOffset: 0)
-        tech.play()
     }
     
     #if DEBUG
