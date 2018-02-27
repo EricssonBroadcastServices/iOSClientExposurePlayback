@@ -110,6 +110,7 @@ public class ProgramService {
     }
     
     deinit {
+        print("ProgramService deinit")
         timer?.setEventHandler{}
         timer?.cancel()
         playbackRateObserver?.cancel()
@@ -139,6 +140,7 @@ public class ProgramService {
 
 extension ProgramService {
     fileprivate func validate(timestamp: Int64, forced: Bool = false, callback: @escaping (Program?, String?) -> Void) {
+        print("validate timestamp",timestamp)
         if !forced, let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
@@ -149,6 +151,7 @@ extension ProgramService {
         
         // We do not have a current program or the timestamp in question is outside the program bounds
         provider.fetchProgram(on: channelId, timestamp: timestamp, using: environment) { [weak self] newProgram, error in
+            print("validate provider.fetchProgram",timestamp, newProgram?.assetId)
             guard let `self` = self else { return }
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
@@ -198,11 +201,13 @@ extension ProgramService {
     }
     
     internal func handleProgramChanged(program: Program?) {
+        print("handleProgramChanged",program?.assetId)
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
             let current = self.activeProgram
             self.activeProgram = program
             if current?.programId != program?.programId {
+                print("---> handleProgramChanged",program?.assetId)
                 self.onProgramChanged(program)
             }
         }
@@ -242,7 +247,7 @@ extension ProgramService {
         stopFuzzyTimer()
         
         guard let timestamp =  currentPlayheadTime() else { return }
-        
+        print("startMonitoring",timestamp)
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
             guard error == nil else {
@@ -265,7 +270,7 @@ extension ProgramService {
             onWarning(.gapInEpg(timestamp: timestamp, channelId: channelId))
             return
         }
-        
+        print("startValidationTimer",timestamp)
         let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: end)
         
         stopTimer()
@@ -274,6 +279,7 @@ extension ProgramService {
         timer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         timer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
+            print("startValidationTimer setEventHandler",fuzzyOffset.0)
             self.validate(timestamp: end, forced: true) { program, invalidMessage in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
@@ -281,8 +287,10 @@ extension ProgramService {
                     self.fuzzyFetchTimer = DispatchSource.makeTimerSource(queue: self.queue)
                     self.fuzzyFetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
                     self.fuzzyFetchTimer?.setEventHandler{ [weak self] in
+                        print("startValidationTimer delay triggered",fuzzyOffset.1)
                         DispatchQueue.main.async { [weak self] in
                             guard let `self` = self else { return }
+                            print("startValidationTimer deliver")
                             if let invalidMessage = invalidMessage {
                                 // The user is not entitled to play this program
                                 self.onNotEntitled(invalidMessage)

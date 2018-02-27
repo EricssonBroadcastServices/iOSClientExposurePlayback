@@ -8,187 +8,114 @@
 
 import Quick
 import Nimble
-import Player
 import Exposure
 import Foundation
 
+@testable import Player
 @testable import ExposurePlayback
-
-class MockedProgramServiceProvider: ProgramProvider {
-    func program(for channelId: String, start: Int64, end: Int64, programId: String, assetId: String = "anAssetId") -> Program {
-        return Program
-            .validJson(programId: programId, channelId: channelId, assetId: assetId)
-            .timestamp(starting: start, ending: end)
-            .decode(Program.self)!
-    }
-    
-    var fetchNumber: Int = 0
-    func fetchProgram(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
-        if channelId == "retryStartMonitoring" {
-            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 30*60*1000, programId: "aProgramId"),nil)
-        }
-        else if channelId == "validationTrigger" {
-            if fetchNumber == 0 {
-                fetchNumber += 1
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId1" ,assetId: "validationTriggerFirstProgram"),nil)
-            }
-            else {
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId2", assetId: "validationTriggerSecondProgram"),nil)
-            }
-        }
-        else if channelId == "validationTriggerNotEntitled" {
-            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "programId", assetId: "notEntitledProgram"),nil)
-        }
-        else if channelId == "noEpgChannel" {
-            callback(nil, nil)
-        }
-        else if channelId == "errorOnProgramFetch" {
-            callback(nil,ExposureError.generalError(error: MockedError.sampleError))
-        }
-        else if channelId == "errorOnProgramValidation" {
-            if fetchNumber == 0 {
-                fetchNumber += 1
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "errorOnProgramValidationFirstProgram", assetId: "errorOnProgramValidationFirstProgram"),nil)
-            }
-            else {
-                callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 1000, programId: "errorOnProgramValidationSecondProgram", assetId: "errorOnProgramValidationSecondProgram"),nil)
-            }
-        }
-        else if channelId == "timestampWithinActiveProgram" {
-            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 30*60*1000, programId: "programId", assetId: "timestampWithinActiveProgram"),nil)
-        }
-        else if channelId == "isEntitledNotEntitled" {
-            callback(program(for: channelId, start: timestamp - 30*60*1000, end: timestamp + 60 * 1000, programId: "programId", assetId: "isEntitledNotEntitledProgram"),nil)
-        }
-    }
-    
-    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
-        if assetId == "validationTriggerSecondProgram" {
-            if let result = validation(status: "SUCCESS") {
-                callback(result,nil)
-            }
-            else {
-                callback(nil, ExposureError.generalError(error: MockedError.sampleError))
-            }
-        }
-        else if assetId == "notEntitledProgram" {
-            if let result = validation(status: "NOT_ENTITLED") {
-                callback(result,nil)
-            }
-            else {
-                callback(nil, ExposureError.generalError(error: MockedError.sampleError))
-            }
-        }
-        else if assetId == "errorOnProgramValidationSecondProgram" {
-            callback(nil, ExposureError.generalError(error: MockedError.sampleError))
-        }
-        else if assetId == "isEntitledNotEntitledProgram" {
-            if let result = validation(status: "NOT_ENTITLED") {
-                callback(result,nil)
-            }
-            else {
-                callback(nil, ExposureError.generalError(error: MockedError.sampleError))
-            }
-        }
-        else {
-            callback(nil, ExposureError.generalError(error: MockedError.sampleError))
-        }
-    }
-    
-    func validation(status: String) -> EntitlementValidation? {
-        let json: [String: Codable] = [
-            "status":status,
-            "paymentDone":false
-        ]
-        
-        return json.decode(EntitlementValidation.self)
-    }
-    
-    enum MockedError: Error {
-        case sampleError
-    }
-}
 
 
 class ProgramServiceSpec: QuickSpec {
     
+    enum MockedError: Error {
+        case sampleError
+    }
+    
     override func spec() {
         super.spec()
+        
+        let currentDate = Date().unixEpoch
+        let second: Int64 = 1 * 1000
+        let hour: Int64 = 60 * 60 * 1000
         
         let environment = Environment(baseUrl: "someUrl", customer: "Customer", businessUnit: "BusinessUnit")
         let sessionToken = SessionToken(value: "someToken")
         
         describe("ProgramServiceSpec") {
 
-//            it("Should retry start monitoring if no playheadTime exists") {
-//                let channelId = "retryStartMonitoring"
-//                var counter = 0
-//                let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-//                let provider = MockedProgramServiceProvider()
-//                service.provider = provider
-//
-//                service.currentPlayheadTime = {
-//                    if counter < 1 {
-//                        counter = counter + 1
-//                        return nil
-//                    }
-//                    else {
-//                        return Date().millisecondsSince1970
-//                    }
-//                }
-//
-//                var newProgram: Program? = nil
-//                service.onProgramChanged = { program in
-//                    newProgram = program
-//                }
-//
-//                service.startMonitoring(epgOffset: 10 * 1000)
-//
-//                expect(newProgram).toEventuallyNot(beNil(), timeout: 20)
-//            }
-
             context("Validation timer on program end timestamp") {
                 it("Should continue while entitled") {
                     let channelId = "validationTrigger"
-                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
-                    service.provider = provider
-
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-
-                    var programs: [Program] = []
-                    service.onProgramChanged = { program in
-                        if let program = program {
-                            programs.append(program)
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        if timestamp > currentDate {
+                            let program = Program
+                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerSecondProgram")
+                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
+                                .decode(Program.self)
+                            callback(program,nil)
+                        }
+                        else {
+                            let program = Program
+                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerFirstProgram")
+                                .timestamp(starting: currentDate, ending: currentDate+second)
+                                .decode(Program.self)
+                            callback(program,nil)
                         }
                     }
-
-                    var notEntitledMessage: String? = nil
-                    service.onNotEntitled = { message in
-                        notEntitledMessage = message
+                    provider.mockedValidate = { programId, _,_, callback in
+                        callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
                     }
+                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                    service.provider = provider
+
+                    var first = true
+                    service.currentPlayheadTime = {
+                        if first {
+                            first = false
+                            return currentDate
+                        }
+                        else {
+                            return currentDate + second
+                        }
+                    }
+                    service.isPlaying = { return true }
 
                     service.startMonitoring(epgOffset: 0)
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
-                    expect(notEntitledMessage).toEventually(beNil())
-                    expect(programs.count).toEventually(equal(2))
-                    expect(programs.last?.assetId).toEventually(equal(service.currentProgram?.assetId))
                 }
 
                 it("Should send message when not entitled") {
                     let channelId = "validationTriggerNotEntitled"
-                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
-                    service.provider = provider
-
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-
-                    var programs: [Program] = []
-                    service.onProgramChanged = { program in
-                        if let program = program {
-                            programs.append(program)
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        if timestamp > currentDate {
+                            let program = Program
+                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledSecondProgram")
+                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
+                                .decode(Program.self)
+                            callback(program,nil)
+                        }
+                        else {
+                            let program = Program
+                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledFirstProgram")
+                                .timestamp(starting: currentDate, ending: currentDate+second)
+                                .decode(Program.self)
+                            callback(program,nil)
                         }
                     }
+                    provider.mockedValidate = { programId, _,_, callback in
+                        if programId == "validationTriggerNotEntitledFirstProgram" {
+                            callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
+                        }
+                        else {
+                            callback(EntitlementValidation.validJson(status: "NOT_ENTITLED").decode(EntitlementValidation.self),nil)
+                        }
+                    }
+                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                    service.provider = provider
+
+                    var first = true
+                    service.currentPlayheadTime = {
+                        if first {
+                            first = false
+                            return currentDate
+                        }
+                        else {
+                            return currentDate + second
+                        }
+                    }
+                    service.isPlaying = { return true }
 
                     var notEntitledMessage: String? = nil
                     service.onNotEntitled = { message in
@@ -196,73 +123,107 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring(epgOffset: 0)
-                    expect(service.currentProgram?.assetId).toEventually(equal("notEntitledProgram"), timeout: 1)
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 1)
                     expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 2)
-                    expect(programs.count).toEventually(equal(1))
-                    expect(programs.last?.assetId).toEventually(equal(service.currentProgram?.assetId))
                 }
             }
 
             context("Should allow playback") {
                 it("if EPG is missing") {
                     let channelId = "noEpgChannel"
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        callback(nil,nil)
+                    }
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
+                    service.currentPlayheadTime = { return currentDate }
+                    service.isPlaying = { return true }
 
-                    var newProgram: Program? = nil
-                    service.onProgramChanged = { program in
-                        newProgram = program
-                    }
-
-                    var notEntitledMessage: String? = nil
-                    service.onNotEntitled = { message in
-                        notEntitledMessage = message
+                    var warningMessage: ExposureContext.Warning.ProgramService? = nil
+                    service.onWarning = { warning in
+                        warningMessage = warning
                     }
 
                     service.startMonitoring(epgOffset: 10 * 1000)
-
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 1)
-                    expect(newProgram).toEventually(beNil(), timeout: 1)
+                    expect(warningMessage?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
                 }
 
                 it("if error on program fetch at startup") {
                     let channelId = "errorOnProgramFetch"
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        callback(nil,ExposureError.generalError(error: MockedError.sampleError))
+                    }
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
+                    service.currentPlayheadTime = { return currentDate }
+                    service.isPlaying = { return true }
 
-                    var newProgram: Program? = nil
-                    service.onProgramChanged = { program in
-                        newProgram = program
-                    }
-
-                    var notEntitledMessage: String? = nil
-                    service.onNotEntitled = { message in
-                        notEntitledMessage = message
+                    var warningMessage: ExposureContext.Warning.ProgramService? = nil
+                    service.onWarning = { warning in
+                        warningMessage = warning
                     }
 
                     service.startMonitoring(epgOffset: 10 * 1000)
-
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 1)
-                    expect(newProgram).toEventually(beNil(), timeout: 1)
+                    expect(warningMessage?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
                 }
 
                 it("if error on program validation") {
                     let channelId = "errorOnProgramValidation"
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        let program = Program
+                            .validJson(programId: "program1", channelId: channelId, assetId: "errorOnProgramValidation")
+                            .timestamp(starting: currentDate, ending: currentDate+second)
+                            .decode(Program.self)
+                        callback(program,nil)
+                    }
+                    provider.mockedValidate = { _,_,_, callback in
+                        callback(nil,ExposureError.generalError(error: MockedError.sampleError))
+                    }
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
                     service.provider = provider
 
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
+                    service.currentPlayheadTime = { return currentDate }
+                    service.isPlaying = { return true }
+
+                    var warningMessage: ExposureContext.Warning.ProgramService? = nil
+                    service.onWarning = { warning in
+                        warningMessage = warning
+                    }
+
+                    service.startMonitoring(epgOffset: 0)
+                    expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
+                }
+            }
+
+            context("Should not validate again") {
+                it("if timestamp is within active program bounds") {
+                    let channelId = "timestampWithinActiveProgram"
+                    let provider = MockedProgramProvider()
+                    provider.mockedFetchProgram = { _,timestamp,_, callback in
+                        let program = Program
+                            .validJson(programId: "program1", channelId: channelId, assetId: "timestampWithinActiveProgram")
+                            .timestamp(starting: currentDate - hour, ending: currentDate+second)
+                            .decode(Program.self)
+                        callback(program,nil)
+                    }
+                    provider.mockedValidate = { _,_,_, callback in
+                        callback(nil,ExposureError.generalError(error: MockedError.sampleError))
+                    }
+                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                    service.provider = provider
+                    
+                    service.currentPlayheadTime = { return currentDate }
+                    service.isPlaying = { return true }
 
                     var programs: [Program] = []
                     service.onProgramChanged = { program in
                         if let program = program {
+                            print(program.assetId)
                             programs.append(program)
                         }
                     }
@@ -274,59 +235,40 @@ class ProgramServiceSpec: QuickSpec {
 
                     service.startMonitoring(epgOffset: 0)
 
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
-                    expect(programs.count).toEventually(equal(2), timeout: 5)
-                }
-            }
-
-            context("Should not validate again") {
-                it("if timestamp is within active program bounds") {
-                    let channelId = "timestampWithinActiveProgram"
-                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                    let provider = MockedProgramServiceProvider()
-                    service.provider = provider
-
-                    service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-
-                    var programs: [Program] = []
-                    service.onProgramChanged = { program in
-                        if let program = program {
-                            programs.append(program)
+                    
+                    var successCalled = false
+                    service.isEntitled(toPlay: currentDate) { program in
+                        service.isEntitled(toPlay: currentDate) { program in
+                            // Trigger another check after currentProgram has been set
+                            successCalled = true
                         }
                     }
 
-                    var notEntitledMessage: String? = nil
-                    service.onNotEntitled = { message in
-                        notEntitledMessage = message
-                    }
-
-                    service.startMonitoring(epgOffset: 10 * 1000)
-
-                    var successCalled = false
-                    service.isEntitled(toPlay: Date().millisecondsSince1970 + 4000) { program in
-                        successCalled = true
-                    }
-
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
                     expect(successCalled).toEventually(beTrue(), timeout: 5)
+                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
                     expect(programs.count).toEventually(equal(1), timeout: 5)
+                    expect(service.currentProgram?.assetId).toEventually(equal("timestampWithinActiveProgram"), timeout: 5)
                 }
             }
 
             it("Should message if isEntitled returns not entitled") {
                 let channelId = "isEntitledNotEntitled"
+                let provider = MockedProgramProvider()
+                provider.mockedFetchProgram = { _,timestamp,_, callback in
+                    let program = Program
+                        .validJson(programId: "program1", channelId: channelId, assetId: "isEntitledNotEntitled")
+                        .timestamp(starting: currentDate, ending: currentDate+second)
+                        .decode(Program.self)
+                    callback(program,nil)
+                }
+                provider.mockedValidate = { _,_,_, callback in
+                    callback(EntitlementValidation.validJson(status: "NOT_ENTITLED").decode(EntitlementValidation.self),nil)
+                }
                 let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
-                let provider = MockedProgramServiceProvider()
                 service.provider = provider
 
-                service.currentPlayheadTime = { return Date().millisecondsSince1970 }
-
-                var programs: [Program] = []
-                service.onProgramChanged = { program in
-                    if let program = program {
-                        programs.append(program)
-                    }
-                }
+                service.currentPlayheadTime = { return currentDate }
+                service.isPlaying = { return true }
 
                 var notEntitledMessage: String? = nil
                 service.onNotEntitled = { message in
@@ -336,13 +278,13 @@ class ProgramServiceSpec: QuickSpec {
                 service.startMonitoring(epgOffset: 10 * 1000)
 
                 var successCalled = false
-                service.isEntitled(toPlay: Date().millisecondsSince1970 + 120 * 1000) { program in
+                service.isEntitled(toPlay: currentDate) { program in
                     successCalled = true
                 }
 
+
                 expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
                 expect(successCalled).toEventually(beFalse(), timeout: 5)
-                expect(programs.count).toEventually(equal(1), timeout: 5)
             }
         }
     }
