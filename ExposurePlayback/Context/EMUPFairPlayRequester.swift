@@ -12,6 +12,7 @@ import Player
 import Exposure
 
 internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
+    var keyValidationError: Error?
     
     init(entitlement: PlaybackEntitlement) {
         self.entitlement = entitlement
@@ -41,6 +42,9 @@ extension EMUPFairPlayRequester {
     internal func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForRenewalOfRequestedResource renewalRequest: AVAssetResourceRenewalRequest) -> Bool {
         return canHandle(resourceLoadingRequest: renewalRequest)
     }
+    
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
+    }
 }
 
 extension EMUPFairPlayRequester {
@@ -49,7 +53,6 @@ extension EMUPFairPlayRequester {
     /// - parameter resourceLoadingRequest: loading request to handle
     /// - returns: ´true` if the requester can handle the request, `false` otherwise.
     internal func canHandle(resourceLoadingRequest: AVAssetResourceLoadingRequest) -> Bool {
-        
         guard let url = resourceLoadingRequest.request.url else {
             return false
         }
@@ -67,7 +70,9 @@ extension EMUPFairPlayRequester {
                 }
             }
             catch {
-                resourceLoadingRequest.finishLoading(with: error)
+                DispatchQueue.main.async{
+                    resourceLoadingRequest.finishLoading(with: error)
+                }
             }
         }
         
@@ -88,15 +93,22 @@ extension EMUPFairPlayRequester {
     fileprivate func handle(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
         
         guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
-            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .invalidContentIdentifier))
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
+                let error = ExposureContext.Error.fairplay(reason: .invalidContentIdentifier)
+                self.keyValidationError = error
+                resourceLoadingRequest.finishLoading(with: error)
+            }
             return
         }
         
         fetchApplicationCertificate{ [weak self] certificate, certificateError in
             guard let `self` = self else { return }
             if let certificateError = certificateError {
-                print("Certificate Error",certificateError.localizedDescription)
-                resourceLoadingRequest.finishLoading(with: certificateError)
+                DispatchQueue.main.async{ [weak self] in
+                    self?.keyValidationError = certificateError
+                    resourceLoadingRequest.finishLoading(with: certificateError)
+                }
                 return
             }
             
@@ -106,48 +118,59 @@ extension EMUPFairPlayRequester {
                     
                     self.fetchContentKeyContext(spc: spcData) { [weak self] ckcBase64, ckcError in
                         guard let `self` = self else { return }
-                        if let ckcError = ckcError {
-                            print("CKC Error",ckcError.localizedDescription)
-                            resourceLoadingRequest.finishLoading(with: ckcError)
-                            return
-                        }
                         
-                        guard let dataRequest = resourceLoadingRequest.dataRequest else {
-                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingDataRequest))
-                            return
-                        }
-                        
-                        guard let ckcBase64 = ckcBase64 else {
-                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingContentKeyContext))
-                            return
-                        }
-                        
-                        do {
-                            // Allow implementation specific handling of the returned `CKC`
-                            let contentKey = try self.onSuccessfulRetrieval(of: ckcBase64, for: resourceLoadingRequest)
+                        DispatchQueue.main.async{ [weak self] in
+                            if let ckcError = ckcError {
+                                self?.keyValidationError = ckcError
+                                resourceLoadingRequest.finishLoading(with: ckcError)
+                                return
+                            }
                             
-                            // Provide data to the loading request.
-                            dataRequest.respond(with: contentKey)
-                            resourceLoadingRequest.finishLoading() // Treat the processing of the request as complete.
-                        }
-                        catch {
-                            resourceLoadingRequest.finishLoading(with: error)
+                            guard let dataRequest = resourceLoadingRequest.dataRequest else {
+                                let error = ExposureContext.Error.fairplay(reason: .missingDataRequest)
+                                self?.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                                return
+                            }
+                            
+                            guard let ckcBase64 = ckcBase64 else {
+                                let error = ExposureContext.Error.fairplay(reason: .missingContentKeyContext)
+                                self?.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                                return
+                            }
+                            
+                            guard let `self` = self else { return }
+                            do {
+                                // Allow implementation specific handling of the returned `CKC`
+                                let contentKey = try self.onSuccessfulRetrieval(of: ckcBase64, for: resourceLoadingRequest)
+                                
+                                // Provide data to the loading request.
+                                dataRequest.respond(with: contentKey)
+                                resourceLoadingRequest.finishLoading() // Treat the processing of the request as complete.
+                            }
+                            catch {
+                                self.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                            }
                         }
                     }
                 }
                 catch {
-                    //                    -42656 Lease duration has expired.
-                    //                    -42668 The CKC passed in for processing is not valid.
-                    //                    -42672 A certificate is not supplied when creating SPC.
-                    //                    -42673 assetId is not supplied when creating an SPC.
-                    //                    -42674 Version list is not supplied when creating an SPC.
-                    //                    -42675 The assetID supplied to SPC creation is not valid.
-                    //                    -42676 An error occurred during SPC creation.
-                    //                    -42679 The certificate supplied for SPC creation is not valid.
-                    //                    -42681 The version list supplied to SPC creation is not valid.
-                    //                    -42783 The certificate supplied for SPC is not valid and is possibly revoked.
-                    print("SPC Error ",error.localizedDescription)
-                    resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .serverPlaybackContext(error: error)))
+                    // -42656 Lease duration has expired.
+                    // -42668 The CKC passed in for processing is not valid.
+                    // -42672 A certificate is not supplied when creating SPC.
+                    // -42673 assetId is not supplied when creating an SPC.
+                    // -42674 Version list is not supplied when creating an SPC.
+                    // -42675 The assetID supplied to SPC creation is not valid.
+                    // -42676 An error occurred during SPC creation.
+                    // -42679 The certificate supplied for SPC creation is not valid.
+                    // -42681 The version list supplied to SPC creation is not valid.
+                    // -42783 The certificate supplied for SPC is not valid and is possibly revoked.
+                    DispatchQueue.main.async{ [weak self] in
+                        self?.keyValidationError = error
+                        resourceLoadingRequest.finishLoading(with: error)
+                    }
                     return
                 }
             }
@@ -194,6 +217,54 @@ extension EMUPFairPlayRequester {
 
 // MARK: - Content Key Context
 extension EMUPFairPlayRequester {
+    struct ServerErrorMessage: Decodable {
+        /// `http` code returned by *Exposure*
+        internal let code: Int
+        
+        /// Related error message returned by *Exposure*
+        internal let message: String
+        
+        internal init(code: Int, message: String) {
+            self.code = code
+            self.message = message
+        }
+        
+        internal init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            code = try container.decode(Int.self, forKey: .code)
+            if let errorMessage = try container.decodeIfPresent(String.self, forKey: .message) {
+                message = errorMessage
+            }
+            else {
+                /// HACK: Exposure sometimes returns
+                ///
+                /// ```json
+                /// {
+                ///     httpCode: 500
+                /// }
+                /// ````
+                ///
+                /// Ie with a missing `message` key:value. This will account for the scenario and internally
+                /// map all 500 without a message to "INTERNAL_ERROR". If `httpCode` != 500`, throws a decoding error.
+                if code == 500 { message = "INTERNAL_ERROR" }
+                else { message = try container.decode(String.self, forKey: .message) }
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(code, forKey: .code)
+            try container.encode(message, forKey: .message)
+        }
+        
+        internal enum CodingKeys: CodingKey {
+            case code
+            case message
+        }
+    }
+    
     /// Fetching a *Content Key Context*, `CKC`, requires a valid *Server Playback Context*.
     ///
     /// - note: This method uses a specialized function for parsing the retrieved *Content Key Context* from an *MRR specific* format.
@@ -213,12 +284,28 @@ extension EMUPFairPlayRequester {
                      data: spc,
                      headers: ["Content-type": "application/octet-stream"])
             .validate()
-            .rawResponse { _,_, data, error in
-                if let error = error {
-                    callback(nil, .fairplay(reason:.networking(error: error)))
+            .rawResponse { _,urlResponse, data, error in
+                guard error == nil, let jsonData = data else {
+                    if let statusError = error as? Request.Networking {
+                        if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
+                            do {
+                                let message = try JSONDecoder().decode(ServerErrorMessage.self, from: statusData)
+                                callback(nil, .fairplay(reason: .contentKeyContextServer(code: message.code, message: message.message)))
+                            }
+                            catch let e {
+                                callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                            }
+                        }
+                        else {
+                            callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                        }
+                    }
+                    else {
+                        callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                    }
                     return
                 }
-                
+
                 if let success = data {
                     callback(success,nil)
                 }
