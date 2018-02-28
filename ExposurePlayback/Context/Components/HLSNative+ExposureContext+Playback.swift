@@ -99,7 +99,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
                     exposureProvider.onHandshakeStarted(tech: tech, source: source)
-                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self] in
+                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak source] in
                         guard let `self` = self else { return nil }
                         guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }
                         return heartbeatsProvider.heartbeat(for: self.tech, in: self.context)
