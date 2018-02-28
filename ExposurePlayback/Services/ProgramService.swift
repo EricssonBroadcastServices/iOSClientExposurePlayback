@@ -8,6 +8,7 @@
 
 import Foundation
 import Exposure
+import Player
 
 internal protocol ProgramProvider {
     func fetchProgram(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
@@ -32,6 +33,8 @@ public class ProgramService {
     
     fileprivate var timer: DispatchSourceTimer?
     fileprivate var fuzzyFetchTimer: DispatchSourceTimer?
+    
+    var playbackRateObserver: RateObserver?
     
     /// Applies a fuzzy factor to the validation logic in order ease backend load.
     ///
@@ -90,6 +93,7 @@ public class ProgramService {
     }
     
     internal var currentPlayheadTime: () -> Int64? = { return nil }
+    internal var isPlaying: () -> Bool = { return false }
     internal var onNotEntitled: (String) -> Void = { _ in }
     internal var onWarning: (ExposureContext.Warning.ProgramService) -> Void = { _ in }
     internal var onProgramChanged: (Program?) -> Void = { _ in }
@@ -106,8 +110,10 @@ public class ProgramService {
     }
     
     deinit {
+        print("ProgramService deinit")
         timer?.setEventHandler{}
         timer?.cancel()
+        playbackRateObserver?.cancel()
     }
     
     internal var provider: ProgramProvider
@@ -134,6 +140,7 @@ public class ProgramService {
 
 extension ProgramService {
     fileprivate func validate(timestamp: Int64, forced: Bool = false, callback: @escaping (Program?, String?) -> Void) {
+        print("validate timestamp",timestamp)
         if !forced, let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
@@ -144,6 +151,7 @@ extension ProgramService {
         
         // We do not have a current program or the timestamp in question is outside the program bounds
         provider.fetchProgram(on: channelId, timestamp: timestamp, using: environment) { [weak self] newProgram, error in
+            print("validate provider.fetchProgram",timestamp, newProgram?.assetId)
             guard let `self` = self else { return }
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
@@ -193,11 +201,13 @@ extension ProgramService {
     }
     
     internal func handleProgramChanged(program: Program?) {
+        print("handleProgramChanged",program?.assetId)
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
             let current = self.activeProgram
             self.activeProgram = program
             if current?.programId != program?.programId {
+                print("---> handleProgramChanged",program?.assetId)
                 self.onProgramChanged(program)
             }
         }
@@ -236,20 +246,8 @@ extension ProgramService {
         stopTimer()
         stopFuzzyTimer()
         
-        guard let timestamp =  currentPlayheadTime() else {
-//            //Retry untill we receive a current playhead time. This is only possible when playback has started
-//            stopTimer()
-//            timer = DispatchSource.makeTimerSource(queue: queue)
-//            timer?.schedule(deadline: .now() + .milliseconds(2000))
-//            timer?.setEventHandler { [weak self] in
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.startMonitoring(epgOffset: epgOffset)
-//                }
-//            }
-//            timer?.resume()
-            return
-        }
-        
+        guard let timestamp =  currentPlayheadTime() else { return }
+        print("startMonitoring",timestamp)
         provider.fetchProgram(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] program, error in
             guard let `self` = self else { return }
             guard error == nil else {
@@ -265,21 +263,23 @@ extension ProgramService {
     
     
     fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program?) {
+        guard isPlaying() else { return }
+        
         guard let end = program?.endDate?.millisecondsSince1970 else {
             // There is no program, validation can not occur, allow playback
             onWarning(.gapInEpg(timestamp: timestamp, channelId: channelId))
             return
         }
-        
+        print("startValidationTimer",timestamp)
         let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: end)
         
         stopTimer()
         stopFuzzyTimer()
-        
         timer = DispatchSource.makeTimerSource(queue: queue)
         timer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         timer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
+            print("startValidationTimer setEventHandler",fuzzyOffset.0)
             self.validate(timestamp: end, forced: true) { program, invalidMessage in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
@@ -287,8 +287,10 @@ extension ProgramService {
                     self.fuzzyFetchTimer = DispatchSource.makeTimerSource(queue: self.queue)
                     self.fuzzyFetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
                     self.fuzzyFetchTimer?.setEventHandler{ [weak self] in
+                        print("startValidationTimer delay triggered",fuzzyOffset.1)
                         DispatchQueue.main.async { [weak self] in
                             guard let `self` = self else { return }
+                            print("startValidationTimer deliver")
                             if let invalidMessage = invalidMessage {
                                 // The user is not entitled to play this program
                                 self.onNotEntitled(invalidMessage)

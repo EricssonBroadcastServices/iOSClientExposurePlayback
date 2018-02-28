@@ -24,18 +24,28 @@ class MockedAVPlayer: AVPlayer {
         mockedReplaceCurrentItem(item)
     }
     
-    var mockedRate: () -> Float = { return 0}
-    var mockedApplyRate: (Float) -> Void = { _ in }
+    var mockedRate: Float = 0 {
+        willSet {
+            self.willChangeValue(forKey: "rate")
+        }
+        didSet {
+            self.didChangeValue(forKey: "rate")
+        }
+    }
     override var rate: Float {
         get {
-            return mockedRate()
+            return mockedRate
         }
         set {
-            mockedApplyRate(newValue)
+            mockedRate = newValue
         }
     }
     
+    deinit {
+        
+    }
 }
+
 
 class MockedAVPlayerItem: AVPlayerItem {
     weak var associatedWithPlayer: MockedAVPlayer?
@@ -81,11 +91,9 @@ class MockedAVPlayerItem: AVPlayerItem {
     
     var mockedStatus: AVPlayerItemStatus = .unknown {
         willSet {
-            print("willChangeValue")
             self.willChangeValue(forKey: "status")
         }
         didSet {
-            print("didChangeValue")
             self.didChangeValue(forKey: "status")
         }
     }
