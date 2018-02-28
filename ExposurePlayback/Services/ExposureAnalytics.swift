@@ -89,7 +89,8 @@ fileprivate func version(for identifier: String) -> String {
 }
 
 extension ExposureAnalytics {
-    fileprivate func offsetTime<Source: MediaSource, Tech : PlaybackTech>(for source: Source, using tech: Tech) -> Int64 {
+    fileprivate func offsetTime<Source: MediaSource, Tech : PlaybackTech>(for source: Source?, using tech: Tech?) -> Int64 {
+        guard let tech = tech, let source = source else { return 0 }
         guard let exposureSource = source as? ExposureSource else {
             // Default to playheadPosition
             return tech.playheadPosition
@@ -262,12 +263,12 @@ extension ExposureAnalytics: AnalyticsProvider {
         dispatcher?.heartbeat(enabled: false)
     }
     
-    public func onError<Tech, Source, Context>(tech: Tech, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
+    public func onError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         guard let dispatcher = dispatcher else {
             finalizeWithError(tech: tech, source: source, error: error)
             return
         }
-        let offset = source != nil ? offsetTime(for: source!, using: tech) : nil
+        let offset = source != nil ? offsetTime(for: source, using: tech) : nil
         let event = Playback.Error(timestamp: Date().millisecondsSince1970,
                                    offsetTime: offset,
                                    message: error.message,
@@ -280,7 +281,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     ///
     /// - parameter error: The encountered error.
     /// - parameter startupEvents: Events `ExposureAnalytics` should deliver as the initial payload related to the error in question.
-    fileprivate func finalizeWithError<Tech, Source, Context>(tech: Tech, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
+    fileprivate func finalizeWithError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         var events = startupEvents
         
         let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
