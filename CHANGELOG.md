@@ -17,6 +17,7 @@
 #### Bugfixes
 * Heartbeats report offset based on stream type
 * `EMP-11029` Forced locale to en_GB for framework dependantn date calculations
+* `EMP-11035` Exposing *FairPlay* errors encountered during the validation process
 
 ## 0.77.0
 

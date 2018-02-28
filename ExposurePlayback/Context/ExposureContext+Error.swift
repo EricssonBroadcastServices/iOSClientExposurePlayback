@@ -84,7 +84,9 @@ extension ExposureContext.Error {
         case contentKeyContextServer(code: Int, message: String)
         
         /// There was an error while parsing the *Content Key Context*. This is considered a general error
-        case contentKeyContextParsing
+        ///
+        /// `error` containes the underlying error
+        case contentKeyContextParsing(error: Error?)
         
         /// *Content Key Context* server did not respond with an error not a valid `CKC`. This is considered a general error
         case missingContentKeyContext
@@ -117,7 +119,7 @@ extension ExposureContext.Error.FairplayError {
         case .missingPlaytoken: return "Content Key Context call requires a playtoken"
         case .contentKeyContextDataFormatInvalid: return "Content Key Context was not encodable using base64"
         case .contentKeyContextServer(code: let code, message: let message): return "Content Key Context server returned error: \(code) with message: \(message)"
-        case .contentKeyContextParsing: return "Content Key Context server response lacks parsable data"
+        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data \(error?.localizedDescription)"
         case .missingContentKeyContext: return "Content Key Context missing from response"
         case .missingDataRequest: return "Data Request missing"
         case .contentInformationRequestMissing: return "Unable to set contentType on contentInformationRequest"
@@ -154,7 +156,7 @@ extension ExposureContext.Error.FairplayError {
         case .applicationCertificateParsing: return 302
         case .applicationCertificateServer(code: _, message: _): return 303
         case .contentKeyContextDataFormatInvalid: return 304
-        case .contentKeyContextParsing: return 305
+        case .contentKeyContextParsing(error: _): return 305
         case .contentKeyContextServer(code: _, message: _): return 306
         case .invalidContentIdentifier: return 307
         case .missingApplicationCertificateUrl: return 308

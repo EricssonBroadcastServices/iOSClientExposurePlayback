@@ -16,6 +16,8 @@ import Exposure
 /// This class handles any *Exposure* related `DRM` validation with regards to *Fairplay*. It is designed to be *plug-and-play* and should require no configuration to use.
 internal class MRRFairplayRequester: NSObject, ExposureFairplayRequester {
     
+    var keyValidationError: Error?
+    
     init(entitlement: PlaybackEntitlement) {
         self.entitlement = entitlement
     }
@@ -93,7 +95,12 @@ extension MRRFairplayRequester {
         guard let url = resourceLoadingRequest.request.url,
             let assetIDString = url.host,
             let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
-                resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .invalidContentIdentifier))
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else { return }
+                    let error = ExposureContext.Error.fairplay(reason: .invalidContentIdentifier)
+                    self.keyValidationError = error
+                    resourceLoadingRequest.finishLoading(with: error)
+                }
                 return
         }
         
@@ -102,52 +109,58 @@ extension MRRFairplayRequester {
         print(url, " - ",assetIDString)
         
         fetchApplicationCertificate{ [unowned self] certificate, certificateError in
-            print("fetchApplicationCertificate")
             if let certificateError = certificateError {
-                print("fetchApplicationCertificate ",certificateError.message)
-                resourceLoadingRequest.finishLoading(with: certificateError)
+                DispatchQueue.main.async{ [weak self] in
+                    self?.keyValidationError = certificateError
+                    resourceLoadingRequest.finishLoading(with: certificateError)
+                }
                 return
             }
             
             if let certificate = certificate {
-                print("prepare SPC")
                 do {
                     let spcData = try resourceLoadingRequest.streamingContentKeyRequestData(forApp: certificate, contentIdentifier: contentIdentifier, options: self.resourceLoadingRequestOptions)
                     
                     // Content Key Context fetch from licenseUrl requires base64 encoded data
                     let spcBase64 = spcData.base64EncodedData(options: Data.Base64EncodingOptions.endLineWithLineFeed)
                     
-                    self.fetchContentKeyContext(spc: spcBase64) { ckcBase64, ckcError in
-                        print("fetchContentKeyContext")
-                        if let ckcError = ckcError {
-                            print("CKC Error",ckcError.localizedDescription, ckcError.message, ckcError.code)
-                            resourceLoadingRequest.finishLoading(with: ckcError)
-                            return
-                        }
+                    self.fetchContentKeyContext(spc: spcBase64) { [weak self] ckcBase64, ckcError in
+                        guard let `self` = self else { return }
                         
-                        guard let dataRequest = resourceLoadingRequest.dataRequest else {
-                            print("dataRequest Error",ExposureContext.Error.fairplay(reason: .missingDataRequest).message)
-                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingDataRequest))
-                            return
-                        }
-                        
-                        guard let ckcBase64 = ckcBase64 else {
-                            print("ckcBase64 Error",ExposureContext.Error.fairplay(reason: .missingContentKeyContext).message)
-                            resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .missingContentKeyContext))
-                            return
-                        }
-                        
-                        do {
-                            // Allow implementation specific handling of the returned `CKC`
-                            let contentKey = try self.onSuccessfulRetrieval(of: ckcBase64, for: resourceLoadingRequest)
+                        DispatchQueue.main.async{ [weak self] in
+                            if let ckcError = ckcError {
+                                self?.keyValidationError = ckcError
+                                resourceLoadingRequest.finishLoading(with: ckcError)
+                                return
+                            }
                             
-                            // Provide data to the loading request.
-                            dataRequest.respond(with: contentKey)
-                            resourceLoadingRequest.finishLoading() // Treat the processing of the request as complete.
-                        }
-                        catch {
-                            print("onSuccessfulRetrieval Error",error)
-                            resourceLoadingRequest.finishLoading(with: error)
+                            guard let dataRequest = resourceLoadingRequest.dataRequest else {
+                                let error = ExposureContext.Error.fairplay(reason: .missingDataRequest)
+                                self?.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                                return
+                            }
+                            
+                            guard let ckcBase64 = ckcBase64 else {
+                                let error = ExposureContext.Error.fairplay(reason: .missingContentKeyContext)
+                                self?.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                                return
+                            }
+                            
+                            guard let `self` = self else { return }
+                            do {
+                                // Allow implementation specific handling of the returned `CKC`
+                                let contentKey = try self.onSuccessfulRetrieval(of: ckcBase64, for: resourceLoadingRequest)
+                                
+                                // Provide data to the loading request.
+                                dataRequest.respond(with: contentKey)
+                                resourceLoadingRequest.finishLoading() // Treat the processing of the request as complete.
+                            }
+                            catch {
+                                self.keyValidationError = error
+                                resourceLoadingRequest.finishLoading(with: error)
+                            }
                         }
                     }
                 }
@@ -162,8 +175,10 @@ extension MRRFairplayRequester {
                     //                    -42679 The certificate supplied for SPC creation is not valid.
                     //                    -42681 The version list supplied to SPC creation is not valid.
                     //                    -42783 The certificate supplied for SPC is not valid and is possibly revoked.
-                    print("SPC - ",error.localizedDescription)
-                    resourceLoadingRequest.finishLoading(with: ExposureContext.Error.fairplay(reason: .serverPlaybackContext(error: error)))
+                    DispatchQueue.main.async{ [weak self] in
+                        self?.keyValidationError = error
+                        resourceLoadingRequest.finishLoading(with: error)
+                    }
                     return
                 }
             }
@@ -353,6 +368,6 @@ extension MRRFairplayRequester {
             
             throw ExposureContext.Error.fairplay(reason: .contentKeyContextServer(code: code, message: message))
         }
-        throw ExposureContext.Error.fairplay(reason: .contentKeyContextParsing)
+        throw ExposureContext.Error.fairplay(reason: .contentKeyContextParsing(error: nil))
     }
 }
