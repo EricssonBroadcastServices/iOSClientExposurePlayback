@@ -71,7 +71,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
                     service.isPlaying = { return true }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
                 }
 
@@ -122,7 +122,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 1)
                     expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 2)
                 }
@@ -195,7 +195,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
             }
@@ -233,7 +233,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
 
                     
                     var successCalled = false

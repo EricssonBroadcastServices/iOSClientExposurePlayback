@@ -130,7 +130,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         
         service.playbackRateObserver = tech.observeRateChanges { [weak service] tech, source, rate in
             if tech.isPlaying {
-                service?.startMonitoring(epgOffset: 0)
+                service?.startMonitoring()
             }
             else {
                 service?.pause()
@@ -162,9 +162,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let contextWarning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning.programService(reason: warning))
             self.tech.eventDispatcher.onWarning(self.tech, source, contextWarning)
         }
-        
-        // We request the epg for the currentTimestamp + a short offset into the future. This will solve issues where the first segment in manifest start
-        service.startMonitoring(epgOffset: 10 * 1000)
     }
 }
 

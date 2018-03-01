@@ -77,7 +77,7 @@ public class ProgramService {
             /// b:   end of fuzzy window
             let pco = arc4random_uniform(availablePco)
             let ffo = programDistance - pco
-            let fvo = programDistance + fuzzyFactor - arc4random_uniform(fuzzyFactor)
+            let fvo = fuzzyFactor - arc4random_uniform(fuzzyFactor)
             return (Int(ffo), Int(pco), Int(fvo))
         }
     }
@@ -89,6 +89,7 @@ public class ProgramService {
     internal var onProgramChanged: (Program?) -> Void = { _ in }
     
     fileprivate var activeProgram: Program?
+    fileprivate var started: Bool = false
     internal init(environment: Environment, sessionToken: SessionToken, channelId: String) {
         self.environment = environment
         self.sessionToken = sessionToken
@@ -264,13 +265,21 @@ extension ProgramService {
         // IMPORTANT: We do not stop the validation timer. It will only act on its result IF the playheadTime is still within the program bounds it is validating
     }
     
-    internal func startMonitoring(epgOffset: Int64) {
+    private func monitoringOffset() -> Int64 {
+        if !started {
+            started = true
+            return 10 * 1000
+        }
+        return 0
+    }
+    
+    internal func startMonitoring() {
         stopFetchTimer()
         stopProgramChangeTimer()
         
         guard let timestamp =  currentPlayheadTime() else { return }
         print("startMonitoring",timestamp)
-        provider.fetchPrograms(on: channelId, timestamp: timestamp + epgOffset, using: environment) { [weak self] newPrograms, error in
+        provider.fetchPrograms(on: channelId, timestamp: timestamp + monitoringOffset(), using: environment) { [weak self] newPrograms, error in
             guard let `self` = self else { return }
             guard error == nil else {
                 // We are permissive on errors, allow playback
@@ -305,7 +314,7 @@ extension ProgramService {
         guard ending - timestamp > 0 else { return }
         
         let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: ending)
-        print("startValidationTimer",fuzzyOffset.0,fuzzyOffset.1, fuzzyOffset.1)
+        print("startValidationTimer",fuzzyOffset.0,fuzzyOffset.1, fuzzyOffset.2)
         stopFetchTimer()
         stopProgramChangeTimer()
         
@@ -313,7 +322,7 @@ extension ProgramService {
         fetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         fetchTimer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
-            print("startValidationTimer fetchTimer",fuzzyOffset.0)
+            print("startValidationTimer fetchTimer",fuzzyOffset.0,fuzzyOffset.1, fuzzyOffset.2)
             self.fetchProgram(timestamp: ending) { [weak self] program, warning in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
@@ -321,7 +330,7 @@ extension ProgramService {
                     self.programChangeTimer = DispatchSource.makeTimerSource(queue: self.queue)
                     self.programChangeTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
                     self.programChangeTimer?.setEventHandler { [weak self] in
-                        print("startValidationTimer programChangeTimer",fuzzyOffset.1)
+                        print("startValidationTimer programChangeTimer",fuzzyOffset.1, fuzzyOffset.2)
                         DispatchQueue.main.async { [weak self] in
                             guard let `self` = self else { return }
                             if let warning = warning {
