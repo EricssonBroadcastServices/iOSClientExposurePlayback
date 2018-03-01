@@ -70,7 +70,7 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    func onError<Tech, Source, Context>(tech: Tech, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
+    func onError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         
     }
     
