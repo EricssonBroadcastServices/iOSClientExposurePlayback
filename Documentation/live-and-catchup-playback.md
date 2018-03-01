@@ -1,6 +1,5 @@
 ## Live and Catchup Playback
 
-
 #### Epg and Content Presentation
 The `Exposure` module provides metadata integration with *EMP Exposure layer* for quick and typesafe content access.
 
@@ -20,7 +19,8 @@ FetchAsset(environment: environment)
     }
 ```
 
-Fetching channel associated *Epg* can be done by calling
+*EPG*, or the *electronic programming guide*, details previous, current and upcomming programs on a specific channel. Client applications may request *EPG* data through the `FetchEpg` endpoint.
+
 
 ```Swift
 let current = player.serverTime ?? Date()
@@ -37,7 +37,22 @@ FetchEpg(environment: environment)
     }
 ```
 
-Additionally, an `ExposureContext` backed `Player` tracks the currently playing program and exposes it through `currentProgram`. When playback of a live stream 
+Client applications relying obn `ExposureContext` may also fetch the currently playing `Program` directly from the `player` object.
+
+```Swift
+let nowPlaying = player.currentProgram
+```
+
+Or listen to the `onProgramChanged` event.
+
+```Swift
+player.onProgramChanged { tech, source, program in
+    // Update userfacing program information
+}
+```
+
+
+#### Custom Playback Properties
 
 
 
