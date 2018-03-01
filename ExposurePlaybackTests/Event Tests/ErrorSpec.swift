@@ -20,27 +20,30 @@ class ErrorSpec: QuickSpec {
             let type = "Playback.Error"
             let code: Int = 101
             let message = "Some error"
+            let domain = "Domain"
             
             it("Should init and record complete structure") {
-                let event = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code)
+                let event = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, domain: domain)
                 
                 expect(event.timestamp).to(equal(timeStamp))
                 expect(event.eventType).to(equal(type))
                 expect(event.offsetTime).to(equal(offset))
                 expect(event.message).to(equal(message))
                 expect(event.code).to(equal(code))
+                expect(event.domain).to(equal(domain))
                 expect(event.bufferLimit).to(equal(3000))
             }
             
             it("Should produce correct jsonPayload") {
-                let json = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code).jsonPayload
+                let json = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, domain: domain).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["Message"] as? String).to(equal(message))
                 expect(json["Code"] as? Int).to(equal(code))
-                expect(json.count).to(equal(5))
+                expect(json["Domain"] as? String).to(equal(domain))
+                expect(json.count).to(equal(6))
             }
         }
     }

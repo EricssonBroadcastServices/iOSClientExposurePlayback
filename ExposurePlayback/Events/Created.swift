@@ -20,13 +20,12 @@ extension Playback {
             return "EMP." + UIDevice.mergedSystemName + "2"
         }
         
-        /// Release version and build revision of the player
+        /// Release version and build revision of ExposurePlayback
         /// Example: 1.34.0
         internal let version: String
         
-        /// Additional optional version information. For instance, the embedded player
-        /// Example: AMC 2.9.1.42740
-        internal let revision: String?
+        /// Exposure framework version information
+        internal let exposureVersion: String?
         
         /// If true, the player will start playing as soon as possible. If false, player does not start playing, and will be initialized at a later time. If this field is missing, it is assumed to have the value "true".
         internal let autoPlay: Bool?
@@ -49,10 +48,10 @@ extension Playback {
         /// Example: 1458209835_fai-hls_IkCMxd
         internal let mediaId: String?
         
-        internal init(timestamp: Int64, version: String, revision: String? = nil, assetData: PlaybackIdentifier? = nil, mediaId: String? = nil, autoPlay: Bool? = nil) {
+        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, mediaId: String? = nil, autoPlay: Bool? = nil) {
             self.timestamp = timestamp
             self.version = version
-            self.revision = revision
+            self.exposureVersion = exposureVersion
             self.assetData = assetData
             self.mediaId = mediaId
             self.autoPlay = autoPlay
@@ -79,8 +78,8 @@ extension Playback.Created: AnalyticsEvent {
             JSONKeys.version.rawValue: version
         ]
         
-        if let revision = revision {
-            params[JSONKeys.revision.rawValue] = revision
+        if let exposureVersion = exposureVersion {
+            params[JSONKeys.exposureVersion.rawValue] = exposureVersion
         }
         
         if let autoPlay = autoPlay {
@@ -115,7 +114,7 @@ extension Playback.Created: AnalyticsEvent {
         case timestamp = "Timestamp"
         case player = "Player"
         case version = "Version"
-        case revision = "Revision"
+        case exposureVersion = "ExposureVersion"
         case autoPlay = "AutoPlay"
         case playMode = "PlayMode"
         case assetId = "AssetId"

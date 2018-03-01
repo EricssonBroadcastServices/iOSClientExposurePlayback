@@ -100,6 +100,34 @@ extension ExposureContext.Error {
     }
 }
 
+extension ExposureContext.Error {
+    public var message: String {
+        switch self {
+        case .fairplay(reason: let reason): return reason.message
+        case .exposure(reason: let error): return error.message
+        }
+    }
+}
+
+extension ExposureContext.Error {
+    /// Defines the `domain` specific code for the underlying error.
+    public var code: Int {
+        switch self {
+        case .fairplay(reason: let reason): return reason.code
+        case .exposure(reason: let error): return error.code
+        }
+    }
+}
+
+extension ExposureContext.Error {
+    public var domain: String {
+        switch self {
+        case .fairplay(reason: let reason): return reason.domain
+        case .exposure(reason: let reason): return reason.domain
+        }
+    }
+}
+
 extension ExposureContext.Error.FairplayError {
     public var message: String {
         switch self {
@@ -127,27 +155,6 @@ extension ExposureContext.Error.FairplayError {
     }
 }
 
-extension ExposureContext.Error {
-    public var message: String {
-        switch self {
-        case .fairplay(reason: let reason): return reason.message
-        case .exposure(reason: let error): return error.message
-        }
-    }
-}
-
-extension ExposureContext.Error {
-    /// Defines the `domain` specific code for the underlying error.
-    public var code: Int {
-        switch self {
-        case .fairplay(reason: let reason): return reason.code
-        case .exposure(reason: let error): return error.code
-        }
-    }
-}
-
-
-
 extension ExposureContext.Error.FairplayError {
     /// Defines the `domain` specific code for the underlying error.
     public var code: Int {
@@ -169,4 +176,8 @@ extension ExposureContext.Error.FairplayError {
         case .contentInformationRequestMissing: return 315
         }
     }
+}
+
+extension ExposureContext.Error.FairplayError {
+    public var domain: String { return String(describing: type(of: self))+"Domain" }
 }
