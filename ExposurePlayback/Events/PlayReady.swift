@@ -17,9 +17,15 @@ extension Playback {
         /// Offset in the video sequence where the playback was started at in milliseconds.
         internal let offsetTime: Int64
         
-        internal init(timestamp: Int64, offsetTime: Int64) {
+        internal let tech: String
+        
+        internal let techVersion: String
+        
+        internal init(timestamp: Int64, offsetTime: Int64, tech: String, techVersion: String) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
+            self.tech = tech
+            self.techVersion = techVersion
         }
     }
 }
@@ -27,7 +33,7 @@ extension Playback {
 extension Playback.PlayReady: PlaybackOffset { }
 extension Playback.PlayReady: AnalyticsEvent {
     var eventType: String {
-        return "Playback.PlayReady"
+        return "Playback.PlayerReady"
     }
     
     var bufferLimit: Int64 {
@@ -38,7 +44,9 @@ extension Playback.PlayReady: AnalyticsEvent {
         return [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime
+            JSONKeys.offsetTime.rawValue: offsetTime,
+            JSONKeys.tech.rawValue: tech,
+            JSONKeys.techVersion.rawValue: techVersion
         ]
     }
     
@@ -46,5 +54,7 @@ extension Playback.PlayReady: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
+        case tech = "Technology"
+        case techVersion = "TechVersion"
     }
 }

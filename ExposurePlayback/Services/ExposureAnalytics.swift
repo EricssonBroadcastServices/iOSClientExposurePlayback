@@ -85,7 +85,7 @@ fileprivate func version(for identifier: String) -> String {
     guard let build = bundleInfo["CFBundleVersion"] as? String else {
         return version
     }
-    return version + "." + build
+    return version
 }
 
 extension ExposureAnalytics {
@@ -123,7 +123,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         /// 1. Created
         let created = Playback.Created(timestamp: Date().millisecondsSince1970,
                                        version: version(for: "com.emp.ExposurePlayback"),
-                                       revision: version(for: "com.emp.Player"),
+                                       exposureVersion: version(for: "com.emp.Exposure"),
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
@@ -205,7 +205,9 @@ extension ExposureAnalytics: AnalyticsProvider {
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// PlayReady
         let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
-                                       offsetTime: offsetTime(for: source, using: tech))
+                                       offsetTime: offsetTime(for: source, using: tech),
+                                       tech: String(describing: type(of: tech)),
+                                       techVersion: version(for: Bundle(for: type(of: tech)).bundleIdentifier!))//"com.emp.Player"))
         dispatcher?.enqueue(event: event)
     }
     
@@ -268,11 +270,13 @@ extension ExposureAnalytics: AnalyticsProvider {
             finalizeWithError(tech: tech, source: source, error: error)
             return
         }
+        
         let offset = source != nil ? offsetTime(for: source, using: tech) : nil
         let event = Playback.Error(timestamp: Date().millisecondsSince1970,
                                    offsetTime: offset,
                                    message: error.message,
-                                   code: error.code)
+                                   code: error.code,
+                                   domain: error.domain)
         dispatcher.enqueue(event: event)
         dispatcher.heartbeat(enabled: false)
     }
@@ -287,7 +291,8 @@ extension ExposureAnalytics: AnalyticsProvider {
         let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
                                           offsetTime: 0,
                                           message: error.message,
-                                          code: error.code)
+                                          code: error.code,
+                                          domain: error.domain)
         
         events.append(errorPayload)
         
