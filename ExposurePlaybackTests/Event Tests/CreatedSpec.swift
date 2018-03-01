@@ -21,7 +21,7 @@ class CreatedSpec: QuickSpec {
             let type = "Playback.Created"
             let player = "EMP.iOS2"
             let version = "1.0.3"
-            let revision = "0.1.3"
+            let exposureVersion = "0.1.3"
             let vodId = PlaybackIdentifier.vod(assetId: "vodAsset")
             let liveId = PlaybackIdentifier.live(channelId: "liveAsset")
             let programId = PlaybackIdentifier.program(programId: "programAsset", channelId: "liveAsset")
@@ -32,14 +32,14 @@ class CreatedSpec: QuickSpec {
             
             
             it("Should init and record complete structure") {
-                let event = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: vodId, mediaId: mediaId, autoPlay: autoPlay)
+                let event = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: vodId, mediaId: mediaId, autoPlay: autoPlay)
                 
                 expect(event.timestamp).to(equal(timeStamp))
                 expect(event.eventType).to(equal(type))
                 expect(event.player).to(equal(player))
                 expect(event.version).to(equal(version))
                 
-                expect(event.revision).to(equal(revision))
+                expect(event.exposureVersion).to(equal(exposureVersion))
                 expect(event.autoPlay).to(equal(autoPlay))
                 expect(event.mediaId).to(equal(mediaId))
                 expect(event.bufferLimit).to(equal(3000))
@@ -86,13 +86,13 @@ class CreatedSpec: QuickSpec {
             }
             
             it("Should produce correct Vod jsonPayload") {
-                let json = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: vodId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
+                let json = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: vodId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["Player"] as? String).to(equal(player))
                 expect(json["Version"] as? String).to(equal(version))
-                expect(json["Revision"] as? String).to(equal(revision))
+                expect(json["ExposureVersion"] as? String).to(equal(exposureVersion))
                 expect(json["AutoPlay"] as? Bool).to(equal(autoPlay))
                 expect(json["PlayMode"] as? String).to(equal("vod"))
                 expect(json["AssetId"] as? String).to(equal("vodAsset"))
@@ -103,13 +103,13 @@ class CreatedSpec: QuickSpec {
             }
             
             it("Should produce correct Live jsonPayload") {
-                let json = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: liveId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
+                let json = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: liveId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["Player"] as? String).to(equal(player))
                 expect(json["Version"] as? String).to(equal(version))
-                expect(json["Revision"] as? String).to(equal(revision))
+                expect(json["ExposureVersion"] as? String).to(equal(exposureVersion))
                 expect(json["AutoPlay"] as? Bool).to(equal(autoPlay))
                 expect(json["PlayMode"] as? String).to(equal("live"))
                 expect(json["AssetId"] as? String).to(beNil())
@@ -119,13 +119,13 @@ class CreatedSpec: QuickSpec {
             }
             
             it("Should produce correct Program jsonPayload") {
-                let json = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: programId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
+                let json = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: programId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["Player"] as? String).to(equal(player))
                 expect(json["Version"] as? String).to(equal(version))
-                expect(json["Revision"] as? String).to(equal(revision))
+                expect(json["ExposureVersion"] as? String).to(equal(exposureVersion))
                 expect(json["AutoPlay"] as? Bool).to(equal(autoPlay))
                 expect(json["PlayMode"] as? String).to(equal("vod"))
                 expect(json["AssetId"] as? String).to(beNil())
@@ -135,13 +135,13 @@ class CreatedSpec: QuickSpec {
             }
             
             it("Should produce correct Offline jsonPayload") {
-                let json = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: offlineId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
+                let json = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: offlineId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["Player"] as? String).to(equal(player))
                 expect(json["Version"] as? String).to(equal(version))
-                expect(json["Revision"] as? String).to(equal(revision))
+                expect(json["ExposureVersion"] as? String).to(equal(exposureVersion))
                 expect(json["AutoPlay"] as? Bool).to(equal(autoPlay))
                 expect(json["PlayMode"] as? String).to(equal("offline"))
                 expect(json["AssetId"] as? String).to(equal("offlineAsset"))
@@ -151,13 +151,13 @@ class CreatedSpec: QuickSpec {
             }
             
             it("Should produce correct Download jsonPayload") {
-                let json = Playback.Created(timestamp: timeStamp, version: version, revision: revision, assetData: downloadId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
+                let json = Playback.Created(timestamp: timeStamp, version: version, exposureVersion: exposureVersion, assetData: downloadId, mediaId: mediaId, autoPlay: autoPlay).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["Player"] as? String).to(equal(player))
                 expect(json["Version"] as? String).to(equal(version))
-                expect(json["Revision"] as? String).to(equal(revision))
+                expect(json["ExposureVersion"] as? String).to(equal(exposureVersion))
                 expect(json["AutoPlay"] as? Bool).to(equal(autoPlay))
                 expect(json["PlayMode"] as? String).to(equal("vod"))
                 expect(json["AssetId"] as? String).to(equal("downloadAsset"))

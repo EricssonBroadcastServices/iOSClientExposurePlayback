@@ -13,6 +13,7 @@
 #### Changes
 * Standalone networking
 * `HeartbeatsProvider` as a closure instead of a protocol
+* `EMP-11047` Clarifies error events delivered to analytics by including error `Domain` in the dispatc
 
 #### Bugfixes
 * Heartbeats report offset based on stream type
