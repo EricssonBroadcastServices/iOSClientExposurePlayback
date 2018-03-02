@@ -49,14 +49,14 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                                 let program = Program
                                     .validJson(programId: "program2", channelId: "channelId", assetId: "asset0")
                                     .timestamp(starting: currentDate + hour / 2, ending: currentDate+2*hour)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                         }
@@ -111,7 +111,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
@@ -174,14 +174,14 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
                                 let program = Program
                                     .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_err_val")
                                     .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                         }
@@ -240,7 +240,7 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
@@ -303,14 +303,14 @@ class DynamicProgramSourceSeekToLiveSpec: QuickSpec {
                                 let program = Program
                                     .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
                                 let program = Program
                                     .validJson(programId: "program2", channelId: "channelId", assetId: "asset2_not_entitled")
                                     .timestamp(starting: currentDate+hour/2, ending: currentDate+hour)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                         }

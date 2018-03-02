@@ -137,11 +137,14 @@ extension ProgramService {
         if candidates.count == 1 {
             guard let end = candidates.first?.endDate?.millisecondsSince1970, end != timestamp else {
                 // If the only program available also has an end time equal to the requested timestamp, the program is considered over.
+                print("requestedProgram only candidate",candidates.first?.programId,timestamp,candidates.first?.endDate?.millisecondsSince1970)
                 return nil
             }
+            print("requestedProgram only candidate",candidates.first?.programId,timestamp,end)
             return candidates.first
         }
         else {
+            print("requestedProgram multi candidates",candidates.last?.programId,timestamp,candidates.last?.endDate?.millisecondsSince1970)
             return candidates.last
         }
     }
@@ -158,8 +161,6 @@ extension ProgramService {
             
             if let programs = newPrograms, let program = self.requestedProgram(for: timestamp, fromCandidates: programs) {
                 callback(program, nil)
-                
-                
             }
             else {
                 /// Validation on program level requires the channel has Epg attached.
@@ -220,7 +221,7 @@ extension ProgramService {
     }
     
     internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping (Program?) -> Void) {
-        print("isEntitled toPlay")
+        print("isEntitled toPlay",timestamp)
         if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
@@ -230,7 +231,7 @@ extension ProgramService {
         }
         
         fetchProgram(timestamp: timestamp) { [weak self] program, warning in
-            print("isEntitled toPlay fetchProgram")
+            print("isEntitled toPlay fetchProgram",program?.programId,warning?.message)
             // There was an error fetching the program. Be permissive and allow playback
             if let warning = warning {
                 DispatchQueue.main.async { [weak self] in
