@@ -136,8 +136,12 @@ For more information regarding track selection, please see [Player module](https
 
 * `.beginning` Playback starts from the beginning of the currently live program
 * `.bookmark` Playback starts from the bookmarked position if available and fallbacks to `.defaultBehavior`
-* `.customPosition(position:)` Playback starts from the specified buffer position. Will ignore positions outside the `seekableRange`.
-* `.customTime(time:)` Playback starts from the specified *unix timestamp*. Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
+* `.customPosition(position:)` Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange`.
+* `.customTime(time:)` Playback starts from the specified *unix timestamp* (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
+
+```Swift
+let properties = PlaybackProperties(playFrom: .bookmark)
+```
 
 The `.defaultBehavior` varies according to stream type:
 

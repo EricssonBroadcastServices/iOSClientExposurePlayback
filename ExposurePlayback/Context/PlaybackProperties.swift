@@ -59,10 +59,10 @@ public struct PlaybackProperties {
         /// Use *EMP* bookmarking functionality as returned in `PlaybackEntitlement`
         case bookmark
         
-        /// Specify a custom 0 based offset.
+        /// Specify a custom 0 based offset. (in milliseconds)
         case customPosition(position: Int64)
         
-        /// Specify a custom  *wallclock unix time stamp* offset
+        /// Specify a custom  *wallclock unix time stamp* offset (in milliseconds)
         case customTime(timestamp: Int64)
     }
     
