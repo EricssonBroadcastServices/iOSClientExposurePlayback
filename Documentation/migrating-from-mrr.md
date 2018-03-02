@@ -43,7 +43,7 @@ One major goal has been to decouple the playback *api* from the underlying playb
 
 Restrictions on `PlaybackTech` has been kept vague by design. The contract between `Player`, the `PlaybackTech`, the `MediaContext` and associated features should largely be defined by their interaction as a complete package. As such, *tech developers* are free to make choices that feel relevant to their platform.
 
-The `PlaybackTech` protocol should be considered a *container* for features related to rendering the media on screen. `HLSNative` provides a baseline implementation which may serve as a guide for this approach.
+The `PlaybackTech` protocol should be considered as a *container* for features related to rendering the media on screen. `HLSNative` provides a baseline implementation which may serve as a guide for this approach.
 
 ### Context Sensitive Playback
 A second cornerstone is a *Context Sensitive* playback. `MediaContext` should encapsulate everything related to the playback context in question, such as source url, content restrictions, `Drm Agent`s and related meta data. This kind of information is often very platform dependant and specialized.
@@ -141,9 +141,9 @@ player.startPlayback(playable: channelPlayable)
 ### Playback Configuration
 Since playback in the *MRR-MC* based library is tightly coupled with the request proceedure through a similar *semi opaque* scheme linking authentication and entitlements, client developers risk a a host of configuration issues when atempting to prepare and manage *playback*.
 
-`EmpClient` references the *current* entitlement. Configuring the `EmpManager` for playback seemingly does not reqire this entitlement but this is actuly wrong. `EmpManager` expects a `ConfigData` object which in turn should be configured, normally through the *Exposure* returned entitlement. In addition, while this config object has been supplied setting up playback, several situations during the manager's lifecycle will retrieve data from the `ImcPlayBackArguments` related to `EmpClient`.
+`EmpClient` references the *current* entitlement. Configuring the `EmpManager` for playback seemingly does not require this entitlement but this is actually wrong. `EmpManager` expects a `ConfigData` object which in turn should be configured, normally through the *Exposure* returned entitlement. In addition, while this config object has been supplied setting up playback, several situations during the manager's lifecycle will retrieve data from the `ImcPlayBackArguments` related to `EmpClient`.
 
-This duality in data dependence makes the entire structure unclear and prone to user error.
+This duality in data dependency makes the entire structure unclear and prone to user error.
 
 ```Objective-c
 ConfigData *configData = [[ConfigData alloc] init];
