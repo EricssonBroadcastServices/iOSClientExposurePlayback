@@ -205,7 +205,7 @@ let entitlement = player.context.entitlement
 
 Another option is to register for the `onEntitlementResponse` callback which will fire every time a new entitlement is recieved.
 
-Three `PlaybackEntitlement` propertoes are of special interest
+Three `PlaybackEntitlement` properties are of special interest
 
 * `ffEnabled` specifies if fast-forwarding is enabled
 * `rqwEnabled` specifies if rewinding is enabled
