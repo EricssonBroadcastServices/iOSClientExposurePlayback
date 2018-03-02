@@ -1,7 +1,7 @@
 ## Live and Catchup Playback
 
 ### Epg and Content Presentation
-The `Exposure` module provides metadata integration with *EMP Exposure layer* for quick and typesafe content access.
+The [`Exposure` module](https://github.com/EricssonBroadcastServices/iOSClientExposure) provides metadata integration with *EMP Exposure layer* for quick and typesafe content access.
 
 Listing all available *channels* can be done by calling
 
@@ -12,8 +12,9 @@ FetchAsset(environment: environment)
     .filter(on: "TV_CHANNEL")
     .sort(on: ["assetId","originalTitle"])
     .request()
-    .response{ [weak self] in
-    if let assetList = $0.value {
+    .validate()
+    .response{
+        if let assetList = $0.value {
             // Present a list of channels
         }
     }
@@ -30,6 +31,7 @@ FetchEpg(environment: environment)
     .show(page: 1, spanning: 100)
     .filter(starting: current.subtract(days: 1), ending: current.add(days: 1) ?? current)
     .request()
+    .validate()
     .response{
         if let channelEpg = $0.value {
             // Present the EPG
@@ -47,7 +49,7 @@ Or listen to the `onProgramChanged` event.
 
 ```Swift
 player.onProgramChanged { player, source, program in
-    // Update userfacing program information
+    // Update user facing program information
 }
 ```
 
@@ -91,7 +93,7 @@ Playback of a program makes no distinction between a currently live program or a
 
 
 ### Custom Playback Properties
-Client applications can apply custom options to any playback start when the default options needs to be tweaked.
+Client applications can apply custom options to any playback request when the default options needs to be tweaked.
 
 Scenarios include enabling `autoplay` mode, `maximum bitrate` restrictions, `language preferences` and `start time` offset.
 
@@ -129,7 +131,7 @@ Finally, client applications may specify a custom selection for just *subtitles*
 let properties = PlaybackProperties(language: .custom(text: "en", audio: nil))
 ```
 
-For more information regarding track selection, please see [Player module](https://github.com/EricssonBroadcastServices/iOSClientPlayer/blob/master/Documentation/subtitles-and-multi-audio.md)
+For more information regarding track selection, please see [`Player` module](https://github.com/EricssonBroadcastServices/iOSClientPlayer/blob/master/Documentation/subtitles-and-multi-audio.md)
 
 #### Start Time
 `PlaybackProperties` specifies 5 different modes, `PlayFrom`, for defining the playback start position.
@@ -179,6 +181,14 @@ if let programStartTime = player.currentProgram?.startDate?.millisecondsSince197
     player.seek(toTime: programStartTime)
 }
 ```
+
+Seeking 30 seconds back
+
+```Swift
+player.seek(toTime: currentTime - 30 * 1000)
+}
+```
+
 
 All information regarding the currently playing program is encapsulated in the `Program` *struct* accessed through `player.currentProgram`. This data can be used to populate the user interface.
 
