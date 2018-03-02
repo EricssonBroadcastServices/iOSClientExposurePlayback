@@ -109,6 +109,9 @@
 		76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE12021CCC000C23579 /* StartCastingSpec.swift */; };
 		76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE22021CCC000C23579 /* StartedSpec.swift */; };
 		76B2F6A520343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */; };
+		76BCE05E204807B900F1E49C /* live-and-catchup-playback.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */; };
+		76BCE0602048236E00F1E49C /* error-handling-and-warning-messages.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */; };
+		76BCE07320482CE600F1E49C /* migrating-from-mrr.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE07220482CE600F1E49C /* migrating-from-mrr.md */; };
 		76CD5AF0202DA57000941ABC /* AssetPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */; };
 		76CD5AF2202DBD4F00941ABC /* ChannelPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */; };
 		76CD5AF4202DBF2300941ABC /* ProgramPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */; };
@@ -249,6 +252,9 @@
 		76A89DE12021CCC000C23579 /* StartCastingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCastingSpec.swift; sourceTree = "<group>"; };
 		76A89DE22021CCC000C23579 /* StartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartedSpec.swift; sourceTree = "<group>"; };
 		76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+DynamicManifest+SeekToLive.swift"; sourceTree = "<group>"; };
+		76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "live-and-catchup-playback.md"; sourceTree = "<group>"; };
+		76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "error-handling-and-warning-messages.md"; sourceTree = "<group>"; };
+		76BCE07220482CE600F1E49C /* migrating-from-mrr.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "migrating-from-mrr.md"; sourceTree = "<group>"; };
 		76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPlayableSpec.swift; sourceTree = "<group>"; };
 		76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPlayableSpec.swift; sourceTree = "<group>"; };
 		76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramPlayableSpec.swift; sourceTree = "<group>"; };
@@ -390,6 +396,9 @@
 			isa = PBXGroup;
 			children = (
 				76A89C2A20207A1600C23579 /* simple-player.md */,
+				76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */,
+				76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */,
+				76BCE07220482CE600F1E49C /* migrating-from-mrr.md */,
 			);
 			path = Documentation;
 			sourceTree = SOURCE_ROOT;
@@ -676,6 +685,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76BCE0602048236E00F1E49C /* error-handling-and-warning-messages.md in Resources */,
+				76BCE07320482CE600F1E49C /* migrating-from-mrr.md in Resources */,
+				76BCE05E204807B900F1E49C /* live-and-catchup-playback.md in Resources */,
 				76A89C2B20207A1600C23579 /* simple-player.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

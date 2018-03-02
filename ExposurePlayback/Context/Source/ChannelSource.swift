@@ -63,8 +63,7 @@ extension ChannelSource: ContextStartTime {
             // Use *EMP* supplied bookmark
             if let offset = entitlement.lastViewedOffset {
                 if isUnifiedPackager {
-                    // Wallclock timestamp
-                    tech.startOffset(atTime: Int64(offset))
+                    tech.startOffset(atPosition: Int64(offset))
                 }
                 else {
                     // 0 based offset
