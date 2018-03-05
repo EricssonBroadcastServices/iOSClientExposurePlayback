@@ -6,13 +6,11 @@
 * [License](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/LICENSE)
 * [Requirements](#requirements)
 * [Installation](#installation)
-* Usage
-    - [Getting Started](#getting-started)
-    - [Playback through `Player` using `ExposureContext`](#playback-through-player-using-exposurecontext)
-    - [Program Service](#program-service)
-    - [Enabling Analytics](#enabling-analytics)
-    - [Fairplay Integration](#fairplay-integration)
-    - [Error Handling](#error-handling)
+* Documentation
+    - [Simple Player](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/simple-player.md)
+    - [Live and Catchup](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/live-and-catchup-playback.md)
+    - [Error Handling and Warning Messages](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/error-handling-and-warning-messages.md)
+    - [Migrating from MRR](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/migrating-from-mrr.md)
 * [Release Notes](#release-notes)
 * [Upgrade Guides](#upgrade-guides)
 * [Roadmap](#roadmap)
@@ -20,10 +18,11 @@
 
 ## Features
 
-- [x] Playback through *Exposure*
+- [x] Catchup as Live
+- [x] Playback through *ExposureContext*
+- [x] Program Based Stream Navigation
 - [x] Program Service
-- [x] Program based seeking
-- [x] Contract Restrictions
+- [x] Advanced Contract Restrictions
 - [x] Analytics Provider
 
 ## Requirements
@@ -59,72 +58,11 @@ Running `carthage update` will fetch your dependencies and place them in `/Carth
 
 Finally, make sure you add the `.framework`s to your targets *General -> Embedded Binaries* section.
 
-## Usage
-`Exposure` conveys seamless integration with the *EMP Exposure Layer* and enables client applications quick access to functionality such as *authentication*, *entitlement requests* and *EPG*.
-
-### Getting Started
-
-### Playback through `Player` using `ExposureContext`
-`Exposure` module is designed to integrate seamlessly with `Player` enabling a smooth transition between the request phase and the playback phase. Context sensitive playback allows for constrained extensions on the `PlaybackTech` and `MediaContext`, encapsulating all logic for an entitlement request.
-
-*Client Applications* can make use of `ExposureContext` which provides out of the box integration with the *EMP* backend, allowing playback from asset identifiers.
-
-```Swift
-player.startPlayback(channelId: "someEMPLiveChannel")
-```
-
-Using the `Player.startPlayback(channelId:)` method ensures playback will be configured with `Exposure` related functionality. This includes *Fairplay* configuration and *Session Shift* management.
-
-### Program Service
-*EPG*, or the *electronic programming guide*, details previous, current and upcomming programs on a specific channel. Client applications may request *EPG* data through the `FetchEpg` endpoint.
-
-`Exposure` supports fetching *EPG* for a set of channels, either all channels or filtered on `channelId`s.
-
-
-Client applications relying obn `ExposureContext` may also fetch the currently playing `Program` directly from the `player` object.
-
-```Swift
-let nowPlaying = player.currentProgram
-```
-
-Or listen to the `onProgramChanged` event.
-
-```Swift
-player.onProgramChanged { tech, source, program in
-    // Update userfacing program information
-}
-```
-
-### Enabling Analytics
-Client applications can integrate `ExposureAnalytics` out of the box when using `HLSNative` and `ExposureContext` by using the `ExposurePlayback` supplied *convenience init* when creating the `Player` object.
-
-```Swift
-player = Player<HLSNative<ExposureContext>(environment: env,
-sessionToken: token)
-```
-
-This method will prepare the player to dispatch analytics in `env` using `token`.
-
-### Fairplay Integration
-`Exposure` provides out of the box integration for managing *EMP* configured *Fairplay* `DRM` protection. By using the `Player.startPlayback(...)` function to engage playback the framework automatically configures `player` to use an `ExposureStreamFairplayRequester` as its `FairplayRequester`.
-
-### Error Handling
-
-#### Fairplay DRM Errors
-Another major cause of errors is *Fairplay* `DRM` issues, broadly categorized into two types:
-
-* Server related `DRM` errors
-* Application related
-
-Server related issues most likely stem from an invalid or broken backend configuration. Application issues range from parsing errors, unexpected server response or networking issues.
-
-*Fairplay* `DRM` troubleshooting is highly coupled with the specific application and backend implementations and as such hard to generalize. For more information about *Fairplay* debugging, please see Apple's [documentation](https://developer.apple.com/library/content/technotes/tn2454).
-
 ## Release Notes
 Release specific changes can be found in the [CHANGELOG](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/CHANGELOG.md).
 
 ## Upgrade Guides
-The procedure to apply when upgrading from one version to another depends on what solution your client application has chosen to integrate `Exposure`.
+The procedure to apply when upgrading from one version to another depends on what solution your client application has chosen to integrate `ExposurePlayback`.
 
 Major changes between releases will be documented with special [Upgrade Guides](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/UPGRADE_GUIDE.md).
 

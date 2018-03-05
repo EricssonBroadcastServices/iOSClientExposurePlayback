@@ -29,9 +29,16 @@ public struct PlaybackProperties {
     /// Setting a non-zero value will indicate the player should attempt to limit playback to that bitrate. If network bandwidth consumption cannot be lowered to meet the preferredPeakBitRate, it will be reduced as much as possible while continuing to play the item.
     ///
     /// `nil` indicates no restrictions should be applied.
+    ///
+    /// Bitrate should be specified in bits per second
     public let maxBitrate: Int64?
     
-    
+    /// Specifies custom playback options
+    ///
+    /// - parameter autoplay: Should playback start immediately when ready
+    /// - parameter playFrom: Specifies the desired start time behavior.
+    /// - parameter language: Specifies the preferred language
+    /// - parameter maxBitrate: Assigns a preferred max bitrate (in bits per second)
     public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .defaultBehaviour, maxBitrate: Int64? = nil) {
         self.autoplay = autoplay
         self.playFrom = playFrom
@@ -52,10 +59,10 @@ public struct PlaybackProperties {
         /// Use *EMP* bookmarking functionality as returned in `PlaybackEntitlement`
         case bookmark
         
-        /// Specify a custom 0 based offset.
+        /// Specify a custom 0 based offset. (in milliseconds)
         case customPosition(position: Int64)
         
-        /// Specify a custom  *wallclock unix time stamp* offset
+        /// Specify a custom  *wallclock unix time stamp* offset (in milliseconds)
         case customTime(timestamp: Int64)
     }
     

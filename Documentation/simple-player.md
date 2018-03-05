@@ -18,7 +18,13 @@ Authenticate(environment: exposureEnv)
 ```
 
 #### Creation
-`ExposureContext` based `Player`s require an `Environment` and a `SessionToken` to operate. They are provided on *initialisation* together with an *analytics provider* to handle *EMP analytics*. An out of the box implementation of this *provider* can be found in the [`Analytics`](https://github.com/EricssonBroadcastServices/iOSClientAnalytics) module.
+`ExposureContext` based `Player`s require an `Environment` and a `SessionToken` to operate which are provided at *initialisation* through a *convenience initialiser*.
+
+```Swift
+public convenience init(environment: Environment, sessionToken: SessionToken)
+```
+
+This will configure the `Player` for playback using *EMP* functionality.
 
 ```Swift
 import Player
@@ -30,15 +36,13 @@ class SimplePlayerViewController: UIViewController {
 
     @IBOutlet weak var playerView: UIView!
     
-    var exposureAnalytics: ExposureStreamingAnalyticsProvider!
-    
     fileprivate(set) var player: Player<HLSNative<ExposureContext>>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         /// This will configure the player with the `SessionToken` aquired in the specified `Environment`
-        player = Player(environment: environment, sessionToken: sessionToken, analytics: exposureAnalytics)
+        player = Player(environment: environment, sessionToken: sessionToken)
         
         player.configure(playerView: playerView)
     }
@@ -50,17 +54,17 @@ The preparation and loading process can be followed by listening to associated e
 
 ```Swift
 player
-    .onPlaybackCreated{ tech, source in
+    .onPlaybackCreated{ player, source in
         // Fires once the associated MediaSource has been created.
         // Playback is not ready to start at this point.
     }
-    .onPlaybackPrepared{ tech, source in
+    .onPlaybackPrepared{ player, source in
         // Published when the associated MediaSource completed asynchronous loading of relevant properties.
         // Playback is not ready to start at this point.
     }
-    .onPlaybackReady{ tech, source in
+    .onPlaybackReady{ player, source in
         // When this event fires starting playback is possible (playback can optionally be set to autoplay instead)
-        tech.play()
+        player.play()
     }
 ```
 
@@ -68,23 +72,23 @@ Once playback is in progress the `Player` continuously publishes *events* relate
 
 ```Swift
 player
-    .onPlaybackStarted{ tech, source in
+    .onPlaybackStarted{ player, source in
         // Published once the playback starts for the first time.
         // This is a one-time event.
     }
-    .onPlaybackPaused{ [weak self] tech, source in
+    .onPlaybackPaused{ [weak self] player, source in
         // Fires when the playback pauses for some reason
         self?.pausePlayButton.toggle(paused: true)
     }
-    .onPlaybackResumed{ [weak self] tech, source in
+    .onPlaybackResumed{ [weak self] player, source in
         // Fires when the playback resumes from a paused state
         self?.pausePlayButton.toggle(paused: false)
     }
-    .onPlaybackAborted{ tech, source in
+    .onPlaybackAborted{ player, source in
         // Published once the player.stop() method is called.
         // This is considered a user action
     }
-    .onPlaybackCompleted{ tech, source in
+    .onPlaybackCompleted{ player, source in
         // Published when playback reached the end of the current media.
     }
 ```
@@ -92,80 +96,64 @@ Besides playback control events `Player` also publishes several status related e
 
 ```Swift
 player
-    .onProgramChanged { [weak self] tech, source, program in
+    .onProgramChanged { [weak self] player, source, program in
         // Update user facing program information
         self?.updateProgram(with: program)
     }
-    .onBitrateChanged{ [weak self] tech, source, bitrate in
+    .onEntitlementResponse { player, source, entitlement in
+        // Fires when a new entitlement is received, such as after attempting to start playback
+    }
+    .onBitrateChanged{ [weak self] player, source, bitrate in
         // Published whenever the current bitrate changes
         self?.updateQualityIndicator(with: bitrate)
     }
-    .onBufferingStarted{ tech, source in
+    .onBufferingStarted{ player, source in
         // Fires whenever the buffer is unable to keep up with playback
     }
-    .onBufferingStopped{ tech, source in
+    .onBufferingStopped{ player, source in
         // Fires when buffering is no longer needed
     }
-    .onDurationChanged{ tech, source in
+    .onDurationChanged{ player, source in
         // Published when the active media received an update to its duration property
     }
 ```
 
-#### Epg and Content Presentation
-The `Exposure` module provides metadata integration with *EMP Exposure layer* for quick and typesafe content access.
 
-Listing all available *channels* can be done by calling
 
-```Swift
-FetchAsset(environment: environment)
-    .list()
-    .includeUserData(for: sessionToken)
-    .filter(on: .tvChannel)
-    .sort(on: ["assetId","originalTitle"])
-    .request()
-    .response{ [weak self] in
-        if let assetList = $0.value {
-            // Present a list of channels
-        }
-    }
-```
+#### Starting Playback
+Client applications start playback by supplying `Player` with a `Playable`.
 
-Fetching channel associated *Epg* can be done by calling
+In order to play a live channel simply create a `ChannelPlayable` specifying the channelId and pass that as a parameter to the `startPlayback(playable:properties:)` method. This will start the currently live program.
 
 ```Swift
-let current = player.serverTime ?? Date()
-
-FetchEpg(environment: environment)
-    .channel(id: channelId)
-    .show(page: 1, spanning: 100)
-    .filter(starting: current.subtract(days: 1), ending: current.add(days: 1) ?? current)
-    .request()
-    .response{
-        if let channelEpg = $0.value {
-            // Present the EPG
-        }
-    }
+let channelPlayable = ChannelPlayable(assetId: "channelId")
+player.startPlayback(playable: channelPlayable)
 ```
 
-#### Playback Management
-I order to start playback of a channel from the *live edge*, client applications should use the  `ExposureContext` extension on `Player`.
+Optionally, client applications can set specific playback options by specifying them in `PlaybackProperties`. These options include maximum bitrate, autoplay mode, custom start time and language preferences.
 
 ```Swift
-player.startPlayback(channelId: "aChannelId")
+let properties = PlaybackProperties(autoPlay: true,
+                                    playFrom: .bookmark,
+                                    language: .custom(text: "fr", audio: "en"),
+                                    maxBitrate: 300000)
+
+player.startPlayback(playable: channelPlayable, properties: properties)
 ```
 
-Specific programs may be started by supplying a *programId*. This will start the requested program from the last known bookmarked position.
+In a similair manner, specific programs may be started by supplying a `ProgramPlayable` and Vods by supplying an `AssetPlayable`.
 
 ```Swift
-player.startPlayback(channelId: "aChannelId", programId: "aProgramId")
+let programPlayable = ProgramPlayable(assetId: "programId", channelId: "channelId")
+player.startPlayback(playable: programPlayable)
 ```
-
-If the required behaviour is for playback is to start from the begining of the program, `useBookmark: false` shoud be set.
 
 ```Swift
-player.startPlayback(channelId: "aChannelId", programId: "aProgramId", useBookmark: false)
+let assetPlayable = AssetPlayable(assetId: "assetId")
+player.startPlayback(playable: assetPlayable)
 ```
 
+#### Playback Progress
 Playback progress is available in two formats. Playhead position reports the position timestamp using the internal buffer time reference in milliseconds. It is also possible to seek to an offset relative to the current position
 
 ```Swift
@@ -173,26 +161,16 @@ let position = player.playheadPosition
 player.seek(toPosition: position - 30 * 1000)
 ```
 
-For program related playback `playheadTime` reports the offset mapped to the current wallclock time.
+For date-time related streams, `playheadTime` reports the offset mapped to the current wallclock time. This feature is used for live and catchup.
 
 ```Swift
 let position = player.playheadTime
 ```
 
-The wallclock related time interface allows for easy and intiutive program seeking. *Going live* in a catchup or timeshifted scenario is as easy as seeking to the current server time.
+It is possible to seek to a specific timestamp by supplying a unix timestamp in milliseconds.
 
 ```Swift
-if let timeRightNow = player.serverTime {
-    player.seek(toTime: timeRightNow)
-}
+let thirtyMinutes = 30 * 60 * 1000
+let thirtyMinutesAgo = Date().millisecondsSince1970 - thirtyMinutes
+player.seek(toTime: thirtyMinutesAgo)
 ```
-
-Additionally, restarting the currently playing program can be done by calling
-
-```Swift
-if let programStartTime = player.currentProgram?.startDate?.millisecondsSince1970 {
-    player.seek(toTime: programStartTime)
-}
-```
-
-All information regarding the currently playing program is encapsulated in the `Program` *struct* accessed through `player.currentProgram`. This data can be used to populate the user interface.
