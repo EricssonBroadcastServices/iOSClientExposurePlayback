@@ -48,7 +48,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                             let program = Program
                                 .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
                                 .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                .decode(Program.self)
+                                .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                         let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
@@ -90,6 +90,11 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         .onError{ player, source, err in
                             error = err
                     }
+                        .onPlaybackReady{ player, source in
+                            if let avPlayer = player.tech.avPlayer as? MockedAVPlayer {
+                                avPlayer.mockedRate = 1
+                            }
+                    }
                     env.player.startPlayback(playable: playable, properties: properties)
 
                     expect(error).toEventuallyNot(beNil(), timeout: 5)
@@ -104,23 +109,23 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     let env = TestEnv(environment: env, sessionToken: token)
                     env.player.context.isDynamicManifest = { _,_ in return false }
                     env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
-                    
+
                     // Mock the ProgramService
                     env.mockProgramService{ environment, sessionToken, channelId in
                         let provider = MockedProgramProvider()
                         provider.mockedFetchProgram = { _,timestamp,_, callback in
                             if timestamp > currentDate + hour/2 {
                                 let program = Program
-                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset0")
-                                    .timestamp(starting: currentDate + hour / 2, ending: currentDate+hour)
-                                    .decode(Program.self)
+                                    .validJson(programId: "program2", channelId: "channelId", assetId: "asset2")
+                                    .timestamp(starting: currentDate + hour / 2, ending: currentDate+2*hour)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                             else {
                                 let program = Program
-                                    .validJson(programId: "program1", channelId: "channelId", assetId: "asset1")
+                                    .validJson(programId: "SeekToLiveTrigger", channelId: "channelId", assetId: "asset1")
                                     .timestamp(starting: currentDate, ending: currentDate+hour/2)
-                                    .decode(Program.self)
+                                    .decodeWrap(Program.self)
                                 callback(program,nil)
                             }
                         }
@@ -128,7 +133,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         service.provider = provider
                         return service
                     }
-                    
+
                     // Mock the ChannelPlayable used in SeekToLive
                     env.mockSeekToLiveChannelPlayable{ channelId in
                         let provider = MockedChannelEntitlementProvider()
@@ -140,7 +145,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         }
                         return ChannelPlayable(assetId: channelId, entitlementProvider: provider)
                     }
-                    
+
                     // Configure the playable
                     let provider = MockedProgramEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_,_, callback in
@@ -154,27 +159,29 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     }
                     let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
-                    
+
                     // Initiate test
                     env.player
-                        .onEntitlementResponse{ player, source, entitlement in
-                            if entitlement.playSessionId == "SeekToLiveFetchedEntitlement" {
-                                // Fake the playheadTime to match "live point"
-                                let item = player.tech.currentAsset?.playerItem as? MockedAVPlayerItem
-                                item?.mockedCurrentDate = Date(unixEpoch: currentDate + hour * 3/4)
-                            }
-                        }
                         .onProgramChanged { player, source, program in
-                            if source.entitlement.playSessionId == "SeekToLiveTrigger" {
+                            if program?.programId == "SeekToLiveTrigger" {
+                                print("SeekingToLive",program?.programId)
                                 player.seekToLive()
                             }
                         }
+                        .onPlaybackReady{ player, source in
+                            if let avPlayer = player.tech.avPlayer as? MockedAVPlayer {
+                                avPlayer.mockedRate = 1
+                            }
+                            if source.entitlement.playSessionId == "SeekToLiveFetchedEntitlement" {
+                                // Fake the playheadTime to match "live point"
+                                let item = player.tech.currentAsset?.playerItem as? MockedAVPlayerItem
+                                item?.mockedCurrentDate = Date(unixEpoch: currentDate + hour)
+                                print("onEntitlementResponse",currentDate+hour)
+                            }
+                    }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.player.tech.currentSource?.entitlement.playSessionId).toEventually(equal("SeekToLiveFetchedEntitlement"), timeout: 5)
+                    expect(env.player.currentProgram?.programId).toEventually(equal("program2"), timeout: 5)
                 }
             }
         }

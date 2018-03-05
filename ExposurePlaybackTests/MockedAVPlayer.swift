@@ -81,6 +81,7 @@ class MockedAVPlayerItem: AVPlayerItem {
     
     var mockedCurrentDate: Date? = nil
     override func currentDate() -> Date? {
+        print("mockedCurrentDate",mockedCurrentDate?.unixEpoch)
         return mockedCurrentDate
     }
     

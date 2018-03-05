@@ -14,8 +14,8 @@ import Exposure
 class MockedProgramProvider: ProgramProvider {
     public init() { }
     
-    var mockedFetchProgram: (String, Int64, Environment, (Program?, ExposureError?) -> Void) -> Void = { _,_,_,_ in }
-    func fetchProgram(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+    var mockedFetchProgram: (String, Int64, Environment, ([Program]?, ExposureError?) -> Void) -> Void = { _,_,_,_ in }
+    func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void) {
         mockedFetchProgram(channelId, timestamp, environment, callback)
     }
     
@@ -24,3 +24,4 @@ class MockedProgramProvider: ProgramProvider {
         mockedValidate(assetId, environment, sessionToken, callback)
     }
 }
+

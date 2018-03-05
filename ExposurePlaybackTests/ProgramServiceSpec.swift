@@ -42,14 +42,14 @@ class ProgramServiceSpec: QuickSpec {
                             let program = Program
                                 .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerSecondProgram")
                                 .timestamp(starting: currentDate+second, ending: currentDate+hour)
-                                .decode(Program.self)
+                                .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                         else {
                             let program = Program
                                 .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerFirstProgram")
                                 .timestamp(starting: currentDate, ending: currentDate+second)
-                                .decode(Program.self)
+                                .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                     }
@@ -71,26 +71,28 @@ class ProgramServiceSpec: QuickSpec {
                     }
                     service.isPlaying = { return true }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
                 }
 
                 it("Should send message when not entitled") {
                     let channelId = "validationTriggerNotEntitled"
                     let provider = MockedProgramProvider()
+                    var first = true
                     provider.mockedFetchProgram = { _,timestamp,_, callback in
-                        if timestamp > currentDate {
+                        if first {
+                            first = false
                             let program = Program
-                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledSecondProgram")
-                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
-                                .decode(Program.self)
+                                .validJson(programId: "validationTriggerNotEntitledFirstProgram", channelId: channelId, assetId: "validationTriggerNotEntitledFirstProgram")
+                                .timestamp(starting: currentDate, ending: currentDate+second)
+                                .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                         else {
                             let program = Program
-                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledFirstProgram")
-                                .timestamp(starting: currentDate, ending: currentDate+second)
-                                .decode(Program.self)
+                                .validJson(programId: "validationTriggerNotEntitledSecondProgram", channelId: channelId, assetId: "validationTriggerNotEntitledSecondProgram")
+                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
+                                .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                     }
@@ -105,26 +107,22 @@ class ProgramServiceSpec: QuickSpec {
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                     service.provider = provider
 
-                    var first = true
-                    service.currentPlayheadTime = {
-                        if first {
-                            first = false
-                            return currentDate
-                        }
-                        else {
-                            return currentDate + second
-                        }
-                    }
+                    service.currentPlayheadTime = { return currentDate }
+                    
                     service.isPlaying = { return true }
 
+                    service.onProgramChanged = { program in
+                        service.currentPlayheadTime = { return currentDate + hour/2 }
+                    }
                     var notEntitledMessage: String? = nil
                     service.onNotEntitled = { message in
                         notEntitledMessage = message
                     }
-
-                    service.startMonitoring(epgOffset: 0)
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 1)
-                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 2)
+                    service.fuzzyConfiguration.fuzzyFactor = 1000
+                    service.startMonitoring()
+                    
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 5)
+                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
                 }
             }
 
@@ -146,7 +144,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring(epgOffset: 10 * 1000)
+                    service.startMonitoring()
                     expect(warningMessage?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
                 }
 
@@ -167,7 +165,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring(epgOffset: 10 * 1000)
+                    service.startMonitoring()
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
                 }
 
@@ -178,7 +176,7 @@ class ProgramServiceSpec: QuickSpec {
                         let program = Program
                             .validJson(programId: "program1", channelId: channelId, assetId: "errorOnProgramValidation")
                             .timestamp(starting: currentDate, ending: currentDate+second)
-                            .decode(Program.self)
+                            .decodeWrap(Program.self)
                         callback(program,nil)
                     }
                     provider.mockedValidate = { _,_,_, callback in
@@ -195,7 +193,8 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
+                    service.isEntitled(toPlay: currentDate) { _ in }
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
             }
@@ -208,7 +207,7 @@ class ProgramServiceSpec: QuickSpec {
                         let program = Program
                             .validJson(programId: "program1", channelId: channelId, assetId: "timestampWithinActiveProgram")
                             .timestamp(starting: currentDate - hour, ending: currentDate+second)
-                            .decode(Program.self)
+                            .decodeWrap(Program.self)
                         callback(program,nil)
                     }
                     provider.mockedValidate = { _,_,_, callback in
@@ -216,7 +215,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                     service.provider = provider
-                    
+
                     service.currentPlayheadTime = { return currentDate }
                     service.isPlaying = { return true }
 
@@ -233,9 +232,9 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring(epgOffset: 0)
+                    service.startMonitoring()
 
-                    
+
                     var successCalled = false
                     service.isEntitled(toPlay: currentDate) { program in
                         service.isEntitled(toPlay: currentDate) { program in
@@ -258,7 +257,7 @@ class ProgramServiceSpec: QuickSpec {
                     let program = Program
                         .validJson(programId: "program1", channelId: channelId, assetId: "isEntitledNotEntitled")
                         .timestamp(starting: currentDate, ending: currentDate+second)
-                        .decode(Program.self)
+                        .decodeWrap(Program.self)
                     callback(program,nil)
                 }
                 provider.mockedValidate = { _,_,_, callback in
@@ -275,7 +274,7 @@ class ProgramServiceSpec: QuickSpec {
                     notEntitledMessage = message
                 }
 
-                service.startMonitoring(epgOffset: 10 * 1000)
+                service.startMonitoring()
 
                 var successCalled = false
                 service.isEntitled(toPlay: currentDate) { program in

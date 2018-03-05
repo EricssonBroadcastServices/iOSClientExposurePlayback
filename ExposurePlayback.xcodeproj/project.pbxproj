@@ -21,6 +21,8 @@
 		7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */; };
 		7636CAA52032E61500F914D1 /* TestEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA42032E61500F914D1 /* TestEnv.swift */; };
 		7636CAA72032E63E00F914D1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA62032E63E00F914D1 /* Date+Extensions.swift */; };
+		76458ABD204D3212002AB3FB /* SeekToLiveMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */; };
+		76458ABF204D441F002AB3FB /* SeekToTimeMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */; };
 		765EAF82203F322F00DD6C94 /* BitrateRestrictionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */; };
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
 		766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */; };
@@ -151,6 +153,8 @@
 		7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedProgramProvider.swift; sourceTree = "<group>"; };
 		7636CAA42032E61500F914D1 /* TestEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnv.swift; sourceTree = "<group>"; };
 		7636CAA62032E63E00F914D1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToLiveMock.swift; sourceTree = "<group>"; };
+		76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToTimeMock.swift; sourceTree = "<group>"; };
 		765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitrateRestrictionsSpec.swift; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
 		766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
@@ -358,6 +362,8 @@
 				76A89D0520209E7400C23579 /* StartTime */,
 				76A89C0B202072D100C23579 /* Info.plist */,
 				76A89D0320209A2700C23579 /* JsonDecoding.swift */,
+				76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */,
+				76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */,
 				765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */,
 				7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */,
 				76D5C9DD20304C1E0056BFF8 /* MockedAVPlayer.swift */,
@@ -786,6 +792,7 @@
 				7636CAA72032E63E00F914D1 /* Date+Extensions.swift in Sources */,
 				76A89DF32021CCC000C23579 /* InitCompletedSpec.swift in Sources */,
 				76CD5AF2202DBD4F00941ABC /* ChannelPlayableSpec.swift in Sources */,
+				76458ABD204D3212002AB3FB /* SeekToLiveMock.swift in Sources */,
 				76A89DF12021CCC000C23579 /* HandshakeStartedSpec.swift in Sources */,
 				76A89DF62021CCC000C23579 /* ProgramChangedSpec.swift in Sources */,
 				76D5C9E020304EBA0056BFF8 /* PlaybackEntitlement+Extensions.swift in Sources */,
@@ -801,6 +808,7 @@
 				76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */,
 				76A89DE62021CCC000C23579 /* BufferingStoppedSpec.swift in Sources */,
 				76A89DE72021CCC000C23579 /* CompletedSpec.swift in Sources */,
+				76458ABF204D441F002AB3FB /* SeekToTimeMock.swift in Sources */,
 				76A89D0B20209E7400C23579 /* ProgramSource+StartTime.swift in Sources */,
 				7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */,
 				76A89DF82021CCC000C23579 /* ScrubbedToSpec.swift in Sources */,
