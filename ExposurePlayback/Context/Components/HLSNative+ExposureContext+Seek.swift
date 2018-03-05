@@ -42,6 +42,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
             tech.eventDispatcher.onWarning(tech, source, warning)
+            source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
             return
         }
         
@@ -65,6 +66,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
             tech.eventDispatcher.onWarning(tech, source, warning)
+            source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
             return
         }
         
@@ -92,12 +94,18 @@ extension Player where Tech == HLSNative<ExposureContext> {
                     let warning = ExposureContext.Warning.programService(reason: .fetchingCurrentProgramFailed(timestamp: timestamp, channelId: programService.channelId, error: error))
                     let contextWarning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: warning)
                     self.tech.eventDispatcher.onWarning(self.tech, self.tech.currentSource, contextWarning)
+                    if let source = self.tech.currentSource {
+                        source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: contextWarning)
+                    }
                 }
                 else {
                     // Gap in EPG, ignoring the seek
                     let warning = ExposureContext.Warning.programService(reason: .gapInEpg(timestamp: timestamp, channelId: programService.channelId))
                     let contextWarning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: warning)
                     self.tech.eventDispatcher.onWarning(self.tech, self.tech.currentSource, contextWarning)
+                    if let source = self.tech.currentSource {
+                        source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: contextWarning)
+                    }
                 }
                 return
             }
@@ -120,12 +128,18 @@ extension Player where Tech == HLSNative<ExposureContext> {
         guard !ranges.isEmpty, let first = ranges.first?.start.milliseconds, let last = ranges.last?.end.milliseconds else {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
             tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
+            if let source = self.tech.currentSource {
+                source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: warning)
+            }
             return
         }
         
         if ranges.count > 1 {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
             tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
+            if let source = self.tech.currentSource {
+                source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: warning)
+            }
         }
         
         if timestamp < first {

@@ -19,12 +19,18 @@ extension ContextGoLive {
         guard !ranges.isEmpty, let last = ranges.last?.end.milliseconds else {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
             player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            if let source = player.tech.currentSource {
+                source.analyticsConnector.onWarning(tech: player.tech, source: source, warning: warning)
+            }
             return
         }
         
         if ranges.count > 1 {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
             player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            if let source = player.tech.currentSource {
+                source.analyticsConnector.onWarning(tech: player.tech, source: source, warning: warning)
+            }
         }
         
         if let programService = player.context.programService {

@@ -161,6 +161,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             guard let `self` = self else { return }
             let contextWarning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning.programService(reason: warning))
             self.tech.eventDispatcher.onWarning(self.tech, source, contextWarning)
+            source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: contextWarning)
         }
     }
 }

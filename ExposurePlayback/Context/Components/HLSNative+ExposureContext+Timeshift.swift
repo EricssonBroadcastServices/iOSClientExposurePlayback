@@ -17,6 +17,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         guard pauseDisabled == nil else {
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: pauseDisabled!)
             tech.eventDispatcher.onWarning(tech, source, warning)
+            source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: warning)
             return
         }
         tech.pause()

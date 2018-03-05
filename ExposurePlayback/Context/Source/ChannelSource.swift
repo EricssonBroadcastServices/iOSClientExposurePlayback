@@ -31,6 +31,8 @@ extension ChannelSource: ContextTimeSeekable {
             else {
                 let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
                 player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+                guard let `self` = self else { return }
+                self.analyticsConnector.onWarning(tech: player.tech, source: self, warning: warning)
             }
         }
     }
