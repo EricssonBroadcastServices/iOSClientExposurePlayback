@@ -18,6 +18,9 @@ class TestEnv {
         case generalError
     }
     
+    var error: PlayerError<HLSNative<ExposureContext>,ExposureContext>?
+    var warning: PlayerWarning<HLSNative<ExposureContext>,ExposureContext>?
+    
     let environment: Environment
     let sessionToken: SessionToken
     let player: Player<HLSNative<ExposureContext>>
