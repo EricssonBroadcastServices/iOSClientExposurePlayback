@@ -180,9 +180,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                             }
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
-
-
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    
                     expect(env.player.currentProgram?.programId).toEventually(equal("program2"), timeout: 5)
                 }
             }
