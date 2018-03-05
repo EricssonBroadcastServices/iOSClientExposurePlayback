@@ -78,18 +78,20 @@ class ProgramServiceSpec: QuickSpec {
                 it("Should send message when not entitled") {
                     let channelId = "validationTriggerNotEntitled"
                     let provider = MockedProgramProvider()
+                    var first = true
                     provider.mockedFetchProgram = { _,timestamp,_, callback in
-                        if timestamp > currentDate {
+                        if first {
+                            first = false
                             let program = Program
-                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledSecondProgram")
-                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
+                                .validJson(programId: "validationTriggerNotEntitledFirstProgram", channelId: channelId, assetId: "validationTriggerNotEntitledFirstProgram")
+                                .timestamp(starting: currentDate, ending: currentDate+second)
                                 .decodeWrap(Program.self)
                             callback(program,nil)
                         }
                         else {
                             let program = Program
-                                .validJson(programId: "program1", channelId: channelId, assetId: "validationTriggerNotEntitledFirstProgram")
-                                .timestamp(starting: currentDate, ending: currentDate+second)
+                                .validJson(programId: "validationTriggerNotEntitledSecondProgram", channelId: channelId, assetId: "validationTriggerNotEntitledSecondProgram")
+                                .timestamp(starting: currentDate+second, ending: currentDate+hour)
                                 .decodeWrap(Program.self)
                             callback(program,nil)
                         }
@@ -105,26 +107,22 @@ class ProgramServiceSpec: QuickSpec {
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                     service.provider = provider
 
-                    var first = true
-                    service.currentPlayheadTime = {
-                        if first {
-                            first = false
-                            return currentDate
-                        }
-                        else {
-                            return currentDate + second
-                        }
-                    }
+                    service.currentPlayheadTime = { return currentDate }
+                    
                     service.isPlaying = { return true }
 
+                    service.onProgramChanged = { program in
+                        service.currentPlayheadTime = { return currentDate + hour/2 }
+                    }
                     var notEntitledMessage: String? = nil
                     service.onNotEntitled = { message in
                         notEntitledMessage = message
                     }
-
+                    service.fuzzyConfiguration.fuzzyFactor = 1000
                     service.startMonitoring()
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 1)
-                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 2)
+                    
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 5)
+                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
                 }
             }
 
@@ -196,6 +194,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring()
+                    service.isEntitled(toPlay: currentDate) { _ in }
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
             }
@@ -216,7 +215,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
                     let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
                     service.provider = provider
-                    
+
                     service.currentPlayheadTime = { return currentDate }
                     service.isPlaying = { return true }
 
@@ -235,7 +234,7 @@ class ProgramServiceSpec: QuickSpec {
 
                     service.startMonitoring()
 
-                    
+
                     var successCalled = false
                     service.isEntitled(toPlay: currentDate) { program in
                         service.isEntitled(toPlay: currentDate) { program in

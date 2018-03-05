@@ -36,6 +36,7 @@ class SeekToTimeMock {
                 callback(program,nil)
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -88,6 +89,7 @@ class SeekToTimeMock {
                 callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -132,6 +134,7 @@ class SeekToTimeMock {
             }
             
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -186,6 +189,7 @@ class SeekToTimeMock {
                 callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 401, message: "SOME_ERROR")))
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -235,6 +239,7 @@ class SeekToTimeMock {
                 }
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -293,6 +298,7 @@ class SeekToTimeMock {
                 }
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -349,6 +355,7 @@ class SeekToTimeMock {
                 callback(program,nil)
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -397,6 +404,7 @@ class SeekToTimeMock {
             }
             
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -443,6 +451,7 @@ class SeekToTimeMock {
                 }
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -492,6 +501,7 @@ class SeekToTimeMock {
                 }
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -552,6 +562,8 @@ class SeekToTimeMock {
                 }
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }
@@ -605,6 +617,7 @@ class SeekToTimeMock {
                 callback(program,nil)
             }
             let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
         }

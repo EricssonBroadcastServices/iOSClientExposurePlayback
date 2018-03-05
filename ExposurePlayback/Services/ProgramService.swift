@@ -137,7 +137,7 @@ extension ProgramService {
         if candidates.count == 1 {
             guard let end = candidates.first?.endDate?.millisecondsSince1970, end != timestamp else {
                 // If the only program available also has an end time equal to the requested timestamp, the program is considered over.
-                print("requestedProgram only candidate",candidates.first?.programId,timestamp,candidates.first?.endDate?.millisecondsSince1970)
+                print("requestedProgram only candidate same end!",candidates.first?.programId,timestamp,candidates.first?.endDate?.millisecondsSince1970)
                 return nil
             }
             print("requestedProgram only candidate",candidates.first?.programId,timestamp,end)
