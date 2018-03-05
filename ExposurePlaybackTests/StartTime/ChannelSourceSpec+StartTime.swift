@@ -159,8 +159,8 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
                         source.handleStartTime(for: tech, in: exposureContext)
                         
-                        expect(tech.startTime).to(equal(100))
-                        expect(tech.startPosition).to(beNil())
+                        expect(tech.startTime).to(beNil())
+                        expect(tech.startPosition).to(equal(100))
                     }
                     
                     it("should use default behavior with lastViewedTime specified") {
