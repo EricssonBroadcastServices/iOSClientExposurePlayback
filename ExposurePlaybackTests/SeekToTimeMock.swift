@@ -573,7 +573,7 @@ class SeekToTimeMock {
             let provider = MockedProgramEntitlementProvider()
             provider.mockedRequestEntitlement = { _,_,_,_, callback in
                 var json = PlaybackEntitlement.requiedJson
-                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                json["mediaLocator"] = "file://play/.isml"
                 json["playToken"] = "ProgramSevicedFetchedEntitlement"
                 json["ffEnabled"] = false
                 json["rwEnabled"] = false

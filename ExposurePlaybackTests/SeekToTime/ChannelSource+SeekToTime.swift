@@ -35,7 +35,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -64,7 +64,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -88,7 +88,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -115,7 +115,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -141,7 +141,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -167,7 +167,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -200,7 +200,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -230,7 +230,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -267,7 +267,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -293,7 +293,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -321,7 +321,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["rwEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -345,7 +345,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedChannelEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
@@ -375,7 +375,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
@@ -401,7 +401,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false

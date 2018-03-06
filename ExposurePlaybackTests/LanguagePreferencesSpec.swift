@@ -63,7 +63,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -106,7 +106,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -149,7 +149,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -192,7 +192,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -235,7 +235,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -278,7 +278,7 @@ class LanguagePreferencesSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }

@@ -69,7 +69,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedProgramEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
@@ -139,7 +139,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "SeekToLiveFetchedEntitlement"
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -150,7 +150,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedProgramEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
