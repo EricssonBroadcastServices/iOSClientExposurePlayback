@@ -267,10 +267,10 @@ extension ProgramService {
     }
     
     private func monitoringOffset() -> Int64 {
-        if !started {
-            started = true
-            return 10 * 1000
-        }
+//        if !started {
+//            started = true
+//            return 10 * 1000
+//        }
         return 0
     }
     

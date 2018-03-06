@@ -46,6 +46,20 @@ public struct PlaybackProperties {
         self.maxBitrate = maxBitrate
     }
     
+    /// Specifies custom playback options by using `old` as a base.
+    ///
+    /// - parameter old: The previous properties to base the new ones on.
+    /// - parameter autoplay: Should playback start immediately when ready
+    /// - parameter playFrom: Specifies the desired start time behavior.
+    /// - parameter language: Specifies the preferred language
+    /// - parameter maxBitrate: Assigns a preferred max bitrate (in bits per second)
+    public init(old: PlaybackProperties, autoplay: Bool? = nil, playFrom: PlayFrom? = nil, language: LanguagePreferences? = nil, maxBitrate: Int64? = nil) {
+        self.autoplay = autoplay ?? old.autoplay
+        self.playFrom = playFrom ?? old.playFrom
+        self.language = language ?? old.language
+        self.maxBitrate = maxBitrate ?? old.maxBitrate
+    }
+    
     /// Governs where the playback should start from.
     ///
     /// - note: Please note that specifying `PlayFrom` functionality may override any settings to `StartTime` done through the underlying `Tech`.
