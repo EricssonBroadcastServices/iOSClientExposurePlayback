@@ -67,7 +67,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -131,7 +131,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
                             callback(json.decode(PlaybackEntitlement.self), nil)
                         }
@@ -210,7 +210,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedProgramEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 callback(json.decode(PlaybackEntitlement.self), nil)
                             }
@@ -276,7 +276,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                 let provider = MockedProgramEntitlementProvider()
                                 provider.mockedRequestEntitlement = { _,_,_,_, callback in
                                     var json = PlaybackEntitlement.requiedJson
-                                    json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                    json["mediaLocator"] = "file://play/.isml"
                                     json["playToken"] = "ProgramSevicedFetchedEntitlement"
                                     json["ffEnabled"] = false
                                     json["rwEnabled"] = false
@@ -290,7 +290,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             let provider = MockedProgramEntitlementProvider()
                             provider.mockedRequestEntitlement = { _,_,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
-                                json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                                json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
@@ -352,7 +352,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
@@ -412,7 +412,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         let provider = MockedProgramEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
-                            json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                            json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false

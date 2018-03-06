@@ -35,7 +35,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedChannelEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
@@ -61,7 +61,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedChannelEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
@@ -91,7 +91,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedChannelEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
@@ -115,7 +115,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedChannelEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
@@ -142,7 +142,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let provider = MockedChannelEntitlementProvider()
                     provider.mockedRequestEntitlement = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
-                        json["mediaLocator"] = "http://www.newPipe.com/play/.isml"
+                        json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
