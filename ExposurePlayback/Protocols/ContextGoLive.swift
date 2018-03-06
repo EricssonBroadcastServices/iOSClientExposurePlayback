@@ -33,6 +33,14 @@ extension ContextGoLive {
             }
         }
         
+        if let serverTime = player.serverTime, last > serverTime {
+            /// It is impossible to search beyond the actual live point
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: last, livePoint: serverTime))
+            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            player.tech.currentSource?.analyticsConnector.onWarning(tech: player.tech, source: player.tech.currentSource, warning: warning)
+            return
+        }
+        
         if let programService = player.context.programService {
             programService.isEntitled(toPlay: last) { program in
                 // NOTE: If `callback` is NOT fired:
