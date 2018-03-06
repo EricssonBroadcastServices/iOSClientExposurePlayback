@@ -19,6 +19,7 @@
 * Heartbeats report offset based on stream type
 * `EMP-11029` Forced locale to en_GB for framework dependantn date calculations
 * `EMP-11035` Exposing *FairPlay* errors encountered during the validation process
+* `EMP-11070` Accounted for `AVPlayer` loosing sync between `currentTime()` and `currentDate()` during rapid `seekToLive()` events
 
 ## 0.77.0
 
