@@ -64,9 +64,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             context.onEntitlementResponse(source.entitlement, source)
             
             /// Make sure StartTime is configured if specified by user
-            if let source = source as? ContextStartTime {
-                source.handleStartTime(for: tech, in: context)
-            }
+            tech.startTime(byDelegate: context)
             
             /// Update tech autoplay settings from PlaybackProperties
             tech.autoplay = context.playbackProperties.autoplay

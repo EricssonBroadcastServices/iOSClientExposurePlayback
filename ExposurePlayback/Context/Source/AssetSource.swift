@@ -20,33 +20,43 @@ extension AssetSource: ContextPositionSeekable {
 }
 
 extension AssetSource: ContextStartTime {
-    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
-            defaultStartTime(for: tech, in: context)
+            return defaultStartTime(for: tech, in: context)
         case .beginning:
             // Start from offset 0
-            tech.startOffset(atPosition: 0)
+            return .startPosition(position: 0)
         case .bookmark:
             // Use *EMP* supplied bookmark, else default behaviour (ie nil bookmark)
-            if let offset = entitlement.lastViewedOffset {
-                tech.startOffset(atPosition: Int64(offset))
+            if let offset = entitlement.lastViewedOffset, check(offset: Int64(offset), inRanges: tech.seekableRanges) {
+                return .startPosition(position: Int64(offset))
             }
             else {
-                defaultStartTime(for: tech, in: context)
+                return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
             // Use the custom supplied offset
-            tech.startOffset(atPosition: offset)
+            if check(offset: offset, inRanges: tech.seekableRanges) {
+                return .startPosition(position: offset)
+            }
+            else {
+                return defaultStartTime(for: tech, in: context)
+            }
         case .customTime(timestamp: let offset):
             // Use the custom supplied offset
-            tech.startOffset(atTime: offset)
+            if check(offset: offset, inRanges: tech.seekableTimeRanges) {
+                return .startTime(time: offset)
+            }
+            else {
+                return defaultStartTime(for: tech, in: context)
+            }
         }
     }
     
-    private func defaultStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+    private func defaultStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         // Default is to start from the beginning
-        tech.startOffset(atPosition: nil)
+        return .defaultStartTime
     }
 }
 
@@ -55,3 +65,4 @@ extension AssetSource: HeartbeatsProvider {
         return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadPosition)
     }
 }
+

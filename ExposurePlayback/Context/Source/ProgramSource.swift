@@ -62,57 +62,60 @@ extension ProgramSource: ContextPositionSeekable {
 }
 
 extension ProgramSource: ContextStartTime {
-    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
-            defaultStartTime(for: tech, in: context)
+            return defaultStartTime(for: tech, in: context)
         case .beginning:
             if isUnifiedPackager {
                 // Start from  program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: ExposureSource.segmentLength)
+                return .startPosition(position: ExposureSource.segmentLength)
             }
             else {
                 // Relies on traditional vod manifest
-                tech.startOffset(atPosition: nil)
+                return .defaultStartTime
             }
         case .bookmark:
             // Use *EMP* supplied bookmark
-            if let offset = entitlement.lastViewedOffset {
-                if isUnifiedPackager {
-                    // 0 based offset
-                    tech.startOffset(atPosition: Int64(offset))
-                }
-                else {
-                    // 0 based offset
-                    tech.startOffset(atPosition: Int64(offset))
-                }
+            if let offset = entitlement.lastViewedOffset, check(offset: Int64(offset), inRanges: tech.seekableRanges) {
+                // 0 based offset
+                return .startPosition(position: Int64(offset))
             }
             else {
-                defaultStartTime(for: tech, in: context)
+                return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
-            // Use the custom supplied offset
-            tech.startOffset(atPosition: offset)
+            if check(offset: offset, inRanges: tech.seekableRanges) {
+                return .startPosition(position: offset)
+            }
+            else {
+                return defaultStartTime(for: tech, in: context)
+            }
         case .customTime(timestamp: let offset):
             // Use the custom supplied offset
-            tech.startOffset(atTime: offset)
+            if check(offset: offset, inRanges: tech.seekableTimeRanges) {
+                return .startTime(time: offset)
+            }
+            else {
+                return defaultStartTime(for: tech, in: context)
+            }
         }
     }
     
-    private func defaultStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) {
+    private func defaultStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         if isUnifiedPackager {
             if entitlement.live {
                 // Start from the live edge (relying on live manifest)
-                tech.startOffset(atTime: nil)
+                return .defaultStartTime
             }
             else {
                 // Start from program start (using a t-param with stream start at program start)
-                tech.startOffset(atPosition: ExposureSource.segmentLength)
+                return .startPosition(position: ExposureSource.segmentLength)
             }
         }
         else {
             // Default is to start from program start (relying on traditional vod manifest)
-            tech.startOffset(atPosition: nil)
+            return .defaultStartTime
         }
     }
 }
