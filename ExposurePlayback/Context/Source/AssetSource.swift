@@ -43,14 +43,9 @@ extension AssetSource: ContextStartTime {
             else {
                 return defaultStartTime(for: tech, in: context)
             }
-        case .customTime(timestamp: let offset):
+        case .customTime(timestamp: _):
             // Use the custom supplied offset
-            if check(offset: offset, inRanges: tech.seekableTimeRanges) {
-                return .startTime(time: offset)
-            }
-            else {
-                return defaultStartTime(for: tech, in: context)
-            }
+            return defaultStartTime(for: tech, in: context)
         }
     }
     
