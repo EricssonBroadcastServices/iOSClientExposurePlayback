@@ -440,20 +440,6 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                 }
             }
         }
-        
-        func buildEntitlement(pipe: String = "http://www.example.com/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int? = nil) -> PlaybackEntitlement {
-            var json = PlaybackEntitlement.requiedJson
-            json["mediaLocator"] = pipe
-            
-            if let offset = lastViewedOffset {
-                json["lastViewedOffset"] = offset
-            }
-            
-            if let offset = lastViewedTime {
-                json["lastViewedTime"] = offset
-            }
-            return json.decode(PlaybackEntitlement.self)!
-        }
     }
 }
 
