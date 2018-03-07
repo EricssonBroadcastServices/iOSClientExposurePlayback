@@ -81,3 +81,14 @@ public class ExposureContext: MediaContext {
         print("ExposureContext deinit")
     }
 }
+
+
+extension ExposureContext: StartTimeDelegate {
+    public func startTime<Context>(for source: MediaSource, tech: HLSNative<Context>) -> StartOffset {
+        if let startTimeSource = source as? ContextStartTime, let hls = tech as? HLSNative<ExposureContext> {
+            return startTimeSource.handleStartTime(for: hls, in: self)
+        }
+        return .defaultStartTime
+    }
+}
+

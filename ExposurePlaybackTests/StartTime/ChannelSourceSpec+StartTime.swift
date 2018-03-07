@@ -11,349 +11,434 @@ import Nimble
 import Player
 import Exposure
 
+@testable import Player
 @testable import ExposurePlayback
 
 class ChannelSourceStartTimeSpec: QuickSpec {
     override func spec() {
         super.spec()
         describe("ChannelSource") {
+            let currentDate = Date().unixEpoch
+            let hour: Int64 = 60 * 60 * 1000
             let environment = Environment(baseUrl: "url", customer: "customer", businessUnit: "businessUnit")
             let sessionToken = SessionToken(value: "token")
-            let tech = HLSNative<ExposureContext>()
+            
+            func generateEnv() -> TestEnv {
+                let env = TestEnv(environment: environment, sessionToken: sessionToken)
+                env.player.context.isDynamicManifest = { _,_ in return false }
+                env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour/2))
+                return env
+            }
+            
+            func generatePlayable(pipe: String = "file://play/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int64? = nil) -> ChannelPlayable {
+                // Configure the playable
+                let provider = MockedChannelEntitlementProvider()
+                provider.mockedRequestEntitlement = { _,_,_, callback in
+                    var json = PlaybackEntitlement.requiedJson
+                    json["mediaLocator"] = pipe
+                    if let offset = lastViewedOffset {
+                        json["lastViewedOffset"] = offset
+                    }
+                    if let offset = lastViewedTime {
+                        json["lastViewedTime"] = offset
+                    }
+                    callback(json.decode(PlaybackEntitlement.self), nil)
+                }
+                return ChannelPlayable(assetId: "assetId", entitlementProvider: provider)
+            }
             
             context(".defaultBehaviour") {
+                let properties = PlaybackProperties(playFrom: .defaultBehaviour)
                 context("USP") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .defaultBehaviour)
                     it("should use default behavior with lastViewedOffset specified") {
-                        let entitlement = buildEntitlement(lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with no bookmarks specified") {
-                        let entitlement = buildEntitlement()
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable()
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
                 
                 context("old pipe") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .defaultBehaviour)
                     it("should use default behavior with lastViewedOffset specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with no bookmarks specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe")
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
             }
             
             context(".beginning") {
+                let properties = PlaybackProperties(playFrom: .beginning)
                 let segmentLength: Int64 = 6000
                 context("USP") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
                     it("should start from zero with lastViewedOffset specified") {
-                        let entitlement = buildEntitlement(lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(segmentLength))
                     }
                     
                     it("should start from zero with no bookmarks specified") {
-                        let entitlement = buildEntitlement()
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable()
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(segmentLength))
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(segmentLength))
                     }
                 }
                 
                 context("old pipe") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .beginning)
                     it("should rely on vod manifest to start from 0 with lastViewedOffset specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should rely on vod manifest to start from 0 with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should rely on vod manifest to start from 0 with no bookmarks specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe")
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
             }
             
             context(".bookmark") {
+                let properties = PlaybackProperties(playFrom: .bookmark)
                 context("USP") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .bookmark)
                     it("should pick up lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(100))
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(100))
                     }
                     
                     it("should use default behavior with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with no bookmarks specified") {
-                        let entitlement = buildEntitlement()
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable()
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
                 
                 context("old pipe") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .bookmark)
                     it("should pick up lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(equal(100))
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(100))
                     }
                     
                     it("should use default behavior with lastViewedTime specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: 100)
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use default behavior with no bookmarks specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe")
                         
-                        expect(tech.startTime).to(beNil())
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
             }
             
             context(".customTime") {
+                let lastViewedTime = currentDate + 1000
+                let customOffset = currentDate + 300
+                let illegalOffset = currentDate - 1000
+                let properties = PlaybackProperties(playFrom: .customTime(timestamp: customOffset))
                 context("USP") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customTime(timestamp: 300))
                     it("should use custom value if lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if lastViewedTime specified") {
-                        let entitlement = buildEntitlement(lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: lastViewedTime)
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if no bookmarks specified") {
-                        let entitlement = buildEntitlement()
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable()
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
+                    }
+                    
+                    it("should use default behavior with illegal startTime") {
+                        let properties = PlaybackProperties(playFrom: .customTime(timestamp: illegalOffset))
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: lastViewedTime)
+                        
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
                 
                 context("old pipe") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customTime(timestamp: 300))
                     it("should use custom value if lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedOffset: 100)
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if lastViewedTime specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: lastViewedTime)
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
                     }
                     
                     it("should use custom value if no bookmarks specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe")
                         
-                        expect(tech.startTime).to(equal(300))
-                        expect(tech.startPosition).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(equal(customOffset))
+                        expect(env.player.startPosition).to(beNil())
+                    }
+                    
+                    it("should use default behavior with illegal startTime") {
+                        let properties = PlaybackProperties(playFrom: .customTime(timestamp: illegalOffset))
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: lastViewedTime)
+                        
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(beNil())
                     }
                 }
             }
+            
             context(".customPosition") {
+                let properties = PlaybackProperties(playFrom: .customPosition(position: 300))
                 context("USP") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customPosition(position: 300))
                     it("should use custom value if lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedOffset: 100)
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                     
                     it("should use custom value if lastViewedTime specified") {
-                        let entitlement = buildEntitlement(lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(lastViewedTime: 100)
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                     
                     it("should use custom value if no bookmarks specified") {
-                        let entitlement = buildEntitlement()
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable()
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                 }
                 
                 context("old pipe") {
-                    let exposureContext = ExposureContext(environment: environment, sessionToken: sessionToken)
-                    exposureContext.playbackProperties = PlaybackProperties(playFrom: .customPosition(position: 300))
                     it("should use custom value if lastViewedOffset if specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedOffset: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedOffset: 100)
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                     
                     it("should use custom value if lastViewedTime specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe", lastViewedTime: 100)
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: 100)
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                     
                     it("should use custom value if no bookmarks specified") {
-                        let entitlement = buildEntitlement(pipe: "http://www.old.pipe")
-                        let source = ChannelSource(entitlement: entitlement, assetId: "assetId")
-                        source.handleStartTime(for: tech, in: exposureContext)
+                        let env = generateEnv()
+                        let playable = generatePlayable(pipe: "file://old/pipe")
                         
-                        expect(tech.startPosition).to(equal(300))
-                        expect(tech.startTime).to(beNil())
+                        env.player.startPlayback(playable: playable, properties: properties)
+                        
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
+                        expect(env.player.startTime).to(beNil())
+                        expect(env.player.startPosition).to(equal(300))
                     }
                 }
             }
-        }
-        
-        func buildEntitlement(pipe: String = "http://www.example.com/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int? = nil) -> PlaybackEntitlement {
-            var json = PlaybackEntitlement.requiedJson
-            json["mediaLocator"] = pipe
-            
-            if let offset = lastViewedOffset {
-                json["lastViewedOffset"] = offset
-            }
-            
-            if let offset = lastViewedTime {
-                json["lastViewedTime"] = offset
-            }
-            return json.decode(PlaybackEntitlement.self)!
         }
     }
 }
