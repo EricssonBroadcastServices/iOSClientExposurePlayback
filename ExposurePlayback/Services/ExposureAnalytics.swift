@@ -204,10 +204,11 @@ extension ExposureAnalytics: AnalyticsProvider {
     
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// PlayReady
+        let techVersion = Bundle(for: type(of: tech)).bundleIdentifier ?? "com.emp.Player"
         let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
                                        offsetTime: offsetTime(for: source, using: tech),
                                        tech: String(describing: type(of: tech)),
-                                       techVersion: version(for: Bundle(for: type(of: tech)).bundleIdentifier!))//"com.emp.Player"))
+                                       techVersion: version(for: techVersion))
         dispatcher?.enqueue(event: event)
     }
     
