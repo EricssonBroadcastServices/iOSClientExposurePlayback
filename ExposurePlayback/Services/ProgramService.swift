@@ -101,7 +101,6 @@ public class ProgramService {
     }
     
     deinit {
-        print("ProgramService deinit")
         stopFetchTimer()
         stopProgramChangeTimer()
         stopValidateTimer()
@@ -137,21 +136,17 @@ extension ProgramService {
         if candidates.count == 1 {
             guard let end = candidates.first?.endDate?.millisecondsSince1970, end != timestamp else {
                 // If the only program available also has an end time equal to the requested timestamp, the program is considered over.
-                print("requestedProgram only candidate same end!",candidates.first?.programId,timestamp,candidates.first?.endDate?.millisecondsSince1970)
                 return nil
             }
-            print("requestedProgram only candidate",candidates.first?.programId,timestamp,end)
             return candidates.first
         }
         else {
-            print("requestedProgram multi candidates",candidates.last?.programId,timestamp,candidates.last?.endDate?.millisecondsSince1970)
             return candidates.last
         }
     }
     
     fileprivate func fetchProgram(timestamp: Int64, callback: @escaping (Program?, ExposureContext.Warning.ProgramService?) -> Void) {
         provider.fetchPrograms(on: channelId, timestamp: timestamp, using: environment) { [weak self] newPrograms, error in
-            print("fetchProgram",timestamp, newPrograms?.count)
             guard let `self` = self else { return }
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
@@ -173,7 +168,6 @@ extension ProgramService {
     
     fileprivate func validate(program: Program, callback: @escaping (ExposureContext.Warning.ProgramService?, String?) -> Void) {
         self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken) { [weak self] validation, error in
-            print("validate program")
             guard let `self` = self else { return }
             guard let expirationReason = validation?.status else {
                 // We are permissive on validation errors, allow playback to continue.
@@ -193,13 +187,11 @@ extension ProgramService {
     }
     
     internal func handleProgramChanged(program: Program?) {
-        print("handleProgramChanged",program?.assetId)
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
             let current = self.activeProgram
             self.activeProgram = program
             if current?.programId != program?.programId {
-                print("---> handleProgramChanged",program?.assetId)
                 self.onProgramChanged(program)
             }
         }
@@ -221,7 +213,6 @@ extension ProgramService {
     }
     
     internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping (Program?) -> Void) {
-        print("isEntitled toPlay",timestamp)
         if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
                 startValidationTimer(onTimestamp: timestamp, for: current)
@@ -231,7 +222,6 @@ extension ProgramService {
         }
         
         fetchProgram(timestamp: timestamp) { [weak self] program, warning in
-            print("isEntitled toPlay fetchProgram",program?.programId,warning?.message)
             // There was an error fetching the program. Be permissive and allow playback
             if let warning = warning {
                 DispatchQueue.main.async { [weak self] in
@@ -250,7 +240,6 @@ extension ProgramService {
                             self?.onNotEntitled(notEntitledMessage)
                         }
                         else {
-                            print("isEntitled toPlay validate",program.endDate?.millisecondsSince1970, timestamp)
                             self?.startValidationTimer(onTimestamp: timestamp, for: program)
                             onSuccess(program)
                         }
@@ -267,10 +256,6 @@ extension ProgramService {
     }
     
     private func monitoringOffset() -> Int64 {
-//        if !started {
-//            started = true
-//            return 10 * 1000
-//        }
         return 0
     }
     
@@ -279,7 +264,6 @@ extension ProgramService {
         stopProgramChangeTimer()
         
         guard let timestamp =  currentPlayheadTime() else { return }
-        print("startMonitoring",timestamp)
         provider.fetchPrograms(on: channelId, timestamp: timestamp + monitoringOffset(), using: environment) { [weak self] newPrograms, error in
             guard let `self` = self else { return }
             guard error == nil else {
@@ -306,16 +290,13 @@ extension ProgramService {
         guard isPlaying() else { return }
         
         guard let ending = program.endDate?.millisecondsSince1970 else {
-            print("TODO: Activate retry trigger")
             // TODO: Activate retry trigger
             return
         }
         
-        print("startValidationTimer",timestamp,ending, ending - timestamp)
         guard ending - timestamp > 0 else { return }
         
         let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: ending)
-        print("startValidationTimer",fuzzyOffset.0,fuzzyOffset.1, fuzzyOffset.2)
         stopFetchTimer()
         stopProgramChangeTimer()
         
@@ -323,7 +304,6 @@ extension ProgramService {
         fetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
         fetchTimer?.setEventHandler { [weak self] in
             guard let `self` = self else { return }
-            print("startValidationTimer fetchTimer",fuzzyOffset.0,fuzzyOffset.1, fuzzyOffset.2)
             self.fetchProgram(timestamp: ending) { [weak self] program, warning in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
@@ -331,7 +311,6 @@ extension ProgramService {
                     self.programChangeTimer = DispatchSource.makeTimerSource(queue: self.queue)
                     self.programChangeTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
                     self.programChangeTimer?.setEventHandler { [weak self] in
-                        print("startValidationTimer programChangeTimer",fuzzyOffset.1, fuzzyOffset.2)
                         DispatchQueue.main.async { [weak self] in
                             guard let `self` = self else { return }
                             if let warning = warning {
@@ -346,7 +325,6 @@ extension ProgramService {
                                 self.validateTimer = DispatchSource.makeTimerSource(queue: self.queue)
                                 self.validateTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.2), leeway: .milliseconds(1000))
                                 self.validateTimer?.setEventHandler { [weak self] in
-                                    print("startValidationTimer validateTimer",fuzzyOffset.2)
                                     guard let `self` = self else { return }
                                     self.validate(program: program) { [weak self] warning, notEntitledMessage in
                                         DispatchQueue.main.async { [weak self] in
