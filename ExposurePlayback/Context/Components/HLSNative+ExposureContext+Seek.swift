@@ -13,15 +13,30 @@ import AVFoundation
 
 // MARK: - Playhead Time
 extension Player where Tech == HLSNative<ExposureContext> {
-    
-    public var timeBehindLive: Int64? {
+    /// Indicates the drift from the actual live point as defined by the `ServerTime Wallclock` (milliseconds).
+    ///
+    /// May be `nil` if no server time has been synched or if the seekable ranges are empty.
+    public var liveDelay: Int64? {
         if let last = seekableTimeRanges.last?.end.milliseconds, let serverTime = serverTime {
-            print("timeBehindLive",(serverTime-last)/1000)
             return serverTime-last
         }
-        return 0
+        return nil
     }
     
+    
+    /// Indicates the how far behind the live point playback is.
+    ///
+    /// This is effectively the difference between live point and the playhead.
+    ///
+    /// May be `nil` if seekable ranges are empty or the current playback is not timestamp related.
+    public var timeBehindLive: Int64? {
+        if let last = seekableTimeRanges.last?.end.milliseconds, let playheadTime = playheadTime {
+            return playheadTime-last
+        }
+        return nil
+    }
+    
+    /// Moves the `playheadTime` to the live point and performs the necessary entitlement checks.
     public func seekToLive() {
         guard let source = tech.currentSource else { return }
         if let source = source as? ContextGoLive {

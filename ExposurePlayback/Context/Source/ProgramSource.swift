@@ -32,7 +32,7 @@ extension ProgramSource: ContextTimeSeekable {
                 // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
                 //
                 // Note: `delta` in this aspect is the *time behind live*
-                let delta = player.timeBehindLive ?? 0
+                let delta = player.liveDelay ?? 0
                 if (timeInterval - delta) <= lastTimestamp {
                     self.handleGoLive(player: player, in: context)
                 }
