@@ -11,6 +11,7 @@
 
 #### Changes
 * Forward `.invalidStartTime` warning when custom start time is set through `PlaybackProperties.PlayFrom`
+* Heartbeats that fail to deliver will be exempt from dispatch retry
 
 ## 2.0.78
 
