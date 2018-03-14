@@ -41,6 +41,7 @@ extension AssetSource: ContextStartTime {
                 return .startPosition(position: offset)
             }
             else {
+                triggerInvalidStartTime(offset: offset, ranges: tech.seekableRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
         case .customTime(timestamp: _):
