@@ -311,11 +311,17 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         let env = generateEnv()
                         let playable = generatePlayable(lastViewedTime: lastViewedTime)
                         
+                        env.player.onWarning{ [weak env] player, source, warn in
+                            env?.warning = warn
+                        }
+                        
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
                         expect(env.player.startTime).to(beNil())
                         expect(env.player.startPosition).to(beNil())
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: 5)
                     }
                 }
                 
@@ -358,11 +364,17 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                         let env = generateEnv()
                         let playable = generatePlayable(pipe: "file://old/pipe", lastViewedTime: lastViewedTime)
                         
+                        env.player.onWarning{ [weak env] player, source, warn in
+                            env?.warning = warn
+                        }
+                        
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
                         expect(env.player.startTime).to(beNil())
                         expect(env.player.startPosition).to(beNil())
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: 5)
                     }
                 }
             }
