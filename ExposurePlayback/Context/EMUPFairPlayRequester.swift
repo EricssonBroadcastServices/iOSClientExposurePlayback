@@ -168,8 +168,16 @@ extension EMUPFairPlayRequester {
                     // -42681 The version list supplied to SPC creation is not valid.
                     // -42783 The certificate supplied for SPC is not valid and is possibly revoked.
                     DispatchQueue.main.async{ [weak self] in
-                        self?.keyValidationError = error
-                        resourceLoadingRequest.finishLoading(with: error)
+                        if let nsError = error as? NSError, let underlyingError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError, underlyingError.domain == NSOSStatusErrorDomain {
+                            print("SPC Error:",underlyingError.domain, underlyingError.code, underlyingError.debugDescription)
+                            self?.keyValidationError = underlyingError
+                            resourceLoadingRequest.finishLoading(with: underlyingError)
+                        }
+                        else {
+                            print("SPC Error:",error.localizedDescription)
+                            self?.keyValidationError = error
+                            resourceLoadingRequest.finishLoading(with: error)
+                        }
                     }
                     return
                 }

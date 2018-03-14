@@ -76,6 +76,7 @@ extension ChannelSource: ContextStartTime {
                 return .startPosition(position: offset)
             }
             else {
+                triggerInvalidStartTime(offset: offset, ranges: tech.seekableRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
         case .customTime(timestamp: let offset):
@@ -84,6 +85,7 @@ extension ChannelSource: ContextStartTime {
                 return .startTime(time: offset)
             }
             else {
+                triggerInvalidStartTime(offset: offset, ranges: tech.seekableTimeRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
         }

@@ -19,4 +19,10 @@ extension ContextStartTime {
         let cmTime = CMTime(value: offset, timescale: 1000)
         return ranges.reduce(false) { $0 || $1.containsTime(cmTime) }
     }
+    
+    internal func triggerInvalidStartTime(offset: Int64, ranges: [CMTimeRange], source: ExposureSource, tech: HLSNative<ExposureContext>) {
+        let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.tech(warning: .invalidStartTime(startTime: offset, seekableRanges: tech.seekableRanges))
+        tech.eventDispatcher.onWarning(tech, source, warning)
+        source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
+    }
 }

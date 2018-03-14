@@ -89,6 +89,7 @@ extension ProgramSource: ContextStartTime {
                 return .startPosition(position: offset)
             }
             else {
+                triggerInvalidStartTime(offset: offset, ranges: tech.seekableRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
         case .customTime(timestamp: let offset):
@@ -97,6 +98,7 @@ extension ProgramSource: ContextStartTime {
                 return .startTime(time: offset)
             }
             else {
+                triggerInvalidStartTime(offset: offset, ranges: tech.seekableTimeRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
         }

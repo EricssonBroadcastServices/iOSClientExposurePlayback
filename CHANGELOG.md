@@ -9,6 +9,8 @@
 #### Bugfixes
 * Fixed a crash when attempting to retrieve bundleId.
 
+#### Changes
+* Forward `.invalidStartTime` warning when custom start time is set through `PlaybackProperties.PlayFrom`
 
 ## 2.0.78
 
