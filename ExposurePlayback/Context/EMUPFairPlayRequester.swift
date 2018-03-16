@@ -91,7 +91,9 @@ extension EMUPFairPlayRequester {
     ///
     /// For more information regarding *Fairplay* validation, please see Apple's documentation regarding *Fairplay Streaming*.
     fileprivate func handle(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
-        
+        AVAudioSession.sharedInstance().currentRoute.outputs.forEach{
+            print("Airplay,",$0.portType, $0.portName, $0.uid)
+        }
         guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
             DispatchQueue.main.async { [weak self] in
                 guard let `self` = self else { return }
@@ -121,6 +123,10 @@ extension EMUPFairPlayRequester {
                         
                         DispatchQueue.main.async{ [weak self] in
                             if let ckcError = ckcError {
+                                print("CKC Error",ckcError.code, ckcError.domain, ckcError.message)
+                                if case let .fairplay(reason: reason) = ckcError, case let .contentKeyContextServer(code: code, message: message) = reason {
+                                    
+                                }
                                 self?.keyValidationError = ckcError
                                 resourceLoadingRequest.finishLoading(with: ckcError)
                                 return

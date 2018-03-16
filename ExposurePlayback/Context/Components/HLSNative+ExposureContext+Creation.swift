@@ -31,8 +31,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
         let generator: (Tech.Context.Source?) -> AnalyticsProvider = { _ in return analytics.init(environment: environment, sessionToken: sessionToken) }
         let context = ExposureContext(environment: environment,
                                       sessionToken: sessionToken)
+        let tech = HLSNative<ExposureContext>()
+        tech.airplayHandler = context
         context.analyticsGenerators.append(generator)
-        self.init(tech: HLSNative<ExposureContext>(),
-                  context: context)
+        context.analyticsGenerators.append( { _ in return AnalyticsLogger() } )
+        self.init(tech: tech, context: context)
     }
 }

@@ -126,7 +126,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             }
             
             self.stop()
-            let properties = PlaybackProperties(autoplay: self.context.playbackProperties.autoplay, playFrom: PlaybackProperties.PlayFrom.customTime(timestamp: timestamp))
+            let properties = PlaybackProperties(old: self.context.playbackProperties, playFrom: PlaybackProperties.PlayFrom.customTime(timestamp: timestamp))
             
             /// Generating the playable through the `ExposureContext` instead of directly from the `Program` allows us to inject specialized `ProgramEntitlementProvider`s which will simplify testing.
             let playable = self.context.programPlayableGenerator(program)
