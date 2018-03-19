@@ -66,15 +66,26 @@ public class ExposureAnalytics {
         dispatcher?.terminate()
     }
     
-    /// Tracks if chromecasting was started
-    internal var startedChromeCasting = false
+    /// External playback mode
+    internal enum ExternalPlayback {
+        case none
+        case chromecast
+        case airplay
+    }
+    /// Tracks if external playback was started
+    internal var externalPlayback: ExternalPlayback = .none
     
     /// ProgramChanged events are sent as soon as an Epg has been detected. We should not send `Playback.ProgramChanged` for this initial "onProgramChanged` event since the request was made for that program.
     internal var lastKnownProgramId: String? = nil
     
-    /// Instruct the player is transitioning from local playback to `ChromeCasting`
+    /// Instruct the analytics engine that the player is transitioning from local playback to `ChromeCasting`
     public func startedCasting() {
-        startedChromeCasting = true
+        externalPlayback = .chromecast
+    }
+    
+    /// Instruct the analytics engine that the player is transitioning from local playback to `Airplay`
+    public func startedAirplay() {
+        externalPlayback = .airplay
     }
 }
 
@@ -245,13 +256,16 @@ extension ExposureAnalytics: AnalyticsProvider {
             dispatcher = nil
         }
         
-        if startedChromeCasting {
+        switch externalPlayback {
+        case .airplay:
+            let event = Playback.StartAirplay(timestamp: Date().millisecondsSince1970,
+                                              offsetTime: offsetTime(for: source, using: tech))
+            dispatcher?.enqueue(event: event)
+        case .chromecast:
             let event = Playback.StartCasting(timestamp: Date().millisecondsSince1970,
                                               offsetTime: offsetTime(for: source, using: tech))
-            
             dispatcher?.enqueue(event: event)
-        }
-        else {
+        case .none:
             let event = Playback.Aborted(timestamp: Date().millisecondsSince1970,
                                          offsetTime: offsetTime(for: source, using: tech))
             dispatcher?.enqueue(event: event)

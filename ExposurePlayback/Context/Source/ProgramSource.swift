@@ -77,7 +77,14 @@ extension ProgramSource: ContextStartTime {
             }
         case .bookmark:
             // Use *EMP* supplied bookmark
-            if let offset = entitlement.lastViewedOffset, check(offset: Int64(offset), inRanges: tech.seekableRanges) {
+            guard let offset = entitlement.lastViewedOffset else { return defaultStartTime(for: tech, in: context) }
+            
+            guard !tech.isExternalPlaybackActive else {
+                // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                return .startPosition(position: Int64(offset))
+            }
+            
+            if check(offset: Int64(offset), inRanges: tech.seekableRanges) {
                 // 0 based offset
                 return .startPosition(position: Int64(offset))
             }
@@ -85,6 +92,11 @@ extension ProgramSource: ContextStartTime {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
+            guard !tech.isExternalPlaybackActive else {
+                // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                return .startPosition(position: offset)
+            }
+            
             if check(offset: offset, inRanges: tech.seekableRanges) {
                 return .startPosition(position: offset)
             }
@@ -93,6 +105,11 @@ extension ProgramSource: ContextStartTime {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customTime(timestamp: let offset):
+            guard !tech.isExternalPlaybackActive else {
+                // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                return .startTime(time: offset)
+            }
+            
             // Use the custom supplied offset
             if check(offset: offset, inRanges: tech.seekableTimeRanges) {
                 return .startTime(time: offset)

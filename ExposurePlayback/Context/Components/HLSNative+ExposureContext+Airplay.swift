@@ -20,27 +20,32 @@ extension Player where Tech == HLSNative<ExposureContext> {
 }
 
 extension ExposureContext: AirplayHandler {
-    public func handleAirplay<Tech, Source>(active: Bool, tech: Tech, source: Source?) where Tech : PlaybackTech, Source : MediaSource {
+    public func handleAirplayEvent<Tech, Source>(active: Bool, tech: Tech, source: Source?) where Tech : PlaybackTech, Source : MediaSource {
         guard let tech = tech as? HLSNative<ExposureContext> else { return }
         
+        if active {
+            source?.analyticsConnector.providers.forEach {
+                if let exposureProvider = $0 as? ExposureAnalytics {
+                    exposureProvider.startedAirplay()
+                }
+            }
+        }
+        
+        let position = tech.playheadPosition
+        let playFrom = active ? PlaybackProperties.PlayFrom.customPosition(position: position) : .bookmark
+        let properties = PlaybackProperties(old: playbackProperties, playFrom: playFrom)
+        tech.stop()
+        print("handleAirplayEvent",active,"pos",position,"time", tech.playheadTime)
         if let source = source as? AssetSource {
             let playable = AssetPlayable(assetId: source.assetId)
-            let position = tech.playheadPosition
-            let properties = PlaybackProperties(old: playbackProperties, playFrom: PlaybackProperties.PlayFrom.bookmark)
             startPlayback(playable: playable, properties: properties, tech: tech)
         }
         else if let source = source as? ChannelSource {
             let playable = ChannelPlayable(assetId: source.assetId)
-            let timestamp = tech.playheadTime
-            let playFrom = timestamp != nil ? PlaybackProperties.PlayFrom.customTime(timestamp: timestamp!) : PlaybackProperties.PlayFrom.bookmark
-            let properties = PlaybackProperties(old: playbackProperties, playFrom: PlaybackProperties.PlayFrom.bookmark)
             startPlayback(playable: playable, properties: properties, tech: tech)
         }
         else if let source = source as? ProgramSource {
             let playable = ProgramPlayable(assetId: source.assetId, channelId: source.channelId)
-            let timestamp = tech.playheadTime
-            let playFrom = timestamp != nil ? PlaybackProperties.PlayFrom.customTime(timestamp: timestamp!) : PlaybackProperties.PlayFrom.bookmark
-            let properties = PlaybackProperties(old: playbackProperties, playFrom: PlaybackProperties.PlayFrom.bookmark)
             startPlayback(playable: playable, properties: properties, tech: tech)
         }
     }
