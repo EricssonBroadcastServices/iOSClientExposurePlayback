@@ -59,7 +59,6 @@ extension ContextGoLive {
     }
     
     internal func goToLiveStaticManifest(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        print("goToLiveStaticManifest")
         // Default is to do a channel play call. Easiest
         guard let channelId = context.programService?.channelId else {
             return

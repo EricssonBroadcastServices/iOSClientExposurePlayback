@@ -9,6 +9,7 @@
 import Foundation
 import Player
 import Exposure
+import AVFoundation
 
 extension Player where Tech == HLSNative<ExposureContext> {
     /// Initiates a playback session with the supplied `Playable`
@@ -18,22 +19,23 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter assetId: EMP `Playable` for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
     public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties()) {
-        context.playbackProperties = properties
-        
-        // Generate the analytics providers
-        let providers = context.analyticsProviders(for: nil)
-        
-        // Initial analytics
-        providers.forEach{
-            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
-            }
-        }
-        
-        playable.prepareSource(environment: context.environment, sessionToken: context.sessionToken) { [weak self] source, error in
-            guard let `self` = self else { return }
-            self.handle(source: source, error: error, providers: providers)
-        }
+        context.startPlayback(playable: playable, properties: properties, tech: tech)
+//        context.playbackProperties = properties
+//
+//        // Generate the analytics providers
+//        let providers = context.analyticsProviders(for: nil)
+//
+//        // Initial analytics
+//        providers.forEach{
+//            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+//                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
+//            }
+//        }
+//
+//        playable.prepareSource(environment: context.environment, sessionToken: context.sessionToken) { [weak self] source, error in
+//            guard let `self` = self else { return }
+//            self.handle(source: source, error: error, providers: providers)
+//        }
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -58,19 +60,47 @@ extension Player where Tech == HLSNative<ExposureContext> {
         let playable: Playable = programId != nil ? ProgramPlayable(assetId: programId!, channelId: channelId) : ChannelPlayable(assetId: channelId)
         startPlayback(playable: playable, properties: properties)
     }
+}
+
+extension ExposureContext {
+    /// Initiates a playback session with the supplied `Playable`
+    ///
+    /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
+    ///
+    /// - parameter assetId: EMP `Playable` for which to request playback.
+    /// - parameter properties: Properties specifying additional configuration for the playback
+    /// - parameter tech: Tech to do the playback on
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
+        playbackProperties = properties
+        
+        // Generate the analytics providers
+        let providers = analyticsProviders(for: nil)
+        
+        // Initial analytics
+        providers.forEach{
+            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
+            }
+        }
+        
+        playable.prepareSource(environment: environment, sessionToken: sessionToken) { [weak self, weak tech] source, error in
+            guard let `self` = self, let tech = tech else { return }
+            self.handle(source: source, error: error, providers: providers, tech: tech)
+        }
+    }
     
-    private func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider]) {
+    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>) {
         if let source = source {
-            context.onEntitlementResponse(source.entitlement, source)
+            onEntitlementResponse(source.entitlement, source)
             
             /// Make sure StartTime is configured if specified by user
-            tech.startTime(byDelegate: context)
+            tech.startTime(byDelegate: self)
             
             /// Update tech autoplay settings from PlaybackProperties
-            tech.autoplay = context.playbackProperties.autoplay
+            tech.autoplay = playbackProperties.autoplay
             
             /// Assign language preferences
-            switch context.playbackProperties.language {
+            switch playbackProperties.language {
             case .defaultBehaviour:
                 print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
             case .userLocale:
@@ -85,22 +115,23 @@ extension Player where Tech == HLSNative<ExposureContext> {
             
             /// Create HLS configuration
             let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
-                                                       preferredMaxBitrate: context.playbackProperties.maxBitrate)
-            /// Load tech
-            tech.load(source: source, configuration: configuration) { [weak self] in
-                /// Start ProgramService
-                self?.prepareProgramService(source: source)
-            }
+                                                       preferredMaxBitrate: playbackProperties.maxBitrate)
             
+            /// Load tech
+            tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
+                guard let `self` = self, let tech = tech, let source = source else { return }
+                /// Start ProgramService
+                self.prepareProgramService(source: source, tech: tech)
+            }
             
             source.analyticsConnector.providers = providers
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
                     exposureProvider.onHandshakeStarted(tech: tech, source: source)
-                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak source] in
-                        guard let `self` = self else { return nil }
+                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in
+                        guard let `self` = self, let tech = tech else { return nil }
                         guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }
-                        return heartbeatsProvider.heartbeat(for: self.tech, in: self.context)
+                        return heartbeatsProvider.heartbeat(for: tech, in: self)
                     }
                 }
             }
@@ -108,7 +139,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         
         if let error = error {
             /// Deliver error
-            let contextError = PlayerError<Tech, ExposureContext>.context(error: .exposure(reason: error))
+            let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             let nilSource: ExposureSource? = nil
             providers.forEach{ $0.onError(tech: tech, source: nilSource, error: contextError) }
             tech.stop()
@@ -116,15 +147,15 @@ extension Player where Tech == HLSNative<ExposureContext> {
         }
     }
     
-    private func prepareProgramService(source: ExposureSource) {
+    private func prepareProgramService(source: ExposureSource, tech: HLSNative<ExposureContext>) {
         guard let serviceEnabled = source as? ProgramServiceEnabled else { return }
-        let service = context.programServiceGenerator(context.environment, context.sessionToken, serviceEnabled.programServiceChannelId)
+        let service = programServiceGenerator(environment, sessionToken, serviceEnabled.programServiceChannelId)
         
-        context.programService = service
+        programService = service
         
-        service.currentPlayheadTime = { [weak self] in return self?.playheadTime }
+        service.currentPlayheadTime = { [weak tech] in return tech?.playheadTime }
         
-        service.isPlaying = { [weak self] in return self?.isPlaying ?? false }
+        service.isPlaying = { [weak tech] in return tech?.isPlaying ?? false }
         
         service.playbackRateObserver = tech.observeRateChanges { [weak service] tech, source, rate in
             if tech.isPlaying {
@@ -135,31 +166,31 @@ extension Player where Tech == HLSNative<ExposureContext> {
             }
         }
         
-        service.onProgramChanged = { [weak self] program in
-            guard let `self` = self else { return }
+        service.onProgramChanged = { [weak self, weak tech, weak source] program in
+            guard let `self` = self, let tech = tech, let source = source else { return }
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                    exposureProvider.onProgramChanged(tech: self.tech, source: source, program: program)
+                    exposureProvider.onProgramChanged(tech: tech, source: source, program: program)
                 }
             }
-            self.context.onProgramChanged(program, source)
+            self.onProgramChanged(program, source)
         }
         
-        service.onNotEntitled = { [weak self] message in
-            guard let `self` = self else { return }
+        service.onNotEntitled = { [weak tech, weak source] message in
+            guard let tech = tech, let source = source else { return }
             let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message))
             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             
-            self.tech.eventDispatcher.onError(self.tech, source, contextError)
-            source.analyticsConnector.onError(tech: self.tech, source: source, error: contextError)
-            self.tech.stop()
+            tech.eventDispatcher.onError(tech, source, contextError)
+            source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
+            tech.stop()
         }
         
-        service.onWarning = { [weak self] warning in
-            guard let `self` = self else { return }
+        service.onWarning = { [weak tech, weak source] warning in
+            guard let tech = tech, let source = source else { return }
             let contextWarning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.context(warning: ExposureContext.Warning.programService(reason: warning))
-            self.tech.eventDispatcher.onWarning(self.tech, source, contextWarning)
-            source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: contextWarning)
+            tech.eventDispatcher.onWarning(tech, source, contextWarning)
+            source.analyticsConnector.onWarning(tech: tech, source: source, warning: contextWarning)
         }
     }
 }

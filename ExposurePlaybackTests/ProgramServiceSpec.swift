@@ -222,7 +222,6 @@ class ProgramServiceSpec: QuickSpec {
                     var programs: [Program] = []
                     service.onProgramChanged = { program in
                         if let program = program {
-                            print(program.assetId)
                             programs.append(program)
                         }
                     }

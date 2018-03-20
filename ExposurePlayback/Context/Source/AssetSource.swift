@@ -29,13 +29,25 @@ extension AssetSource: ContextStartTime {
             return .startPosition(position: 0)
         case .bookmark:
             // Use *EMP* supplied bookmark, else default behaviour (ie nil bookmark)
-            if let offset = entitlement.lastViewedOffset, check(offset: Int64(offset), inRanges: tech.seekableRanges) {
+            guard let offset = entitlement.lastViewedOffset else { return defaultStartTime(for: tech, in: context) }
+            
+            guard !tech.isExternalPlaybackActive else {
+                // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                return .startPosition(position: Int64(offset))
+            }
+            
+            if check(offset: Int64(offset), inRanges: tech.seekableRanges) {
                 return .startPosition(position: Int64(offset))
             }
             else {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
+            guard !tech.isExternalPlaybackActive else {
+                // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                return .startPosition(position: offset)
+            }
+            
             // Use the custom supplied offset
             if check(offset: offset, inRanges: tech.seekableRanges) {
                 return .startPosition(position: offset)

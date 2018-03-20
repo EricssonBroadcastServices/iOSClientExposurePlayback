@@ -27,6 +27,8 @@
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
 		766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */; };
 		7686A8C02040281C0002E2B6 /* LanguagePreferencesSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */; };
+		76A29D39205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A29D38205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift */; };
+		76A29D3B205FB6C70047B546 /* StartAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A29D3A205FB6C70047B546 /* StartAirplay.swift */; };
 		76A89C05202072D100C23579 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89BFB202072D100C23579 /* ExposurePlayback.framework */; };
 		76A89C0C202072D100C23579 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 76A89BFE202072D100C23579 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		76A89C2B20207A1600C23579 /* simple-player.md in Resources */ = {isa = PBXBuildFile; fileRef = 76A89C2A20207A1600C23579 /* simple-player.md */; };
@@ -159,6 +161,8 @@
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
 		766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
 		7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePreferencesSpec.swift; sourceTree = "<group>"; };
+		76A29D38205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Airplay.swift"; sourceTree = "<group>"; };
+		76A29D3A205FB6C70047B546 /* StartAirplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAirplay.swift; sourceTree = "<group>"; };
 		76A89BFB202072D100C23579 /* ExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A89BFE202072D100C23579 /* ExposurePlayback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExposurePlayback.h; sourceTree = "<group>"; };
 		76A89BFF202072D100C23579 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -331,9 +335,9 @@
 		76A89BFD202072D100C23579 /* ExposurePlayback */ = {
 			isa = PBXGroup;
 			children = (
-				76A89C172020730B00C23579 /* CHANGELOG.md */,
 				76A89C152020730B00C23579 /* LICENSE */,
 				76A89C162020730B00C23579 /* README.md */,
+				76A89C172020730B00C23579 /* CHANGELOG.md */,
 				76A89C182020730B00C23579 /* UPGRADE_GUIDE.md */,
 				76A89C2920207A1600C23579 /* Documentation */,
 				76A89C1D2020731300C23579 /* fastlane */,
@@ -436,6 +440,7 @@
 				76A89C3320207AB100C23579 /* HLSNative+ExposureContext+Timeshift.swift */,
 				7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */,
 				76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */,
+				76A29D38205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -548,6 +553,7 @@
 				76A89D832020F41F00C23579 /* ScrubbedTo.swift */,
 				76A89D842020F41F00C23579 /* StartCasting.swift */,
 				76A89D852020F41F00C23579 /* Started.swift */,
+				76A29D3A205FB6C70047B546 /* StartAirplay.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -748,6 +754,7 @@
 				76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A89D9B2020F41F00C23579 /* PlaybackOffset.swift in Sources */,
+				76A29D39205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
@@ -771,6 +778,7 @@
 				760200FA2034A56F00EF495D /* EMUPFairPlayRequester.swift in Sources */,
 				76A89D952020F41F00C23579 /* Error.swift in Sources */,
 				76A89DA12020F41F00C23579 /* Started.swift in Sources */,
+				76A29D3B205FB6C70047B546 /* StartAirplay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
