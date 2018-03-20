@@ -11,6 +11,9 @@
 * `EMP-11121` New playcalls are now made for each *Airplay* transition.
 * Added analytics event to signal an *Airplay* session was initiated from local playback.
 
+#### Changes
+* `EMP-11156` Standardized error messages and introduced an `info` variable
+
 ## 2.0.79
 
 #### Bugfixes
