@@ -290,7 +290,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                    offsetTime: offset,
                                    message: error.message,
                                    code: error.code,
-                                   domain: error.domain)
+                                   domain: error.domain,
+                                   info: error.info)
         dispatcher.enqueue(event: event)
         dispatcher.heartbeat(enabled: false)
     }
@@ -306,7 +307,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                           offsetTime: 0,
                                           message: error.message,
                                           code: error.code,
-                                          domain: error.domain)
+                                          domain: error.domain,
+                                          info: error.info)
         
         events.append(errorPayload)
         

@@ -110,6 +110,16 @@ extension ExposureContext.Error {
 }
 
 extension ExposureContext.Error {
+    /// Returns detailed information about the error
+    public var info: String? {
+        switch self {
+        case .fairplay(reason: let reason): return reason.info
+        case .exposure(reason: let error): return error.info
+        }
+    }
+}
+
+extension ExposureContext.Error {
     /// Defines the `domain` specific code for the underlying error.
     public var code: Int {
         switch self {
@@ -132,6 +142,34 @@ extension ExposureContext.Error.FairplayError {
     public var message: String {
         switch self {
         // Application Certificate
+        case .missingApplicationCertificateUrl: return "MISSING_APPLICATION_CERTIFICATE_URL"
+        case .networking(error: ): return "FAIRPLAY_NETWORKING_ERROR"
+        case .applicationCertificateDataFormatInvalid: return "APPLICATION_CERTIFICATE_DATA_FORMAT_INVALID"
+        case .applicationCertificateServer(code: _, message: _): return "APPLICATION_CERTIFICATE_SERVER_ERROR"
+        case .applicationCertificateParsing: return "APPLICATION_CERTIFICATE_PARSING_ERROR"
+        case .invalidContentIdentifier: return "INVALID_CONTENT_IDENTIFIER"
+            
+        // Server Playback Context
+        case .serverPlaybackContext(error: _): return "SERVER_PLAYBACK_CONTEXT_ERROR"
+            
+        // Content Key Context
+        case .missingContentKeyContextUrl: return "MISSING_CONTENT_KEY_CONTEXT_URL"
+        case .missingPlaytoken: return "MISSING_PLAYTOKEN"
+        case .contentKeyContextDataFormatInvalid: return "CONTENT_KEY_CONTEXT_DATA_FORMAT_INVALID"
+        case .contentKeyContextServer(code: _, message: _): return "CONTENT_KEY_CONTEXT_SERVER_ERROR"
+        case .contentKeyContextParsing(error: _): return "CONTENT_KEY_CONTEXT_PARSING_ERROR"
+        case .missingContentKeyContext: return "MISSING_CONTENT_KEY_CONTEXT"
+        case .missingDataRequest: return "MISSING_DATA_REQUEST"
+        case .contentInformationRequestMissing: return "CONTENT_INFORMATION_REQUEST_MISSING"
+        }
+    }
+}
+
+extension ExposureContext.Error.FairplayError {
+    /// Returns detailed information about the error
+    public var info: String? {
+        switch self {
+        // Application Certificate
         case .missingApplicationCertificateUrl: return "Application Certificate Url not found"
         case .networking(error: let error): return "Network error while fetching Application Certificate: \(error.localizedDescription)"
         case .applicationCertificateDataFormatInvalid: return "Certificate Data was not encodable using base64"
@@ -147,7 +185,7 @@ extension ExposureContext.Error.FairplayError {
         case .missingPlaytoken: return "Content Key Context call requires a playtoken"
         case .contentKeyContextDataFormatInvalid: return "Content Key Context was not encodable using base64"
         case .contentKeyContextServer(code: let code, message: let message): return "Content Key Context server returned error: \(code) with message: \(message)"
-        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data \(error?.localizedDescription)"
+        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data \(error?.localizedDescription ?? "")"
         case .missingContentKeyContext: return "Content Key Context missing from response"
         case .missingDataRequest: return "Data Request missing"
         case .contentInformationRequestMissing: return "Unable to set contentType on contentInformationRequest"
