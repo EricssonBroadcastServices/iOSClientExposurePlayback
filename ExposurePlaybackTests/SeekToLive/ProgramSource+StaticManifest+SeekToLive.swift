@@ -164,7 +164,6 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.player
                         .onProgramChanged { player, source, program in
                             if program?.programId == "SeekToLiveTrigger" {
-                                print("SeekingToLive",program?.programId)
                                 player.seekToLive()
                             }
                         }
@@ -176,7 +175,6 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                                 // Fake the playheadTime to match "live point"
                                 let item = player.tech.currentAsset?.playerItem as? MockedAVPlayerItem
                                 item?.mockedCurrentDate = Date(unixEpoch: currentDate + hour)
-                                print("onEntitlementResponse",currentDate+hour)
                             }
                     }
                     env.player.startPlayback(playable: playable, properties: properties)

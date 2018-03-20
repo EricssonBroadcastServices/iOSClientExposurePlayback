@@ -138,7 +138,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 extension Player where Tech == HLSNative<ExposureContext> {
     internal func checkBounds(timestamp: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
-        print("checkBounds")
         let ranges = seekableTimeRanges
         guard !ranges.isEmpty, let first = ranges.first?.start.milliseconds, let last = ranges.last?.end.milliseconds else {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)

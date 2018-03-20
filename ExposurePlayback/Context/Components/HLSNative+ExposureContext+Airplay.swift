@@ -35,7 +35,7 @@ extension ExposureContext: AirplayHandler {
         let playFrom = active ? PlaybackProperties.PlayFrom.customPosition(position: position) : .bookmark
         let properties = PlaybackProperties(old: playbackProperties, playFrom: playFrom)
         tech.stop()
-        print("handleAirplayEvent",active,"pos",position,"time", tech.playheadTime)
+        
         if let source = source as? AssetSource {
             let playable = AssetPlayable(assetId: source.assetId)
             startPlayback(playable: playable, properties: properties, tech: tech)
