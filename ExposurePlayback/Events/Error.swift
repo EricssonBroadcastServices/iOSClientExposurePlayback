@@ -27,12 +27,16 @@ extension Playback {
         /// Error Domain
         internal let domain: String
         
-        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, domain: String) {
+        /// Additional detailed error information
+        internal let info: String?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, domain: String, info: String? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.message = message
             self.code = code
             self.domain = domain
+            self.info = info
         }
     }
 }
@@ -59,6 +63,10 @@ extension Playback.Error: AnalyticsEvent {
             json[JSONKeys.offsetTime.rawValue] = offset
         }
         
+        if let info = info {
+            json[JSONKeys.info.rawValue] = info
+        }
+        
         return json
     }
     
@@ -69,6 +77,7 @@ extension Playback.Error: AnalyticsEvent {
         case message = "Message"
         case code = "Code"
         case domain = "Domain"
+        case info = "Info"
     }
 }
 
