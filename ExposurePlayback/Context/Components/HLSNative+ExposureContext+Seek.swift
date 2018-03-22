@@ -17,6 +17,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// May be `nil` if no server time has been synched or if the seekable ranges are empty.
     public var liveDelay: Int64? {
+        let isDynamicManifest = context.isDynamicManifest(tech, tech.currentSource)
+        guard isDynamicManifest else { return nil }
         if let last = seekableTimeRanges.last?.end.milliseconds, let serverTime = serverTime {
             return serverTime-last
         }
@@ -30,6 +32,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// May be `nil` if seekable ranges are empty or the current playback is not timestamp related.
     public var timeBehindLive: Int64? {
+        let isDynamicManifest = context.isDynamicManifest(tech, tech.currentSource)
+        guard isDynamicManifest else { return nil }
         if let last = seekableTimeRanges.last?.end.milliseconds, let playheadTime = playheadTime {
             return playheadTime-last
         }
