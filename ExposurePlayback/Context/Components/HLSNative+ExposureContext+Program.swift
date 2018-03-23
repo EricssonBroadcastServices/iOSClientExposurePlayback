@@ -12,24 +12,25 @@ import Exposure
 
 // MARK: - Program Data
 extension Player where Tech == HLSNative<ExposureContext> {
+    /// Returns the currently playing program, or `nil` if it is unavailable.
+    ///
+    ///
     public var currentProgram: Program? {
         return context.programService?.currentProgram
     }
     
+    /// Fetches the program associated with the current `playheadTime`.
     public func currentProgram(callback: @escaping (Program?, ExposureError?) -> Void) {
         guard let service = context.programService else {
             callback(nil, nil)
             return
         }
-        context.monotonicTimeService.serverTime{ [weak service] serverTime, error in
-            if let serverTime = serverTime {
-                service?.currentProgram(for: serverTime, callback: callback)
-            }
-            
-            if let error = error {
-                callback(nil, error)
-            }
+        guard let playhead = playheadTime else {
+            callback(nil, nil)
+            return
         }
+        
+        service.currentProgram(for: playhead, callback: callback)
     }
     
     /// Sets the callback to fire once program change triggers
