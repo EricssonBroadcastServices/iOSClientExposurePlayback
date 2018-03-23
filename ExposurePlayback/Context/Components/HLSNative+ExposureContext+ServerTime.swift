@@ -9,8 +9,8 @@
 import Foundation
 import Player
 
-// MARK: - Wallclock Time
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Server Time
     
     /// Returns the cached, *server wallclock timestamp* in unix epoch (milliseconds)
     ///

@@ -9,8 +9,9 @@
 import Foundation
 import Player
 
-// MARK: - Timeshift
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Timeshift
+    
     /// Pause playback if currently active
     ///
     /// - note: Will perform a check against contract restrictions to decide if pausing is allowed or not.

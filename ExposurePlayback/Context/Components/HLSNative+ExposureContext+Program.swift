@@ -10,11 +10,10 @@ import Foundation
 import Player
 import Exposure
 
-// MARK: - Program Data
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Program Information
+    
     /// Returns the currently playing program, or `nil` if it is unavailable.
-    ///
-    ///
     public var currentProgram: Program? {
         return context.programService?.currentProgram
     }
