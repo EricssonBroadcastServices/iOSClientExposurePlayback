@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		760200FA2034A56F00EF495D /* EMUPFairPlayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */; };
+		7608003E2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7608003C2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift */; };
+		7608003F2064EA79007F59D5 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7608003D2064EA79007F59D5 /* SWXMLHash.swift */; };
 		7624D5FA20344BE300CD1835 /* ChannelSource+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */; };
 		7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEBE2029AF94001512BF /* Int64+Extensions.swift */; };
 		7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */; };
@@ -142,6 +144,8 @@
 
 /* Begin PBXFileReference section */
 		760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMUPFairPlayRequester.swift; sourceTree = "<group>"; };
+		7608003C2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
+		7608003D2064EA79007F59D5 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSource+SeekToLive.swift"; sourceTree = "<group>"; };
 		7635AEBE2029AF94001512BF /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
 		7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Entitlements.swift"; sourceTree = "<group>"; };
@@ -303,6 +307,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7608003A2064EA79007F59D5 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				7608003B2064EA79007F59D5 /* SWXMLHash */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		7608003B2064EA79007F59D5 /* SWXMLHash */ = {
+			isa = PBXGroup;
+			children = (
+				7608003C2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift */,
+				7608003D2064EA79007F59D5 /* SWXMLHash.swift */,
+			);
+			path = SWXMLHash;
+			sourceTree = "<group>";
+		};
 		7636CA9F2032E5A000F914D1 /* SeekToTime */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +365,7 @@
 				76A89C27202073D300C23579 /* Cartfile */,
 				76A89BFE202072D100C23579 /* ExposurePlayback.h */,
 				76A89BFF202072D100C23579 /* Info.plist */,
+				7608003A2064EA79007F59D5 /* Dependencies */,
 				76A89D622020F36400C23579 /* Extensions */,
 				76A89C5B20207B2400C23579 /* Protocols */,
 				76A89C2C20207AB100C23579 /* Context */,
@@ -734,6 +756,7 @@
 				76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */,
 				76A89C4A20207AB200C23579 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
 				76A89D8B2020F41F00C23579 /* BufferingStopped.swift in Sources */,
+				7608003F2064EA79007F59D5 /* SWXMLHash.swift in Sources */,
 				76A89C4F20207AB200C23579 /* AssetPlayable.swift in Sources */,
 				76A89C5A20207AB200C23579 /* ServerTimeProvider.swift in Sources */,
 				76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */,
@@ -741,6 +764,7 @@
 				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
 				76A89C5220207AB200C23579 /* PlaybackProperties.swift in Sources */,
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
+				7608003E2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */,
 				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
