@@ -30,7 +30,7 @@ public class ExposureSource: MediaSource {
     /// Entitlement related to this playback request.
     public let entitlement: PlaybackEntitlement
     
-    /// *EMP* assetId
+    /// EMP assetId
     public let assetId: String
     
     internal let fairplayRequester: ExposureFairplayRequester

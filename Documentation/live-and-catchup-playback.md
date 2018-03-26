@@ -136,9 +136,9 @@ For more information regarding track selection, please see [`Player` module](htt
 #### Start Time
 `PlaybackProperties` specifies 5 different modes, `PlayFrom`, for defining the playback start position.
 
-* `.beginning` Playback starts from the beginning of the currently live program
+* `.beginning` Playback starts from the beginning of the program
 * `.bookmark` Playback starts from the bookmarked position if available and fallbacks to `.defaultBehavior`
-* `.customPosition(position:)` Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange`.
+* `.customPosition(position:)` Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
 * `.customTime(time:)` Playback starts from the specified *unix timestamp* (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
 
 ```Swift
