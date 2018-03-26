@@ -80,6 +80,7 @@ public struct PlaybackProperties {
         case customTime(timestamp: Int64)
     }
     
+    /// Guides user selection of preferred languages.
     public enum LanguagePreferences {
         /// Subtitle and audio selection defaults to `Tech` behavior.
         case defaultBehaviour

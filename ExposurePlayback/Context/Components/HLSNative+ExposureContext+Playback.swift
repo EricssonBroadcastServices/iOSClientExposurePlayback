@@ -20,22 +20,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter properties: Properties specifying additional configuration for the playback
     public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties()) {
         context.startPlayback(playable: playable, properties: properties, tech: tech)
-//        context.playbackProperties = properties
-//
-//        // Generate the analytics providers
-//        let providers = context.analyticsProviders(for: nil)
-//
-//        // Initial analytics
-//        providers.forEach{
-//            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-//                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
-//            }
-//        }
-//
-//        playable.prepareSource(environment: context.environment, sessionToken: context.sessionToken) { [weak self] source, error in
-//            guard let `self` = self else { return }
-//            self.handle(source: source, error: error, providers: providers)
-//        }
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -49,12 +33,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
         startPlayback(playable: playable, properties: properties)
     }
     
-    /// Initiating a playback session by requesting an entitlement for `channelId` will start live playback. Optionally, users can specify a `programId` as well, which will request program playback.
+    /// Initiates a playback session by requesting an entitlement for `channelId` will start live playback. Optionally, users can specify a `programId` as well, which will request program playback.
     ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
     ///
+    /// - parameter channelId: EMP channel id for which to request playback.
     /// - parameter programId: EMP program id for which to request playback.
-    //    /// - parameter programId: EMP program id for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
     public func startPlayback(channelId: String, programId: String? = nil, properties: PlaybackProperties = PlaybackProperties()) {
         let playable: Playable = programId != nil ? ProgramPlayable(assetId: programId!, channelId: channelId) : ChannelPlayable(assetId: channelId)
@@ -104,7 +88,6 @@ extension ExposureContext {
             case .defaultBehaviour:
                 print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
             case .userLocale:
-                print("context.playbackProperties.language.userLocale",Locale.current.languageCode)
                 let locale = Locale.current.languageCode
                 tech.preferredTextLanguage = locale
                 tech.preferredAudioLanguage = locale

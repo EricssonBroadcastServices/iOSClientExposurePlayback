@@ -9,18 +9,24 @@
 import Foundation
 import Player
 
-public class AssetSource: ExposureSource {
-    
-}
+/// Specialized `MediaSource` used for playback of *Vod* assets
+///
+/// Start time `PlayFrom` behavior:
+/// * `.beginning` : Playback starts from the beginning of asset
+/// * `.bookmark` : Playback starts from the bookmarked position if available and fallbacks to `.defaultBehavior`
+/// * `.customPosition(position:)` : Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange`.
+/// * `.customTime(time:)` : Starting from a unix timestamp is undefined for Vod assets. Will use `.defaultBehavior`
+/// * `.defaultBehavior` Playback starts from the beginning of the asset
+public class AssetSource: ExposureSource { }
 
 extension AssetSource: ContextPositionSeekable {
-    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         player.tech.seek(toPosition: position)
     }
 }
 
 extension AssetSource: ContextStartTime {
-    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
             return defaultStartTime(for: tech, in: context)

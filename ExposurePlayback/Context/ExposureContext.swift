@@ -48,7 +48,7 @@ public class ExposureContext: MediaContext {
     internal var onEntitlementResponse: (PlaybackEntitlement, Source) -> Void = { _,_ in }
     
     /// Specifies playback related behaviour
-    internal var playbackProperties: PlaybackProperties = PlaybackProperties()
+    internal(set) public var playbackProperties: PlaybackProperties = PlaybackProperties()
     
     /// Used to generate a fresh `ProgramPlayable` from the specified program.
     ///
@@ -70,6 +70,10 @@ public class ExposureContext: MediaContext {
         return (type == "LIVE" || type == "Live")
     }
     
+    /// Creates a new `ExposureContext`
+    ///
+    /// - parameter environment: Exposure `Environment` to use
+    /// - parameter sessionToken: Exposure `SessionToken` to use
     public init(environment: Environment, sessionToken: SessionToken) {
         self.environment = environment
         self.sessionToken = sessionToken
@@ -84,6 +88,15 @@ public class ExposureContext: MediaContext {
 
 
 extension ExposureContext: StartTimeDelegate {
+    // MARK: Start Time
+    
+    /// `ExposureContext` will only handle start time for `MediaSource`s which are explicit subclasses of `ExposureSource` defined in `ExposurePlayback`. Unsupported sources will use `.defaultStartTime`.
+    ///
+    /// The actual start time for valid `MediaSource`s depends on what options `PlaybackProperties` specifies and the exact behaviour for that source.
+    ///
+    /// - parameter source: The `MediaSource` for which this start time request concerns.
+    /// - parameter tech: Tech which will apply the start time.
+    /// - returns: relevant `StartOffset` for the `MediaSource`
     public func startTime<Context>(for source: MediaSource, tech: HLSNative<Context>) -> StartOffset {
         if let startTimeSource = source as? ContextStartTime, let hls = tech as? HLSNative<ExposureContext> {
             return startTimeSource.handleStartTime(for: hls, in: self)

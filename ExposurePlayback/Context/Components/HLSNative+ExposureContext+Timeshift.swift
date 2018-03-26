@@ -9,8 +9,12 @@
 import Foundation
 import Player
 
-// MARK: - Timeshift
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Timeshift
+    
+    /// Pause playback if currently active
+    ///
+    /// - note: Will perform a check against contract restrictions to decide if pausing is allowed or not.
     public func pause() {
         guard let source = tech.currentSource else { return }
         let pauseDisabled = context.contractRestrictionsService.canPause(entitlement: source.entitlement)
@@ -22,21 +26,4 @@ extension Player where Tech == HLSNative<ExposureContext> {
         }
         tech.pause()
     }
-    
-    #if DEBUG
-    /// Specifies the timeshift delay *in seconds* associated with the current `MediaSource` (if available).
-    ///
-    /// - note: Requires a *Unified Packager* sourced stream.
-    public var timeshiftDelay: Int64? {
-        return tech.currentSource?.timeshiftDelay
-    }
-    
-    public var dvrWindowLength: Int64? {
-        return tech.currentSource?.dvrWindowLength
-    }
-    
-    public var tParameter: (Int64, Int64?)? {
-        return tech.currentSource?.tParameter
-    }
-    #endif
 }

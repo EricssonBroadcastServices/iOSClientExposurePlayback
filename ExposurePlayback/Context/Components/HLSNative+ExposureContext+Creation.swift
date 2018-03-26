@@ -12,6 +12,8 @@ import Exposure
 
 /// Extends `Player` using `HLSNative` tech in an `ExposureContext` with a convenience initializer
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Creation
+    
     /// Convenience initializer that creates and configures `Player` for use with `HLSNative`, `ExposureContext`.
     ///
     /// Attaches `ExposureAnalytics` to deal with *Exposure* relaed analytics dispatch.

@@ -9,9 +9,15 @@
 import Foundation
 import Player
 
-public class ChannelSource: ExposureSource {
-    
-}
+/// Specialized `MediaSource` used for starting live playback of channels
+///
+/// Start time `PlayFrom` behavior:
+/// * `.beginning` : Playback starts from the beginning of the currently live program.
+/// * `.bookmark` : Playback starts from the bookmarked position if available and fallbacks to `.defaultBehavior`
+/// * `.customPosition(position:)` : Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning
+/// * `.customTime(time:)` : Playback starts from the specified unix timestamp (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
+/// * `.defaultBehavior` Playback starts from the live edge
+public class ChannelSource: ExposureSource { }
 
 extension ChannelSource: ContextTimeSeekable {
     internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
@@ -39,7 +45,7 @@ extension ChannelSource: ContextTimeSeekable {
 }
 
 extension ChannelSource: ContextPositionSeekable {
-    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         if let playheadTime = player.playheadTime {
             let timeInterval = position.timestampFrom(referenceTime: playheadTime, referencePosition: player.playheadPosition)
             handleSeek(toTime: timeInterval, for: player, in: context)
@@ -48,7 +54,7 @@ extension ChannelSource: ContextPositionSeekable {
 }
 
 extension ChannelSource: ContextStartTime {
-    func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
             return defaultStartTime(for: tech, in: context)
@@ -128,7 +134,7 @@ extension ChannelSource: ContextGoLive {
 }
 
 extension ChannelSource: ProgramServiceEnabled {
-    public var programServiceChannelId: String {
+    internal var programServiceChannelId: String {
         return assetId
     }
 }

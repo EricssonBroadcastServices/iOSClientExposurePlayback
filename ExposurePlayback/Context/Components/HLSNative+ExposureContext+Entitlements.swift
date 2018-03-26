@@ -10,8 +10,8 @@ import Foundation
 import Player
 import Exposure
 
-// MARK: Entitlement response
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Entitlement Response
     
     /// Sets the callback to fire once an entitlement response is received
     ///

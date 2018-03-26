@@ -11,7 +11,7 @@ import Exposure
 import Player
 
 extension Player where Tech == HLSNative<ExposureContext> {
-    // MARK: Audio
+    // MARK: Audio Track Selection
     
     /// Returns the audio related `MediaGroup`
     public var audioGroup: MediaGroup? {
@@ -53,7 +53,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     
-    // MARK: Text
+    // MARK: Text Track Selection
+    
     /// Returns the text related `MediaGroup`
     public var textGroup: MediaGroup? {
         return tech.textGroup

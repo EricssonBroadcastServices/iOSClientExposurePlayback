@@ -10,8 +10,23 @@ import Foundation
 import Player
 import Exposure
 
+/// Specialized `MediaSource` used for starting playback of a specific program on a channel
+///
+/// Start time `PlayFrom` behavior:
+/// * `.beginning` : Playback starts from the beginning of the program
+/// * `.bookmark` : Playback starts from the bookmarked position if available and fallbacks to `.defaultBehavior`
+/// * `.customPosition(position:)` : Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning
+/// * `.customTime(time:)` : Playback starts from the specified unix timestamp (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
+/// * `.defaultBehavior` If the program is currently *live*, playback will start from the live edge., otherwise playback starts from the beginning of the program
 public class ProgramSource: ExposureSource {
+    /// The channel Id on which the program plays
     public let channelId: String
+    
+    /// Creates a new `ProgramSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the program
+    /// - parameter assetId: The id for the program
+    /// - parameter channelId: The channel Id on which the program plays
     public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String) {
         self.channelId = channelId
         super.init(entitlement: entitlement, assetId: assetId)
@@ -151,7 +166,7 @@ extension ProgramSource: ContextGoLive {
 }
 
 extension ProgramSource: ProgramServiceEnabled {
-    public var programServiceChannelId: String {
+    internal var programServiceChannelId: String {
         return channelId
     }
 }

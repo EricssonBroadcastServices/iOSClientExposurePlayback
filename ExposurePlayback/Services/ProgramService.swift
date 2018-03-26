@@ -15,10 +15,11 @@ internal protocol ProgramProvider {
     func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
 }
 
-public protocol ProgramServiceEnabled {
+internal protocol ProgramServiceEnabled {
     var programServiceChannelId: String { get }
 }
 
+/// `ProgramService` provides automatic tracking of the currently playing program including continuous entitlement validation during playback.
 public class ProgramService {
     /// `Environment` to use when requesting program data
     fileprivate var environment: Environment
@@ -35,13 +36,13 @@ public class ProgramService {
     fileprivate var programChangeTimer: DispatchSourceTimer?
     fileprivate var validateTimer: DispatchSourceTimer?
     
-    var playbackRateObserver: RateObserver?
+    internal var playbackRateObserver: RateObserver?
     
     /// Applies a fuzzy factor to the validation logic in order ease backend load.
     ///
     /// Values in milliseconds.
     ///
-    /// - important: A minimum value of `30000` is enforced
+    /// - note: A minimum value of `30000` is enforced
     public var fuzzyFactor: UInt32 {
         get {
             return fuzzyConfiguration.fuzzyFactor
@@ -51,6 +52,7 @@ public class ProgramService {
             fuzzyConfiguration.fuzzyFactor = acceptableValue
         }
     }
+    
     internal var fuzzyConfiguration: FuzzyFactor = FuzzyFactor()
     internal struct FuzzyFactor {
         internal static let minimumFuzzyFactor: UInt32 = 30 * 1000

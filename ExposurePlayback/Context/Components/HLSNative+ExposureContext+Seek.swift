@@ -11,8 +11,9 @@ import Player
 import Exposure
 import AVFoundation
 
-// MARK: - Playhead Time
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Seeking
+    
     /// Indicates the drift from the actual live point as defined by the `ServerTime Wallclock` (milliseconds).
     ///
     /// May be `nil` if no server time has been synched or if the seekable ranges are empty.

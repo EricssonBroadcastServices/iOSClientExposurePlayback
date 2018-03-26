@@ -11,6 +11,7 @@ import Player
 import Exposure
 
 extension ExposureContext {
+    /// `ExposureContext` specific errors
     public enum Error: ExpandedError {
         /// Errors related to *Fairplay* `DRM` validation.
         case fairplay(reason: FairplayError)
@@ -101,6 +102,7 @@ extension ExposureContext.Error {
 }
 
 extension ExposureContext.Error {
+    /// Returns a unique message describing the error
     public var message: String {
         switch self {
         case .fairplay(reason: let reason): return reason.message
@@ -130,6 +132,7 @@ extension ExposureContext.Error {
 }
 
 extension ExposureContext.Error {
+    /// The specific error domain the error belongs to
     public var domain: String {
         switch self {
         case .fairplay(reason: let reason): return reason.domain

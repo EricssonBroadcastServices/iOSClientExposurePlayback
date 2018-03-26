@@ -10,6 +10,14 @@ import Foundation
 import Player
 
 extension Player where Tech == HLSNative<ExposureContext> {
+    // MARK: Airplay
+    
+    /// Sets the callback to fire once Airplay status changes
+    ///
+    /// The third parameter in the callback specifies if *Airplay* was turned on or off.
+    ///
+    /// - parameter callback: callback to fire once the event is fired.
+    /// - returns: `Self`
     public func onAirplayStatusChanged(callback: @escaping (Player<HLSNative<ExposureContext>>, ExposureSource?, Bool) -> Void) -> Self {
         tech.onAirplayStatusChanged = { [weak self] tech, source, airplaying in
             guard let `self` = self else { return }
