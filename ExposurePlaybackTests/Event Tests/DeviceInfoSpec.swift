@@ -13,11 +13,18 @@ import Nimble
 
 class DeviceInfoSpec: QuickSpec {
     override func spec() {
+        func deviceName() -> String {
+            let name = UIDevice.current.systemName
+            if name == "iPhone OS" {
+                return "iOS"
+            }
+            return name
+        }
         describe("DeviceInfo") {
             let timeStamp: Int64 = 10
             let type = "Device.Info"
             let simulatorModel = "x86_64"
-            let os = "iOS"
+            let os = deviceName()
             let manufacturer = "Apple"
             let event = DeviceInfo(timestamp: timeStamp)
             
