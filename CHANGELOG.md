@@ -10,6 +10,7 @@
 #### Features
 * `EMP-11121` New playcalls are now made for each *Airplay* transition.
 * Added analytics event to signal an *Airplay* session was initiated from local playback.
+* `EMP-11171` `ExposurePlayback` now supports *tvOS*.
 
 #### Changes
 * `EMP-11156` Standardized error messages and introduced an `info` variable
