@@ -80,11 +80,20 @@ platform :ios do
     
     # Private lanes
     desc "Runs all the tests"
-    private_lane :run_unit_tests do
+    lane :run_unit_tests do
+        
+        UI.success("== iOS Unit tests ==")
         scan(
              workspace: ENV["UNIT_TEST_WORKSPACE"],
-             scheme: ENV["UNIT_TEST_SCHEME"]
+             scheme: ENV["IOS_UNIT_TEST_SCHEME"]
              )
+             
+         UI.success("== tvOS Unit tests ==")
+         scan(
+              workspace: ENV["UNIT_TEST_WORKSPACE"],
+              scheme: ENV["TVOS_UNIT_TEST_SCHEME"]
+              )
+                  
     end
     
     private_lane :fix_dependencies do
@@ -117,7 +126,7 @@ platform :ios do
     private_lane :update_graph do
         carthage(
                  command: "update",
-                 platform: "iOS",
+                 platform: "iOS, tvOS",
                  use_submodules: true,
                  use_ssh: true,
                  use_binaries: false,

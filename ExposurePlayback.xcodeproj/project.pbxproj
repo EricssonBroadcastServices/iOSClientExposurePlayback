@@ -74,8 +74,6 @@
 		7608021D2069306E007F59D5 /* Started.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D852020F41F00C23579 /* Started.swift */; };
 		7608021E2069306E007F59D5 /* StartAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A29D3A205FB6C70047B546 /* StartAirplay.swift */; };
 		760802232069306E007F59D5 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 76A89BFE202072D100C23579 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7608022E2069317C007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 760802302069317C007F59D5 /* Exposure.framework */; };
-		7608022F2069317C007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 760802312069317C007F59D5 /* Player.framework */; };
 		7608023620693193007F59D5 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */; };
 		7608023720693193007F59D5 /* MockedAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D5C9DD20304C1E0056BFF8 /* MockedAVPlayer.swift */; };
 		7608023820693193007F59D5 /* TestEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA42032E61500F914D1 /* TestEnv.swift */; };
@@ -123,12 +121,14 @@
 		7608026220693193007F59D5 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
 		7608026320693193007F59D5 /* BitrateChangedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */; };
 		7608026420693193007F59D5 /* CreatedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD02021CCC000C23579 /* CreatedSpec.swift */; };
-		7608026620693193007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89CFE202098CA00C23579 /* Exposure.framework */; };
 		7608026720693193007F59D5 /* Mockingjay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89CFF202098CA00C23579 /* Mockingjay.framework */; };
 		7608026820693193007F59D5 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D00202098CA00C23579 /* Nimble.framework */; };
-		7608026920693193007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D01202098CA00C23579 /* Player.framework */; };
 		7608026A20693193007F59D5 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D02202098CA00C23579 /* Quick.framework */; };
-		7608026B20693193007F59D5 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89BFB202072D100C23579 /* ExposurePlayback.framework */; };
+		76080272206933D2007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080274206933D2007F59D5 /* Exposure.framework */; };
+		76080273206933D2007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080275206933D2007F59D5 /* Player.framework */; };
+		76080276206933EA007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080278206933EA007F59D5 /* Exposure.framework */; };
+		76080277206933EA007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080279206933EA007F59D5 /* Player.framework */; };
+		7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7608022C2069306E007F59D5 /* ExposurePlayback.framework */; };
 		7624D5FA20344BE300CD1835 /* ChannelSource+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */; };
 		7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEBE2029AF94001512BF /* Int64+Extensions.swift */; };
 		7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */; };
@@ -276,6 +276,10 @@
 		760802302069317C007F59D5 /* Exposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Exposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		760802312069317C007F59D5 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7608027020693194007F59D5 /* ExposurePlaybackTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExposurePlaybackTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		76080274206933D2007F59D5 /* Exposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Exposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76080275206933D2007F59D5 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76080278206933EA007F59D5 /* Exposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Exposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76080279206933EA007F59D5 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSource+SeekToLive.swift"; sourceTree = "<group>"; };
 		7635AEBE2029AF94001512BF /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
 		7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Entitlements.swift"; sourceTree = "<group>"; };
@@ -416,8 +420,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7608022E2069317C007F59D5 /* Exposure.framework in Frameworks */,
-				7608022F2069317C007F59D5 /* Player.framework in Frameworks */,
+				76080272206933D2007F59D5 /* Exposure.framework in Frameworks */,
+				76080273206933D2007F59D5 /* Player.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,12 +429,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7608026620693193007F59D5 /* Exposure.framework in Frameworks */,
+				7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */,
+				76080276206933EA007F59D5 /* Exposure.framework in Frameworks */,
+				76080277206933EA007F59D5 /* Player.framework in Frameworks */,
 				7608026720693193007F59D5 /* Mockingjay.framework in Frameworks */,
 				7608026820693193007F59D5 /* Nimble.framework in Frameworks */,
-				7608026920693193007F59D5 /* Player.framework in Frameworks */,
 				7608026A20693193007F59D5 /* Quick.framework in Frameworks */,
-				7608026B20693193007F59D5 /* ExposurePlayback.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +676,10 @@
 		76A89C8E2020808900C23579 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				76080278206933EA007F59D5 /* Exposure.framework */,
+				76080279206933EA007F59D5 /* Player.framework */,
+				76080274206933D2007F59D5 /* Exposure.framework */,
+				76080275206933D2007F59D5 /* Player.framework */,
 				760802302069317C007F59D5 /* Exposure.framework */,
 				760802312069317C007F59D5 /* Player.framework */,
 				76A89CFE202098CA00C23579 /* Exposure.framework */,
