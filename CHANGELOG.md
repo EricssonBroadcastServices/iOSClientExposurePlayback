@@ -1,16 +1,21 @@
 # CHANGELOG
 
+* `2.0.81` Release - [2.0.81](#2081)
 * `2.0.80` Release - [2.0.80](#2080)
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.0.81
+
+#### Features
+* `EMP-11171` `ExposurePlayback` now supports *tvOS*.
 
 ## 2.0.80
 
 #### Features
 * `EMP-11121` New playcalls are now made for each *Airplay* transition.
 * Added analytics event to signal an *Airplay* session was initiated from local playback.
-* `EMP-11171` `ExposurePlayback` now supports *tvOS*.
 
 #### Changes
 * `EMP-11156` Standardized error messages and introduced an `info` variable
