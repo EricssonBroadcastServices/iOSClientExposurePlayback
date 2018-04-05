@@ -1,9 +1,15 @@
 # CHANGELOG
 
+* `2.0.81` Release - [2.0.81](#2081)
 * `2.0.80` Release - [2.0.80](#2080)
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.0.81
+
+#### Bug Fixes
+* Errors encountered during *Fairplay Certificate* processing are now forwarded correctly, including server messages.
 
 ## 2.0.80
 

@@ -268,7 +268,7 @@ extension MRRFairplayRequester {
             
             throw ExposureContext.Error.fairplay(reason: .applicationCertificateServer(code: code, message: message))
         }
-        throw ExposureContext.Error.fairplay(reason: .applicationCertificateParsing)
+        throw ExposureContext.Error.fairplay(reason: .applicationCertificateParsing(error: nil))
     }
 }
 

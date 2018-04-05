@@ -207,8 +207,24 @@ extension EMUPFairPlayRequester {
                      method: .get)
             .validate()
             .rawResponse { _,_, data, error in
-                if let error = error {
-                    callback(nil, .fairplay(reason: .networking(error: error)))
+                guard error == nil, let jsonData = data else {
+                    if let statusError = error as? Request.Networking {
+                        if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
+                            do {
+                                let message = try JSONDecoder().decode(ServerErrorMessage.self, from: statusData)
+                                callback(nil, .fairplay(reason: .applicationCertificateServer(code: message.code, message: message.message)))
+                            }
+                            catch let e {
+                                callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                            }
+                        }
+                        else {
+                            callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                        }
+                    }
+                    else {
+                        callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                    }
                     return
                 }
                 
