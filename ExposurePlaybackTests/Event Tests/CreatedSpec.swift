@@ -16,10 +16,18 @@ import Exposure
 
 class CreatedSpec: QuickSpec {
     override func spec() {
+        func deviceName() -> String {
+            let name = UIDevice.current.systemName
+            if name == "iPhone OS" {
+                return "iOS"
+            }
+            return name
+        }
+        
         describe("Created") {
             let timeStamp: Int64 = 10
             let type = "Playback.Created"
-            let player = "EMP.iOS2"
+            let player = "EMP."+deviceName()+"2"
             let version = "1.0.3"
             let exposureVersion = "0.1.3"
             let vodId = PlaybackIdentifier.vod(assetId: "vodAsset")

@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "76A89BFA202072D100C23579"
                BuildableName = "ExposurePlayback.framework"
-               BlueprintName = "ExposurePlayback"
+               BlueprintName = "ExposurePlayback-iOS"
                ReferencedContainer = "container:ExposurePlayback.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -35,8 +35,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "76A89C03202072D100C23579"
-               BuildableName = "ExposurePlaybackTests.xctest"
-               BlueprintName = "ExposurePlaybackTests"
+               BuildableName = "ExposurePlaybackTests-iOS.xctest"
+               BlueprintName = "ExposurePlaybackTests-iOS"
                ReferencedContainer = "container:ExposurePlayback.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "76A89BFA202072D100C23579"
             BuildableName = "ExposurePlayback.framework"
-            BlueprintName = "ExposurePlayback"
+            BlueprintName = "ExposurePlayback-iOS"
             ReferencedContainer = "container:ExposurePlayback.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -69,7 +69,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "76A89BFA202072D100C23579"
             BuildableName = "ExposurePlayback.framework"
-            BlueprintName = "ExposurePlayback"
+            BlueprintName = "ExposurePlayback-iOS"
             ReferencedContainer = "container:ExposurePlayback.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -87,7 +87,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "76A89BFA202072D100C23579"
             BuildableName = "ExposurePlayback.framework"
-            BlueprintName = "ExposurePlayback"
+            BlueprintName = "ExposurePlayback-iOS"
             ReferencedContainer = "container:ExposurePlayback.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
