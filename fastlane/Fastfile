@@ -126,7 +126,7 @@ platform :ios do
     private_lane :update_graph do
         carthage(
                  command: "update",
-                 platform: "iOS, tvOS",
+                 platform: "iOS,tvOS",
                  use_submodules: true,
                  use_ssh: true,
                  use_binaries: false,
