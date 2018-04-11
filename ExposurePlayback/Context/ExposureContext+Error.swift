@@ -47,7 +47,9 @@ extension ExposureContext.Error {
         case applicationCertificateServer(code: Int, message: String)
         
         /// There was an error while parsing the *Application Certificate*. This is considered a general error
-        case applicationCertificateParsing
+        ///
+        /// `error` containes the underlying error
+        case applicationCertificateParsing(error: Error?)
         
         /// `AVAssetResourceLoadingRequest` failed to prepare the *Fairplay* related content identifier. This should normaly be encoded in the resouce loader's `urlRequest.url.host`.
         case invalidContentIdentifier

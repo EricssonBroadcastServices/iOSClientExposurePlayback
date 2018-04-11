@@ -11,6 +11,9 @@
 #### Features
 * `EMP-11171` `ExposurePlayback` now supports *tvOS*.
 
+#### Bug Fixes
+* Errors encountered during *Fairplay Certificate* processing are now forwarded correctly, including server messages.
+
 ## 2.0.80
 
 #### Features
