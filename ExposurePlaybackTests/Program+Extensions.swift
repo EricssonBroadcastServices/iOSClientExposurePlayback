@@ -10,7 +10,7 @@ import Foundation
 import Exposure
 
 extension Program {
-    static func validJson(programId: String, channelId: String, assetId: String) -> [String: Codable] {
+    static func validJson(programId: String, channelId: String, assetId: String) -> [String: Any] {
         return [
             "programId": programId,
             "assetId": assetId,
@@ -19,8 +19,8 @@ extension Program {
     }
 }
 
-extension Dictionary where Key == String, Value == Codable {
-    func timestamp(starting: Int64, ending: Int64) -> Dictionary<String,Codable> {
+extension Dictionary where Key == String, Value == Any {
+    func timestamp(starting: Int64, ending: Int64) -> Dictionary<String,Any> {
         var old = self
         
         let start = Date(milliseconds: starting)

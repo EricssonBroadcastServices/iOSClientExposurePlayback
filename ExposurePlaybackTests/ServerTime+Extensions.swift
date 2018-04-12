@@ -10,7 +10,7 @@ import Foundation
 import Exposure
 
 extension ServerTime {
-    static func validJson(date: Date) -> [String: Codable] {
+    static func validJson(date: Date) -> [String: Any] {
         return [
             "epochMillis": UInt64(date.millisecondsSince1970)
         ]

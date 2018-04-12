@@ -10,7 +10,7 @@ import Foundation
 import Exposure
 
 extension EntitlementValidation {
-    static func validJson(status: String) -> [String: Codable] {
+    static func validJson(status: String) -> [String: Any] {
         return [
             "status": status,
         ]

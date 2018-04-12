@@ -65,7 +65,7 @@ class MockedMonotonicServerTimeProvider: ServerTimeProvider {
     }
     
     func createServerTime() -> ServerTime {
-        let json:[String: Codable] = [
+        let json:[String: Any] = [
             "epochMillis": UInt64(Date().millisecondsSince1970)
         ]
         return json.decode(ServerTime.self)!

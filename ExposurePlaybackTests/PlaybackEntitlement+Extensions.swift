@@ -10,13 +10,13 @@ import Foundation
 import Exposure
 
 extension PlaybackEntitlement {
-    static var validJson: [String: Codable] {
-        let fairplayJson:[String: Codable] = [
+    static var validJson: [String: Any] {
+        let fairplayJson:[String: Any] = [
             "secondaryMediaLocator":"secondaryMediaLocator",
             "certificateUrl":"certificateUrl",
             "licenseAcquisitionUrl":"licenseAcquisitionUrl"
         ]
-        let json:[String: Codable] = [
+        let json:[String: Any] = [
             "playToken":"playToken",
             "fairplayConfig":fairplayJson,
             "mediaLocator":"mediaLocator",
@@ -44,7 +44,7 @@ extension PlaybackEntitlement {
         return json
     }
     
-    static var requiedJson: [String: Codable] {
+    static var requiedJson: [String: Any] {
         return [
             "mediaLocator":"mediaLocator",
             "playTokenExpiration":"playTokenExpiration",
