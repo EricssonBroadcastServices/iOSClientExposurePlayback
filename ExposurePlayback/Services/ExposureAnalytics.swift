@@ -89,12 +89,11 @@ public class ExposureAnalytics {
     }
 }
 
-fileprivate func version(for identifier: String) -> String {
-    guard let bundleInfo = Bundle(identifier: identifier)?.infoDictionary else { return "Not found" }
-    let version = (bundleInfo["CFBundleShortVersionString"] as? String) ?? "Unknown Version"
-//    guard let build = bundleInfo["CFBundleVersion"] as? String else {
-//        return version
-//    }
+fileprivate func version(for identifier: String?) -> String {
+    guard let identifier = identifier else { return "MISSING_BUNDLE_IDENTIFIER" }
+    guard let bundleInfo = Bundle(identifier: identifier)?.infoDictionary else { return "BUNDLE_NOT_FOUND" }
+    let version = (bundleInfo["CFBundleShortVersionString"] as? String) ?? "UNKNOWN_VERSION"
+    
     return version
 }
 
@@ -214,7 +213,14 @@ extension ExposureAnalytics: AnalyticsProvider {
     
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// PlayReady
-        let techBundle = Bundle(for: type(of: tech)).bundleIdentifier ?? "com.emp.Player"
+        
+        /// BUGFIX: EMP-11313
+        /// `Bundle(for: aClass)`
+        ///
+        /// The NSBundle object that dynamically loaded aClass (a loadable bundle), the NSBundle object for the framework in which aClass is defined, or the main bundle object if aClass was not dynamically loaded or is not defined in a framework.
+        ///
+        /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
+        let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
         let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
                                        offsetTime: offsetTime(for: source, using: tech),
                                        tech: String(describing: type(of: tech)),
