@@ -386,3 +386,12 @@ extension ExposureAnalytics: AnalyticsProvider {
         
     }
 }
+
+extension ExposureAnalytics: TraceProvider {
+    public func onTrace<Tech, Source>(tech: Tech?, source: Source?, data: [String: Any]) where Tech : PlaybackTech, Source : MediaSource {
+        let event = Playback.Trace(timestamp: Date().millisecondsSince1970,
+                                   offsetTime: tech?.playheadTime,
+                                   data: data)
+        dispatcher?.enqueue(event: event)
+    }
+}

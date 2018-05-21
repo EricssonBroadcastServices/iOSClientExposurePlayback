@@ -9,6 +9,9 @@
 
 ## 2.0.84
 
+#### Features
+* `EMP-11335` `ExposureAnalytics` now adopts `TraceProvider` protocol.
+
 #### Bug Fixes
 * `EMP-11313` Reported tech version now correctly identifies `HLSNative` bundle if used.
 
