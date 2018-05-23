@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.0.85` Release - [2.0.85](#2085)
 * `2.0.84` Release - [2.0.84](#2084)
 * `2.0.81` Release - [2.0.81](#2081)
 * `2.0.80` Release - [2.0.80](#2080)
@@ -7,10 +8,13 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
-## 2.0.84
+
+## 2.0.85
 
 #### Features
 * `EMP-11335` `ExposureAnalytics` now adopts `TraceProvider` protocol.
+
+## 2.0.84
 
 #### Bug Fixes
 * `EMP-11313` Reported tech version now correctly identifies `HLSNative` bundle if used.
