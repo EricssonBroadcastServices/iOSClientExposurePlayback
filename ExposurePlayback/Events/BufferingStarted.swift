@@ -24,8 +24,6 @@ extension Playback {
     }
 }
 
-
-extension Playback.BufferingStarted: PlaybackOffset { }
 extension Playback.BufferingStarted: AnalyticsEvent {
     var eventType: String {
         return "Playback.BufferingStarted"

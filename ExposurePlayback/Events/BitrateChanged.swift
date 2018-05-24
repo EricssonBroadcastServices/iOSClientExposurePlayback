@@ -28,8 +28,6 @@ extension Playback {
     }
 }
 
-
-extension Playback.BitrateChanged: PlaybackOffset { }
 extension Playback.BitrateChanged: AnalyticsEvent {
     var eventType: String {
         return "Playback.BitrateChanged"

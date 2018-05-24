@@ -25,7 +25,6 @@ extension Playback {
     }
 }
 
-extension Playback.Completed: PlaybackOffset { }
 extension Playback.Completed: AnalyticsEvent {
     var eventType: String {
         return "Playback.Completed"

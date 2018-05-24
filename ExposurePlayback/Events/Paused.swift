@@ -24,7 +24,6 @@ extension Playback {
     }
 }
 
-extension Playback.Paused: PlaybackOffset { }
 extension Playback.Paused: AnalyticsEvent {
     var eventType: String {
         return "Playback.Paused"

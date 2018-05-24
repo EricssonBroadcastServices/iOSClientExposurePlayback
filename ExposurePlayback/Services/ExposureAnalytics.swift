@@ -387,11 +387,30 @@ extension ExposureAnalytics: AnalyticsProvider {
     }
 }
 
+/// MARK: TraceProvider
 extension ExposureAnalytics: TraceProvider {
     public func onTrace<Tech, Source>(tech: Tech?, source: Source?, data: [String: Any]) where Tech : PlaybackTech, Source : MediaSource {
         let event = Playback.Trace(timestamp: Date().millisecondsSince1970,
                                    offsetTime: offsetTime(for: source, using: tech),
                                    data: data)
         dispatcher?.enqueue(event: event)
+    }
+}
+
+
+/// MARK: TraceProvider
+extension ExposureAnalytics: TechDeallocationEventProvider {
+    public func onTechDeallocated<Source>(beforeMediaPreparationFinalizedOf mediaSource: Source) where Source : MediaSource {
+        let data = ["Message":"TECH_DEALLOCATED_BEFORE_MEDIA_PREPARATION_FINISHED"]
+        let trace = Playback.Trace(timestamp: Date().millisecondsSince1970,
+                                   data: data)
+        
+        let aborted = Playback.Aborted(timestamp: Date().millisecondsSince1970)
+        
+        dispatcher?.enqueue(event: trace)
+        dispatcher?.enqueue(event: aborted)
+        dispatcher?.heartbeat(enabled: false)
+        dispatcher?.flushTrigger(enabled: false)
+        dispatcher = nil
     }
 }

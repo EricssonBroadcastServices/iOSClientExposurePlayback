@@ -24,7 +24,6 @@ extension Playback {
     }
 }
 
-extension Playback.StartCasting: PlaybackOffset { }
 extension Playback.StartCasting: AnalyticsEvent {
     var eventType: String {
         return "Playback.StartCasting"

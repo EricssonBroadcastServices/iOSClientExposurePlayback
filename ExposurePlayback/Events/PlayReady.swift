@@ -30,7 +30,6 @@ extension Playback {
     }
 }
 
-extension Playback.PlayReady: PlaybackOffset { }
 extension Playback.PlayReady: AnalyticsEvent {
     var eventType: String {
         return "Playback.PlayerReady"

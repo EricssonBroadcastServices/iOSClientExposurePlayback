@@ -65,5 +65,3 @@ extension Playback.ProgramChanged: AnalyticsEvent {
     }
 }
 
-extension Playback.ProgramChanged: PlaybackOffset { }
-
