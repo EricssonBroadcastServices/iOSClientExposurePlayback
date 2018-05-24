@@ -98,8 +98,8 @@ fileprivate func version(for identifier: String?) -> String {
 }
 
 extension ExposureAnalytics {
-    fileprivate func offsetTime<Source: MediaSource, Tech : PlaybackTech>(for source: Source?, using tech: Tech?) -> Int64 {
-        guard let tech = tech, let source = source else { return 0 }
+    fileprivate func offsetTime<Source: MediaSource, Tech : PlaybackTech>(for source: Source?, using tech: Tech?) -> Int64? {
+        guard let tech = tech, let source = source else { return nil }
         guard let exposureSource = source as? ExposureSource else {
             // Default to playheadPosition
             return tech.playheadPosition
@@ -107,10 +107,10 @@ extension ExposureAnalytics {
         
         if exposureSource.isUnifiedPackager {
             if exposureSource is ChannelSource {
-                return tech.playheadTime ?? 0 // TODO: How do we handle when there is no playheadTime available?
+                return tech.playheadTime
             }
             else if exposureSource is ProgramSource {
-                return tech.playheadTime ?? 0 // TODO: How do we handle when there is no playheadTime available?
+                return tech.playheadTime
             }
             else if exposureSource is AssetSource {
                 return tech.playheadPosition
@@ -291,9 +291,8 @@ extension ExposureAnalytics: AnalyticsProvider {
             return
         }
         
-        let offset = source != nil ? offsetTime(for: source, using: tech) : nil
         let event = Playback.Error(timestamp: Date().millisecondsSince1970,
-                                   offsetTime: offset,
+                                   offsetTime: offsetTime(for: source, using: tech),
                                    message: error.message,
                                    code: error.code,
                                    domain: error.domain,
@@ -310,7 +309,7 @@ extension ExposureAnalytics: AnalyticsProvider {
         var events = startupEvents
         
         let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
-                                          offsetTime: 0,
+                                          offsetTime: offsetTime(for: source, using: tech),
                                           message: error.message,
                                           code: error.code,
                                           domain: error.domain,

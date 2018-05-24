@@ -15,9 +15,9 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence (in milliseconds) where video started playing again. For vod or offline viewing, this is the offset from the start of the asset, and for live, this is measured from the start of the program according to the EPG.
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64) {
+        internal init(timestamp: Int64, offsetTime: Int64?) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
         }
@@ -34,11 +34,16 @@ extension Playback.Resumed: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime
+            JSONKeys.timestamp.rawValue: timestamp
         ]
+        
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {
