@@ -24,7 +24,6 @@ extension Playback {
     }
 }
 
-extension Playback.Resumed: PlaybackOffset { }
 extension Playback.Resumed: AnalyticsEvent {
     var eventType: String {
         return "Playback.Resumed"

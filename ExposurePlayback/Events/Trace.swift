@@ -21,7 +21,7 @@ extension Playback {
         internal let data: [String: Any]
         
         
-        internal init(timestamp: Int64, offsetTime: Int64?, data: [String: Any]) {
+        internal init(timestamp: Int64, offsetTime: Int64? = nil, data: [String: Any]) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.data = data

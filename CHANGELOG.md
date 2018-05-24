@@ -1,7 +1,6 @@
 # CHANGELOG
 
 * `2.0.85` Release - [2.0.85](#2085)
-* `2.0.84` Release - [2.0.84](#2084)
 * `2.0.81` Release - [2.0.81](#2081)
 * `2.0.80` Release - [2.0.80](#2080)
 * `2.0.79` Release - [2.0.79](#2079)
@@ -13,8 +12,7 @@
 
 #### Features
 * `EMP-11335` `ExposureAnalytics` now adopts `TraceProvider` protocol.
-
-## 2.0.84
+* `EMP-11356` `ExposureAnalytics` now correctly handles analytics for playback sessions where the `Tech` was deallocated before media preparation completed.
 
 #### Bug Fixes
 * `EMP-11313` Reported tech version now correctly identifies `HLSNative` bundle if used.

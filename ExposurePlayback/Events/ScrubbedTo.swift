@@ -24,7 +24,6 @@ extension Playback {
     }
 }
 
-extension Playback.ScrubbedTo: PlaybackOffset { }
 extension Playback.ScrubbedTo: AnalyticsEvent {
     var eventType: String {
         return "Playback.ScrubbedTo"

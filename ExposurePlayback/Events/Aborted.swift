@@ -15,16 +15,15 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was aborted.
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64) {
+        internal init(timestamp: Int64, offsetTime: Int64? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
         }
     }
 }
 
-extension Playback.Aborted: PlaybackOffset { }
 extension Playback.Aborted: AnalyticsEvent {
     var eventType: String {
         return "Playback.Aborted"
@@ -35,11 +34,16 @@ extension Playback.Aborted: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime
+            JSONKeys.timestamp.rawValue: timestamp
         ]
+        
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

@@ -29,7 +29,6 @@ extension Playback {
     }
 }
 
-extension Playback.Heartbeat: PlaybackOffset { }
 extension Playback.Heartbeat: AnalyticsEvent {
     var eventType: String {
         return "Playback.Heartbeat"

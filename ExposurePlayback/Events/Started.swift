@@ -58,7 +58,6 @@ extension Playback {
 }
 
 extension Playback.Started: AssetIdentifier { }
-extension Playback.Started: PlaybackOffset { }
 extension Playback.Started: AnalyticsEvent {
     var eventType: String {
         return "Playback.Started"
