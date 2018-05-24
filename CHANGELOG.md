@@ -16,6 +16,7 @@
 
 #### Bug Fixes
 * `EMP-11313` Reported tech version now correctly identifies `HLSNative` bundle if used.
+* `EMP-11361` Fixed an issue where analytics events dispatched with a unix timestamp of 0 if no playback timestamp was found.
 
 ## 2.0.81
 

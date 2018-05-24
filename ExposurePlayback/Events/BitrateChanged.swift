@@ -15,12 +15,12 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback switched to a different bitrate
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
         /// New bitrate, in kilobit/s
         internal let bitrate: Int64
         
-        internal init(timestamp: Int64, offsetTime: Int64, bitrate: Int64) {
+        internal init(timestamp: Int64, offsetTime: Int64?, bitrate: Int64) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.bitrate = bitrate
@@ -38,12 +38,17 @@ extension Playback.BitrateChanged: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime,
             JSONKeys.bitrate.rawValue: bitrate
         ]
+        
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

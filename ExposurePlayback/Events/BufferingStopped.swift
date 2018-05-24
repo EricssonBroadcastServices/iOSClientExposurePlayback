@@ -16,9 +16,9 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback resumed after a buffering event.
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64) {
+        internal init(timestamp: Int64, offsetTime: Int64?) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
         }
@@ -35,11 +35,16 @@ extension Playback.BufferingStopped: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime
+            JSONKeys.timestamp.rawValue: timestamp
         ]
+        
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

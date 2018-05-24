@@ -15,13 +15,13 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was started at in milliseconds.
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
         internal let tech: String
         
         internal let techVersion: String
         
-        internal init(timestamp: Int64, offsetTime: Int64, tech: String, techVersion: String) {
+        internal init(timestamp: Int64, offsetTime: Int64?, tech: String, techVersion: String) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.tech = tech
@@ -40,13 +40,18 @@ extension Playback.PlayReady: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime,
             JSONKeys.tech.rawValue: tech,
             JSONKeys.techVersion.rawValue: techVersion
         ]
+        
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

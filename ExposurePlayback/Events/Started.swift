@@ -35,7 +35,7 @@ extension Playback {
         internal let mediaId: String
         
         /// Offset in the video sequence (in milliseconds) where playback started. For playback of live streams, this is the offset from the start of the current program. Even if the player does not support millisecond precision, the offset should still be reported in milliseconds (rather than seconds).
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
         /// Length of the vod asset or the live TV show. In milliseconds.
         internal let videoLength: Int64?
@@ -45,7 +45,7 @@ extension Playback {
         
         internal let referenceTime: Int64?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
             self.timestamp = timestamp
             self.requiredAssetData = assetData
             self.mediaId = mediaId
@@ -72,9 +72,12 @@ extension Playback.Started: AnalyticsEvent {
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.playMode.rawValue: playMode,
-            JSONKeys.mediaId.rawValue: mediaId,
-            JSONKeys.offsetTime.rawValue: offsetTime
+            JSONKeys.mediaId.rawValue: mediaId
         ]
+        
+        if let value = offsetTime {
+            params[JSONKeys.offsetTime.rawValue] = value
+        }
         
         if let assetId = assetId {
             params[JSONKeys.assetId.rawValue] = assetId

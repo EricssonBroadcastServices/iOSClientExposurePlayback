@@ -14,7 +14,7 @@ extension Playback {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the player was at the time the event was emitted
-        internal let offsetTime: Int64
+        internal let offsetTime: Int64?
         
         /// Identifier of the new program that just started, as specified in the EPG.
         /// Example: 1458835_IkCMxd
@@ -23,7 +23,7 @@ extension Playback {
         /// Length in milliseconds of this program, according to the EPG
         let videoLength: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64, programId: String, videoLength: Int64? = nil) {
+        internal init(timestamp: Int64, offsetTime: Int64?, programId: String, videoLength: Int64? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.programId = programId
@@ -42,18 +42,21 @@ extension Playback.ProgramChanged: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        var params: [String: Any] = [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.offsetTime.rawValue: offsetTime,
             JSONKeys.programId.rawValue: programId
         ]
         
-        if let videoLength = videoLength {
-            params[JSONKeys.videoLength.rawValue] = videoLength
+        if let value = offsetTime {
+            json[JSONKeys.offsetTime.rawValue] = value
         }
         
-        return params
+        if let videoLength = videoLength {
+            json[JSONKeys.videoLength.rawValue] = videoLength
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {
