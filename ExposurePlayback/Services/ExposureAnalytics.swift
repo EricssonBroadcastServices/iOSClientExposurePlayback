@@ -15,17 +15,17 @@ import Exposure
 /// Designed to work out of the box with `Player`, adopting and using `ExposureAnalytics` is very straight forward:
 ///
 /// ```swift
-/// player
-///     .analytics(using: sessionToken,
-///                in: environment)
-///     .stream(vod: assetId) { entitlement, error in
-///         // Handle success or error
-///     }
+/// let player = (environment: anEnvironment, sessionToken: aSessionToken)
 /// ```
 ///
-/// - important: *EMP Analytics* is not intended to be used in conjunction with manual requests of *entitlements* or manual initialization of playback. In order to ensure analytics data integrity and consistency, users should adopt the *framework* specific extension-points for initializing playback.
+/// Additionally, it is possible to supply you own version of the `ExposureStreamingAnalyticsProvider` by using:
 ///
-/// For further details, please see: `Player` functions `stream(vod: callback:)`, `stream(live: callback:)` and `stream(programId: channelId:)`.
+/// ```swift
+/// let player = (environment: anEnvironment, sessionToken: aSessionToken, analytics: CustomAnalyticsProvider.self)
+/// ```
+///
+///
+/// - important: *EMP Analytics* is not intended to be used in conjunction with manual requests of *entitlements* or manual initialization of playback. In order to ensure analytics data integrity and consistency, users should adopt the *framework* specific extension-points for initializing playback.
 public class ExposureAnalytics {
     /// Tracks the initialization state, optionally storing events created before entitlement request has been made
     fileprivate var startup: Startup = .notStarted(events: [])
@@ -51,6 +51,14 @@ public class ExposureAnalytics {
     ///
     /// - Important: should match the `environment` used to authenticate the user.
     public let sessionToken: SessionToken
+    
+    /// Handles timestamp generation for event timestamps and dispatch matters
+    ///
+    /// The system should not rely on *raw* `Date()`s due to clock tampering.
+    ///
+    /// - Important: We need to keep a strong reference to the service since the session needs to be self contained.
+    ///              An example includes when an `ExposureContext` provides its own `monotonicTimeService` for this purpose. Once the context dissapears, (deallocates) the analytics session should still have access to a correct timestamp.
+    public var monotonicTimeService: MonotonicTimeService?
     
     /// `Dispatcher` takes care of delivering analytics payload.
     fileprivate(set) internal var dispatcher: Dispatcher?
@@ -120,6 +128,13 @@ extension ExposureAnalytics {
     }
 }
 
+extension ExposureAnalytics {
+    fileprivate func currentTimestamp() -> Int64 {
+        /// EMP-11373: We should allways use serverTime as provided by the `monotonicTimeService`. If that is available, we return a negative value to indicate no timestamp was available
+        return monotonicTimeService?.serverTime ?? -1
+    }
+}
+
 extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     private func autoplay<Tech>(tech: Tech) -> Bool {
         if let tech = tech as? MediaPlayback {
@@ -129,15 +144,16 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     }
     
     public func onEntitlementRequested<Tech>(tech: Tech, playable: Playable) where Tech : PlaybackTech {
+        print(#function)
         /// 1. Created
-        let created = Playback.Created(timestamp: Date().millisecondsSince1970,
+        let created = Playback.Created(timestamp: currentTimestamp(),
                                        version: version(for: "com.emp.ExposurePlayback"),
                                        exposureVersion: version(for: "com.emp.Exposure"),
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
         /// 2. DeviceInfo
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970)
+        let deviceInfo = DeviceInfo(timestamp: currentTimestamp())
         
         /// 3. Store startup events
         var current = startupEvents
@@ -148,7 +164,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
     public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
-            let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
+            let event = Playback.HandshakeStarted(timestamp: currentTimestamp(),
                                                   assetData: PlaybackIdentifier.from(source: source),
                                                   mediaId: source.url.path)
             
@@ -176,13 +192,16 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                 playSessionId: playSessionId,
                                 startupEvents: events,
                                 heartbeatsProvider: heartbeatsProvider)
+        dispatcher?.currentTimestamp = { [weak self] in
+            return self?.monotonicTimeService?.serverTime ?? Date().millisecondsSince1970
+        }
         dispatcher?.flushTrigger(enabled: true)
     }
     
     
     public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource {
         if let programId = program?.programId, lastKnownProgramId != nil {
-            let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
+            let event = Playback.ProgramChanged(timestamp: currentTimestamp(),
                                                 offsetTime: offsetTime(for: source, using: tech),
                                                 programId: programId,
                                                 videoLength: tech.duration)
@@ -207,7 +226,7 @@ extension ExposureAnalytics: AnalyticsProvider {
 
     public func onPrepared<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// InitCompleted
-        let event = Playback.InitCompleted(timestamp: Date().millisecondsSince1970)
+        let event = Playback.InitCompleted(timestamp: currentTimestamp())
         dispatcher?.enqueue(event: event)
     }
     
@@ -221,7 +240,7 @@ extension ExposureAnalytics: AnalyticsProvider {
         ///
         /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
         let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
-        let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
+        let event = Playback.PlayReady(timestamp: currentTimestamp(),
                                        offsetTime: offsetTime(for: source, using: tech),
                                        tech: String(describing: type(of: tech)),
                                        techVersion: version(for: techBundle))
@@ -231,7 +250,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     public func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
-            let event = Playback.Started(timestamp: Date().millisecondsSince1970,
+            let event = Playback.Started(timestamp: currentTimestamp(),
                                          assetData: PlaybackIdentifier.from(source: source),
                                          mediaId: source.url.cleanQuery() ?? source.url.path,
                                          offsetTime: offsetTime(for: source, using: tech),
@@ -244,13 +263,13 @@ extension ExposureAnalytics: AnalyticsProvider {
     }
     
     public func onPaused<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.Paused(timestamp: Date().millisecondsSince1970,
+        let event = Playback.Paused(timestamp: currentTimestamp(),
                                     offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
     }
     
     public func onResumed<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.Resumed(timestamp: Date().millisecondsSince1970,
+        let event = Playback.Resumed(timestamp: currentTimestamp(),
                                      offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
     }
@@ -264,22 +283,23 @@ extension ExposureAnalytics: AnalyticsProvider {
         
         switch externalPlayback {
         case .airplay:
-            let event = Playback.StartAirplay(timestamp: Date().millisecondsSince1970,
+            let event = Playback.StartAirplay(timestamp: currentTimestamp(),
                                               offsetTime: offsetTime(for: source, using: tech))
             dispatcher?.enqueue(event: event)
         case .chromecast:
-            let event = Playback.StartCasting(timestamp: Date().millisecondsSince1970,
+            let event = Playback.StartCasting(timestamp: currentTimestamp(),
                                               offsetTime: offsetTime(for: source, using: tech))
             dispatcher?.enqueue(event: event)
         case .none:
-            let event = Playback.Aborted(timestamp: Date().millisecondsSince1970,
+            let event = Playback.Aborted(timestamp: currentTimestamp(),
                                          offsetTime: offsetTime(for: source, using: tech))
+            print("Playback.Aborted",event.timestamp)
             dispatcher?.enqueue(event: event)
         }
     }
     
     public func onCompleted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.Completed(timestamp: Date().millisecondsSince1970,
+        let event = Playback.Completed(timestamp: currentTimestamp(),
                                        offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
         dispatcher?.heartbeat(enabled: false)
@@ -291,7 +311,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             return
         }
         
-        let event = Playback.Error(timestamp: Date().millisecondsSince1970,
+        let event = Playback.Error(timestamp: currentTimestamp(),
                                    offsetTime: offsetTime(for: source, using: tech),
                                    message: error.message,
                                    code: error.code,
@@ -308,7 +328,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     fileprivate func finalizeWithError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         var events = startupEvents
         
-        let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
+        let errorPayload = Playback.Error(timestamp: currentTimestamp(),
                                           offsetTime: offsetTime(for: source, using: tech),
                                           message: error.message,
                                           code: error.code,
@@ -353,26 +373,26 @@ extension ExposureAnalytics: AnalyticsProvider {
     }
     
     public func onBitrateChanged<Tech, Source>(tech: Tech, source: Source, bitrate: Double) where Tech : PlaybackTech, Source : MediaSource {
-        let analyticsEvent = Playback.BitrateChanged(timestamp: Date().millisecondsSince1970,
+        let analyticsEvent = Playback.BitrateChanged(timestamp: currentTimestamp(),
                                                      offsetTime: offsetTime(for: source, using: tech),
                                                      bitrate: Int64(bitrate/1000))
         dispatcher?.enqueue(event: analyticsEvent)
     }
     
     public func onBufferingStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.BufferingStarted(timestamp: Date().millisecondsSince1970,
+        let event = Playback.BufferingStarted(timestamp: currentTimestamp(),
                                               offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
     }
     
     public func onBufferingStopped<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.BufferingStopped(timestamp: Date().millisecondsSince1970,
+        let event = Playback.BufferingStopped(timestamp: currentTimestamp(),
                                               offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
     }
     
     public func onScrubbedTo<Tech, Source>(tech: Tech, source: Source, offset: Int64) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.ScrubbedTo(timestamp: Date().millisecondsSince1970,
+        let event = Playback.ScrubbedTo(timestamp: currentTimestamp(),
                                         offsetTime: offset)
         dispatcher?.enqueue(event: event)
     }
@@ -389,7 +409,7 @@ extension ExposureAnalytics: AnalyticsProvider {
 /// MARK: TraceProvider
 extension ExposureAnalytics: TraceProvider {
     public func onTrace<Tech, Source>(tech: Tech?, source: Source?, data: [String: Any]) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.Trace(timestamp: Date().millisecondsSince1970,
+        let event = Playback.Trace(timestamp: currentTimestamp(),
                                    offsetTime: offsetTime(for: source, using: tech),
                                    data: data)
         dispatcher?.enqueue(event: event)
@@ -401,10 +421,10 @@ extension ExposureAnalytics: TraceProvider {
 extension ExposureAnalytics: TechDeallocationEventProvider {
     public func onTechDeallocated<Source>(beforeMediaPreparationFinalizedOf mediaSource: Source) where Source : MediaSource {
         let data = ["Message":"TECH_DEALLOCATED_BEFORE_MEDIA_PREPARATION_FINISHED"]
-        let trace = Playback.Trace(timestamp: Date().millisecondsSince1970,
+        let trace = Playback.Trace(timestamp: currentTimestamp(),
                                    data: data)
         
-        let aborted = Playback.Aborted(timestamp: Date().millisecondsSince1970)
+        let aborted = Playback.Aborted(timestamp: currentTimestamp())
         
         dispatcher?.enqueue(event: trace)
         dispatcher?.enqueue(event: aborted)

@@ -70,10 +70,13 @@ extension Playback.Started: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.playMode.rawValue: playMode,
             JSONKeys.mediaId.rawValue: mediaId
         ]
+        
+        if timestamp > 0 {
+            params[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let value = offsetTime {
             params[JSONKeys.offsetTime.rawValue] = value

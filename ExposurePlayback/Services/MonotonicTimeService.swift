@@ -155,9 +155,7 @@ extension MonotonicTimeService {
             self.fetchServerTime{ [weak self] difference, error in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
-                    if let difference = difference {
-                        self.currentDifference = difference
-                        
+                    if difference != nil {
                         self.timer?.schedule(deadline: .now() + .milliseconds(self.refreshInterval))
                     }
                     else {
@@ -185,13 +183,14 @@ extension MonotonicTimeService {
     
     /// Convenience method for fetching the server time and perparing the `Difference` struct
     private func fetchServerTime(callback: @escaping (Difference?, ExposureError?) -> Void) {
-        serverTimeProvider.fetchServerTime(using: environment) { serverTime, error in
+        serverTimeProvider.fetchServerTime(using: environment) { [weak self] serverTime, error in
             guard let serverTime = serverTime?.epochMillis else {
                 callback(nil, error)
                 return
             }
             
             let difference = Difference(serverStartTime: Int64(serverTime), localStartTime: Date().millisecondsSince1970)
+            self?.currentDifference = difference
             callback(difference, nil)
         }
     }

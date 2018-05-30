@@ -44,9 +44,12 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
     
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
-            JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.eventType.rawValue: eventType
         ]
+        
+        if timestamp > 0 {
+            params[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let assetId = assetId {
             params[JSONKeys.assetId.rawValue] = assetId

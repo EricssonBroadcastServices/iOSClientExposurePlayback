@@ -173,11 +173,12 @@ extension ProgramSource: ProgramServiceEnabled {
 
 extension ProgramSource: HeartbeatsProvider {
     internal func heartbeat(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> Playback.Heartbeat {
+        let timestamp = context.monotonicTimeService.serverTime ?? -1
         if isUnifiedPackager {
-            return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadTime ?? tech.playheadPosition)
+            return Playback.Heartbeat(timestamp: timestamp, offsetTime: tech.playheadTime)
         }
         else {
-            return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadPosition)
+            return Playback.Heartbeat(timestamp: timestamp, offsetTime: tech.playheadPosition)
         }
     }
 }

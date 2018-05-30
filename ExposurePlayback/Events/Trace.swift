@@ -42,7 +42,10 @@ extension Playback.Trace: AnalyticsEvent {
         var json: [String: Any] = data
         
         json[JSONKeys.eventType.rawValue] = eventType
-        json[JSONKeys.timestamp.rawValue] = timestamp
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let offset = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = offset

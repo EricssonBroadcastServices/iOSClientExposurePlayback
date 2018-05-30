@@ -40,9 +40,12 @@ extension Playback.BitrateChanged: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.bitrate.rawValue: bitrate
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let value = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = value

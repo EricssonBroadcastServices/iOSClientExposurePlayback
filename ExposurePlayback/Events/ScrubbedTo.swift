@@ -34,11 +34,16 @@ extension Playback.ScrubbedTo: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.offsetTime.rawValue: offsetTime
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

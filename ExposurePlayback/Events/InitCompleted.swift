@@ -30,10 +30,15 @@ extension Playback.InitCompleted: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
-            JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+        var json: [String: Any] = [
+            JSONKeys.eventType.rawValue: eventType
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
+        
+        return json
     }
     
     internal enum JSONKeys: String {

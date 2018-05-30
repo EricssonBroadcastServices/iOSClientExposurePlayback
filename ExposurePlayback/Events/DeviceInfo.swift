@@ -79,13 +79,16 @@ extension DeviceInfo: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.deviceId.rawValue: deviceId,
             JSONKeys.deviceModel.rawValue: deviceModel,
             JSONKeys.os.rawValue: os,
             JSONKeys.osVersion.rawValue: osVersion,
             JSONKeys.manufacturer.rawValue: manufacturer
         ]
+        
+        if timestamp > 0 {
+            params[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let cpuType = cpuType {
             params[JSONKeys.cpuType.rawValue] = cpuType

@@ -55,22 +55,43 @@ extension ExposureContext {
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter tech: Tech to do the playback on
     internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
-        playbackProperties = properties
-        
-        // Generate the analytics providers
-        let providers = analyticsProviders(for: nil)
-        
-        // Initial analytics
-        providers.forEach{
-            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
+        /// A monotonic time is required for delivering analytics. As such, we should make sure that is available before playback starts
+        monotonicTimeService.serverTime(forceRefresh: false) { [weak self, weak tech] _, error in
+            guard let `self` = self, let tech = tech else {
+                /// This will occur when the player dissapears after servertime sync returns. It is considered a *lost cause*
+                return
+            }
+            self.playbackProperties = properties
+            
+            guard error == nil else {
+                // TODO: Do we trigger a warning?
+                // TODO: Do we trigger an error? Do we allow playback anyway? Do we add a trace message?
+                
+                /// An error here basicly means a user CAN NOT play. Is this desired behavior
+                
+                return
+            }
+            
+            // Generate the analytics providers
+            let providers = self.analyticsProviders(for: nil)
+            
+            // Initial analytics
+            providers.forEach{
+                if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                    exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
+                }
+            }
+            
+            playable.prepareSource(environment: self.environment, sessionToken: self.sessionToken) { [weak self, weak tech] source, error in
+                guard let `self` = self, let tech = tech else {
+                    // TODO: Add trace?
+                    return
+                    
+                }
+                self.handle(source: source, error: error, providers: providers, tech: tech)
             }
         }
         
-        playable.prepareSource(environment: environment, sessionToken: sessionToken) { [weak self, weak tech] source, error in
-            guard let `self` = self, let tech = tech else { return }
-            self.handle(source: source, error: error, providers: providers, tech: tech)
-        }
     }
     
     fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>) {

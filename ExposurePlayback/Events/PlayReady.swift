@@ -42,10 +42,13 @@ extension Playback.PlayReady: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.tech.rawValue: tech,
             JSONKeys.techVersion.rawValue: techVersion
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let value = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = value

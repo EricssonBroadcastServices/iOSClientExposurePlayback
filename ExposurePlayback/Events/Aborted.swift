@@ -35,9 +35,12 @@ extension Playback.Aborted: AnalyticsEvent {
     
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
-            JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.eventType.rawValue: eventType
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let value = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = value

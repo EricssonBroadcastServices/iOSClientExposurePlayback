@@ -53,11 +53,14 @@ extension Playback.Error: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.message.rawValue: message,
             JSONKeys.code.rawValue: code,
             JSONKeys.domain.rawValue: domain
         ]
+        
+        if timestamp > 0 {
+            json[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let offset = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = offset

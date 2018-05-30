@@ -30,11 +30,20 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter sessionToken: Token identifying this session
     /// - parameter analytics: The *Exposure* related `AnalyticsProvider` tasked with delivering analytics to the *EMP* backend.
     public convenience init<Analytics: ExposureStreamingAnalyticsProvider>(environment: Environment, sessionToken: SessionToken, analytics: Analytics.Type) {
-        let generator: (Tech.Context.Source?) -> AnalyticsProvider = { _ in return analytics.init(environment: environment, sessionToken: sessionToken) }
         let context = ExposureContext(environment: environment, sessionToken: sessionToken)
         let tech = HLSNative<ExposureContext>()
         tech.airplayHandler = context
-        context.analyticsGenerators.append(generator)
+        
+        // Handle mandatory `ExposureAnalytics`
+        let exposureAnalyticsGenerator: (Tech.Context.Source?) -> AnalyticsProvider = { [weak context] _ -> AnalyticsProvider in
+            let provider = analytics.init(environment: environment, sessionToken: sessionToken)
+            if let exposureAnalytics = provider as? ExposureAnalytics {
+                exposureAnalytics.monotonicTimeService = context?.monotonicTimeService
+            }
+            return provider
+        }
+        context.analyticsGenerators.append(exposureAnalyticsGenerator)
+        
         self.init(tech: tech, context: context)
     }
 }

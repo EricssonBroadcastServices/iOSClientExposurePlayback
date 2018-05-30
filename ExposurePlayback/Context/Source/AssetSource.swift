@@ -76,7 +76,8 @@ extension AssetSource: ContextStartTime {
 
 extension AssetSource: HeartbeatsProvider {
     internal func heartbeat(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> Playback.Heartbeat {
-        return Playback.Heartbeat(timestamp: Date().millisecondsSince1970, offsetTime: tech.playheadPosition)
+        let timestamp = context.monotonicTimeService.serverTime ?? -1
+        return Playback.Heartbeat(timestamp: timestamp, offsetTime: tech.playheadPosition)
     }
 }
 

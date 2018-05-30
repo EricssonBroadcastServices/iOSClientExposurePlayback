@@ -73,10 +73,13 @@ extension Playback.Created: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.player.rawValue: player,
             JSONKeys.version.rawValue: version
         ]
+        
+        if timestamp > 0 {
+            params[JSONKeys.timestamp.rawValue] = timestamp
+        }
         
         if let exposureVersion = exposureVersion {
             params[JSONKeys.exposureVersion.rawValue] = exposureVersion
