@@ -100,7 +100,10 @@ platform :ios do
     end
     
     private_lane :fix_dependencies do
-        version = get_version_number(xcodeproj: ENV["XCODE_PROJECT"])
+        version = get_version_number(
+                                     xcodeproj: ENV["XCODE_PROJECT"],
+                                     target: ENV["RELEASE_VERSION_TARGET"]
+                                     )
         cartfile = File.expand_path("..",Dir.pwd) + "/Cartfile"
         UI.message(cartfile)
         if File.exists?(cartfile)
