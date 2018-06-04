@@ -108,7 +108,8 @@ extension MRRFairplayRequester {
         
         print(url, " - ",assetIDString)
         
-        fetchApplicationCertificate{ [unowned self] certificate, certificateError in
+        fetchApplicationCertificate{ [weak self] certificate, certificateError in
+            guard let `self` = self else { return }
             if let certificateError = certificateError {
                 DispatchQueue.main.async{ [weak self] in
                     self?.keyValidationError = certificateError
