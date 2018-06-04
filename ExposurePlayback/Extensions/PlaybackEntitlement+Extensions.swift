@@ -14,6 +14,6 @@ extension PlaybackEntitlement {
     internal var isUnifiedPackager: Bool {
         return mediaLocator
             .pathComponents
-            .reduce(false) { $0 || $1.contains(".isml") }
+            .reduce(false) { $0 || $1.contains(".isml") || $1.contains(".ism") }
     }
 }
