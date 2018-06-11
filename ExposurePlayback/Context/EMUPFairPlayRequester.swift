@@ -120,10 +120,6 @@ extension EMUPFairPlayRequester {
                         
                         DispatchQueue.main.async{ [weak self] in
                             if let ckcError = ckcError {
-                                print("CKC Error",ckcError.code, ckcError.domain, ckcError.message)
-                                if case let .fairplay(reason: reason) = ckcError, case let .contentKeyContextServer(code: code, message: message) = reason {
-                                    
-                                }
                                 self?.keyValidationError = ckcError
                                 resourceLoadingRequest.finishLoading(with: ckcError)
                                 return
@@ -201,13 +197,18 @@ extension EMUPFairPlayRequester {
             return
         }
         
+        /// Check if the certificate is cached for the requested `certificateUrl`
+        if let cachedCertificate = FairplayCertificateCache.shared.cache[url] {
+            callback(cachedCertificate, nil)
+            return
+        }
+        
         SessionManager
             .default
-            .request(url,
-                     method: .get)
+            .request(url, method: .get)
             .validate()
             .rawResponse { _,_, data, error in
-                guard error == nil, let jsonData = data else {
+                guard error == nil else {
                     if let statusError = error as? Request.Networking {
                         if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
                             do {
@@ -215,7 +216,7 @@ extension EMUPFairPlayRequester {
                                 callback(nil, .fairplay(reason: .applicationCertificateServer(code: message.code, message: message.message)))
                             }
                             catch let e {
-                                callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                                callback(nil, .fairplay(reason: .applicationCertificateParsing(error: e)))
                             }
                         }
                         else {
@@ -229,6 +230,7 @@ extension EMUPFairPlayRequester {
                 }
                 
                 if let certificate = data {
+                    FairplayCertificateCache.shared.cache[url] = certificate
                     callback(certificate, nil)
                 }
         }
@@ -312,7 +314,7 @@ extension EMUPFairPlayRequester {
                      headers: ["Content-type": "application/octet-stream"])
             .validate()
             .rawResponse { _,urlResponse, data, error in
-                guard error == nil, let jsonData = data else {
+                guard error == nil else {
                     if let statusError = error as? Request.Networking {
                         if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
                             do {
@@ -320,7 +322,7 @@ extension EMUPFairPlayRequester {
                                 callback(nil, .fairplay(reason: .contentKeyContextServer(code: message.code, message: message.message)))
                             }
                             catch let e {
-                                callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                                callback(nil, .fairplay(reason: .contentKeyContextParsing(error: e)))
                             }
                         }
                         else {
