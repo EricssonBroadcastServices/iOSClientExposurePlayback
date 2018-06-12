@@ -144,6 +144,8 @@
 		76458ABD204D3212002AB3FB /* SeekToLiveMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */; };
 		76458ABF204D441F002AB3FB /* SeekToTimeMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */; };
 		765EAF82203F322F00DD6C94 /* BitrateRestrictionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */; };
+		766EE43120CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */; };
+		766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */; };
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
 		766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */; };
 		7686A8C02040281C0002E2B6 /* LanguagePreferencesSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */; };
@@ -296,6 +298,7 @@
 		76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToLiveMock.swift; sourceTree = "<group>"; };
 		76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToTimeMock.swift; sourceTree = "<group>"; };
 		765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitrateRestrictionsSpec.swift; sourceTree = "<group>"; };
+		766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairplayCertificateCache.swift; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
 		766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
 		7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePreferencesSpec.swift; sourceTree = "<group>"; };
@@ -654,6 +657,7 @@
 				76A89C4320207AB100C23579 /* MonotonicTimeService.swift */,
 				76A89C4420207AB100C23579 /* ProgramService.swift */,
 				76A89C4520207AB100C23579 /* ServerTimeProvider.swift */,
+				766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1010,6 +1014,7 @@
 				760802042069306E007F59D5 /* AssetIdentifier.swift in Sources */,
 				760802062069306E007F59D5 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				760802072069306E007F59D5 /* Aborted.swift in Sources */,
+				766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				760802082069306E007F59D5 /* ExposureSource.swift in Sources */,
 				760802092069306E007F59D5 /* ContractRestrictionsService.swift in Sources */,
 				7608020A2069306E007F59D5 /* DeviceInfo.swift in Sources */,
@@ -1134,6 +1139,7 @@
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A29D39205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
+				766EE43120CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
 				76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */,

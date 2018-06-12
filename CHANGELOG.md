@@ -10,6 +10,9 @@
 
 ## 2.0.86
 
+#### Features
+* `EMP-11452` Cache *Fairplay* certificates on on request url.
+
 #### Bug Fixes
 * Use correct `FairplayRequester` when streaming *vod*
 
