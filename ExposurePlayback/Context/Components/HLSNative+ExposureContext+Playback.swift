@@ -75,6 +75,10 @@ extension ExposureContext {
     
     fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>) {
         if let source = source {
+            /// Apply bitrate quality selection based on `PlaybackProperties`
+            source.startIndex = playbackProperties.initialBitrateQuality
+            
+            // Fire the entitlement response
             onEntitlementResponse(source.entitlement, source)
             
             /// Make sure StartTime is configured if specified by user

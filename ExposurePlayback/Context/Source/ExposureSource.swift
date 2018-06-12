@@ -22,8 +22,16 @@ public class ExposureSource: MediaSource {
         return entitlement.playSessionId
     }
     
+    /// Creates a custom rearangement of the master manifest variant list.
+    ///
+    /// Playback will start with the specified variant, if available.
+    internal var startIndex: UInt?
+    
     /// Media locator
     public var url: URL {
+        if let startIndex = startIndex, let modified = entitlement.mediaLocator.queryParam(key: "start_index", value: "\(startIndex)") {
+            return modified
+        }
         return entitlement.mediaLocator
     }
     

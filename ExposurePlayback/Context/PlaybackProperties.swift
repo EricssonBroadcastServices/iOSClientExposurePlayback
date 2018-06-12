@@ -33,17 +33,41 @@ public struct PlaybackProperties {
     /// Bitrate should be specified in bits per second
     public let maxBitrate: Int64?
     
+    /// Sets the desired initial bitrate quality as a variant offset in master playlist.
+    ///
+    /// Example: manifest.m3u8
+    ///
+    /// Num variants == 3
+    ///
+    /// #EXT-X-STREAM-INF:BANDWIDTH=638000 ...
+    /// #EXT-X-STREAM-INF:BANDWIDTH=1062000 ...
+    /// #EXT-X-STREAM-INF:BANDWIDTH=1762000 ...
+    ///
+    /// ```swift
+    /// let playbackProperties = PlaybackProperties(initialBitrateQuality: 2)
+    /// player.startPlayback(playable: playable, properties: playbackProperties)
+    /// ```
+    ///
+    /// Playback should now start with the 3:rd bitrate (ie BANDWIDTH=1762000).
+    ///
+    /// Specifying a quality indicator larger than the number of available variants will cause selection to default to the first option specified in the master manifest. (offset is zero-based)
+    ///
+    /// - note: This only influences bitrate quality selection during the initial startup phase. The player will still manage ABR changes during continuous playback.
+    public let initialBitrateQuality: UInt?
+    
     /// Specifies custom playback options
     ///
     /// - parameter autoplay: Should playback start immediately when ready
     /// - parameter playFrom: Specifies the desired start time behavior.
     /// - parameter language: Specifies the preferred language
     /// - parameter maxBitrate: Assigns a preferred max bitrate (in bits per second)
-    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .defaultBehaviour, maxBitrate: Int64? = nil) {
+    /// - parameter initialBitrateQuality: The initial bitrate quality filter. (corresponds to the variant offset in the master manifest).
+    public init(autoplay: Bool = true, playFrom: PlayFrom = .defaultBehaviour, language: LanguagePreferences = .defaultBehaviour, maxBitrate: Int64? = nil, initialBitrateQuality: UInt? = nil) {
         self.autoplay = autoplay
         self.playFrom = playFrom
         self.language = language
         self.maxBitrate = maxBitrate
+        self.initialBitrateQuality = initialBitrateQuality
     }
     
     /// Specifies custom playback options by using `old` as a base.
@@ -53,11 +77,12 @@ public struct PlaybackProperties {
     /// - parameter playFrom: Specifies the desired start time behavior.
     /// - parameter language: Specifies the preferred language
     /// - parameter maxBitrate: Assigns a preferred max bitrate (in bits per second)
-    public init(old: PlaybackProperties, autoplay: Bool? = nil, playFrom: PlayFrom? = nil, language: LanguagePreferences? = nil, maxBitrate: Int64? = nil) {
+    public init(old: PlaybackProperties, autoplay: Bool? = nil, playFrom: PlayFrom? = nil, language: LanguagePreferences? = nil, maxBitrate: Int64? = nil, initialBitrateQuality: UInt? = nil) {
         self.autoplay = autoplay ?? old.autoplay
         self.playFrom = playFrom ?? old.playFrom
         self.language = language ?? old.language
         self.maxBitrate = maxBitrate ?? old.maxBitrate
+        self.initialBitrateQuality = initialBitrateQuality ?? old.initialBitrateQuality
     }
     
     /// Governs where the playback should start from.
