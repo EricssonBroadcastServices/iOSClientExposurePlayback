@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.0.87` Release - [2.0.87](#2087)
 * `2.0.86` Release - [2.0.86](#2086)
 * `2.0.85` Release - [2.0.85](#2085)
 * `2.0.81` Release - [2.0.81](#2081)
@@ -7,6 +8,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.0.87
+
+#### Bug Fixes
+* `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events. 
 
 ## 2.0.86
 

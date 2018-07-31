@@ -150,7 +150,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         if let source = source as? ExposureSource {
             let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
                                                   assetData: PlaybackIdentifier.from(source: source),
-                                                  mediaId: source.url.path)
+                                                  mediaId: source.url.absoluteString)
             
             /// 3. Store startup events
             var current = startupEvents
@@ -233,7 +233,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source),
-                                         mediaId: source.url.cleanQuery() ?? source.url.path,
+                                         mediaId: source.url.absoluteString,
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
                                          bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil,
