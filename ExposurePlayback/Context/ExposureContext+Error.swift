@@ -179,7 +179,7 @@ extension ExposureContext.Error.FairplayError {
         case .networking(error: let error): return "Network error while fetching Application Certificate: \(error.localizedDescription)"
         case .applicationCertificateDataFormatInvalid: return "Certificate Data was not encodable using base64"
         case .applicationCertificateServer(code: let code, message: let message): return "Application Certificate server returned error: \(code) with message: \(message)"
-        case .applicationCertificateParsing: return "Application Certificate server response lacks parsable data"
+        case .applicationCertificateParsing(error: let error): return "Unable to parce Application Certificate: \(error.debugDescription)"
         case .invalidContentIdentifier: return "Invalid Content Identifier"
             
         // Server Playback Context
@@ -190,7 +190,7 @@ extension ExposureContext.Error.FairplayError {
         case .missingPlaytoken: return "Content Key Context call requires a playtoken"
         case .contentKeyContextDataFormatInvalid: return "Content Key Context was not encodable using base64"
         case .contentKeyContextServer(code: let code, message: let message): return "Content Key Context server returned error: \(code) with message: \(message)"
-        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data \(error?.localizedDescription ?? "")"
+        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data: \(error?.localizedDescription ?? "")"
         case .missingContentKeyContext: return "Content Key Context missing from response"
         case .missingDataRequest: return "Data Request missing"
         case .contentInformationRequestMissing: return "Unable to set contentType on contentInformationRequest"
@@ -203,7 +203,7 @@ extension ExposureContext.Error.FairplayError {
     public var code: Int {
         switch self {
         case .applicationCertificateDataFormatInvalid: return 301
-        case .applicationCertificateParsing: return 302
+        case .applicationCertificateParsing(error: _): return 302
         case .applicationCertificateServer(code: _, message: _): return 303
         case .contentKeyContextDataFormatInvalid: return 304
         case .contentKeyContextParsing(error: _): return 305

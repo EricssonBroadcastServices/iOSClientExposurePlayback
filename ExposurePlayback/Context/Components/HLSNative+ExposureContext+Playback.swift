@@ -109,6 +109,31 @@ extension ExposureContext {
             
             source.analyticsConnector.providers = providers
             source.analyticsConnector.providers.forEach{
+                /// DRM analytics events
+                if let drmProvider = $0 as? DrmAnalyticsProvider, let fairplayRequester = source.fairplayRequester as? EMUPFairPlayRequester {
+                    /// Hook certificate request and response listener
+                    fairplayRequester.onCertificateRequest = { [weak tech, weak source] in
+                        guard let tech = tech, let source = source else { return }
+                        drmProvider.onCertificateRequest(tech: tech, source: source)
+                    }
+                    
+                    fairplayRequester.onCertificateResponse = { [weak tech, weak source] certError in
+                        guard let tech = tech, let source = source else { return }
+                        drmProvider.onCertificateResponse(tech: tech, source: source, error: certError)
+                    }
+                    /// Hook license request and response listener
+                    fairplayRequester.onLicenseRequest = { [weak tech, weak source] in
+                        guard let tech = tech, let source = source else { return }
+                        drmProvider.onLicenseRequest(tech: tech, source: source)
+                    }
+                    
+                    fairplayRequester.onLicenseResponse = { [weak tech, weak source] licenseError in
+                        guard let tech = tech, let source = source else { return }
+                        drmProvider.onLicenseResponse(tech: tech, source: source, error: licenseError)
+                    }
+                }
+                
+                /// EMP related startup analytics
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
                     exposureProvider.onHandshakeStarted(tech: tech, source: source)
                     exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in
@@ -177,4 +202,3 @@ extension ExposureContext {
         }
     }
 }
-

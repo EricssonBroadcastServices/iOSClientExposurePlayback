@@ -141,6 +141,10 @@
 		7636CAA32032E5F200F914D1 /* MockedProgramProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */; };
 		7636CAA52032E61500F914D1 /* TestEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA42032E61500F914D1 /* TestEnv.swift */; };
 		7636CAA72032E63E00F914D1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636CAA62032E63E00F914D1 /* Date+Extensions.swift */; };
+		7644FBBA21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644FBB921134843006CEBF0 /* DrmAnalyticsProvider.swift */; };
+		7644FBBB21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644FBB921134843006CEBF0 /* DrmAnalyticsProvider.swift */; };
+		7644FBBD21134BCA006CEBF0 /* DrmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */; };
+		7644FBBE21134BCA006CEBF0 /* DrmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */; };
 		76458ABD204D3212002AB3FB /* SeekToLiveMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */; };
 		76458ABF204D441F002AB3FB /* SeekToTimeMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */; };
 		765EAF82203F322F00DD6C94 /* BitrateRestrictionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */; };
@@ -295,6 +299,8 @@
 		7636CAA22032E5F200F914D1 /* MockedProgramProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedProgramProvider.swift; sourceTree = "<group>"; };
 		7636CAA42032E61500F914D1 /* TestEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnv.swift; sourceTree = "<group>"; };
 		7636CAA62032E63E00F914D1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		7644FBB921134843006CEBF0 /* DrmAnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrmAnalyticsProvider.swift; sourceTree = "<group>"; };
+		7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrmEvent.swift; sourceTree = "<group>"; };
 		76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToLiveMock.swift; sourceTree = "<group>"; };
 		76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToTimeMock.swift; sourceTree = "<group>"; };
 		765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitrateRestrictionsSpec.swift; sourceTree = "<group>"; };
@@ -673,6 +679,7 @@
 				7635AECA202AE0B2001512BF /* ContextPositionSeekable.swift */,
 				7635AECC202AE0D2001512BF /* ContextStartTime.swift */,
 				766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */,
+				7644FBB921134843006CEBF0 /* DrmAnalyticsProvider.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -744,6 +751,7 @@
 				76A89D852020F41F00C23579 /* Started.swift */,
 				76A29D3A205FB6C70047B546 /* StartAirplay.swift */,
 				7696508320B2E64000B76A14 /* Trace.swift */,
+				7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1016,6 +1024,7 @@
 				760802072069306E007F59D5 /* Aborted.swift in Sources */,
 				766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				760802082069306E007F59D5 /* ExposureSource.swift in Sources */,
+				7644FBBE21134BCA006CEBF0 /* DrmEvent.swift in Sources */,
 				760802092069306E007F59D5 /* ContractRestrictionsService.swift in Sources */,
 				7608020A2069306E007F59D5 /* DeviceInfo.swift in Sources */,
 				7608020B2069306E007F59D5 /* ExposureContext+Error.swift in Sources */,
@@ -1028,6 +1037,7 @@
 				760802122069306E007F59D5 /* Resumed.swift in Sources */,
 				760802132069306E007F59D5 /* ExposureFairplayRequester.swift in Sources */,
 				760802142069306E007F59D5 /* ProgramChanged.swift in Sources */,
+				7644FBBB21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
 				760802152069306E007F59D5 /* ProgramSource.swift in Sources */,
 				760802162069306E007F59D5 /* BitrateChanged.swift in Sources */,
 				760802172069306E007F59D5 /* StartCasting.swift in Sources */,
@@ -1141,6 +1151,7 @@
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
 				766EE43120CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
+				7644FBBD21134BCA006CEBF0 /* DrmEvent.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
 				76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */,
 				76A89DA32020F9A300C23579 /* ExposureContext+Error.swift in Sources */,
@@ -1153,6 +1164,7 @@
 				76A89D9E2020F41F00C23579 /* Resumed.swift in Sources */,
 				76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */,
 				76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */,
+				7644FBBA21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
 				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
