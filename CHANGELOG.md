@@ -11,8 +11,12 @@
 
 ## 2.0.87
 
+#### Features
+* `EMP-11449` Improved debug potential for the *Fairplay* validation process. Added `Playback.DRM` event to trace license and cerrtificate requests.
+
 #### Bug Fixes
-* `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events. 
+* `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events.
+* Fixed several small bugs related to error handling during *Fairplay* validation.
 
 ## 2.0.86
 
