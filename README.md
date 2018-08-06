@@ -70,4 +70,4 @@ Major changes between releases will be documented with special [Upgrade Guides](
 Updating your dependencies is done by running  `carthage update` with the relevant *options*, such as `--use-submodules`, depending on your project setup. For more information regarding dependency management with `Carthage` please consult their [documentation](https://github.com/Carthage/Carthage/blob/master/README.md) or run `carthage help`.
 
 ## Known Limitations
-* `EMP-11583` Contract restrictions for *fast forward*, *rewind*, and *pause* can not be enforced during *Airplay Mode* due to lack of event callbacks originating from `AppleTV` remote control .
+* `EMP-11583` Contract restrictions for *fast forward*, *rewind*, and *pause* can not be enforced during *Airplay Mode* due to lack of event callbacks originating from `AppleTV` remote control. 
