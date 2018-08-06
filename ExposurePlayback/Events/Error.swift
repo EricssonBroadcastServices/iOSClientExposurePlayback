@@ -18,7 +18,7 @@ extension Playback {
         internal let offsetTime: Int64?
         
         /// Human readable error message
-        /// Example: "Unable to parse HLS manifest"
+        /// Example: "NOT_ENTITLED"
         internal let message: String
         
         /// Platform-dependent error code

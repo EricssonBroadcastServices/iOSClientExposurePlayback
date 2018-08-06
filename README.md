@@ -13,8 +13,6 @@
     - [Migrating from MRR](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/migrating-from-mrr.md)
 * [Release Notes](#release-notes)
 * [Upgrade Guides](#upgrade-guides)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
 
 ## Features
 
@@ -69,9 +67,3 @@ Major changes between releases will be documented with special [Upgrade Guides](
 
 ### Carthage
 Updating your dependencies is done by running  `carthage update` with the relevant *options*, such as `--use-submodules`, depending on your project setup. For more information regarding dependency management with `Carthage` please consult their [documentation](https://github.com/Carthage/Carthage/blob/master/README.md) or run `carthage help`.
-
-## Roadmap
-No formalised roadmap has yet been established but an extensive backlog of possible items exist. The following represent an unordered *wish list* and is subject to change.
-
-
-## Contributing

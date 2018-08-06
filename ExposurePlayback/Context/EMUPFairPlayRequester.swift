@@ -31,6 +31,12 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     internal func shouldContactRemote(for resourceLoadingRequest: AVAssetResourceLoadingRequest) throws -> Bool {
         return true
     }
+    
+    internal var onCertificateRequest: () -> Void = { }
+    internal var onCertificateResponse: (ExposureContext.Error?) -> Void = { _ in }
+    
+    internal var onLicenseRequest: () -> Void = { }
+    internal var onLicenseResponse: (ExposureContext.Error?) -> Void = { _ in }
 }
 
 // MARK: - AVAssetResourceLoaderDelegate
@@ -101,8 +107,23 @@ extension EMUPFairPlayRequester {
             return
         }
         
-        fetchApplicationCertificate{ [weak self] certificate, certificateError in
+        
+        guard let certificateUrl = certificateUrl else {
+            let missingCertificateUrlError = ExposureContext.Error.fairplay(reason: .missingApplicationCertificateUrl)
+            self.keyValidationError = missingCertificateUrlError
+            resourceLoadingRequest.finishLoading(with: missingCertificateUrlError)
+            return
+        }
+        
+        /// Fetch the certificate
+        fetchApplicationCertificate(url: certificateUrl) { [weak self] certificate, cachedResponse, certificateError in
             guard let `self` = self else { return }
+            
+            /// Trigger the certificate response listener
+            if !cachedResponse {
+                self.onCertificateResponse(certificateError)
+            }
+            
             if let certificateError = certificateError {
                 DispatchQueue.main.async{ [weak self] in
                     self?.keyValidationError = certificateError
@@ -115,8 +136,20 @@ extension EMUPFairPlayRequester {
                 do {
                     let spcData = try resourceLoadingRequest.streamingContentKeyRequestData(forApp: certificate, contentIdentifier: contentIdentifier, options: self.resourceLoadingRequestOptions)
                     
-                    self.fetchContentKeyContext(spc: spcData) { [weak self] ckcBase64, ckcError in
+                    
+                    guard let licenseUrl = self.licenseUrl else {
+                        let missingLicenseUrlError = ExposureContext.Error.fairplay(reason: .missingContentKeyContextUrl)
+                        self.keyValidationError = missingLicenseUrlError
+                        resourceLoadingRequest.finishLoading(with: missingLicenseUrlError)
+                        return
+                    }
+                    
+                    /// Fetch the CKC
+                    self.fetchContentKeyContext(url: licenseUrl, spc: spcData) { [weak self] ckcBase64, ckcError in
                         guard let `self` = self else { return }
+                        
+                        /// Trigger the license response listener
+                        self.onLicenseResponse(ckcError)
                         
                         DispatchQueue.main.async{ [weak self] in
                             if let ckcError = ckcError {
@@ -189,49 +222,52 @@ extension EMUPFairPlayRequester {
 extension EMUPFairPlayRequester {
     /// The *Application Certificate* is fetched from a server specified by a `certificateUrl` delivered in the *entitlement* obtained through *Exposure*.
     ///
-    /// - note: This method uses a specialized function for parsing the retrieved *Application Certificate* from an *MRR specific* format.
+    /// Callback:
+    ///     * Data: The certificate data
+    ///     * Bool: If the certificate data was cached (ie no network request was made)
+    ///     * Error: An error, if one occured
+    ///
+    /// - note: This method uses a specialized function for parsing the retrieved *Application Certificate* from an *EMUP specific* format.
     /// - parameter callback: fires when the certificate is fetched or when an `error` occurs.
-    fileprivate func fetchApplicationCertificate(callback: @escaping (Data?, ExposureContext.Error?) -> Void) {
-        guard let url = certificateUrl else {
-            callback(nil, .fairplay(reason: .missingApplicationCertificateUrl))
+    fileprivate func fetchApplicationCertificate(url: URL, callback: @escaping (Data?, Bool, ExposureContext.Error?) -> Void) {
+        /// Check if the certificate is cached for the requested `certificateUrl`
+        if let cachedCertificate = FairplayCertificateCache.shared.cache[url] {
+            callback(cachedCertificate, true, nil)
             return
         }
         
-        /// Check if the certificate is cached for the requested `certificateUrl`
-        if let cachedCertificate = FairplayCertificateCache.shared.cache[url] {
-            callback(cachedCertificate, nil)
-            return
-        }
+        /// Trigger the certificate request listener
+        onCertificateRequest()
         
         SessionManager
             .default
             .request(url, method: .get)
             .validate()
-            .rawResponse { _,_, data, error in
+            .rawResponse { _, response, data, error in
                 guard error == nil else {
                     if let statusError = error as? Request.Networking {
-                        if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
+                        if case Request.Networking.unacceptableStatusCode(code: let statusCode) = statusError, let statusData = data {
                             do {
                                 let message = try JSONDecoder().decode(ServerErrorMessage.self, from: statusData)
-                                callback(nil, .fairplay(reason: .applicationCertificateServer(code: message.code, message: message.message)))
+                                callback(nil, false, .fairplay(reason: .applicationCertificateServer(code: message.code, message: message.message)))
                             }
-                            catch let e {
-                                callback(nil, .fairplay(reason: .applicationCertificateParsing(error: e)))
+                            catch {
+                                callback(nil, false, .fairplay(reason: .applicationCertificateServer(code: statusCode, message: "")))
                             }
                         }
                         else {
-                            callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                            callback(nil, false, .fairplay(reason: .networking(error: statusError)))
                         }
                     }
                     else {
-                        callback(nil, .fairplay(reason: .applicationCertificateParsing(error: error)))
+                        callback(nil, false, .fairplay(reason: .networking(error: error!)))
                     }
                     return
                 }
                 
                 if let certificate = data {
                     FairplayCertificateCache.shared.cache[url] = certificate
-                    callback(certificate, nil)
+                    callback(certificate, false, nil)
                 }
         }
     }
@@ -300,11 +336,10 @@ extension EMUPFairPlayRequester {
     ///
     /// - parameter spc: *Server Playback Context*
     /// - parameter callback: fires when `CKC` is fetched or when an `error` occurs.
-    fileprivate func fetchContentKeyContext(spc: Data, callback: @escaping (Data?, ExposureContext.Error?) -> Void) {
-        guard let url = licenseUrl else {
-            callback(nil, .fairplay(reason: .missingContentKeyContextUrl))
-            return
-        }
+    fileprivate func fetchContentKeyContext(url: URL, spc: Data, callback: @escaping (Data?, ExposureContext.Error?) -> Void) {
+        
+        /// Trigger the license request listener
+        self.onLicenseRequest()
         
         SessionManager
             .default
@@ -316,21 +351,21 @@ extension EMUPFairPlayRequester {
             .rawResponse { _,urlResponse, data, error in
                 guard error == nil else {
                     if let statusError = error as? Request.Networking {
-                        if case Request.Networking.unacceptableStatusCode(code: _) = statusError, let statusData = data {
+                        if case Request.Networking.unacceptableStatusCode(code: let statusCode) = statusError, let statusData = data {
                             do {
                                 let message = try JSONDecoder().decode(ServerErrorMessage.self, from: statusData)
                                 callback(nil, .fairplay(reason: .contentKeyContextServer(code: message.code, message: message.message)))
                             }
-                            catch let e {
-                                callback(nil, .fairplay(reason: .contentKeyContextParsing(error: e)))
+                            catch {
+                                callback(nil, .fairplay(reason: .contentKeyContextServer(code: statusCode, message: "")))
                             }
                         }
                         else {
-                            callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                            callback(nil, .fairplay(reason: .networking(error: statusError)))
                         }
                     }
                     else {
-                        callback(nil, .fairplay(reason: .contentKeyContextParsing(error: error)))
+                        callback(nil, .fairplay(reason: .networking(error: error!)))
                     }
                     return
                 }

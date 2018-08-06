@@ -397,7 +397,7 @@ extension ExposureAnalytics: TraceProvider {
 }
 
 
-/// MARK: TraceProvider
+/// MARK: TechDeallocationEventProvider
 extension ExposureAnalytics: TechDeallocationEventProvider {
     public func onTechDeallocated<Source>(beforeMediaPreparationFinalizedOf mediaSource: Source) where Source : MediaSource {
         let data = ["Message":"TECH_DEALLOCATED_BEFORE_MEDIA_PREPARATION_FINISHED"]
@@ -411,5 +411,41 @@ extension ExposureAnalytics: TechDeallocationEventProvider {
         dispatcher?.heartbeat(enabled: false)
         dispatcher?.flushTrigger(enabled: false)
         dispatcher = nil
+    }
+}
+
+/// MARK: DrmAnalyticsProvider
+extension ExposureAnalytics: DrmAnalyticsProvider {
+    func onCertificateRequest<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
+        let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .certificateRequest, info: (source as? ExposureSource)?.entitlement.fairplay?.certificateUrl)
+        dispatcher?.enqueue(event: event)
+    }
+    
+    func onCertificateResponse<Tech, Source>(tech: Tech, source: Source, error: ExposureContext.Error?) where Tech : PlaybackTech, Source : MediaSource {
+        
+        if let error = error {
+            let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .certificateError, code: error.code, info: error.info)
+            dispatcher?.enqueue(event: event)
+        }
+        else {
+            let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .certificateResponse)
+            dispatcher?.enqueue(event: event)
+        }
+    }
+    
+    func onLicenseRequest<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
+        let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .licenseRequest, info: (source as? ExposureSource)?.entitlement.fairplay?.licenseAcquisitionUrl)
+        dispatcher?.enqueue(event: event)
+    }
+    
+    func onLicenseResponse<Tech, Source>(tech: Tech, source: Source, error: ExposureContext.Error?) where Tech : PlaybackTech, Source : MediaSource {
+        if let error = error {
+            let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .licenseError, code: error.code, info: error.info)
+            dispatcher?.enqueue(event: event)
+        }
+        else {
+            let event = Playback.DRM(timestamp: Date().millisecondsSince1970, message: .licenseResponse)
+            dispatcher?.enqueue(event: event)
+        }
     }
 }
