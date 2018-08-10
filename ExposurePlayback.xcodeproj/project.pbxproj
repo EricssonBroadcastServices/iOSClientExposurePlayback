@@ -303,6 +303,7 @@
 		7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrmEvent.swift; sourceTree = "<group>"; };
 		76458ABC204D3212002AB3FB /* SeekToLiveMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToLiveMock.swift; sourceTree = "<group>"; };
 		76458ABE204D441F002AB3FB /* SeekToTimeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekToTimeMock.swift; sourceTree = "<group>"; };
+		765AEB6E211DA799004D4190 /* KNOWN_LIMITATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KNOWN_LIMITATIONS.md; sourceTree = "<group>"; };
 		765EAF81203F322F00DD6C94 /* BitrateRestrictionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitrateRestrictionsSpec.swift; sourceTree = "<group>"; };
 		766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairplayCertificateCache.swift; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 				76A89C162020730B00C23579 /* README.md */,
 				76A89C172020730B00C23579 /* CHANGELOG.md */,
 				76A89C182020730B00C23579 /* UPGRADE_GUIDE.md */,
+				765AEB6E211DA799004D4190 /* KNOWN_LIMITATIONS.md */,
 				76A89C2920207A1600C23579 /* Documentation */,
 				76A89C1D2020731300C23579 /* fastlane */,
 				76A89C27202073D300C23579 /* Cartfile */,
