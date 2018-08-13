@@ -16,14 +16,9 @@ extension Playback {
         
         internal let assetData: PlaybackIdentifier?
         
-        /// Identity of the media the player should play. This should be the media locator as received from the call to the entitlement service. This is a string of proprietary format that corresponds to the MRR Media ID if applicable, but can contain implementation specific strings for other streaming formats. If this is not known at this time, it can be omitted.
-        /// Example: 1458209835_fai-hls_IkCMxd
-        internal let mediaId: String?
-        
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier? = nil, mediaId: String? = nil) {
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier? = nil) {
             self.timestamp = timestamp
             self.assetData = assetData
-            self.mediaId = mediaId
         }
     }
 }
@@ -60,10 +55,6 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
             params[JSONKeys.programId.rawValue] = programId
         }
         
-        if let mediaId = mediaId {
-            params[JSONKeys.mediaId.rawValue] = mediaId
-        }
-        
         return params
     }
     
@@ -73,7 +64,6 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
-        case mediaId = "MediaId"
     }
 }
 

@@ -21,9 +21,9 @@ extension DeviceInfo {
     /// NOTE: Implementation details for "identifierForVendor" states this:
     /// "If the value is nil, wait and get the value again later. This happens, for example, after the device has been restarted but before the user has unlocked the device."
     ///
-    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround.
+    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround. "UNKNOWN_DEVICE_ID" will be sent in the event this occurs.
     internal var deviceId: String {
-        return UIDevice.current.identifierForVendor!.uuidString
+        return UIDevice.current.identifierForVendor?.uuidString ?? "UNKNOWN_DEVICE_ID"
     }
     
     /// Model of the device
@@ -38,7 +38,6 @@ extension DeviceInfo {
     
     /// String identifying the CPU of the device playing the media    armeabi-v7a
     internal var cpuType: String? {
-        // TODO: Not implemented yet
         return nil
     }
     
@@ -52,13 +51,6 @@ extension DeviceInfo {
     /// Example: 8.1
     internal var osVersion: String {
         return UIDevice.current.systemVersion
-        //        let components = UIDevice.current.systemVersion.components(separatedBy: ".")
-        //        switch components.count {
-        //        case 0: return nil
-        //        case 1: return components.first! + ".0"
-        //        case 2: return components.joined(separator: ".")
-        //        default: return components[0] + "." + components[1]
-        //        }
     }
     
     /// Company that built/created/marketed the device

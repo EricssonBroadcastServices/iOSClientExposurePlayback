@@ -30,9 +30,8 @@ extension Playback {
         }
         internal let requiredAssetData: PlaybackIdentifier
         
-        /// Implementation specific identity of the media the player is playing. This should be the media locator as received from the call to the entitlement service. This is a string of proprietary format that corresponds to the MRR Media ID if applicable, but can contain implementation specific strings for other streaming formats.
-        /// Example: 1458209835_fai-hls_IkCMxd
-        internal let mediaId: String
+        /// This should be the media locator as received from the call to the entitlement service.
+        internal let mediaLocator: String
         
         /// Offset in the video sequence (in milliseconds) where playback started. For playback of live streams, this is the offset from the start of the current program. Even if the player does not support millisecond precision, the offset should still be reported in milliseconds (rather than seconds).
         internal let offsetTime: Int64?
@@ -45,10 +44,10 @@ extension Playback {
         
         internal let referenceTime: Int64?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaId: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaLocator: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
             self.timestamp = timestamp
             self.requiredAssetData = assetData
-            self.mediaId = mediaId
+            self.mediaLocator = mediaLocator
             self.offsetTime = offsetTime
             self.videoLength = videoLength
             self.bitrate = bitrate
@@ -72,7 +71,7 @@ extension Playback.Started: AnalyticsEvent {
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.playMode.rawValue: playMode,
-            JSONKeys.mediaId.rawValue: mediaId
+            JSONKeys.mediaLocator.rawValue: mediaLocator
         ]
         
         if let value = offsetTime {
@@ -110,7 +109,7 @@ extension Playback.Started: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case playMode = "PlayMode"
-        case mediaId = "MediaLocator"
+        case mediaLocator = "MediaLocator"
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"

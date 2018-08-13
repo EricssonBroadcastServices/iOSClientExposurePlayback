@@ -18,6 +18,7 @@
 #### Bug Fixes
 * `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events.
 * Fixed several small bugs related to error handling during *Fairplay* validation.
+* `EMP-11637` Send correct _media Id_ in `Playback.HandshakeStarted`.
 
 #### Known Limitations
 * `EMP-11583` Contract restrictions are bypassed when using the *AppleTV remote* during *Airplay*.
