@@ -38,7 +38,6 @@ extension DeviceInfo {
     
     /// String identifying the CPU of the device playing the media    armeabi-v7a
     internal var cpuType: String? {
-        // TODO: Not implemented yet
         return nil
     }
     
@@ -52,13 +51,6 @@ extension DeviceInfo {
     /// Example: 8.1
     internal var osVersion: String {
         return UIDevice.current.systemVersion
-        //        let components = UIDevice.current.systemVersion.components(separatedBy: ".")
-        //        switch components.count {
-        //        case 0: return nil
-        //        case 1: return components.first! + ".0"
-        //        case 2: return components.joined(separator: ".")
-        //        default: return components[0] + "." + components[1]
-        //        }
     }
     
     /// Company that built/created/marketed the device
