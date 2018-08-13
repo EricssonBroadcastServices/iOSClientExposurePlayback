@@ -21,9 +21,9 @@ extension DeviceInfo {
     /// NOTE: Implementation details for "identifierForVendor" states this:
     /// "If the value is nil, wait and get the value again later. This happens, for example, after the device has been restarted but before the user has unlocked the device."
     ///
-    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround.
+    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround. "UNKNOWN_DEVICE_ID" will be sent in the event this occurs.
     internal var deviceId: String {
-        return UIDevice.current.identifierForVendor!.uuidString
+        return UIDevice.current.identifierForVendor?.uuidString ?? "UNKNOWN_DEVICE_ID"
     }
     
     /// Model of the device
