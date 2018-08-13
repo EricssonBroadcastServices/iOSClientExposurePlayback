@@ -13,6 +13,7 @@
     - [Migrating from MRR](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/migrating-from-mrr.md)
 * [Release Notes](#release-notes)
 * [Upgrade Guides](#upgrade-guides)
+* [Known Limitations](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/KNOWN_LIMITATIONS.md)
 
 ## Features
 
