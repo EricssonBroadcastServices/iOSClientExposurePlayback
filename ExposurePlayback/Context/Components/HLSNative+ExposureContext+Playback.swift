@@ -148,8 +148,26 @@ extension ExposureContext {
                 }
             }
             
-            /// EMP related startup analytics
+            
             source.analyticsConnector.providers.forEach{
+                /// Analytics Session Invalidation Detection
+                if let exposureAnalytics = $0 as? ExposureAnalytics {
+                    exposureAnalytics.onExposureResponseMessage = { [weak tech, weak source] reason in
+                        guard let tech = tech, let source = source else { return }
+                        switch (reason.httpCode, reason.message) {
+                        case (401, "INVALID_SESSION_TOKEN"), (403, "NOT_ENTITLED"):
+                            let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: ExposureError.exposureResponse(reason: reason)))
+                            tech.eventDispatcher.onError(tech, source, contextError)
+                            source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
+                            tech.stop()
+                        default:
+                            print("===",reason.httpCode,reason.message)
+                        }
+                    }
+                }
+                
+                
+                /// EMP related startup analytics
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
                     exposureProvider.onHandshakeStarted(tech: tech, source: source)
                     exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in

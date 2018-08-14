@@ -60,6 +60,8 @@ public class ExposureAnalytics {
         self.sessionToken = sessionToken
     }
     
+    public var onExposureResponseMessage: (ExposureResponseMessage) -> Void = { _ in }
+    
     deinit {
         print("ExposureAnalytics.deinit")
         dispatcher?.flushTrigger(enabled: false)
@@ -175,6 +177,9 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                 playSessionId: playSessionId,
                                 startupEvents: events,
                                 heartbeatsProvider: heartbeatsProvider)
+        dispatcher?.onExposureResponseMessage = { [weak self] message in
+            self?.onExposureResponseMessage(message)
+        }
         dispatcher?.flushTrigger(enabled: true)
     }
     
