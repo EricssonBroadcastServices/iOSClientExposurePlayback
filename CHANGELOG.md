@@ -14,6 +14,7 @@
 #### Features
 * `EMP-11449` Improved debug potential for the *Fairplay* validation process. Added `Playback.DRM` event to trace license and cerrtificate requests.
 * `EMP-11338` `ExposureAnalytics` now adopts `SourceAbandonedEventProvider`, delivering trace events on media abandonment.
+* `EMP-11640` Playback is now stopped when analytics responds with `INVALID_SESSION_TOKEN`
 
 #### Bug Fixes
 * `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events.

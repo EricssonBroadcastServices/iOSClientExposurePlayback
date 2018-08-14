@@ -155,7 +155,7 @@ extension ExposureContext {
                     exposureAnalytics.onExposureResponseMessage = { [weak tech, weak source] reason in
                         guard let tech = tech, let source = source else { return }
                         switch (reason.httpCode, reason.message) {
-                        case (401, "INVALID_SESSION_TOKEN"), (403, "NOT_ENTITLED"):
+                        case (401, "INVALID_SESSION_TOKEN"):
                             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: ExposureError.exposureResponse(reason: reason)))
                             tech.eventDispatcher.onError(tech, source, contextError)
                             source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
