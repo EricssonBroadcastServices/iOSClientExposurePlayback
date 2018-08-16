@@ -72,7 +72,8 @@ public class ExposureAnalytics {
     internal enum ExternalPlayback {
         case none
         case chromecast
-        case airplay
+        case endedByActivatingAirplay
+        case startedAsAirplay
     }
     /// Tracks if external playback was started
     internal var externalPlayback: ExternalPlayback = .none
@@ -87,7 +88,7 @@ public class ExposureAnalytics {
     
     /// Instruct the analytics engine that the player is transitioning from local playback to `Airplay`
     public func startedAirplay() {
-        externalPlayback = .airplay
+        externalPlayback = .endedByActivatingAirplay
     }
 }
 
@@ -171,6 +172,11 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
     public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         let events = startupEvents
+        
+        if let tech = tech as? HLSNative<ExposureContext>, tech.isExternalPlaybackActive {
+            /// Session was started with Airplay active. This session should be terminated with ´Playback.StopAirplay`
+            externalPlayback = .startedAsAirplay
+        }
         
         dispatcher = Dispatcher(environment: environment,
                                 sessionToken: sessionToken,
@@ -267,9 +273,13 @@ extension ExposureAnalytics: AnalyticsProvider {
         }
         
         switch externalPlayback {
-        case .airplay:
+        case .endedByActivatingAirplay:
             let event = Playback.StartAirplay(timestamp: Date().millisecondsSince1970,
                                               offsetTime: offsetTime(for: source, using: tech))
+            dispatcher?.enqueue(event: event)
+        case .startedAsAirplay:
+            let event = Playback.StopAirplay(timestamp: Date().millisecondsSince1970,
+                                             offsetTime: offsetTime(for: source, using: tech))
             dispatcher?.enqueue(event: event)
         case .chromecast:
             let event = Playback.StartCasting(timestamp: Date().millisecondsSince1970,
