@@ -18,7 +18,7 @@ class BufferingStoppedSpec: QuickSpec {
         describe("BufferingStopped") {
             let timeStamp: Int64 = 10
             let offset: Int64 = 10
-            let type = "Playback.BufferingStopped"
+            let type = "Playback.BufferingEnded"
             
             it("Should init and record complete structure") {
                 let event = Playback.BufferingStopped(timestamp: timeStamp, offsetTime: offset)
