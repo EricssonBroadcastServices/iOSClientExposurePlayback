@@ -27,7 +27,7 @@ extension Playback {
 
 extension Playback.BufferingStopped: AnalyticsEvent {
     var eventType: String {
-        return "Playback.BufferingStopped"
+        return "Playback.BufferingEnded"
     }
     
     var bufferLimit: Int64 {
