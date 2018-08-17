@@ -123,6 +123,7 @@ extension ExposureAnalytics {
     }
 }
 
+import AVFoundation
 extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     private func autoplay<Tech>(tech: Tech) -> Bool {
         if let tech = tech as? MediaPlayback {
@@ -139,8 +140,10 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
+        let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
+        let isAirplaySession = !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
         /// 2. DeviceInfo
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970)
+        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, type: isAirplaySession)
         
         /// 3. Store startup events
         var current = startupEvents
