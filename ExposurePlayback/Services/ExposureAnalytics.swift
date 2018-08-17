@@ -140,8 +140,10 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
+        /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
         let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
         let isAirplaySession = !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
+        
         /// 2. DeviceInfo
         let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, type: isAirplaySession)
         
