@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76010C872125B364008DB688 /* StopAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76010C862125B364008DB688 /* StopAirplay.swift */; };
+		76010C882125B364008DB688 /* StopAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76010C862125B364008DB688 /* StopAirplay.swift */; };
 		760200FA2034A56F00EF495D /* EMUPFairPlayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */; };
 		7608003E2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7608003C2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift */; };
 		7608003F2064EA79007F59D5 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7608003D2064EA79007F59D5 /* SWXMLHash.swift */; };
@@ -275,6 +277,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		76010C862125B364008DB688 /* StopAirplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopAirplay.swift; sourceTree = "<group>"; };
 		760200F92034A56F00EF495D /* EMUPFairPlayRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMUPFairPlayRequester.swift; sourceTree = "<group>"; };
 		7608003C2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
 		7608003D2064EA79007F59D5 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
@@ -752,6 +755,7 @@
 				76A89D842020F41F00C23579 /* StartCasting.swift */,
 				76A89D852020F41F00C23579 /* Started.swift */,
 				76A29D3A205FB6C70047B546 /* StartAirplay.swift */,
+				76010C862125B364008DB688 /* StopAirplay.swift */,
 				7696508320B2E64000B76A14 /* Trace.swift */,
 				7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */,
 			);
@@ -993,6 +997,7 @@
 				760801E62069306E007F59D5 /* ScrubbedTo.swift in Sources */,
 				760801E72069306E007F59D5 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				760801E82069306E007F59D5 /* ContextTimeSeekable.swift in Sources */,
+				76010C882125B364008DB688 /* StopAirplay.swift in Sources */,
 				760801E92069306E007F59D5 /* Completed.swift in Sources */,
 				760801EA2069306E007F59D5 /* HandshakeStarted.swift in Sources */,
 				760801EB2069306E007F59D5 /* PlaybackEntitlement+Extensions.swift in Sources */,
@@ -1120,6 +1125,7 @@
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
 				76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				7635AEC9202AE0A2001512BF /* ContextTimeSeekable.swift in Sources */,
+				76010C872125B364008DB688 /* StopAirplay.swift in Sources */,
 				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
 				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,
 				766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */,

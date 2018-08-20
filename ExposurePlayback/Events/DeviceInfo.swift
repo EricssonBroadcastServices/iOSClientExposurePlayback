@@ -11,8 +11,17 @@ import Exposure
 
 /// The device info object should be sent once per playback session, preferably at the start of the session.
 internal struct DeviceInfo {
-    internal var timestamp: Int64
+    internal let timestamp: Int64
     
+    /// Optional string indicating the nature of playback from this device
+    ///
+    /// Can be used to indicate this is an `Airplay` session
+    internal let type: String?
+    
+    internal init(timestamp: Int64, type: String? = nil) {
+        self.timestamp = timestamp
+        self.type = type
+    }
 }
 
 extension DeviceInfo {
@@ -83,6 +92,10 @@ extension DeviceInfo: AnalyticsEvent {
             params[JSONKeys.cpuType.rawValue] = cpuType
         }
         
+        if let value = type {
+            params[JSONKeys.type.rawValue] = value
+        }
+        
         return params
     }
     
@@ -95,5 +108,6 @@ extension DeviceInfo: AnalyticsEvent {
         case os = "OS"
         case osVersion = "OSVersion"
         case manufacturer = "Manufacturer"
+        case type = "Type"
     }
 }
