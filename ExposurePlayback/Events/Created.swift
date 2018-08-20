@@ -30,6 +30,9 @@ extension Playback {
         /// If true, the player will start playing as soon as possible. If false, player does not start playing, and will be initialized at a later time. If this field is missing, it is assumed to have the value "true".
         internal let autoPlay: Bool?
         
+        /// `X-Request-Id` header specified in the ExposureResponse delivered when requesting an entitlement.
+        internal var requestId: String?
+        
         /// One of the following: vod, live, offline
         internal var playMode: String? {
             guard let data = assetData else { return nil }
@@ -97,6 +100,10 @@ extension Playback.Created: AnalyticsEvent {
             params[JSONKeys.programId.rawValue] = programId
         }
         
+        if let value = requestId {
+            params[JSONKeys.requestId.rawValue] = value
+        }
+        
         return params
     }
     
@@ -111,6 +118,7 @@ extension Playback.Created: AnalyticsEvent {
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
+        case requestId = "RequestId"
     }
 }
 

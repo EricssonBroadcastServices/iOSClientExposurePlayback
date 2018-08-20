@@ -44,6 +44,9 @@ public class ExposureSource: MediaSource {
     deinit {
         print("ExposureSource deinit")
     }
+    
+    /// The HTTPURLResponse associated with the Entitlement Request, ie `ExposureRequest`, made to *Exposure* which resulted in the creation of this `Source`.
+    internal var response: HTTPURLResponse?
 }
 
 extension ExposureSource {

@@ -67,13 +67,13 @@ extension ExposureContext {
             }
         }
         
-        playable.prepareSource(environment: environment, sessionToken: sessionToken) { [weak self, weak tech] source, error in
+        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
-            self.handle(source: source, error: error, providers: providers, tech: tech)
+            self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
         }
     }
     
-    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>) {
+    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?) {
         if let source = source {
             onEntitlementResponse(source.entitlement, source)
             
@@ -184,7 +184,11 @@ extension ExposureContext {
             /// Deliver error
             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             let nilSource: ExposureSource? = nil
-            providers.forEach{ $0.onError(tech: tech, source: nilSource, error: contextError) }
+            providers.forEach{
+                /// EMP-11667: If Exposure returned an error, (ie an ExposureResponseMessage, for example NOT_ENTITLED), no Source object is created. This means we need to set the `X-Request-Id` before we finalize the session.
+                ($0 as? ExposureAnalytics)?.exposureEntitlementHTTPURLResponse = exposureResponse
+                $0.onError(tech: tech, source: nilSource, error: contextError)
+            }
             tech.stop()
             tech.eventDispatcher.onError(tech, nilSource, contextError)
         }

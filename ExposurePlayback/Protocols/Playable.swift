@@ -11,9 +11,36 @@ import Exposure
 
 // MARK: Playable
 public protocol Playable {
+    /// The unique identifier for this asset.
     var assetId: String { get }
     
+    
+    /// Helper method producing an `ExposureSoure` for playback using the supplied `environment` and `sessionToken`
+    ///
+    /// - parameter environment: `Environment` to request the Source from
+    /// - parameter sessionToken: `SessionToken` validating the user
+    /// - parameter callback: Closure called on request completion
     func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void)
+    
+    /// Helper method producing an `ExposureSoure` for playback using the supplied `environment` and `sessionToken`
+    ///
+    /// - parameter environment: `Environment` to request the Source from
+    /// - parameter sessionToken: `SessionToken` validating the user
+    /// - parameter callback: Closure called on request completion
+    func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void)
+}
+
+extension Playable {
+    /// Helper method producing an `ExposureSoure` for playback using the supplied `environment` and `sessionToken`
+    ///
+    /// - parameter environment: `Environment` to request the Source from
+    /// - parameter sessionToken: `SessionToken` validating the user
+    /// - parameter callback: Closure called on request completion
+    func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        prepareSource(environment: environment, sessionToken: sessionToken) { source, error in
+            callback(source,error,nil)
+        }
+    }
 }
 
 // MARK: ChannelPlayConvertible
