@@ -17,15 +17,21 @@ extension Playback {
         /// Offset in the video sequence where the playback was started at in milliseconds.
         internal let offsetTime: Int64?
         
+        /// Playback technology used
         internal let tech: String
         
+        /// Version of the tech
         internal let techVersion: String
         
-        internal init(timestamp: Int64, offsetTime: Int64?, tech: String, techVersion: String) {
+        /// `X-Playback-Session-Id` used to track segment and manifest requests
+        internal let segmentRequestId: String?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, tech: String, techVersion: String, segmentRequestId: String? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.tech = tech
             self.techVersion = techVersion
+            self.segmentRequestId = segmentRequestId
         }
     }
 }
@@ -51,6 +57,10 @@ extension Playback.PlayReady: AnalyticsEvent {
             json[JSONKeys.offsetTime.rawValue] = value
         }
         
+        if let value = segmentRequestId {
+            json[JSONKeys.segmentRequestId.rawValue] = value
+        }
+        
         return json
     }
     
@@ -60,5 +70,6 @@ extension Playback.PlayReady: AnalyticsEvent {
         case offsetTime = "OffsetTime"
         case tech = "Technology"
         case techVersion = "TechVersion"
+        case segmentRequestId = "X-Playback-Session-Id"
     }
 }

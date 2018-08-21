@@ -257,6 +257,8 @@ extension ExposureAnalytics: AnalyticsProvider {
     
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// PlayReady
+        /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
+        let segmentRequestId = (source as? HLSNativeMediaSource)?.streamingRequestPlaybackSessionId
         
         /// BUGFIX: EMP-11313
         /// `Bundle(for: aClass)`
@@ -268,12 +270,16 @@ extension ExposureAnalytics: AnalyticsProvider {
         let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
                                        offsetTime: offsetTime(for: source, using: tech),
                                        tech: String(describing: type(of: tech)),
-                                       techVersion: version(for: techBundle))
+                                       techVersion: version(for: techBundle),
+                                       segmentRequestId: segmentRequestId)
         dispatcher?.enqueue(event: event)
     }
     
     public func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
+            /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
+            let segmentRequestId = source.streamingRequestPlaybackSessionId
+            
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source),
@@ -281,7 +287,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
                                          bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil,
-                                         referenceTime: referenceTime)
+                                         referenceTime: referenceTime,
+                                         segmentRequestId: segmentRequestId)
             dispatcher?.enqueue(event: event)
             dispatcher?.heartbeat(enabled: true)
         }

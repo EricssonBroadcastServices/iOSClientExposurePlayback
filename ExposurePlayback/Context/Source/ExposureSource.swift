@@ -47,6 +47,9 @@ public class ExposureSource: MediaSource {
     
     /// The HTTPURLResponse associated with the Entitlement Request, ie `ExposureRequest`, made to *Exposure* which resulted in the creation of this `Source`.
     internal var response: HTTPURLResponse?
+    
+    /// `X-Playback-Session-Id` used to track segment and manifest requests
+    public var streamingRequestPlaybackSessionId: String?
 }
 
 extension ExposureSource {
@@ -99,3 +102,4 @@ extension ExposureSource {
     }
 }
 
+extension ExposureSource: HLSNativeMediaSource { }

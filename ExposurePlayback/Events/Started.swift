@@ -42,9 +42,13 @@ extension Playback {
         /// Initial playback bitrate, measured in kbit/s.
         internal let bitrate: Int64?
         
+        /// Reference time in relation to playback start
         internal let referenceTime: Int64?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaLocator: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil) {
+        /// `X-Playback-Session-Id` used to track segment and manifest requests
+        internal let segmentRequestId: String?
+        
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaLocator: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil, segmentRequestId: String? = nil) {
             self.timestamp = timestamp
             self.requiredAssetData = assetData
             self.mediaLocator = mediaLocator
@@ -52,6 +56,7 @@ extension Playback {
             self.videoLength = videoLength
             self.bitrate = bitrate
             self.referenceTime = referenceTime
+            self.segmentRequestId = segmentRequestId
         }
     }
 }
@@ -102,6 +107,10 @@ extension Playback.Started: AnalyticsEvent {
             params[JSONKeys.referenceTime.rawValue] = referenceTime
         }
         
+        if let value = segmentRequestId {
+            params[JSONKeys.segmentRequestId.rawValue] = value
+        }
+        
         return params
     }
     
@@ -117,6 +126,7 @@ extension Playback.Started: AnalyticsEvent {
         case videoLength = "VideoLength"
         case bitrate = "Bitrate"
         case referenceTime = "ReferenceTime"
+        case segmentRequestId = "X-Playback-Session-Id"
     }
 }
 
