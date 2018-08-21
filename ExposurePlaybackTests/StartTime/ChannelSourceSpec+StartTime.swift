@@ -42,7 +42,7 @@ class ChannelSourceStartTimeSpec: QuickSpec {
                     if let offset = lastViewedTime {
                         json["lastViewedTime"] = offset
                     }
-                    callback(json.decode(PlaybackEntitlement.self), nil)
+                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
                 }
                 return ChannelPlayable(assetId: "assetId", entitlementProvider: provider)
             }

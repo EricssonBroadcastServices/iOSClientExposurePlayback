@@ -10,7 +10,7 @@ import Foundation
 import Exposure
 
 internal protocol ChannelEntitlementProvider {
-    func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (ExposureResponse<PlaybackEntitlement>) -> Void)
+    func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
 /// Defines a `Playable` for the specific channel. Will play the currently live program
@@ -21,7 +21,7 @@ public struct ChannelPlayable: Playable {
     internal var entitlementProvider: ChannelEntitlementProvider = ExposureEntitlementProvider()
     
     internal struct ExposureEntitlementProvider: ChannelEntitlementProvider {
-        func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (ExposureResponse<PlaybackEntitlement>) -> Void) {
+        func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
             let entitlement = Entitlement(environment: environment,
                                           sessionToken: sessionToken)
                 .live(channelId: channelId)
@@ -37,14 +37,14 @@ public struct ChannelPlayable: Playable {
                                 .use(drm: "UNENCRYPTED")
                                 .request()
                                 .validate()
-                                .response{ callback($0) }
+                                .response{ callback($0.value, $0.error, $0.response) }
                         }
                         else {
-                            callback($0)
+                            callback($0.value, $0.error, $0.response)
                         }
                     }
                     else {
-                        callback($0)
+                        callback($0.value, $0.error, $0.response)
                     }
                 }
         }
@@ -68,13 +68,13 @@ extension ChannelPlayable {
     }
     
     internal func prepareChannelSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) {
-            if let value = $0.value {
+        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
                 let source = ChannelSource(entitlement: value, assetId: self.assetId)
-                source.response = $0.response
+                source.response = response
                 callback(source, nil)
             }
-            else if let error = $0.error {
+            else if let error = error {
                 callback(nil,error)
             }
         }
@@ -83,14 +83,14 @@ extension ChannelPlayable {
 
 extension ChannelPlayable {
     public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
-        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) {
-            if let value = $0.value {
+        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
                 let source = ChannelSource(entitlement: value, assetId: self.assetId)
-                source.response = $0.response
-                callback(source, nil, $0.response)
+                source.response = response
+                callback(source, nil, response)
             }
-            else if let error = $0.error {
-                callback(nil,error,$0.response)
+            else if let error = error {
+                callback(nil,error,response)
             }
         }
     }

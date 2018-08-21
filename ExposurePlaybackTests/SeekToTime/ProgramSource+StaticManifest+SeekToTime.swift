@@ -69,7 +69,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -133,7 +133,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -201,7 +201,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             env.mockProgramServicePlayable{ program in
                                 let provider = MockedProgramEntitlementProvider()
                                 provider.mockedRequestEntitlement = { _,_,_,_, callback in
-                                    callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")))
+                                    callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
                                 }
                                 return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
                             }
@@ -212,7 +212,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -281,7 +281,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                     json["ffEnabled"] = false
                                     json["rwEnabled"] = false
                                     json["timeshiftEnabled"] = false
-                                    callback(json.decode(PlaybackEntitlement.self), nil)
+                                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
                                 }
                                 return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
                             }
@@ -294,7 +294,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -356,7 +356,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -416,7 +416,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(playFrom: .defaultBehaviour)

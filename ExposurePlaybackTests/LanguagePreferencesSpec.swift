@@ -65,7 +65,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .defaultBehaviour)
@@ -108,7 +108,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .userLocale)
@@ -151,7 +151,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .custom(text: nil, audio: "custom"))
@@ -194,7 +194,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .defaultBehaviour)
@@ -237,7 +237,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .userLocale)
@@ -280,7 +280,7 @@ class LanguagePreferencesSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .custom(text: custom, audio: nil))

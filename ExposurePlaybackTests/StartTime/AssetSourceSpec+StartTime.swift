@@ -43,7 +43,7 @@ class AssetSourceStartTimeSpec: QuickSpec {
                     if let offset = lastViewedTime {
                         json["lastViewedTime"] = offset
                     }
-                    callback(json.decode(PlaybackEntitlement.self), nil)
+                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
                 }
                 return AssetPlayable(assetId: "assetId", entitlementProvider: provider)
             }

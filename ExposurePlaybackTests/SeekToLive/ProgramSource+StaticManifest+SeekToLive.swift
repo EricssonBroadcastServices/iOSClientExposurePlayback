@@ -60,7 +60,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.mockSeekToLiveChannelPlayable{ channelId in
                         let provider = MockedChannelEntitlementProvider()
                         provider.mockedRequestEntitlement = { _,_,_, callback in
-                            callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")))
+                            callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
                         }
                         return ChannelPlayable(assetId: channelId, entitlementProvider: provider)
                     }
@@ -74,7 +74,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -141,7 +141,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "SeekToLiveFetchedEntitlement"
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         return ChannelPlayable(assetId: channelId, entitlementProvider: provider)
                     }
@@ -155,7 +155,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)

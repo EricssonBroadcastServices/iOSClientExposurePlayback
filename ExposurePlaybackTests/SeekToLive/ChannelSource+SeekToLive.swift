@@ -40,7 +40,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -66,7 +66,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -95,7 +95,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -120,7 +120,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -147,7 +147,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil)
+                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)

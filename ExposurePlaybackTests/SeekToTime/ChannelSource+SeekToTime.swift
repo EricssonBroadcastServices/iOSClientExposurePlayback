@@ -37,7 +37,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
@@ -66,7 +66,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -90,7 +90,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
@@ -117,7 +117,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -143,7 +143,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -169,7 +169,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -202,7 +202,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -232,7 +232,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -269,7 +269,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -295,7 +295,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -323,7 +323,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["rwEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -349,7 +349,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -379,7 +379,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
@@ -405,7 +405,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
