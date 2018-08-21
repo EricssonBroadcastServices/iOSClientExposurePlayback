@@ -44,7 +44,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         json["lastViewedTime"] = offset
                     }
                     json["live"] = live
-                    callback(json.decode(PlaybackEntitlement.self), nil)
+                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
                 }
                 return ProgramPlayable(assetId: "assetId", channelId: "channelId", entitlementProvider: provider)
             }

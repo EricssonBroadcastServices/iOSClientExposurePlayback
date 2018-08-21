@@ -63,7 +63,7 @@ class BitrateRestrictionSpec: QuickSpec {
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = "file://play/.isml"
                     json["playSessionId"] = "BitrateSession"
-                    callback(json.decode(PlaybackEntitlement.self), nil)
+                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
                 }
                 let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                 let properties = PlaybackProperties(maxBitrate: preferredBitRate)

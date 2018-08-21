@@ -510,7 +510,7 @@ class SeekToTimeMock {
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
             provider.mockedRequestEntitlement = { _,_,_,_, callback in
-                callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")))
+                callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
         }
@@ -578,7 +578,7 @@ class SeekToTimeMock {
                 json["ffEnabled"] = false
                 json["rwEnabled"] = false
                 json["timeshiftEnabled"] = false
-                callback(json.decode(PlaybackEntitlement.self), nil)
+                callback(json.decode(PlaybackEntitlement.self), nil, nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
         }

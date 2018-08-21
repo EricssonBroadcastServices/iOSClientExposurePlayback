@@ -81,6 +81,9 @@ public class ExposureAnalytics {
     /// ProgramChanged events are sent as soon as an Epg has been detected. We should not send `Playback.ProgramChanged` for this initial "onProgramChanged` event since the request was made for that program.
     internal var lastKnownProgramId: String? = nil
     
+    /// If the playback session failed with an error from Exposure (ie an ExposureResponseMessage, for example NOT_ENTITLED), no Source object is created. This means we need to set the `X-Request-Id` before we finalize the session.
+    internal var exposureEntitlementHTTPURLResponse: HTTPURLResponse?
+    
     /// Instruct the analytics engine that the player is transitioning from local playback to `ChromeCasting`
     public func startedCasting() {
         externalPlayback = .chromecast
@@ -176,7 +179,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     /// - parameter entitlement: The entitlement this session concerns
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
     public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
-        let events = startupEvents
+        let events = extractAndPrepareStartupEvents(source: source)
         
         if let tech = tech as? HLSNative<ExposureContext>, tech.isExternalPlaybackActive {
             /// Session was started with Airplay active. This session should be terminated with ´Playback.StopAirplay`
@@ -215,6 +218,32 @@ extension URL {
         return nil
     }
 }
+
+extension ExposureAnalytics {
+    /// Returns the `X-Request-Id` associated with the response generated when requesting an entitlement.
+    fileprivate func extractRequestId<Source>(source: Source?) -> String? where Source: MediaSource {
+        /// First, try extracting from the source
+        guard let exposureSource = source as? ExposureSource else {
+            /// If no source is available this might be an error session. This means no Source was created. Check if we set the response headers from the Exposure request HTTPURLResponse previously.
+            return exposureEntitlementHTTPURLResponse?.allHeaderFields["X-Request-Id"] as? String
+        }
+        return exposureSource.response?.allHeaderFields["X-Request-Id"] as? String
+    }
+    
+    /// Modify the existing startup events to include `X-Request-Id` in `Playback.Created` event.
+    fileprivate func extractAndPrepareStartupEvents<Source>(source: Source?) -> [AnalyticsEvent] where Source: MediaSource {
+        return startupEvents.map{ e -> AnalyticsEvent in
+            if var event = e as? Playback.Created, let requestId = extractRequestId(source: source) {
+                event.requestId = requestId
+                return event
+            }
+            else {
+                return e
+            }
+        }
+    }
+}
+
 extension ExposureAnalytics: AnalyticsProvider {
     public func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// Created/DeviceInfo/Handshake will be sent before entitlement request
@@ -325,7 +354,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     /// - parameter error: The encountered error.
     /// - parameter startupEvents: Events `ExposureAnalytics` should deliver as the initial payload related to the error in question.
     fileprivate func finalizeWithError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
-        var events = startupEvents
+        var events = extractAndPrepareStartupEvents(source: source)
         
         let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
                                           offsetTime: offsetTime(for: source, using: tech),
@@ -476,12 +505,7 @@ extension ExposureAnalytics: SourceAbandonedEventProvider {
         let trace = Playback.Trace(timestamp: Date().millisecondsSince1970,
                                    data: data)
         
-        let aborted = Playback.Aborted(timestamp: Date().millisecondsSince1970)
-        
         dispatcher?.enqueue(event: trace)
-        dispatcher?.enqueue(event: aborted)
-        dispatcher?.heartbeat(enabled: false)
-        dispatcher?.flushTrigger(enabled: false)
-        dispatcher = nil
+        onAborted(tech: tech, source: mediaSource)
     }
 }

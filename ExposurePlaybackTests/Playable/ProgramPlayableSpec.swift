@@ -14,8 +14,8 @@ import Foundation
 @testable import ExposurePlayback
 
 internal class MockedProgramEntitlementProvider: ProgramEntitlementProvider {
-    var mockedRequestEntitlement: (String, String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?) -> Void) -> Void = { _,_,_,_,_ in }
-    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void) {
+    var mockedRequestEntitlement: (String, String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_,_ in }
+    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
         mockedRequestEntitlement(programId, channelId, sessionToken, environment, callback)
     }
 }
@@ -38,10 +38,10 @@ class ProgramPlayableSpec: QuickSpec {
                 let provider = MockedProgramEntitlementProvider()
                 provider.mockedRequestEntitlement = { _,_,_,_, callback in
                     guard let result = PlaybackEntitlement.validJson.decode(PlaybackEntitlement.self) else {
-                        callback(nil,ExposureError.generalError(error: MockedError.generalError))
+                        callback(nil,ExposureError.generalError(error: MockedError.generalError), nil)
                         return
                     }
-                    callback(result,nil)
+                    callback(result,nil, nil)
                 }
                 let playable = ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)
                 
@@ -59,7 +59,7 @@ class ProgramPlayableSpec: QuickSpec {
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedProgramEntitlementProvider()
                 provider.mockedRequestEntitlement = { _,_,_,_, callback in
-                    callback(nil,ExposureError.generalError(error: MockedError.generalError))
+                    callback(nil,ExposureError.generalError(error: MockedError.generalError), nil)
                 }
                 let playable = ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)
                 

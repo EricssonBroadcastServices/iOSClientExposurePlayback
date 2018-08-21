@@ -10,17 +10,21 @@ import Foundation
 import Exposure
 
 internal protocol ProgramEntitlementProvider {
-    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void)
+    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
+/// Defines a `Playable` for the specific program
 public struct ProgramPlayable: Playable {
+    /// The program Id for the program
     public let assetId: String
+    
+    /// The channel id
     public let channelId: String
     
-    internal var entitlementProvider: ProgramEntitlementProvider = AlamofireEntitlementProvider()
+    internal var entitlementProvider: ProgramEntitlementProvider = ExposureEntitlementProvider()
     
-    internal struct AlamofireEntitlementProvider: ProgramEntitlementProvider {
-        func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void) {
+    internal struct ExposureEntitlementProvider: ProgramEntitlementProvider {
+        func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
             let entitlement = Entitlement(environment: environment,
                                           sessionToken: sessionToken)
                 .program(programId: programId,
@@ -37,16 +41,16 @@ public struct ProgramPlayable: Playable {
                                 .use(drm: "UNENCRYPTED")
                                 .request()
                                 .validate()
-                                .response{ callback($0.value, $0.error) }
+                                .response{ callback($0.value, $0.error, $0.response) }
                         }
                         else {
-                            callback(nil,error)
+                            callback($0.value, $0.error, $0.response)
                         }
                     }
-                    else if let entitlement = $0.value {
-                        callback(entitlement, nil)
+                    else {
+                        callback($0.value, $0.error, $0.response)
                     }
-            }
+                }
         }
     }
 }
@@ -65,13 +69,31 @@ extension ProgramPlayable {
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
     public func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        entitlementProvider.requestEntitlement(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlement, error in
-            if let entitlement = entitlement {
-                callback(ProgramSource(entitlement: entitlement, assetId: self.assetId, channelId: self.channelId), nil)
+        entitlementProvider.requestEntitlement(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
+                let source = ProgramSource(entitlement: value, assetId: self.assetId, channelId: self.channelId)
+                source.response = response
+                callback(source, nil)
             }
-            else {
-                callback(nil,error!)
+            else if let error = error {
+                callback(nil,error)
             }
         }
     }
 }
+
+extension ProgramPlayable {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        entitlementProvider.requestEntitlement(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
+                let source = ProgramSource(entitlement: value, assetId: self.assetId, channelId: self.channelId)
+                source.response = response
+                callback(source, nil, response)
+            }
+            else if let error = error {
+                callback(nil,error,response)
+            }
+        }
+    }
+}
+

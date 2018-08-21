@@ -10,16 +10,18 @@ import Foundation
 import Exposure
 
 internal protocol ChannelEntitlementProvider {
-    func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void)
+    func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
+/// Defines a `Playable` for the specific channel. Will play the currently live program
 public struct ChannelPlayable: Playable {
+    /// The channel id
     public let assetId: String
     
-    internal var entitlementProvider: ChannelEntitlementProvider = AlamofireEntitlementProvider()
+    internal var entitlementProvider: ChannelEntitlementProvider = ExposureEntitlementProvider()
     
-    internal struct AlamofireEntitlementProvider: ChannelEntitlementProvider {
-        func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?) -> Void) {
+    internal struct ExposureEntitlementProvider: ChannelEntitlementProvider {
+        func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
             let entitlement = Entitlement(environment: environment,
                                           sessionToken: sessionToken)
                 .live(channelId: channelId)
@@ -35,16 +37,16 @@ public struct ChannelPlayable: Playable {
                                 .use(drm: "UNENCRYPTED")
                                 .request()
                                 .validate()
-                                .response{ callback($0.value, $0.error) }
+                                .response{ callback($0.value, $0.error, $0.response) }
                         }
                         else {
-                            callback(nil,error)
+                            callback($0.value, $0.error, $0.response)
                         }
                     }
-                    else if let entitlement = $0.value {
-                        callback(entitlement, nil)
+                    else {
+                        callback($0.value, $0.error, $0.response)
                     }
-            }
+                }
         }
     }
 }
@@ -66,13 +68,31 @@ extension ChannelPlayable {
     }
     
     internal func prepareChannelSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) { entitlement, error in
-            if let entitlement = entitlement {
-                callback(ChannelSource(entitlement: entitlement, assetId: self.assetId), nil)
+        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
+                let source = ChannelSource(entitlement: value, assetId: self.assetId)
+                source.response = response
+                callback(source, nil)
             }
-            else {
-                callback(nil,error!)
+            else if let error = error {
+                callback(nil,error)
             }
         }
     }
 }
+
+extension ChannelPlayable {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        entitlementProvider.requestEntitlement(channelId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
+            if let value = entitlement {
+                let source = ChannelSource(entitlement: value, assetId: self.assetId)
+                source.response = response
+                callback(source, nil, response)
+            }
+            else if let error = error {
+                callback(nil,error,response)
+            }
+        }
+    }
+}
+

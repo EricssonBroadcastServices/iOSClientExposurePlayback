@@ -16,6 +16,7 @@
 * `EMP-11338` `ExposureAnalytics` now adopts `SourceAbandonedEventProvider`, delivering trace events on media abandonment.
 * `EMP-11640` Playback is now stopped when analytics responds with `INVALID_SESSION_TOKEN`
 * `EMP-11647` Added analytics event triggering when *Airplay* sessions end.
+* `EMP-11667` `X-Request-Id` associated with Exposure response when requesting a `PlaybackEntitlement` dispatched in `Playback.Created`.
 
 #### Bug Fixes
 * `EMP-11567` Complete media locator included in `Playback.Started` and `Playback.HandshakeStarted` events.

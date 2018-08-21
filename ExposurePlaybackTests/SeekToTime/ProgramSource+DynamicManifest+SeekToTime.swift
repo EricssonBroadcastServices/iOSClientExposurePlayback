@@ -43,7 +43,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
@@ -73,7 +73,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -97,7 +97,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -124,7 +124,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -150,7 +150,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -176,7 +176,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -209,7 +209,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
@@ -238,7 +238,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
 
@@ -275,7 +275,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
@@ -301,7 +301,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
@@ -329,7 +329,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["rwEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -355,7 +355,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil)
+                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
                             }
                             let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                             
@@ -384,7 +384,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
@@ -409,7 +409,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil)
+                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         
