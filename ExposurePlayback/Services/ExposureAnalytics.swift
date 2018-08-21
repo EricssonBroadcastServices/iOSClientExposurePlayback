@@ -505,12 +505,7 @@ extension ExposureAnalytics: SourceAbandonedEventProvider {
         let trace = Playback.Trace(timestamp: Date().millisecondsSince1970,
                                    data: data)
         
-        let aborted = Playback.Aborted(timestamp: Date().millisecondsSince1970)
-        
         dispatcher?.enqueue(event: trace)
-        dispatcher?.enqueue(event: aborted)
-        dispatcher?.heartbeat(enabled: false)
-        dispatcher?.flushTrigger(enabled: false)
-        dispatcher = nil
+        onAborted(tech: tech, source: mediaSource)
     }
 }
