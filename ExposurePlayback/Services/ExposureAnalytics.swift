@@ -258,7 +258,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// PlayReady
         /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
-        let segmentRequestId = (source as? HLSNativeMediaSource)?.streamingRequestPlaybackSessionId
+        let segmentRequestId = (source as? MediaSourceRequestHeaders)?.mediaSourceRequestHeaders["X-Playback-Session-Id"]
         
         /// BUGFIX: EMP-11313
         /// `Bundle(for: aClass)`
@@ -278,7 +278,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     public func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
-            let segmentRequestId = source.streamingRequestPlaybackSessionId
+            let segmentRequestId = source.mediaSourceRequestHeaders["X-Playback-Session-Id"]
             
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,

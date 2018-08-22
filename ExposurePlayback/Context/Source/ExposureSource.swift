@@ -39,6 +39,7 @@ public class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.mediaSourceRequestHeaders = [:]
     }
     
     deinit {
@@ -48,8 +49,8 @@ public class ExposureSource: MediaSource {
     /// The HTTPURLResponse associated with the Entitlement Request, ie `ExposureRequest`, made to *Exposure* which resulted in the creation of this `Source`.
     internal var response: HTTPURLResponse?
     
-    /// `X-Playback-Session-Id` used to track segment and manifest requests
-    public var streamingRequestPlaybackSessionId: String?
+    /// Stores any HTTP headers used when requesting manifest and media segments for this `Source`.
+    public var mediaSourceRequestHeaders: [String: String]
 }
 
 extension ExposureSource {
@@ -102,4 +103,4 @@ extension ExposureSource {
     }
 }
 
-extension ExposureSource: HLSNativeMediaSource { }
+extension ExposureSource: MediaSourceRequestHeaders { }
