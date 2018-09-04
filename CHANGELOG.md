@@ -10,9 +10,10 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
-## 2.0.89
+## 2.0.90
 
-* Updated dependencies
+#### Features
+* `EMP-11711` Playtoken passed as header when requesting fairplay licenses.
 
 ## 2.0.89
 
