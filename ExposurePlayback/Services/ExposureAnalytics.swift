@@ -337,7 +337,10 @@ extension ExposureAnalytics: AnalyticsProvider {
         let event = Playback.Completed(timestamp: Date().millisecondsSince1970,
                                        offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
+        dispatcher?.flushTrigger(enabled: false)
         dispatcher?.heartbeat(enabled: false)
+        dispatcher = nil
+        (tech as? HLSNative<ExposureContext>)?.stop()
     }
     
     public func onError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
