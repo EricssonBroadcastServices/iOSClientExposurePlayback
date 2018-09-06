@@ -12,6 +12,9 @@
 
 ## 2.0.90
 
+#### Features
+* Added *Exposure* `X-Request-Id` to license requests.
+
 #### Changes
 * Stop and unload `MediaAsset` when playback reaches end of duration.
 

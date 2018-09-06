@@ -22,6 +22,7 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     internal let resourceLoadingRequestQueue = DispatchQueue(label: "com.emp.exposurePlayback.fairplay.emup.requests")
     internal let customScheme = "skd"
     internal let resourceLoadingRequestOptions: [String : AnyObject]? = nil
+    internal var exposureRequestId: String?
     
     internal func onSuccessfulRetrieval(of ckc: Data, for resourceLoadingRequest: AVAssetResourceLoadingRequest) throws -> Data {
         return ckc
@@ -239,9 +240,14 @@ extension EMUPFairPlayRequester {
         /// Trigger the certificate request listener
         onCertificateRequest()
         
+        var headers: [String: String] = [:]
+        if let requestId = exposureRequestId {
+            headers["X-Request-Id"] = requestId
+        }
+        
         SessionManager
             .default
-            .request(url, method: .get)
+            .request(url, method: .get, headers: headers)
             .validate()
             .rawResponse { _, response, data, error in
                 guard error == nil else {
@@ -341,12 +347,17 @@ extension EMUPFairPlayRequester {
         /// Trigger the license request listener
         self.onLicenseRequest()
         
+        var headers = ["Content-type": "application/octet-stream"]
+        if let requestId = exposureRequestId {
+            headers["X-Request-Id"] = requestId
+        }
+        
         SessionManager
             .default
             .request(url,
                      method: .post,
                      data: spc,
-                     headers: ["Content-type": "application/octet-stream"])
+                     headers: headers)
             .validate()
             .rawResponse { _,urlResponse, data, error in
                 guard error == nil else {
