@@ -217,7 +217,6 @@ extension EMUPFairPlayRequester {
         }
     }
 }
-
 // MARK: - Application Certificate
 extension EMUPFairPlayRequester {
     /// The *Application Certificate* is fetched from a server specified by a `certificateUrl` delivered in the *entitlement* obtained through *Exposure*.
@@ -341,12 +340,17 @@ extension EMUPFairPlayRequester {
         /// Trigger the license request listener
         self.onLicenseRequest()
         
+        var headers = ["Content-type": "application/octet-stream"]
+        if let playToken = entitlement.playToken {
+            headers["Authorization"] = "Bearer " + playToken
+        }
+        
         SessionManager
             .default
             .request(url,
                      method: .post,
                      data: spc,
-                     headers: ["Content-type": "application/octet-stream"])
+                     headers: headers)
             .validate()
             .rawResponse { _,urlResponse, data, error in
                 guard error == nil else {
