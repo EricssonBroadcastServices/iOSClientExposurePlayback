@@ -340,12 +340,17 @@ extension EMUPFairPlayRequester {
         /// Trigger the license request listener
         self.onLicenseRequest()
         
+        var headers = ["Content-type": "application/octet-stream"]
+        if let playToken = entitlement.playToken {
+            headers["Authorization"] = "Bearer " + playToken
+        }
+        
         SessionManager
             .default
             .request(url,
                      method: .post,
                      data: spc,
-                     headers: licenseRequestHeaders())
+                     headers: headers)
             .validate()
             .rawResponse { _,urlResponse, data, error in
                 guard error == nil else {
@@ -379,12 +384,5 @@ extension EMUPFairPlayRequester {
     fileprivate var licenseUrl: URL? {
         guard let urlString = entitlement.fairplay?.licenseAcquisitionUrl else { return nil }
         return URL(string: urlString)
-    }
-    
-    fileprivate func licenseRequestHeaders() -> [String: String]? {
-        var headers = ["Content-type": "application/octet-stream"]
-        guard let playToken = entitlement.playToken else { return headers }
-        headers["Authorization"] = "Bearer " + playToken
-        return headers
     }
 }
