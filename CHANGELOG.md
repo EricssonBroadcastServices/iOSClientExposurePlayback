@@ -15,6 +15,9 @@
 #### Features
 * `EMP-11711` Playtoken passed as header when requesting fairplay licenses.
 
+#### Changes
+* Stop and unload `MediaAsset` when playback reaches end of duration.
+
 ## 2.0.89
 
 #### Features
