@@ -191,6 +191,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                 playSessionId: playSessionId,
                                 startupEvents: events,
                                 heartbeatsProvider: heartbeatsProvider)
+        dispatcher?.requestId = extractRequestId(source: source)
         dispatcher?.onExposureResponseMessage = { [weak self] message in
             self?.onExposureResponseMessage(message)
         }
@@ -375,39 +376,16 @@ extension ExposureAnalytics: AnalyticsProvider {
         
         events.append(errorPayload)
         
-        let batch = AnalyticsBatch(sessionToken: sessionToken,
-                                   environment: environment,
-                                   playToken: UUID().uuidString,
-                                   payload: events)
+        dispatcher = Dispatcher(environment: environment,
+                                sessionToken: sessionToken,
+                                playSessionId: UUID().uuidString,
+                                startupEvents: events,
+                                heartbeatsProvider: { return nil })
+        dispatcher?.requestId = extractRequestId(source: source)
         
-        EventSink()
-            .send(analytics: batch,
-                  clockOffset: nil)
-            .request()
-            .validate()
-            .response{
-                // NOTE: Capture of self needs to be strong. Else we can not ensure saving will work properly. Reference will be cleaned up after block finishes.
-                if let error = $0.error {
-                    // These events need to be stored to disk
-                    print("🚨 Failed to deliver error events.", error.message)
-                    
-                    do {
-                        try AnalyticsPersister().persist(analytics: batch)
-                        print("💾 Analytics data saved to disk")
-                    }
-                    catch {
-                        print("🚨 AnalyticsPersister failed to persist error data",error)
-                    }
-                }
-                else {
-                    print("Delivered Error payload: \(batch.payload.count)")
-                    batch.payload
-                        .flatMap{ $0 as? AnalyticsEvent }
-                        .forEach{
-                            print(" ✅ ",$0.eventType)
-                    }
-                }
-        }
+        dispatcher?.flushTrigger(enabled: false)
+        dispatcher?.heartbeat(enabled: false)
+        dispatcher = nil
     }
     
     public func onBitrateChanged<Tech, Source>(tech: Tech, source: Source, bitrate: Double) where Tech : PlaybackTech, Source : MediaSource {
