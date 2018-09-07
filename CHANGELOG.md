@@ -13,6 +13,7 @@
 ## 2.0.90
 
 #### Features
+* Added *Exposure* `X-Request-Id` to license requests.
 * `EMP-11711` Playtoken passed as header when requesting fairplay licenses.
 
 #### Changes

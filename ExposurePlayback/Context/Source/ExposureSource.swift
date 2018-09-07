@@ -47,7 +47,13 @@ public class ExposureSource: MediaSource {
     }
     
     /// The HTTPURLResponse associated with the Entitlement Request, ie `ExposureRequest`, made to *Exposure* which resulted in the creation of this `Source`.
-    internal var response: HTTPURLResponse?
+    internal var response: HTTPURLResponse? {
+        didSet {
+            if let emupFairplayRequester = fairplayRequester as? EMUPFairPlayRequester, let response = self.response {
+                emupFairplayRequester.exposureRequestId = response.allHeaderFields["X-Request-Id"] as? String
+            }
+        }
+    }
     
     /// Stores any HTTP headers used when requesting manifest and media segments for this `Source`.
     public var mediaSourceRequestHeaders: [String: String]
