@@ -14,6 +14,7 @@
 
 #### Features
 * Added *Exposure* `X-Request-Id` to license requests.
+* `EMP-11711` Playtoken passed as header when requesting fairplay licenses.
 
 #### Changes
 * Stop and unload `MediaAsset` when playback reaches end of duration.

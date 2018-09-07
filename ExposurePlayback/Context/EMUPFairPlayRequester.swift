@@ -218,7 +218,6 @@ extension EMUPFairPlayRequester {
         }
     }
 }
-
 // MARK: - Application Certificate
 extension EMUPFairPlayRequester {
     /// The *Application Certificate* is fetched from a server specified by a `certificateUrl` delivered in the *entitlement* obtained through *Exposure*.
@@ -350,6 +349,9 @@ extension EMUPFairPlayRequester {
         var headers = ["Content-type": "application/octet-stream"]
         if let requestId = exposureRequestId {
             headers["X-Request-Id"] = requestId
+        }
+        if let playToken = entitlement.playToken {
+            headers["Authorization"] = "Bearer " + playToken
         }
         
         SessionManager
