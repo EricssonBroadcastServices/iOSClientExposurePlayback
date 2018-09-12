@@ -284,7 +284,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source),
-                                         mediaLocator: source.url.absoluteString,
+                                         mediaLocator: source.entitlement.mediaLocator.absoluteString,
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
                                          bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil,
