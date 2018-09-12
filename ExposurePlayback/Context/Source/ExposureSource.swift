@@ -35,6 +35,12 @@ open class ExposureSource: MediaSource {
     
     internal let fairplayRequester: ExposureFairplayRequester
     
+    /// Creates a new `ExposureSource`
+    ///
+    /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
+    /// - parameter assetId: The id for the asset
     public init(entitlement: PlaybackEntitlement, assetId: String) {
         self.entitlement = entitlement
         self.assetId = assetId
@@ -43,7 +49,13 @@ open class ExposureSource: MediaSource {
         self.response = nil
     }
     
-    
+    /// Creates a new `ExposureSource`
+    ///
+    /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
+    /// - parameter assetId: The id for the asset
+    /// - parameter response: HTTP response received when requesting the entitlement
     public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?) {
         self.entitlement = entitlement
         self.assetId = assetId
