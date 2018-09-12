@@ -18,7 +18,7 @@ import Exposure
 /// * `.customPosition(position:)` : Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning
 /// * `.customTime(time:)` : Playback starts from the specified unix timestamp (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
 /// * `.defaultBehavior` If the program is currently *live*, playback will start from the live edge., otherwise playback starts from the beginning of the program
-public class ProgramSource: ExposureSource {
+open class ProgramSource: ExposureSource {
     /// The channel Id on which the program plays
     public let channelId: String
     
@@ -30,6 +30,17 @@ public class ProgramSource: ExposureSource {
     public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String) {
         self.channelId = channelId
         super.init(entitlement: entitlement, assetId: assetId)
+    }
+    
+    /// Creates a new `ProgramSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the program
+    /// - parameter assetId: The id for the program
+    /// - parameter channelId: The channel Id on which the program plays
+    /// - parameter response: HTTP response received when requesting the entitlement
+    public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String, response: HTTPURLResponse? = nil) {
+        self.channelId = channelId
+        super.init(entitlement: entitlement, assetId: assetId, response: response)
     }
 }
 

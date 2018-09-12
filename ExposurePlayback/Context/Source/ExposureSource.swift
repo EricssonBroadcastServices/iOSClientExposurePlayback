@@ -11,7 +11,7 @@ import Player
 import Exposure
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
-public class ExposureSource: MediaSource {
+open class ExposureSource: MediaSource {
     internal static let segmentLength: Int64 = 6000
     
     /// Connector used to process Analytics Events
@@ -23,7 +23,7 @@ public class ExposureSource: MediaSource {
     }
     
     /// Media locator
-    public var url: URL {
+    open var url: URL {
         return entitlement.mediaLocator
     }
     
@@ -35,11 +35,33 @@ public class ExposureSource: MediaSource {
     
     internal let fairplayRequester: ExposureFairplayRequester
     
+    /// Creates a new `ExposureSource`
+    ///
+    /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
+    /// - parameter assetId: The id for the asset
     public init(entitlement: PlaybackEntitlement, assetId: String) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
+        self.response = nil
+    }
+    
+    /// Creates a new `ExposureSource`
+    ///
+    /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
+    ///
+    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
+    /// - parameter assetId: The id for the asset
+    /// - parameter response: HTTP response received when requesting the entitlement
+    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?) {
+        self.entitlement = entitlement
+        self.assetId = assetId
+        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.mediaSourceRequestHeaders = [:]
+        self.response = response
     }
     
     deinit {
@@ -57,6 +79,17 @@ public class ExposureSource: MediaSource {
     
     /// Stores any HTTP headers used when requesting manifest and media segments for this `Source`.
     public var mediaSourceRequestHeaders: [String: String]
+    
+    
+    public var entitlementSourceResponseHeaders: [String : String] {
+        var result: [String: String] = [:]
+        response?.allHeaderFields.forEach{
+            if let key = $0.key as? String, let value = $0.value as? String {
+                result[key] = value
+            }
+        }
+        return result
+    }
 }
 
 extension ExposureSource {
@@ -110,3 +143,4 @@ extension ExposureSource {
 }
 
 extension ExposureSource: MediaSourceRequestHeaders { }
+extension ExposureSource: EntitlementSourceResponseHeaders { }
