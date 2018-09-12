@@ -242,6 +242,8 @@
 		76A89DF92021CCC000C23579 /* StartCastingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE12021CCC000C23579 /* StartCastingSpec.swift */; };
 		76A89DFA2021CCC000C23579 /* StartedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DE22021CCC000C23579 /* StartedSpec.swift */; };
 		76B2F6A520343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */; };
+		76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */; };
+		76B7B13621482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */; };
 		76BCE05E204807B900F1E49C /* live-and-catchup-playback.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */; };
 		76BCE0602048236E00F1E49C /* error-handling-and-warning-messages.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */; };
 		76BCE07320482CE600F1E49C /* migrating-from-mrr.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE07220482CE600F1E49C /* migrating-from-mrr.md */; };
@@ -411,6 +413,7 @@
 		76A89DE12021CCC000C23579 /* StartCastingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCastingSpec.swift; sourceTree = "<group>"; };
 		76A89DE22021CCC000C23579 /* StartedSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartedSpec.swift; sourceTree = "<group>"; };
 		76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+DynamicManifest+SeekToLive.swift"; sourceTree = "<group>"; };
+		76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementSourceResponseHeaders.swift; sourceTree = "<group>"; };
 		76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "live-and-catchup-playback.md"; sourceTree = "<group>"; };
 		76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "error-handling-and-warning-messages.md"; sourceTree = "<group>"; };
 		76BCE07220482CE600F1E49C /* migrating-from-mrr.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "migrating-from-mrr.md"; sourceTree = "<group>"; };
@@ -685,6 +688,7 @@
 				7635AECC202AE0D2001512BF /* ContextStartTime.swift */,
 				766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */,
 				7644FBB921134843006CEBF0 /* DrmAnalyticsProvider.swift */,
+				76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1018,6 +1022,7 @@
 				760801F92069306E007F59D5 /* Playback.swift in Sources */,
 				760801FA2069306E007F59D5 /* ProgramService.swift in Sources */,
 				760801FB2069306E007F59D5 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				76B7B13621482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				760801FC2069306E007F59D5 /* Created.swift in Sources */,
 				760801FD2069306E007F59D5 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				760801FE2069306E007F59D5 /* UIDevice+Extensions.swift in Sources */,
@@ -1146,6 +1151,7 @@
 				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
 				76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */,

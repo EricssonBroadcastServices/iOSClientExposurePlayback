@@ -228,7 +228,7 @@ extension ExposureAnalytics {
             /// If no source is available this might be an error session. This means no Source was created. Check if we set the response headers from the Exposure request HTTPURLResponse previously.
             return exposureEntitlementHTTPURLResponse?.allHeaderFields["X-Request-Id"] as? String
         }
-        return exposureSource.response?.allHeaderFields["X-Request-Id"] as? String
+        return exposureSource.entitlementSourceResponseHeaders["X-Request-Id"]
     }
     
     /// Modify the existing startup events to include `X-Request-Id` in `Playback.Created` event.
