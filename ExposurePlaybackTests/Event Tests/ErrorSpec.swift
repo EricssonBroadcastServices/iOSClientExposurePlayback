@@ -20,30 +20,33 @@ class ErrorSpec: QuickSpec {
             let type = "Playback.Error"
             let code: Int = 101
             let message = "Some error"
-            let domain = "Domain"
+            let info = "Info"
+            let details = "Details"
             
             it("Should init and record complete structure") {
-                let event = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, domain: domain)
+                let event = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, info: info, details: details)
                 
                 expect(event.timestamp).to(equal(timeStamp))
                 expect(event.eventType).to(equal(type))
                 expect(event.offsetTime).to(equal(offset))
                 expect(event.message).to(equal(message))
                 expect(event.code).to(equal(code))
-                expect(event.domain).to(equal(domain))
+                expect(event.info).to(equal(info))
+                expect(event.details).to(equal(details))
                 expect(event.bufferLimit).to(equal(3000))
             }
             
             it("Should produce correct jsonPayload") {
-                let json = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, domain: domain).jsonPayload
+                let json = Playback.Error(timestamp: timeStamp, offsetTime: offset, message: message, code: code, info: info, details: details).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["Message"] as? String).to(equal(message))
                 expect(json["Code"] as? Int).to(equal(code))
-                expect(json["Domain"] as? String).to(equal(domain))
-                expect(json.count).to(equal(6))
+                expect(json["Info"] as? String).to(equal(info))
+                expect(json["Details"] as? String).to(equal(details))
+                expect(json.count).to(equal(7))
             }
         }
     }
