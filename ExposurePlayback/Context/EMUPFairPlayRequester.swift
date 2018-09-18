@@ -257,7 +257,7 @@ extension EMUPFairPlayRequester {
                                 callback(nil, false, .fairplay(reason: .applicationCertificateServer(code: message.code, message: message.message)))
                             }
                             catch {
-                                callback(nil, false, .fairplay(reason: .applicationCertificateServer(code: statusCode, message: "")))
+                                callback(nil, false, .fairplay(reason: .applicationCertificateServer(code: statusCode, message: "UNKNOWN_ERROR")))
                             }
                         }
                         else {
@@ -370,7 +370,7 @@ extension EMUPFairPlayRequester {
                                 callback(nil, .fairplay(reason: .contentKeyContextServer(code: message.code, message: message.message)))
                             }
                             catch {
-                                callback(nil, .fairplay(reason: .contentKeyContextServer(code: statusCode, message: "")))
+                                callback(nil, .fairplay(reason: .contentKeyContextServer(code: statusCode, message: "UNKNOWN_ERROR")))
                             }
                         }
                         else {

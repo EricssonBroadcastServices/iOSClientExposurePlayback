@@ -16,9 +16,13 @@
 * Added *Exposure* `X-Request-Id` to license requests.
 * `EMP-11711` Playtoken passed as header when requesting fairplay licenses.
 * `EMP-11747` Added `EntitlementSourceResponseHeaders` protocol.
+* `EMP-11766` Expanded and harmonized error reporting through analytics dispatch.
 
 #### Changes
 * Stop and unload `MediaAsset` when playback reaches end of duration.
+
+#### Bug Fixes
+* Fixed an issue where `Playback.Aborted` was sent after a terminating error event.
 
 ## 2.0.89
 

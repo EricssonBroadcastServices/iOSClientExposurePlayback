@@ -350,15 +350,78 @@ extension ExposureAnalytics: AnalyticsProvider {
             return
         }
         
-        let event = Playback.Error(timestamp: Date().millisecondsSince1970,
-                                   offsetTime: offsetTime(for: source, using: tech),
-                                   message: error.message,
-                                   code: error.code,
-                                   domain: error.domain,
-                                   info: error.info)
+        let event = buildPlaybackErrorEvent(tech: tech, source: source, error: error)
         dispatcher.enqueue(event: event)
         dispatcher.heartbeat(enabled: false)
+        dispatcher.flushTrigger(enabled: false)
+        // Terminate the Dispatcher. This will cause no more events to be sent on this playback session.
+        self.dispatcher = nil
     }
+    
+    private func buildPlaybackErrorEvent<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) -> Playback.Error where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
+        let timestamp = Date().millisecondsSince1970
+        let offset = offsetTime(for: source, using: tech)
+        
+        let structure = buildErrorStructure(hierarchy: [], nextError: error)
+        
+        let info = structure.isEmpty ? nil : structure.map{ "\($0):" + $1 }.joined(separator: " << ")
+        
+        guard let rootError = extractRootError(tech: tech, error: error) else {
+            return Playback.Error(timestamp: timestamp,
+                                  offsetTime: offset,
+                                  message: error.message,
+                                  code: error.code,
+                                  info: info,
+                                  details: error.info)
+        }
+        
+        return Playback.Error(timestamp: timestamp,
+                              offsetTime: offset,
+                              message: rootError.1,
+                              code: rootError.0,
+                              info: info,
+                              details: error.info)
+    }
+    
+    private func extractRootError<Tech, Context>(tech: Tech?, error: PlayerError<Tech, Context>) -> (Int, String)? where Tech : PlaybackTech, Context : MediaContext {
+        if let underlyingError = error.underlyingError as? ExposureError {
+            return (underlyingError.code, underlyingError.domain)
+        }
+        else if let underlyingError = error.underlyingError as? ExpandedError {
+            return (underlyingError.code, underlyingError.domain)
+        }
+        else if let underlyingError = error.underlyingError as? NSError {
+            return (underlyingError.code, underlyingError.domain)
+        }
+        return nil
+    }
+    
+    private func buildErrorStructure(hierarchy: [(Int, String)], nextError error: Error) -> [(Int, String)] {
+        var result = hierarchy
+        if let exposureError = error as? ExposureError {
+            result.append((exposureError.code, exposureError.domain))
+            if let underlyingError = exposureError.underlyingError {
+                return buildErrorStructure(hierarchy: result, nextError: underlyingError)
+            }
+            return result
+        }
+        else if let expanded = error as? ExpandedError {
+            result.append((expanded.code, expanded.domain))
+            if let underlyingError = expanded.underlyingError {
+                return buildErrorStructure(hierarchy: result, nextError: underlyingError)
+            }
+            return result
+        }
+        else if let nsError = error as? NSError {
+            result.append((nsError.code, nsError.domain))
+            if let underlyingError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
+                return buildErrorStructure(hierarchy: result, nextError: underlyingError)
+            }
+            return result
+        }
+        return result
+    }
+    
     
     /// Delivers errors received while trying to finalize a session.
     ///
@@ -367,12 +430,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     fileprivate func finalizeWithError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         var events = extractAndPrepareStartupEvents(source: source)
         
-        let errorPayload = Playback.Error(timestamp: Date().millisecondsSince1970,
-                                          offsetTime: offsetTime(for: source, using: tech),
-                                          message: error.message,
-                                          code: error.code,
-                                          domain: error.domain,
-                                          info: error.info)
+        let errorPayload = buildPlaybackErrorEvent(tech: tech, source: source, error: error)
         
         events.append(errorPayload)
         

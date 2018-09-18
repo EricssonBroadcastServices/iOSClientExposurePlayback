@@ -143,6 +143,15 @@ extension ExposureContext.Error {
     }
 }
 
+extension ExposureContext.Error {
+    public var underlyingError: Error? {
+        switch self {
+        case .fairplay(reason: let error): return error.underlyingError
+        case .exposure(reason: let error): return error.underlyingError
+        }
+    }
+}
+
 extension ExposureContext.Error.FairplayError {
     public var message: String {
         switch self {
@@ -176,25 +185,37 @@ extension ExposureContext.Error.FairplayError {
         switch self {
         // Application Certificate
         case .missingApplicationCertificateUrl: return "Application Certificate Url not found"
-        case .networking(error: let error): return "Network error while fetching Application Certificate: \(error.localizedDescription)"
+        case .networking(error: let error): return condensedInfo(error: error) ?? "Networking Error"
         case .applicationCertificateDataFormatInvalid: return "Certificate Data was not encodable using base64"
         case .applicationCertificateServer(code: let code, message: let message): return "Application Certificate server returned error: \(code) with message: \(message)"
-        case .applicationCertificateParsing(error: let error): return "Unable to parce Application Certificate: \(error.debugDescription)"
+        case .applicationCertificateParsing(error: let error): return condensedInfo(error: error) ?? "Unable to parce Application Certificate"
         case .invalidContentIdentifier: return "Invalid Content Identifier"
             
         // Server Playback Context
-        case .serverPlaybackContext(error: let error): return "Server Playback Context: \(error.localizedDescription)"
+        case .serverPlaybackContext(error: let error): return condensedInfo(error: error) ?? "Server Playback Context Error"
             
         // Content Key Context
         case .missingContentKeyContextUrl: return "Content Key Context Url not found"
         case .missingPlaytoken: return "Content Key Context call requires a playtoken"
         case .contentKeyContextDataFormatInvalid: return "Content Key Context was not encodable using base64"
         case .contentKeyContextServer(code: let code, message: let message): return "Content Key Context server returned error: \(code) with message: \(message)"
-        case .contentKeyContextParsing(error: let error): return "Content Key Context server response lacks parsable data: \(error?.localizedDescription ?? "")"
+        case .contentKeyContextParsing(error: let error): return condensedInfo(error: error) ?? "Content Key Context server response lacks parsable data"
         case .missingContentKeyContext: return "Content Key Context missing from response"
         case .missingDataRequest: return "Data Request missing"
         case .contentInformationRequestMissing: return "Unable to set contentType on contentInformationRequest"
         }
+    }
+    
+    private func condensedInfo(error: Error?) -> String? {
+        guard let error = error else { return nil }
+        guard let nsError = error as? NSError else { return "[" + error.localizedDescription + "]" }
+        var message = "[\(nsError.code):\(nsError.domain)] \n "
+        message += "[\(nsError.debugDescription)] \n "
+        
+        if let uError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError, let uInfo = condensedInfo(error: uError) {
+            message += uInfo
+        }
+        return message
     }
 }
 
@@ -217,6 +238,28 @@ extension ExposureContext.Error.FairplayError {
         case .networking(error: _): return 313
         case .serverPlaybackContext(error: _): return 314
         case .contentInformationRequestMissing: return 315
+        }
+    }
+}
+
+extension ExposureContext.Error.FairplayError {
+    public var underlyingError: Error? {
+        switch self {
+        case .applicationCertificateDataFormatInvalid: return nil
+        case .applicationCertificateParsing(error: let error): return error
+        case .applicationCertificateServer(code: _, message: _): return nil
+        case .contentKeyContextDataFormatInvalid: return nil
+        case .contentKeyContextParsing(error: let error): return error
+        case .contentKeyContextServer(code: _, message: _): return nil
+        case .invalidContentIdentifier: return nil
+        case .missingApplicationCertificateUrl: return nil
+        case .missingContentKeyContext: return nil
+        case .missingContentKeyContextUrl: return nil
+        case .missingDataRequest: return nil
+        case .missingPlaytoken: return nil
+        case .networking(error: let error): return error
+        case .serverPlaybackContext(error: let error): return error
+        case .contentInformationRequestMissing: return nil
         }
     }
 }
