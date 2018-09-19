@@ -208,14 +208,21 @@ extension ExposureContext.Error.FairplayError {
     
     private func condensedInfo(error: Error?) -> String? {
         guard let error = error else { return nil }
-        guard let nsError = error as? NSError else { return "[" + error.localizedDescription + "]" }
-        var message = "[\(nsError.code):\(nsError.domain)] \n "
-        message += "[\(nsError.debugDescription)] \n "
-        
-        if let uError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError, let uInfo = condensedInfo(error: uError) {
-            message += uInfo
+        if let networkingError = error as? Exposure.Request.Networking {
+            var message = "[\(networkingError.code):\(networkingError.domain)] \n "
+            message += "[\(networkingError.message)] \n "
+            return message
         }
-        return message
+        else if let nsError = error as? NSError  {
+            var message = "[\(nsError.code):\(nsError.domain)] \n "
+            message += "[\(nsError.debugDescription)] \n "
+            
+            if let uError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError, let uInfo = condensedInfo(error: uError) {
+                message += uInfo
+            }
+            return message
+        }
+        return "[" + error.localizedDescription + "]"
     }
 }
 
