@@ -390,6 +390,9 @@ extension ExposureAnalytics: AnalyticsProvider {
         else if let underlyingError = error.underlyingError as? ExpandedError {
             return (underlyingError.code, underlyingError.domain)
         }
+        else if let underlyingError = error.underlyingError as? Exposure.Request.Networking {
+            return (underlyingError.code, underlyingError.domain)
+        }
         else if let underlyingError = error.underlyingError as? NSError {
             return (underlyingError.code, underlyingError.domain)
         }
@@ -410,6 +413,10 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let underlyingError = expanded.underlyingError {
                 return buildErrorStructure(hierarchy: result, nextError: underlyingError)
             }
+            return result
+        }
+        else if let expanded = error as? Exposure.Request.Networking {
+            result.append((expanded.code, expanded.domain))
             return result
         }
         else if let nsError = error as? NSError {
