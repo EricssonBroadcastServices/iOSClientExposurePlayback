@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.0.92` Release - [2.0.92](#2092)
 * `2.0.91` Release - [2.0.91](#2091)
 * `2.0.89` Release - [2.0.89](#2089)
 * `2.0.86` Release - [2.0.86](#2086)
@@ -9,6 +10,12 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.0.92
+
+#### Changes
+* Promote underlying errors in analytics.
+* Expanded Fairplay error reporting.
 
 ## 2.0.91
 

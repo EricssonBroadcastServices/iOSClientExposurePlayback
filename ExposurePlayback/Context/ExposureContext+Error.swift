@@ -254,10 +254,10 @@ extension ExposureContext.Error.FairplayError {
         switch self {
         case .applicationCertificateDataFormatInvalid: return nil
         case .applicationCertificateParsing(error: let error): return error
-        case .applicationCertificateServer(code: _, message: _): return nil
+        case .applicationCertificateServer(code: let code, message: let message): return FairplayServerError.certificateError(code: code, serverMessage: message)
         case .contentKeyContextDataFormatInvalid: return nil
         case .contentKeyContextParsing(error: let error): return error
-        case .contentKeyContextServer(code: _, message: _): return nil
+        case .contentKeyContextServer(code: let code, message: let message): return FairplayServerError.licenseError(code: code, serverMessage: message)
         case .invalidContentIdentifier: return nil
         case .missingApplicationCertificateUrl: return nil
         case .missingContentKeyContext: return nil
@@ -273,4 +273,51 @@ extension ExposureContext.Error.FairplayError {
 
 extension ExposureContext.Error.FairplayError {
     public var domain: String { return String(describing: type(of: self))+"Domain" }
+}
+
+
+extension ExposureContext.Error.FairplayError {
+    public enum FairplayServerError: ExpandedError {
+        
+        /// The certificate request resulted in a server error
+        ///
+        /// - code: The server supplied error code
+        /// - serverMessage: The server supplied error message
+        case certificateError(code: Int, serverMessage: String)
+        
+        /// The license request resulted in a server error
+        ///
+        /// - code: The server supplied error code
+        /// - serverMessage: The server supplied error message
+        case licenseError(code: Int, serverMessage: String)
+        
+        /// Error code as described by the server
+        public var code: Int {
+            switch self {
+            case .certificateError(code: let value, serverMessage: _): return value
+            case .licenseError(code: let value, serverMessage: _): return value
+            }
+        }
+        
+        /// Human readable error message
+        public var message: String {
+            switch self {
+            case .certificateError(code: _, serverMessage: _): return "FAIRPLAY_SERVER_CERTIFICATE_ERROR"
+            case .licenseError(code: _, serverMessage: _): return "FAIRPLAY_SERVER_LICENSE_ERROR"
+            }
+        }
+        
+        /// The fairplay server error domain
+        public var domain: String {
+            return "FairplayServerErrorDomain"
+        }
+        
+        /// Returns detailed information about the server error, if available
+        public var info: String? {
+            switch self {
+            case .certificateError(code: _, serverMessage: let value): return value
+            case .licenseError(code: _, serverMessage: let value): return value
+            }
+        }
+    }
 }

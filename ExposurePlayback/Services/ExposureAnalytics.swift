@@ -366,7 +366,7 @@ extension ExposureAnalytics: AnalyticsProvider {
         
         let info = structure.isEmpty ? nil : structure.map{ "\($0):" + $1 }.joined(separator: " << ")
         
-        guard let rootError = extractRootError(tech: tech, error: error) else {
+        guard let rootError = structure.last else {
             return Playback.Error(timestamp: timestamp,
                                   offsetTime: offset,
                                   message: error.message,
@@ -381,22 +381,6 @@ extension ExposureAnalytics: AnalyticsProvider {
                               code: rootError.0,
                               info: info,
                               details: error.info)
-    }
-    
-    private func extractRootError<Tech, Context>(tech: Tech?, error: PlayerError<Tech, Context>) -> (Int, String)? where Tech : PlaybackTech, Context : MediaContext {
-        if let underlyingError = error.underlyingError as? ExposureError {
-            return (underlyingError.code, underlyingError.domain)
-        }
-        else if let underlyingError = error.underlyingError as? ExpandedError {
-            return (underlyingError.code, underlyingError.domain)
-        }
-        else if let underlyingError = error.underlyingError as? Exposure.Request.Networking {
-            return (underlyingError.code, underlyingError.domain)
-        }
-        else if let underlyingError = error.underlyingError as? NSError {
-            return (underlyingError.code, underlyingError.domain)
-        }
-        return nil
     }
     
     private func buildErrorStructure(hierarchy: [(Int, String)], nextError error: Error) -> [(Int, String)] {
