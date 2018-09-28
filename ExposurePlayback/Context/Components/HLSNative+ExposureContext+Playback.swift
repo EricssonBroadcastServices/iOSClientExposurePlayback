@@ -177,6 +177,16 @@ extension ExposureContext {
                         return heartbeatsProvider.heartbeat(for: tech, in: self)
                     }
                 }
+                
+            }
+            
+            /// Hook connection changed analytics events
+            reachability?.onReachabilityChanged = { [weak tech, weak source] connection in
+                source?.analyticsConnector.providers.forEach{
+                    if let exposureAnalytics = $0 as? ExposureAnalytics {
+                        exposureAnalytics.onConnectionChanged(tech: tech, source: source, type: connection)
+                    }
+                }
             }
         }
         

@@ -254,6 +254,10 @@
 		76D5C9E4203199DF0056BFF8 /* EntitlementValidation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */; };
 		76DE495B2033041B006801B4 /* MockedExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */; };
 		76DE495D20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */; };
+		76EBF037215E30E000503146 /* ConnectionChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF036215E30E000503146 /* ConnectionChanged.swift */; };
+		76EBF038215E30E000503146 /* ConnectionChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF036215E30E000503146 /* ConnectionChanged.swift */; };
+		76EBF03A215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
+		76EBF03B215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
 /* End PBXBuildFile section */
 
@@ -426,6 +430,8 @@
 		76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StaticManifest+SeekToTime.swift"; sourceTree = "<group>"; };
 		76EBF034215E1F6200503146 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = SOURCE_ROOT; };
 		76EBF035215E1F6200503146 /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = SOURCE_ROOT; };
+		76EBF036215E30E000503146 /* ConnectionChanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionChanged.swift; sourceTree = "<group>"; };
+		76EBF039215E3E0600503146 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -672,6 +678,7 @@
 				76A89C4420207AB100C23579 /* ProgramService.swift */,
 				76A89C4520207AB100C23579 /* ServerTimeProvider.swift */,
 				766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */,
+				76EBF039215E3E0600503146 /* Reachability.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -762,6 +769,7 @@
 				76010C862125B364008DB688 /* StopAirplay.swift */,
 				7696508320B2E64000B76A14 /* Trace.swift */,
 				7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */,
+				76EBF036215E30E000503146 /* ConnectionChanged.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1016,6 +1024,7 @@
 				760801F72069306E007F59D5 /* ProgramPlayable.swift in Sources */,
 				760801F82069306E007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */,
 				760801F92069306E007F59D5 /* Playback.swift in Sources */,
+				76EBF03B215E3E0600503146 /* Reachability.swift in Sources */,
 				760801FA2069306E007F59D5 /* ProgramService.swift in Sources */,
 				760801FB2069306E007F59D5 /* HLSNative+ExposureContext+Playback.swift in Sources */,
 				76B7B13621482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
@@ -1036,6 +1045,7 @@
 				760802092069306E007F59D5 /* ContractRestrictionsService.swift in Sources */,
 				7608020A2069306E007F59D5 /* DeviceInfo.swift in Sources */,
 				7608020B2069306E007F59D5 /* ExposureContext+Error.swift in Sources */,
+				76EBF038215E30E000503146 /* ConnectionChanged.swift in Sources */,
 				7608020C2069306E007F59D5 /* HLSNative+ExposureContext+Creation.swift in Sources */,
 				7608020D2069306E007F59D5 /* ContextGoLive.swift in Sources */,
 				7608020E2069306E007F59D5 /* Int64+Extensions.swift in Sources */,
@@ -1145,6 +1155,7 @@
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
 				7608003E2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */,
 				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
+				76EBF03A215E3E0600503146 /* Reachability.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
 				76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
@@ -1165,6 +1176,7 @@
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
 				76A89D8E2020F41F00C23579 /* DeviceInfo.swift in Sources */,
 				76A89DA32020F9A300C23579 /* ExposureContext+Error.swift in Sources */,
+				76EBF037215E30E000503146 /* ConnectionChanged.swift in Sources */,
 				76A89C4620207AB200C23579 /* HLSNative+ExposureContext+Creation.swift in Sources */,
 				7635AEC7202AE07E001512BF /* ContextGoLive.swift in Sources */,
 				7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */,
