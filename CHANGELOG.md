@@ -16,6 +16,7 @@
 #### Changes
 * Promote underlying errors in analytics.
 * Expanded Fairplay error reporting.
+* Upgraded unit testing frameworks.
 
 ## 2.0.91
 

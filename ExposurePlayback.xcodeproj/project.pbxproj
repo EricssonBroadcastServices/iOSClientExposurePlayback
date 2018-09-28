@@ -161,7 +161,6 @@
 		76A29D3B205FB6C70047B546 /* StartAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A29D3A205FB6C70047B546 /* StartAirplay.swift */; };
 		76A89C05202072D100C23579 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89BFB202072D100C23579 /* ExposurePlayback.framework */; };
 		76A89C0C202072D100C23579 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 76A89BFE202072D100C23579 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		76A89C2B20207A1600C23579 /* simple-player.md in Resources */ = {isa = PBXBuildFile; fileRef = 76A89C2A20207A1600C23579 /* simple-player.md */; };
 		76A89C4620207AB200C23579 /* HLSNative+ExposureContext+Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C2E20207AB100C23579 /* HLSNative+ExposureContext+Creation.swift */; };
 		76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C2F20207AB100C23579 /* HLSNative+ExposureContext+Playback.swift */; };
 		76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3020207AB100C23579 /* HLSNative+ExposureContext+Program.swift */; };
@@ -244,9 +243,6 @@
 		76B2F6A520343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B2F6A420343BE400183842 /* ProgramSource+DynamicManifest+SeekToLive.swift */; };
 		76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */; };
 		76B7B13621482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B7B13421482BCB003514F4 /* EntitlementSourceResponseHeaders.swift */; };
-		76BCE05E204807B900F1E49C /* live-and-catchup-playback.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */; };
-		76BCE0602048236E00F1E49C /* error-handling-and-warning-messages.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */; };
-		76BCE07320482CE600F1E49C /* migrating-from-mrr.md in Resources */ = {isa = PBXBuildFile; fileRef = 76BCE07220482CE600F1E49C /* migrating-from-mrr.md */; };
 		76CD5AF0202DA57000941ABC /* AssetPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AEF202DA57000941ABC /* AssetPlayableSpec.swift */; };
 		76CD5AF2202DBD4F00941ABC /* ChannelPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF1202DBD4F00941ABC /* ChannelPlayableSpec.swift */; };
 		76CD5AF4202DBF2300941ABC /* ProgramPlayableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */; };
@@ -428,6 +424,8 @@
 		76D5C9E3203199DF0056BFF8 /* EntitlementValidation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementValidation+Extensions.swift"; sourceTree = "<group>"; };
 		76DE495A2033041B006801B4 /* MockedExposureAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedExposureAnalytics.swift; sourceTree = "<group>"; };
 		76DE495C20331616006801B4 /* ProgramSource+StaticManifest+SeekToTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProgramSource+StaticManifest+SeekToTime.swift"; sourceTree = "<group>"; };
+		76EBF034215E1F6200503146 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = SOURCE_ROOT; };
+		76EBF035215E1F6200503146 /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = SOURCE_ROOT; };
 		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -538,6 +536,8 @@
 				76A89C2920207A1600C23579 /* Documentation */,
 				76A89C1D2020731300C23579 /* fastlane */,
 				76A89C27202073D300C23579 /* Cartfile */,
+				76EBF034215E1F6200503146 /* Cartfile.private */,
+				76EBF035215E1F6200503146 /* Cartfile.resolved */,
 				76A89BFE202072D100C23579 /* ExposurePlayback.h */,
 				76A89BFF202072D100C23579 /* Info.plist */,
 				7608003A2064EA79007F59D5 /* Dependencies */,
@@ -971,10 +971,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76BCE0602048236E00F1E49C /* error-handling-and-warning-messages.md in Resources */,
-				76BCE07320482CE600F1E49C /* migrating-from-mrr.md in Resources */,
-				76BCE05E204807B900F1E49C /* live-and-catchup-playback.md in Resources */,
-				76A89C2B20207A1600C23579 /* simple-player.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
