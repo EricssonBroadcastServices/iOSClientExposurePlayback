@@ -10,6 +10,11 @@ import Foundation
 import Player
 import Exposure
 
+#if os(iOS)
+import CoreTelephony
+#endif
+
+
 /// `ExposureAnalytics` delivers a complete analytics manager fully integrated with the *EMP* system. It is an extension of the `Player` defined `AnalyticsProvider` protocol customized to fit EMP specifications.
 ///
 /// Designed to work out of the box with `Player`, adopting and using `ExposureAnalytics` is very straight forward:
@@ -549,7 +554,6 @@ extension ExposureAnalytics: SourceAbandonedEventProvider {
     }
 }
 
-import CoreTelephony
 extension ExposureAnalytics {
     /// Should be called whenever changes in the connection status is detected
     ///
@@ -564,7 +568,12 @@ extension ExposureAnalytics {
     
     internal func networkTech(connection: Reachability.Connection) -> String {
         switch connection {
-        case .cellular: return CTTelephonyNetworkInfo().currentRadioAccessTechnology ?? connection.description
+        case .cellular:
+            #if os(iOS)
+            return CTTelephonyNetworkInfo().currentRadioAccessTechnology ?? connection.description
+            #elseif os(tvOS)
+            return connection.description
+            #endif
         case .none: return connection.description
         case .unknown: return connection.description
         case .wifi: return connection.description
