@@ -41,6 +41,9 @@ public class ExposureContext: MediaContext {
     /// Service that manages contract restrictions
     internal let contractRestrictionsService: ContractRestrictionsService
     
+    /// Service that listens to changes in network connection
+    internal var reachability: Reachability?
+    
     /// Tracks the internal programChanged callback
     internal var onProgramChanged: (Program?, Source) -> Void = { _,_ in }
     
@@ -79,10 +82,20 @@ public class ExposureContext: MediaContext {
         self.sessionToken = sessionToken
         self.monotonicTimeService = MonotonicTimeService(environment: environment)
         self.contractRestrictionsService = ContractRestrictionsService()
+        
+        
+        reachability = Reachability()
+        do {
+            try reachability?.startNotifier()
+        }
+        catch{
+            print("could not start reachability notifier")
+        }
     }
     
     deinit {
         print("ExposureContext deinit")
+        reachability?.stopNotifier()
     }
 }
 

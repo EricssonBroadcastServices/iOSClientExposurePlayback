@@ -13,6 +13,9 @@
 
 ## 2.0.92
 
+#### Features
+* `EMP-11805` Report connection type changes by dispatching `Playback.ConnectionChanged` analytics events.
+
 #### Changes
 * Promote underlying errors in analytics.
 * Expanded Fairplay error reporting.

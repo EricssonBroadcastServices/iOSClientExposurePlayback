@@ -18,8 +18,12 @@ internal struct DeviceInfo {
     /// Can be used to indicate this is an `Airplay` session
     internal let type: String?
     
-    internal init(timestamp: Int64, type: String? = nil) {
+    /// Indicates the connection type
+    internal let connection: String
+    
+    internal init(timestamp: Int64, connection: String, type: String? = nil) {
         self.timestamp = timestamp
+        self.connection = connection
         self.type = type
     }
 }
@@ -85,7 +89,8 @@ extension DeviceInfo: AnalyticsEvent {
             JSONKeys.deviceModel.rawValue: deviceModel,
             JSONKeys.os.rawValue: os,
             JSONKeys.osVersion.rawValue: osVersion,
-            JSONKeys.manufacturer.rawValue: manufacturer
+            JSONKeys.manufacturer.rawValue: manufacturer,
+            JSONKeys.connection.rawValue: connection
         ]
         
         if let cpuType = cpuType {
@@ -109,5 +114,6 @@ extension DeviceInfo: AnalyticsEvent {
         case osVersion = "OSVersion"
         case manufacturer = "Manufacturer"
         case type = "Type"
+        case connection = "Connection"
     }
 }

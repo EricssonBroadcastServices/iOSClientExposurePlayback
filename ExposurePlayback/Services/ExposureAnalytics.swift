@@ -147,8 +147,10 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
         let isAirplaySession = !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
         
+        
         /// 2. DeviceInfo
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, type: isAirplaySession)
+        let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
+        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession)
         
         /// 3. Store startup events
         var current = startupEvents
@@ -544,5 +546,28 @@ extension ExposureAnalytics: SourceAbandonedEventProvider {
         
         dispatcher?.enqueue(event: trace)
         onAborted(tech: tech, source: mediaSource)
+    }
+}
+
+import CoreTelephony
+extension ExposureAnalytics {
+    /// Should be called whenever changes in the connection status is detected
+    ///
+    /// - parameters:
+    ///     - tech: the tech currently playing `source`
+    ///     - source: the source under playback when the connection change occured
+    ///     - type: connection type changed to
+    internal func onConnectionChanged<Tech, Source>(tech: Tech?, source: Source?, type: Reachability.Connection) where Tech : PlaybackTech, Source : MediaSource {
+        let event = Playback.ConnectionChanged(timestamp: Date().millisecondsSince1970, connection: networkTech(connection: type), offsetTime: offsetTime(for: source, using: tech))
+        dispatcher?.enqueue(event: event)
+    }
+    
+    internal func networkTech(connection: Reachability.Connection) -> String {
+        switch connection {
+        case .cellular: return CTTelephonyNetworkInfo().currentRadioAccessTechnology ?? connection.description
+        case .none: return connection.description
+        case .unknown: return connection.description
+        case .wifi: return connection.description
+        }
     }
 }
