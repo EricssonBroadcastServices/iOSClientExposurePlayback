@@ -149,7 +149,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
         
         /// 2. DeviceInfo
-        let connectionType = (Reachability()?.connection ?? Reachability.Connection.unknown).description
+        let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
         let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession)
         
         /// 3. Store startup events
@@ -549,6 +549,7 @@ extension ExposureAnalytics: SourceAbandonedEventProvider {
     }
 }
 
+import CoreTelephony
 extension ExposureAnalytics {
     /// Should be called whenever changes in the connection status is detected
     ///
@@ -557,7 +558,16 @@ extension ExposureAnalytics {
     ///     - source: the source under playback when the connection change occured
     ///     - type: connection type changed to
     internal func onConnectionChanged<Tech, Source>(tech: Tech?, source: Source?, type: Reachability.Connection) where Tech : PlaybackTech, Source : MediaSource {
-        let event = Playback.ConnectionChanged(timestamp: Date().millisecondsSince1970, connection: type.description, offsetTime: offsetTime(for: source, using: tech))
+        let event = Playback.ConnectionChanged(timestamp: Date().millisecondsSince1970, connection: networkTech(connection: type), offsetTime: offsetTime(for: source, using: tech))
         dispatcher?.enqueue(event: event)
+    }
+    
+    internal func networkTech(connection: Reachability.Connection) -> String {
+        switch connection {
+        case .cellular: return CTTelephonyNetworkInfo().currentRadioAccessTechnology ?? connection.description
+        case .none: return connection.description
+        case .unknown: return connection.description
+        case .wifi: return connection.description
+        }
     }
 }
