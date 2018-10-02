@@ -77,6 +77,12 @@ extension ExposureContext {
         if let source = source {
             onEntitlementResponse(source.entitlement, source)
             
+            /// Assign the providers
+            source.analyticsConnector.providers = providers
+            
+            /// Ask if an optional AdService is available
+            onAdServiceRequested(source)
+            
             /// Make sure StartTime is configured if specified by user
             tech.startTime(byDelegate: self)
             
@@ -100,14 +106,17 @@ extension ExposureContext {
             let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
                                                        preferredMaxBitrate: playbackProperties.maxBitrate)
             
-            /// Load tech
-            tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
-                guard let `self` = self, let tech = tech, let source = source else { return }
-                /// Start ProgramService
-                self.prepareProgramService(source: source, tech: tech)
+            if let adService = source.adService {
+                // TODO: AdService should process source, then the tech loads it.
             }
-            
-            source.analyticsConnector.providers = providers
+            else {
+                /// Load tech
+                tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
+                    guard let `self` = self, let tech = tech, let source = source else { return }
+                    /// Start ProgramService
+                    self.prepareProgramService(source: source, tech: tech)
+                }
+            }
             
             /// Hook DRM analytics events
             if let fairplayRequester = source.fairplayRequester as? EMUPFairPlayRequester {

@@ -80,7 +80,7 @@ open class ExposureSource: MediaSource {
     /// Stores any HTTP headers used when requesting manifest and media segments for this `Source`.
     public var mediaSourceRequestHeaders: [String: String]
     
-    
+    /// Response headers for the entitlement response call
     public var entitlementSourceResponseHeaders: [String : String] {
         var result: [String: String] = [:]
         response?.allHeaderFields.forEach{
@@ -90,6 +90,9 @@ open class ExposureSource: MediaSource {
         }
         return result
     }
+    
+    /// Service responsible for handling Ad presentation.
+    public var adService: AdService?
 }
 
 extension ExposureSource {
