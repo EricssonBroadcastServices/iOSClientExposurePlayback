@@ -11,6 +11,11 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.0.93
+
+#### Known Limitations
+* `EMP-11863` *Carthage*, using `xcodebuild` and `Xcode10`s new build system, fails to resolve and link the correct dependencies when `ExposurePlayback` is included as a dependency.
+
 ## 2.0.92
 
 #### Features
