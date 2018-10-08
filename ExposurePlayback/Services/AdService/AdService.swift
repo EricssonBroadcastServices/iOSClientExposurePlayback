@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public protocol AdPlayerProxy {
+@objc public protocol AdPlayerProxy: class {
     var playheadPosition: Int64 { get }
     var isMuted: Bool { get set }
     var duration: Int64 { get }
@@ -22,61 +22,60 @@ import Foundation
 
 import Player
 internal class AdTechWrapper: AdPlayerProxy {
-    internal let tech: HLSNative<ExposureContext>
+    internal weak var tech: HLSNative<ExposureContext>?
     internal init(tech: HLSNative<ExposureContext>) {
         self.tech = tech
     }
     
     var playheadPosition: Int64 {
-        print(#function,tech.playheadPosition)
-        return tech.playheadPosition
+        return (tech?.playheadPosition ?? -1)
     }
     
     var isMuted: Bool {
         get {
-            print(#function,tech.isMuted)
-            return tech.isMuted
+            print(#function,tech?.isMuted)
+            return tech?.isMuted ?? false
         }
         set {
             print(#function,newValue)
-            tech.isMuted = newValue
+            tech?.isMuted = newValue
         }
     }
     
     var duration: Int64 {
-        print(#function,tech.duration)
-        return tech.duration ?? -1
+        print(#function,tech?.duration)
+        return tech?.duration ?? -1
     }
     
     var rate: Float {
         get {
-            print(#function,tech.rate)
-            return tech.rate
+            print(#function,tech?.rate)
+            return tech?.rate ?? 0
         }
         set {
             print(#function,newValue)
-            tech.rate = newValue
+            tech?.rate = newValue
         }
     }
     
     func play() {
         print(#function)
-        tech.play()
+        tech?.play()
     }
     
     func pause() {
         print(#function)
-        tech.pause()
+        tech?.pause()
     }
     
     func stop() {
         print(#function)
-        tech.stop()
+        tech?.stop()
     }
     
     func seek(toTime timeInterval: Int64, callback: @escaping (Bool) -> Void) {
         print(#function,timeInterval)
-        tech.seek(toPosition: timeInterval, callback: callback)
+        tech?.seek(toPosition: timeInterval, callback: callback)
     }
 }
 
