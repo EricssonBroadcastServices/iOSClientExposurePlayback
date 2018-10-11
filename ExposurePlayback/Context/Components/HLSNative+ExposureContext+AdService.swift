@@ -22,6 +22,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             guard let `self` = self else { return }
             if let adService = callback(self,source) {
                 source.adService = adService
+                source.adService?.playerProxy = AdTechWrapper(tech: self.tech)
                 
                 let eventProvider = AdServiceEventProvider(adService: adService)
                 source.analyticsConnector.providers.append(eventProvider)

@@ -106,10 +106,14 @@ extension ExposureContext {
             let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
                                                        preferredMaxBitrate: playbackProperties.maxBitrate)
             
-            if let adService = source.adService {
-                // TODO: AdService should process source, then the tech loads it.
-            }
-            else {
+            source.prepareSourceUrl{ [weak self, weak tech, weak source] in
+                guard let `self` = self, let tech = tech, let source = source else {
+                    print("====== prepareSourceUrl NIL")
+                    // TODO: WARN + ABORT
+                    return
+                }
+                source.proxyUrl = $0
+                
                 /// Load tech
                 tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
                     guard let `self` = self, let tech = tech, let source = source else { return }

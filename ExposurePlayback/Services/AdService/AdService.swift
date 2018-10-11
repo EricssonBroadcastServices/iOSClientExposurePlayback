@@ -8,187 +8,68 @@
 
 import Foundation
 
-@objc public protocol AdPlayerProxy: class {
-    var playheadPosition: Int64 { get }
-    var isMuted: Bool { get set }
-    var duration: Int64 { get }
-    var rate: Float { get set }
-    
-    func play()
-    func pause()
-    func stop()
-    func seek(toTime timeInterval: Int64, callback: @escaping (Bool) -> Void)
-}
-
-import Player
-internal class AdTechWrapper: AdPlayerProxy {
-    internal weak var tech: HLSNative<ExposureContext>?
-    internal init(tech: HLSNative<ExposureContext>) {
-        self.tech = tech
-    }
-    
-    var playheadPosition: Int64 {
-        return (tech?.playheadPosition ?? -1)
-    }
-    
-    var isMuted: Bool {
-        get {
-            print(#function,tech?.isMuted)
-            return tech?.isMuted ?? false
-        }
-        set {
-            print(#function,newValue)
-            tech?.isMuted = newValue
-        }
-    }
-    
-    var duration: Int64 {
-        print(#function,tech?.duration)
-        return tech?.duration ?? -1
-    }
-    
-    var rate: Float {
-        get {
-            print(#function,tech?.rate)
-            return tech?.rate ?? 0
-        }
-        set {
-            print(#function,newValue)
-            tech?.rate = newValue
-        }
-    }
-    
-    func play() {
-        print(#function)
-        tech?.play()
-    }
-    
-    func pause() {
-        print(#function)
-        tech?.pause()
-    }
-    
-    func stop() {
-        print(#function)
-        tech?.stop()
-    }
-    
-    func seek(toTime timeInterval: Int64, callback: @escaping (Bool) -> Void) {
-        print(#function,timeInterval)
-        tech?.seek(toPosition: timeInterval, callback: callback)
-    }
-}
-
-@objc public protocol AdInteractionPolicy {
-    func requiredAttentionBeforeSkipping(fromPosition: Int64) -> Int64
-    func allowedTargetSeek(forRequest: Int64) -> Int64
-    func canPause(atPosition: Int64) -> Bool
-}
-
+/// Defines a set of requirements `ExposureContext` places on an `AdService`.
+///
+/// Service providers are required to declare functionality to handle pre-processing of `Source` url's and accept playback status updates.
 @objc public protocol AdService {
-    func playbackReady(tech: AdPlayerProxy)
-    func playbackStarted(tech: AdPlayerProxy)
-    func playbackEnded(tech: AdPlayerProxy)
-    func playbackPaused(tech: AdPlayerProxy)
-    func playbackResumed(tech: AdPlayerProxy)
-    func playbackFailed(error: NSError, tech: AdPlayerProxy)
-    func playbackBufferingStarted(tech: AdPlayerProxy)
-    func playbackBufferingEnded(tech: AdPlayerProxy)
-    func playbackTimedMetadata(metaData: Any?, tech: AdPlayerProxy)
+    /// Inform `AdService` that playback is ready
+    func playbackReady()
     
-    func prepareAsset(source: URL, callback: @escaping (URL) -> AdPlayerProxy?)
-    func prepareProgram(source: URL, callback: @escaping (URL) -> AdPlayerProxy?)
-    func prepareChannel(source: URL, callback: @escaping (URL) -> AdPlayerProxy?)
+    /// Inform `AdService` that playback started
+    func playbackStarted()
+    
+    /// Inform `AdService` that playback ended
+    func playbackEnded()
+    
+    /// Inform `AdService` that playback paused
+    func playbackPaused()
+    
+    /// Inform `AdService` that playback resumed from a paused state
+    func playbackResumed()
+    
+    /// Inform `AdService` that playback failed
+    ///
+    /// - parameter error: the error causing playback to fail
+    func playbackFailed(error: NSError)
+    
+    /// Inform `AdService` that playback was stalled due to buffering
+    func playbackBufferingStarted()
+    
+    /// Inform `AdService` that playback resumed after buffering finished
+    func playbackBufferingEnded()
+    
+    /// Inform `AdService` that timed metadata arrived during playback.
+    ///
+    /// - parameter metaData: the timed metadata
+    func playbackTimedMetadata(metaData: Any?)
+    
+    /// A proxy for the playback tech. This can be used by the `AdService` implementation to interact with the underlying playback tech.
+    var playerProxy: AdPlayerProxy? { get set }
+    
+    /// Ask the `AdService` to prepare playback of a *VoD* asset.
+    ///
+    /// The callback should be fired whenever the `AdService` has prepared the source.
+    ///
+    /// - parameter source: url provided by the `AdService` used to initiate the stream
+    /// - parameter callback: the callback to fire
+    func prepareAsset(source: URL, callback: @escaping (URL) -> Void)
+    
+    /// Ask the `AdService` to prepare playback of a *program* asset.
+    ///
+    /// The callback should be fired whenever the `AdService` has prepared the source.
+    ///
+    /// - parameter source: url provided by the `AdService` used to initiate the stream
+    /// - parameter callback: the callback to fire
+    
+    func prepareProgram(source: URL, callback: @escaping (URL) -> Void)
+    
+    /// Ask the `AdService` to prepare playback of a *channel* asset.
+    ///
+    /// The callback should be fired whenever the `AdService` has prepared the source.
+    ///
+    /// - parameter source: url provided by the `AdService` used to initiate the stream
+    /// - parameter callback: the callback to fire
+    func prepareChannel(source: URL, callback: @escaping (URL) -> Void)
 }
 
 
-import AVFoundation
-internal class AdServiceEventProvider: AnalyticsProvider, TimedMetadataProvider {
-    internal unowned let adService: AdService
-    
-    internal init(adService: AdService) {
-        self.adService = adService
-    }
-    
-    func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
-    }
-    
-    func onPrepared<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
-    }
-    
-    func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackReady(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackStarted(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onPaused<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackPaused(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onResumed<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackResumed(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onAborted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackEnded(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onCompleted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackEnded(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
-        // TODO:
-    }
-    
-    func onBitrateChanged<Tech, Source>(tech: Tech, source: Source, bitrate: Double) where Tech : PlaybackTech, Source : MediaSource {
-        
-    }
-    
-    func onBufferingStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackBufferingStarted(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onBufferingStopped<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackBufferingEnded(tech: AdTechWrapper(tech: tech))
-        }
-    }
-    
-    func onScrubbedTo<Tech, Source>(tech: Tech, source: Source, offset: Int64) where Tech : PlaybackTech, Source : MediaSource {
-        
-    }
-    
-    func onDurationChanged<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
-    }
-    
-    func onWarning<Tech, Source, Context>(tech: Tech, source: Source?, warning: PlayerWarning<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
-        
-    }
-    
-    func onTimedMetadataChanged<Tech, Source>(source: Source?, tech: Tech, metadata: [AVMetadataItem]?) where Tech : PlaybackTech, Source : MediaSource {
-        if let tech = tech as? HLSNative<ExposureContext> {
-            adService.playbackTimedMetadata(metaData: metadata, tech: AdTechWrapper(tech: tech))
-        }
-    }
-}

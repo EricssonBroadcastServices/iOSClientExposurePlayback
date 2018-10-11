@@ -22,10 +22,16 @@ open class ExposureSource: MediaSource {
         return entitlement.playSessionId
     }
     
+    
     /// Media locator
     open var url: URL {
-        return entitlement.mediaLocator
+        return proxyUrl ?? entitlement.mediaLocator
     }
+    
+    /// Internal storage for a proxy mediaLocator
+    ///
+    /// Sources may optionally modify the mediaLocator, for example by redirecting through an external provider. Will be provided as the source url when loading the tech.
+    internal var proxyUrl: URL?
     
     /// Entitlement related to this playback request.
     public let entitlement: PlaybackEntitlement
@@ -93,6 +99,15 @@ open class ExposureSource: MediaSource {
     
     /// Service responsible for handling Ad presentation.
     public var adService: AdService?
+    
+    /// Provides a way for performing pre-processing of the *Source Url* before feeding it into the `PlaybackTech`.
+    ///
+    /// Override this method to provide custom modifications on the url. `ExposureContext` will use the `URL` returned by the callback as the `Source`'s proxied mediaLocator when instructing the `tech` to load the `Source`.
+    ///
+    /// - parameter callback: The callback that will fire when custom source url modifications are done.
+    public func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
+        callback(nil)
+    }
 }
 
 extension ExposureSource {
