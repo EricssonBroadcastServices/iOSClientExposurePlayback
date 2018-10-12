@@ -108,8 +108,7 @@ extension ExposureContext {
             
             source.prepareSourceUrl{ [weak self, weak tech, weak source] in
                 guard let `self` = self, let tech = tech, let source = source else {
-                    print("====== prepareSourceUrl NIL")
-                    // TODO: WARN + ABORT
+                    // TODO: Trigger warning?
                     return
                 }
                 source.proxyUrl = $0
