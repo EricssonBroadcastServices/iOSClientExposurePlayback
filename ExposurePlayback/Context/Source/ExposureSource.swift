@@ -25,6 +25,7 @@ open class ExposureSource: MediaSource {
     
     /// Media locator
     open var url: URL {
+        return proxyUrl ?? URL(string: "https://csm-e.tls1.yospace.com/csm/access/149023395/L0Rldkdyb3VwL0VuaWdtYVRWL3VuZW5jcnlwdGVkX2VuaWdtYS91bmVuY3J5cHRlZC0xX2VuaWdtYS92b2QuaXNtLy5tM3U4?position=start,00:01:11,00:02:10")!
         return proxyUrl ?? entitlement.mediaLocator
     }
     
@@ -41,6 +42,9 @@ open class ExposureSource: MediaSource {
     
     internal let fairplayRequester: ExposureFairplayRequester
     
+    /// Service that manages contract restrictions
+    internal let contractRestrictionsService: ContractRestrictionsService
+    
     /// Creates a new `ExposureSource`
     ///
     /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
@@ -51,6 +55,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.contractRestrictionsService = ContractRestrictionsService()
         self.mediaSourceRequestHeaders = [:]
         self.response = nil
     }
@@ -66,6 +71,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.contractRestrictionsService = ContractRestrictionsService()
         self.mediaSourceRequestHeaders = [:]
         self.response = response
     }

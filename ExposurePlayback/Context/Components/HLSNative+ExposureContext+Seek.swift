@@ -57,7 +57,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     public func seek(toTime timeInterval: Int64) {
         guard let source = tech.currentSource else { return }
         guard let currentTimestamp = playheadTime else { return }
-        let seekDisabled = context.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement)
+        let seekDisabled = source.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement)
         guard seekDisabled == nil else {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
@@ -81,7 +81,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter position: target offset in milliseconds
     public func seek(toPosition position: Int64) {
         guard let source = tech.currentSource else { return }
-        let seekDisabled = context.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement)
+        let seekDisabled = source.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement)
         guard seekDisabled == nil else {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)

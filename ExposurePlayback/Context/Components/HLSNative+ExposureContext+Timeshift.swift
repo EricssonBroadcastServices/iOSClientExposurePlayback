@@ -17,7 +17,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - note: Will perform a check against contract restrictions to decide if pausing is allowed or not.
     public func pause() {
         guard let source = tech.currentSource else { return }
-        let pauseDisabled = context.contractRestrictionsService.canPause(entitlement: source.entitlement)
+        let pauseDisabled = source.contractRestrictionsService.canPause(entitlement: source.entitlement)
         guard pauseDisabled == nil else {
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: pauseDisabled!)
             tech.eventDispatcher.onWarning(tech, source, warning)

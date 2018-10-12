@@ -38,9 +38,6 @@ public class ExposureContext: MediaContext {
     /// Service that manages entitlement validation on currently active program
     public var programService: ProgramService?
     
-    /// Service that manages contract restrictions
-    internal let contractRestrictionsService: ContractRestrictionsService
-    
     /// Service that listens to changes in network connection
     internal var reachability: Reachability?
     
@@ -84,8 +81,6 @@ public class ExposureContext: MediaContext {
         self.environment = environment
         self.sessionToken = sessionToken
         self.monotonicTimeService = MonotonicTimeService(environment: environment)
-        self.contractRestrictionsService = ContractRestrictionsService()
-        
         
         reachability = Reachability()
         do {
