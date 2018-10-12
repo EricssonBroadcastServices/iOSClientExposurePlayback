@@ -42,6 +42,17 @@ open class ProgramSource: ExposureSource {
         self.channelId = channelId
         super.init(entitlement: entitlement, assetId: assetId, response: response)
     }
+    
+    public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
+        if let adService = adService {
+            adService.prepareProgram(source: url) {
+                callback($0)
+            }
+        }
+        else {
+            callback(nil)
+        }
+    }
 }
 
 extension ProgramSource: ContextTimeSeekable {

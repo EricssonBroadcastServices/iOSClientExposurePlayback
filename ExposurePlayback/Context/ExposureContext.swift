@@ -50,6 +50,9 @@ public class ExposureContext: MediaContext {
     /// Tracks the internal entitlementResponse callback
     internal var onEntitlementResponse: (PlaybackEntitlement, Source) -> Void = { _,_ in }
     
+    /// Tracks the internal adService callback
+    internal var onAdServiceRequested: (Source) -> Void = { _ in }
+    
     /// Specifies playback related behaviour
     internal(set) public var playbackProperties: PlaybackProperties = PlaybackProperties()
     
