@@ -17,6 +17,9 @@
 #### Features
 * `EMP-11839` Introduced `AdServiceProvider` to handle server side ad insertion.
 
+#### Changes
+* `EMP-11894` Contract restrictions service now part of source instead of context.
+
 #### Known Limitations
 * `EMP-11863` *Carthage*, using `xcodebuild` and `Xcode10`s new build system, fails to resolve and link the correct dependencies when `ExposurePlayback` is included as a dependency.
 
