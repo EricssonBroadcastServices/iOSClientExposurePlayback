@@ -50,39 +50,55 @@ extension ProgramSource: ContextTimeSeekable {
         handleSeek(toTime: timeInterval, for: player, in: context) { [weak self] lastTimestamp in
             guard let `self` = self else { return }
             // After seekable range.
-            
-            // TODO: Check fragility of checking for `playbackType`
-            if context.isDynamicManifest(player.tech, self) {
-                // ProgreamSource is considered to be live which means seeking beyond the last seekable range would be impossible.
-                //
-                // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
-                //
-                // Note: `delta` in this aspect is the *time behind live*
-                let delta = player.liveDelay ?? 0
-                if (timeInterval - delta) <= lastTimestamp {
-                    self.handleGoLive(player: player, in: context)
-                }
-                else {
-                    let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
-                    player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
-                    self.analyticsConnector.onWarning(tech: player.tech, source: self, warning: warning)
-                }
+            self.handleSeekBeyondLivePoint(lastOffset: lastTimestamp, targetTime: timeInterval, timeInterval: timeInterval, for: player, in: context)
+        }
+    }
+    
+    /// Handles seeking beyond the live edge.
+    ///
+    /// This can be done both through zero-based offset and unix timestamp. Program based seek for static catchup requires a unix timestamp to work, and this should be supplied as the `timeInterval`. If the seek is done with zero-based offset the supplied `timeInterval` should mark the relative timestamp in unix time.
+    ///
+    /// - parameters:
+    ///     - lastOffset: the last buffer offset (either zero based or unix timestamp), ie the live point.
+    ///     - targetTime: the target offset, either zero based or unix timestamp, but it must match the scale supplied by `lastOffset`
+    ///     - timeInterval: the target offset as a unix timestamp. This is needed to handle `ProgramService` based seek.
+    ///     - player: The player
+    ///     - context: The playback context
+    fileprivate func handleSeekBeyondLivePoint(lastOffset: Int64, targetTime: Int64, timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // TODO: Check fragility of checking for `playbackType`
+        if context.isDynamicManifest(player.tech, self) {
+            // ProgreamSource is considered to be live which means seeking beyond the last seekable range would be impossible.
+            //
+            // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
+            //
+            // Note: `delta` in this aspect is the *time behind live*
+            let delta = player.liveDelay ?? 0
+            if (targetTime - delta) <= lastOffset {
+                self.handleGoLive(player: player, in: context)
             }
             else {
-                // ProgramSource is considered static catchup.
-                //
-                // Seeking beyond the manifest should trigger an entitlement request
-                player.handleProgramServiceBasedSeek(timestamp: timeInterval)
+                let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: targetTime, livePoint: lastOffset))
+                player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+                self.analyticsConnector.onWarning(tech: player.tech, source: self, warning: warning)
             }
+        }
+        else {
+            // ProgramSource is considered static catchup.
+            //
+            // Seeking beyond the manifest should trigger an entitlement request
+            player.handleProgramServiceBasedSeek(timestamp: timeInterval)
         }
     }
 }
 
 extension ProgramSource: ContextPositionSeekable {
-    func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        if let playheadTime = player.playheadTime {
-            let timeInterval = position.timestampFrom(referenceTime: playheadTime, referencePosition: player.playheadPosition)
-            handleSeek(toTime: timeInterval, for: player, in: context)
+    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // NOTE: ProgramSource playback can be either *dynamic catchup*, ie a growing manifest, or *static catchup*, ie a vod manifest
+        handleSeek(toPosition: position, for: player, in: context) { [weak self] timeInterval, lastPosition in
+            guard let `self` = self else { return }
+            // After seekable range.
+            self.handleSeekBeyondLivePoint(lastOffset: lastPosition, targetTime: position, timeInterval: timeInterval, for: player, in: context)
+            
         }
     }
 }
