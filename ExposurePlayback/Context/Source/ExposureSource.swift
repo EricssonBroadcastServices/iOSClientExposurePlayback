@@ -43,7 +43,7 @@ open class ExposureSource: MediaSource {
     internal let fairplayRequester: ExposureFairplayRequester
     
     /// Service that manages contract restrictions
-    internal let contractRestrictionsService: ContractRestrictionsService
+    public var contractRestrictionsService: ContractRestrictionsService
     
     /// Creates a new `ExposureSource`
     ///
@@ -55,7 +55,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
-        self.contractRestrictionsService = ContractRestrictionsService()
+        self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.response = nil
     }
@@ -71,7 +71,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
-        self.contractRestrictionsService = ContractRestrictionsService()
+        self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.response = response
     }

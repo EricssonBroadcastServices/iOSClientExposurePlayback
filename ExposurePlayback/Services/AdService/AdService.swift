@@ -70,6 +70,11 @@ import Foundation
     /// - parameter source: url provided by the `AdService` used to initiate the stream
     /// - parameter callback: the callback to fire
     func prepareChannel(source: URL, callback: @escaping (URL) -> Void)
+    
+    /// Should optionally return a contract specialized `ContractRestrictionsService` which will be used to handle player policies during playback of the ad-based stream. Returning `nil` here will use the default service based on `PlaybackEntitlement`s.
+    ///
+    /// - note: The `Source` object which will be using this service will keep an `unowned` reference to the service in question. It is the responsibility of the `AdService` to keep this object alive as long as the `Source` object is alive.
+    var contractRestrictionsService: ContractRestrictionsService? { get }
 }
 
 
