@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Exposure
 
 /// Implements basic contract restrictions based the raw `PlaybackEntitlement`
 internal class BasicContractRestrictions: ContractRestrictionsService {
