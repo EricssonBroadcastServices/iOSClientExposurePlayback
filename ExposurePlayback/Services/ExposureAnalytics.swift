@@ -148,13 +148,9 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
-        /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-        let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
-        let isAirplaySession = !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
-        
-        
         /// 2. DeviceInfo
         let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
+        /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
         let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession)
         
         /// 3. Store startup events
@@ -249,6 +245,15 @@ extension ExposureAnalytics {
                 return e
             }
         }
+    }
+}
+
+extension ExposureAnalytics {
+    /// Returns an indcation if Airplay is active.
+    fileprivate var isAirplaySession: String? {
+        /// EMP-11647: If this is an Airplay session, return `AVAudioSessionPortAirPlay`
+        let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
+        return !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
     }
 }
 
@@ -464,8 +469,14 @@ extension ExposureAnalytics: AnalyticsProvider {
     }
     
     public func onScrubbedTo<Tech, Source>(tech: Tech, source: Source, offset: Int64) where Tech : PlaybackTech, Source : MediaSource {
+        /// BUGFIX: EMP-11909: `ProgramSource`s and `ChannelSource`s are seekable with zero-based buffer position offset. This causes the related callback to be fired with that zero based target which is not what we want to deliver to analytics.
+        ///
+        /// In order to fix this we simply disregard the supplied `offset` as this might be delivered as a zero-based buffer position for `ProgramSource` and `ChannelSource` playback. Instead, we try to extract the current offsetTime (based on the Source type ie playheadTime for ProgramSource and ChannelSource) which should be close to or equal to the requested offset.
+        ///
+        /// If no such offset is available, we dispatch no offset
+        let usedOffset = offsetTime(for: source, using: tech)
         let event = Playback.ScrubbedTo(timestamp: Date().millisecondsSince1970,
-                                        offsetTime: offset)
+                                        offsetTime: usedOffset)
         dispatcher?.enqueue(event: event)
     }
     

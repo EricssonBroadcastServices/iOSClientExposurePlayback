@@ -101,7 +101,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     internal func handleProgramServiceBasedSeek(timestamp: Int64) {
         guard let programService = context.programService else {
             // TODO: WARNING
-//            tech.eventDispatcher.onWarning(tech, tech.currentSource, <#T##PlayerWarning<HLSNative<ExposureContext>, ExposureContext>#>)
+//            tech.eventDispatcher.onWarning(tech, tech.currentSource, )
             return
         }
         
@@ -142,9 +142,16 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 
 extension Player where Tech == HLSNative<ExposureContext> {
-    internal func checkBounds(timestamp: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
-        let ranges = seekableTimeRanges
-        guard !ranges.isEmpty, let first = ranges.first?.start.milliseconds, let last = ranges.last?.end.milliseconds else {
+    /// Checks if the supplied `offset` is within, before of after `bounds`
+    ///
+    /// - parameters:
+    ///     - bounds: the bounds to check against
+    ///     - offset: the target offset to check
+    ///     - ifBefore: callback fired if the `offset` is before `bounds`
+    ///     - ifWithin: callback fired if the `offset` is within `bounds`
+    ///     - ifAfter: callback fired if the `offset` is after `bounds`
+    internal func check(bounds: [CMTimeRange], offset: Int64, ifBefore: @escaping () -> Void, ifWithin: @escaping () -> Void, ifAfter: @escaping (Int64) -> Void) {
+        guard !bounds.isEmpty, let first = bounds.first?.start.milliseconds, let last = bounds.last?.end.milliseconds else {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
             tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
             if let source = self.tech.currentSource {
@@ -153,19 +160,19 @@ extension Player where Tech == HLSNative<ExposureContext> {
             return
         }
         
-        if ranges.count > 1 {
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: ranges))
+        if bounds.count > 1 {
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .discontinuousSeekableRanges(seekableRanges: bounds))
             tech.eventDispatcher.onWarning(tech, tech.currentSource, warning)
             if let source = self.tech.currentSource {
                 source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: warning)
             }
         }
         
-        if timestamp < first {
+        if offset < first {
             // Before seekable range
             ifBefore()
         }
-        else if timestamp > (last) {
+        else if offset > last {
             // After seekable range.
             ifAfter(last)
         }

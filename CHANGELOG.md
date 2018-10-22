@@ -17,6 +17,9 @@
 #### Features
 * `EMP-11839` Introduced `AdServiceProvider` to handle server side ad insertion.
 
+#### Bug Fixes
+* `EMP-11909` Fixed inconsistent behaviour when seeking by position in a *unix time based stream*. Bounds checking and relevant callbacks should now use the correct offset.
+
 #### Changes
 * `EMP-11894` Contract restrictions service now part of source instead of context.
 

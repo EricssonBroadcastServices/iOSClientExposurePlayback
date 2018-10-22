@@ -57,7 +57,6 @@
 		7608020B2069306E007F59D5 /* ExposureContext+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DA22020F9A300C23579 /* ExposureContext+Error.swift */; };
 		7608020C2069306E007F59D5 /* HLSNative+ExposureContext+Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C2E20207AB100C23579 /* HLSNative+ExposureContext+Creation.swift */; };
 		7608020D2069306E007F59D5 /* ContextGoLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC6202AE07E001512BF /* ContextGoLive.swift */; };
-		7608020E2069306E007F59D5 /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEBE2029AF94001512BF /* Int64+Extensions.swift */; };
 		7608020F2069306E007F59D5 /* ChannelSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3E20207AB100C23579 /* ChannelSource.swift */; };
 		760802102069306E007F59D5 /* HLSNative+ExposureContext+Seek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C3120207AB100C23579 /* HLSNative+ExposureContext+Seek.swift */; };
 		760802112069306E007F59D5 /* BufferingStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D6E2020F41F00C23579 /* BufferingStarted.swift */; };
@@ -135,7 +134,6 @@
 		7619B489216F258D00EE0DC8 /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */; };
 		7619B48B216F25EF00EE0DC8 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */; };
 		7624D5FA20344BE300CD1835 /* ChannelSource+SeekToLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */; };
-		7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEBE2029AF94001512BF /* Int64+Extensions.swift */; };
 		7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */; };
 		7635AEC5202ADFDE001512BF /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */; };
 		7635AEC7202AE07E001512BF /* ContextGoLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7635AEC6202AE07E001512BF /* ContextGoLive.swift */; };
@@ -303,7 +301,6 @@
 		7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdServiceEventProvider.swift; sourceTree = "<group>"; };
 		7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTechWrapper.swift; sourceTree = "<group>"; };
 		7624D5F920344BE300CD1835 /* ChannelSource+SeekToLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSource+SeekToLive.swift"; sourceTree = "<group>"; };
-		7635AEBE2029AF94001512BF /* Int64+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int64+Extensions.swift"; sourceTree = "<group>"; };
 		7635AEC2202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Entitlements.swift"; sourceTree = "<group>"; };
 		7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
 		7635AEC6202AE07E001512BF /* ContextGoLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextGoLive.swift; sourceTree = "<group>"; };
@@ -764,7 +761,6 @@
 			isa = PBXGroup;
 			children = (
 				76A89D642020F36400C23579 /* UIDevice+Extensions.swift */,
-				7635AEBE2029AF94001512BF /* Int64+Extensions.swift */,
 				7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */,
 				766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */,
 			);
@@ -1077,7 +1073,6 @@
 				76EBF038215E30E000503146 /* ConnectionChanged.swift in Sources */,
 				7608020C2069306E007F59D5 /* HLSNative+ExposureContext+Creation.swift in Sources */,
 				7608020D2069306E007F59D5 /* ContextGoLive.swift in Sources */,
-				7608020E2069306E007F59D5 /* Int64+Extensions.swift in Sources */,
 				7608020F2069306E007F59D5 /* ChannelSource.swift in Sources */,
 				760802102069306E007F59D5 /* HLSNative+ExposureContext+Seek.swift in Sources */,
 				760802112069306E007F59D5 /* BufferingStarted.swift in Sources */,
@@ -1213,7 +1208,6 @@
 				76EBF037215E30E000503146 /* ConnectionChanged.swift in Sources */,
 				76A89C4620207AB200C23579 /* HLSNative+ExposureContext+Creation.swift in Sources */,
 				7635AEC7202AE07E001512BF /* ContextGoLive.swift in Sources */,
-				7635AEBF2029AF94001512BF /* Int64+Extensions.swift in Sources */,
 				76A89C5420207AB200C23579 /* ChannelSource.swift in Sources */,
 				76A89C4920207AB200C23579 /* HLSNative+ExposureContext+Seek.swift in Sources */,
 				76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */,
