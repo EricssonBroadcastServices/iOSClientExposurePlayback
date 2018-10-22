@@ -22,10 +22,17 @@ open class ExposureSource: MediaSource {
         return entitlement.playSessionId
     }
     
+    
     /// Media locator
     open var url: URL {
-        return entitlement.mediaLocator
+        return proxyUrl ?? URL(string: "https://csm-e.tls1.yospace.com/csm/access/149023395/L0Rldkdyb3VwL0VuaWdtYVRWL3VuZW5jcnlwdGVkX2VuaWdtYS91bmVuY3J5cHRlZC0xX2VuaWdtYS92b2QuaXNtLy5tM3U4?position=start,00:01:11,00:02:10")!
+        return proxyUrl ?? entitlement.mediaLocator
     }
+    
+    /// Internal storage for a proxy mediaLocator
+    ///
+    /// Sources may optionally modify the mediaLocator, for example by redirecting through an external provider. Will be provided as the source url when loading the tech.
+    internal var proxyUrl: URL?
     
     /// Entitlement related to this playback request.
     public let entitlement: PlaybackEntitlement
@@ -34,6 +41,9 @@ open class ExposureSource: MediaSource {
     public let assetId: String
     
     internal let fairplayRequester: ExposureFairplayRequester
+    
+    /// Service that manages contract restrictions
+    internal let contractRestrictionsService: ContractRestrictionsService
     
     /// Creates a new `ExposureSource`
     ///
@@ -45,6 +55,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.contractRestrictionsService = ContractRestrictionsService()
         self.mediaSourceRequestHeaders = [:]
         self.response = nil
     }
@@ -60,6 +71,7 @@ open class ExposureSource: MediaSource {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.contractRestrictionsService = ContractRestrictionsService()
         self.mediaSourceRequestHeaders = [:]
         self.response = response
     }
@@ -80,7 +92,7 @@ open class ExposureSource: MediaSource {
     /// Stores any HTTP headers used when requesting manifest and media segments for this `Source`.
     public var mediaSourceRequestHeaders: [String: String]
     
-    
+    /// Response headers for the entitlement response call
     public var entitlementSourceResponseHeaders: [String : String] {
         var result: [String: String] = [:]
         response?.allHeaderFields.forEach{
@@ -89,6 +101,18 @@ open class ExposureSource: MediaSource {
             }
         }
         return result
+    }
+    
+    /// Service responsible for handling Ad presentation.
+    public var adService: AdService?
+    
+    /// Provides a way for performing pre-processing of the *Source Url* before feeding it into the `PlaybackTech`.
+    ///
+    /// Override this method to provide custom modifications on the url. `ExposureContext` will use the `URL` returned by the callback as the `Source`'s proxied mediaLocator when instructing the `tech` to load the `Source`.
+    ///
+    /// - parameter callback: The callback that will fire when custom source url modifications are done.
+    public func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
+        callback(nil)
     }
 }
 

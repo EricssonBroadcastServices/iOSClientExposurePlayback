@@ -77,6 +77,12 @@ extension ExposureContext {
         if let source = source {
             onEntitlementResponse(source.entitlement, source)
             
+            /// Assign the providers
+            source.analyticsConnector.providers = providers
+            
+            /// Ask if an optional AdService is available
+            onAdServiceRequested(source)
+            
             /// Make sure StartTime is configured if specified by user
             tech.startTime(byDelegate: self)
             
@@ -100,14 +106,20 @@ extension ExposureContext {
             let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
                                                        preferredMaxBitrate: playbackProperties.maxBitrate)
             
-            /// Load tech
-            tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
-                guard let `self` = self, let tech = tech, let source = source else { return }
-                /// Start ProgramService
-                self.prepareProgramService(source: source, tech: tech)
+            source.prepareSourceUrl{ [weak self, weak tech, weak source] in
+                guard let `self` = self, let tech = tech, let source = source else {
+                    // TODO: Trigger warning?
+                    return
+                }
+                source.proxyUrl = $0
+                
+                /// Load tech
+                tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
+                    guard let `self` = self, let tech = tech, let source = source else { return }
+                    /// Start ProgramService
+                    self.prepareProgramService(source: source, tech: tech)
+                }
             }
-            
-            source.analyticsConnector.providers = providers
             
             /// Hook DRM analytics events
             if let fairplayRequester = source.fairplayRequester as? EMUPFairPlayRequester {

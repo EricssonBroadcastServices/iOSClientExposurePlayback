@@ -17,7 +17,18 @@ import Player
 /// * `.customPosition(position:)` : Playback starts from the specified buffer position (in milliseconds) . Will ignore positions outside the `seekableRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning
 /// * `.customTime(time:)` : Playback starts from the specified unix timestamp (in milliseconds). Will ignore timestamps not within the `seekableTimeRange` and present the application with an `invalidStartTime(startTime:seekableRanges:)` warning.
 /// * `.defaultBehavior` Playback starts from the live edge
-open class ChannelSource: ExposureSource { }
+open class ChannelSource: ExposureSource {
+    public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
+        if let adService = adService {
+            adService.prepareChannel(source: url) {
+                callback($0)
+            }
+        }
+        else {
+            callback(nil)
+        }
+    }
+}
 
 extension ChannelSource: ContextTimeSeekable {
     internal func handleSeek(toTime timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
