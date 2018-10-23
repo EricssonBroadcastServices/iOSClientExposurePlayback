@@ -11,6 +11,7 @@ import Exposure
 
 /// Implements basic contract restrictions based the raw `PlaybackEntitlement`
 internal class BasicContractRestrictions: ContractRestrictionsService {
+    
     internal init(entitlement: PlaybackEntitlement) {
         let policy = ContractRestrictionsPolicy()
         policy.fastForwardEnabled = entitlement.ffEnabled
@@ -33,25 +34,18 @@ internal class BasicContractRestrictions: ContractRestrictionsService {
         return contractRestrictionsPolicy?.timeshiftEnabled ?? true
     }
     
-    internal func canSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Int64 {
+    internal func canSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Bool {
         if destination < origin && !rwEnabled {
-            return -1
+            return false
         }
         
         if destination > origin && !ffEnabled {
-            return -1
+            return false
         }
-        return destination
+        return true
     }
     
-    internal func canSeek(fromTime origin: Int64, toTime destination: Int64) -> Int64 {
-        if destination < origin && !rwEnabled {
-            return -1
-        }
-        
-        if destination > origin && !ffEnabled {
-            return -1
-        }
+    func willSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Int64 {
         return destination
     }
     

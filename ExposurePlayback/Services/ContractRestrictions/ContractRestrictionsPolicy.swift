@@ -9,11 +9,11 @@
 import Foundation
 
 @objc public class ContractRestrictionsPolicy: NSObject {
-    public var timeshiftEnabled: Bool
-    public var fastForwardEnabled: Bool
-    public var rewindEnabled: Bool
+    @objc public var timeshiftEnabled: Bool
+    @objc public var fastForwardEnabled: Bool
+    @objc public var rewindEnabled: Bool
     
-    public override init() {
+    @objc public override init() {
         self.timeshiftEnabled = false
         self.fastForwardEnabled = false
         self.rewindEnabled = false

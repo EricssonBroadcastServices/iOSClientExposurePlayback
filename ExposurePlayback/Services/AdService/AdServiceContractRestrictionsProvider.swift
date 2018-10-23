@@ -9,6 +9,7 @@
 import Foundation
 
 internal class AdServiceContractRestrictionsProvider: ContractRestrictionsService {
+    
     var contractRestrictionsPolicy: ContractRestrictionsPolicy? {
         get {
             return delegate.contractRestrictionsPolicy
@@ -24,13 +25,12 @@ internal class AdServiceContractRestrictionsProvider: ContractRestrictionsServic
         self.delegate = delegate
     }
     
-    
-    func canSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Int64 {
+    func canSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Bool {
         return delegate.canSeek(fromPosition: origin, toPosition: destination)
     }
     
-    func canSeek(fromTime origin: Int64, toTime destination: Int64) -> Int64 {
-        return delegate.canSeek(fromTime: origin, toTime: destination)
+    func willSeek(fromPosition origin: Int64, toPosition destination: Int64) -> Int64 {
+        return delegate.willSeek(fromPosition: origin, toPosition: destination)
     }
     
     func canPause(at position: Int64) -> Bool {
