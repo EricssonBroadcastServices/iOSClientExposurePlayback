@@ -45,7 +45,8 @@ open class ProgramSource: ExposureSource {
     
     public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
         if let adService = adService {
-            adService.prepareProgram(source: url) {
+            let sourceUrl = entitlement.adMediaLocator ?? entitlement.mediaLocator
+            adService.prepareProgram(source: sourceUrl) {
                 callback($0)
             }
         }

@@ -20,7 +20,8 @@ import Player
 open class ChannelSource: ExposureSource {
     public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
         if let adService = adService {
-            adService.prepareChannel(source: url) {
+            let sourceUrl = entitlement.adMediaLocator ?? entitlement.mediaLocator
+            adService.prepareChannel(source: sourceUrl) {
                 callback($0)
             }
         }
