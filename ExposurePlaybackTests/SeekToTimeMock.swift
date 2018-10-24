@@ -326,7 +326,6 @@ class SeekToTimeMock {
         let livePointDelay: Int64 = 25 * 1000
         
         let currentDate = seekTarget - livePointOffet - overshot
-        
         let env = TestEnv(environment: environment, sessionToken: token)
         env.player.context.isDynamicManifest = { _,_ in return true }
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: livePointOffet))
@@ -342,8 +341,7 @@ class SeekToTimeMock {
         }
         
         // ServerTime is required for LiveDelay to work properly
-        _ = env.player.serverTime
-        
+        env.player.serverTime(forceRefresh: true) { _ in }
         // Mock the ProgramService
         env.mockProgramService{ environment, sessionToken, channelId in
             let provider = MockedProgramProvider()

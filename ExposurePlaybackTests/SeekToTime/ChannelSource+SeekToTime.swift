@@ -213,9 +213,16 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         
                         let env = SeekToTimeMock().runAfterSeekableRangeBeyondLive(playable: playable, seekTarget: seekTarget, overshot: overshot)
                         
+                        let dif: Int64? = 1000
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - (seekTarget - overshot)) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                        expect{
+                            if let val = env.player.playheadTime {
+                                return abs(val - (seekTarget - overshot))
+                            }
+                            return nil
+//                            return env.player.playheadTime != nil ? abs(env.player.playheadTime! - (seekTarget - overshot)) : nil
+                            }.toEventually(beLessThan(dif), timeout: 5)
                     }
                 }
 

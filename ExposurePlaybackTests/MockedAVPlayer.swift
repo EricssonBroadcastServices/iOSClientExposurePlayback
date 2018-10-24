@@ -82,7 +82,6 @@ class MockedAVPlayerItem: AVPlayerItem {
     
     var mockedCurrentDate: Date? = nil
     override func currentDate() -> Date? {
-        print("mockedCurrentDate",mockedCurrentDate?.unixEpoch)
         return mockedCurrentDate
     }
     
@@ -117,7 +116,6 @@ class MockedAVURLAsset: AVURLAsset {
     var mockedLoadValuesAsynchronously: ([String], (() -> Void)?) -> Void = { _,_ in }
     override func loadValuesAsynchronously(forKeys keys: [String], completionHandler handler: (() -> Void)? = nil) {
         DispatchQueue(label: "mockedLoadValuesAsynchronously", qos: DispatchQoS.background, attributes: DispatchQueue.Attributes.concurrent).async { [weak self] in
-            print("mockedLoadValuesAsynchronously")
             self?.mockedLoadValuesAsynchronously(keys, handler)
         }
     }
