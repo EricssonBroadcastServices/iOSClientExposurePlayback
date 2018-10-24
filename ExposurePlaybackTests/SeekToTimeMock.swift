@@ -341,7 +341,7 @@ class SeekToTimeMock {
         }
         
         // ServerTime is required for LiveDelay to work properly
-        env.player.serverTime(forceRefresh: true) { _ in }
+        env.player.serverTime(forceRefresh: true) { print("runAfterSeekableRangeBeyondLive",$0) }
         // Mock the ProgramService
         env.mockProgramService{ environment, sessionToken, channelId in
             let provider = MockedProgramProvider()
