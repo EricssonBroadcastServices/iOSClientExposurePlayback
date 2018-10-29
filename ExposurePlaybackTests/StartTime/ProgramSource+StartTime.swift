@@ -34,7 +34,7 @@ class ProgramSourceStartTimeSpec: QuickSpec {
             func generatePlayable(pipe: String = "file://play/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int64? = nil, live: Bool = false) -> ProgramPlayable {
                 // Configure the playable
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                provider.mockedRequestEntitlement = { _,_,_, callback in
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = pipe
                     if let offset = lastViewedOffset {
