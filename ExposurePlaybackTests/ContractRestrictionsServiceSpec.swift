@@ -19,104 +19,97 @@ class ContractRestrictionsServiceSpec: QuickSpec {
         super.spec()
         
         describe("ContractRestrictionsService") {
-            let service = ContractRestrictionsService()
             
             context("All disabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: false, rwEnabled: false, timeshiftEnabled: false)
+                    let entitlement = self.buildEntitlement(ffEnabled: false, rwEnabled: false, timeshiftEnabled: false)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
                     
-                    expect(ff).toNot(beNil())
-                    expect(rw).toNot(beNil())
-                    expect(pause).toNot(beNil())
-                    
-                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
-                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
-                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
+                    expect(ff).to(equal(false))
+                    expect(rw).to(equal(false))
+                    expect(pause).to(equal(false))
                 }
             }
             
             context("ff enabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: true, rwEnabled: false, timeshiftEnabled: false)
+                    let entitlement = self.buildEntitlement(ffEnabled: true, rwEnabled: false, timeshiftEnabled: false)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
                     
-                    expect(ff).to(beNil())
-                    expect(rw).toNot(beNil())
-                    expect(pause).toNot(beNil())
-                    
-                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
-                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
+                    expect(ff).to(equal(true))
+                    expect(rw).to(equal(false))
+                    expect(pause).to(equal(false))
                 }
             }
             
             context("rw enabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: false, rwEnabled: true, timeshiftEnabled: false)
+                    let entitlement = self.buildEntitlement(ffEnabled: false, rwEnabled: true, timeshiftEnabled: false)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
                     
-                    expect(ff).toNot(beNil())
-                    expect(rw).to(beNil())
-                    expect(pause).toNot(beNil())
-                    
-                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
-                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
+                    expect(ff).to(equal(false))
+                    expect(rw).to(equal(true))
+                    expect(pause).to(equal(false))
                 }
             }
             
             context("pause enabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: false, rwEnabled: false, timeshiftEnabled: true)
+                    let entitlement = self.buildEntitlement(ffEnabled: false, rwEnabled: false, timeshiftEnabled: true)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
                     
-                    expect(ff).toNot(beNil())
-                    expect(rw).toNot(beNil())
-                    expect(pause).to(beNil())
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
                     
-                    expect(ff?.message).to(equal("Contract restrictions disables fast forwarding"))
-                    expect(rw?.message).to(equal("Contract restrictions disabled rewinding"))
+                    expect(ff).to(equal(false))
+                    expect(rw).to(equal(false))
+                    expect(pause).to(equal(true))
                 }
             }
             
             context("ff and rw enabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: true, rwEnabled: true, timeshiftEnabled: false)
+                    let entitlement = self.buildEntitlement(ffEnabled: true, rwEnabled: true, timeshiftEnabled: false)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
                     
-                    expect(ff).to(beNil())
-                    expect(rw).to(beNil())
-                    expect(pause).toNot(beNil())
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
                     
-                    expect(pause?.message).to(equal("Contract restrictions disabled timeshifting"))
+                    expect(ff).to(equal(true))
+                    expect(rw).to(equal(true))
+                    expect(pause).to(equal(false))
                 }
             }
             
             context("all enabled") {
                 it("should convey restrictions from entitlement") {
-                    let noneEnabled = self.buildEntitlement(ffEnabled: true, rwEnabled: true, timeshiftEnabled: true)
+                    let entitlement = self.buildEntitlement(ffEnabled: true, rwEnabled: true, timeshiftEnabled: true)
                     
-                    let ff = service.canSeek(from: 0, to: 10, using: noneEnabled)
-                    let rw = service.canSeek(from: 10, to: 0, using: noneEnabled)
-                    let pause = service.canPause(entitlement: noneEnabled)
+                    let service = BasicContractRestrictions(entitlement: entitlement)
                     
-                    expect(ff).to(beNil())
-                    expect(rw).to(beNil())
-                    expect(pause).to(beNil())
+                    let ff = service.canSeek(fromPosition: 0, toPosition: 10)
+                    let rw = service.canSeek(fromPosition: 10, toPosition: 0)
+                    let pause = service.canPause(at: 10)
+                    
+                    expect(ff).to(equal(true))
+                    expect(rw).to(equal(true))
+                    expect(pause).to(equal(true))
                 }
             }
         }

@@ -129,13 +129,14 @@
 		76080276206933EA007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080278206933EA007F59D5 /* Exposure.framework */; };
 		76080277206933EA007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080279206933EA007F59D5 /* Player.framework */; };
 		7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7608022C2069306E007F59D5 /* ExposurePlayback.framework */; };
-		7619B485216F253C00EE0DC8 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B484216F253B00EE0DC8 /* AdPlayerProxy.swift */; };
+		76150E7C2187826F00AABE89 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7B2187826E00AABE89 /* AdPlayerProxy.swift */; };
+		76150E7D2187826F00AABE89 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7B2187826E00AABE89 /* AdPlayerProxy.swift */; };
+		76150E80218782A000AABE89 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7E218782A000AABE89 /* AdService.swift */; };
+		76150E81218782A000AABE89 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7E218782A000AABE89 /* AdService.swift */; };
+		76150E82218782A000AABE89 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7F218782A000AABE89 /* AdTechWrapper.swift */; };
+		76150E83218782A000AABE89 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76150E7F218782A000AABE89 /* AdTechWrapper.swift */; };
 		7619B489216F258D00EE0DC8 /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */; };
-		7619B48B216F25EF00EE0DC8 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */; };
-		7619B49B21764FE300EE0DC8 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCE6216278F200F6CC74 /* AdService.swift */; };
-		7619B49C21764FE300EE0DC8 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B484216F253B00EE0DC8 /* AdPlayerProxy.swift */; };
 		7619B49D21764FE300EE0DC8 /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */; };
-		7619B49E21764FE300EE0DC8 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */; };
 		7619B49F21764FEB00EE0DC8 /* HLSNative+ExposureContext+AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCE9216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift */; };
 		7619B4A421773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B4A321773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift */; };
 		7619B4A521773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B4A321773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift */; };
@@ -166,14 +167,9 @@
 		766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */; };
 		766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */; };
 		766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */; };
-		767EFCE7216278F200F6CC74 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCE6216278F200F6CC74 /* AdService.swift */; };
 		767EFCEA216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCE9216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift */; };
 		767EFCEF21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCEE21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift */; };
-		767FB4B0217FC7B400BC087A /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EFCE6216278F200F6CC74 /* AdService.swift */; };
-		767FB4B1217FC7B400BC087A /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B484216F253B00EE0DC8 /* AdPlayerProxy.swift */; };
-		767FB4B2217FC7B400BC087A /* AdInteractionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B486216F256200EE0DC8 /* AdInteractionPolicy.swift */; };
-		767FB4B3217FC7B400BC087A /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */; };
-		767FB4B4217FC7B400BC087A /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */; };
+		767FB4B2217FC7B400BC087A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7686A8C02040281C0002E2B6 /* LanguagePreferencesSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */; };
 		7696508420B2E64000B76A14 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7696508320B2E64000B76A14 /* Trace.swift */; };
 		7696508520B2E64000B76A14 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7696508320B2E64000B76A14 /* Trace.swift */; };
@@ -311,9 +307,10 @@
 		76080275206933D2007F59D5 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76080278206933EA007F59D5 /* Exposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Exposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76080279206933EA007F59D5 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7619B484216F253B00EE0DC8 /* AdPlayerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPlayerProxy.swift; sourceTree = "<group>"; };
+		76150E7B2187826E00AABE89 /* AdPlayerProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdPlayerProxy.swift; sourceTree = "<group>"; };
+		76150E7E218782A000AABE89 /* AdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
+		76150E7F218782A000AABE89 /* AdTechWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdTechWrapper.swift; sourceTree = "<group>"; };
 		7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdServiceEventProvider.swift; sourceTree = "<group>"; };
-		7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTechWrapper.swift; sourceTree = "<group>"; };
 		7619B4A321773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdServiceContractRestrictionsProvider.swift; sourceTree = "<group>"; };
 		7619B4A721773F1B00EE0DC8 /* ContractRestrictionsPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractRestrictionsPolicy.swift; sourceTree = "<group>"; };
 		7619B4AA21773F3D00EE0DC8 /* BasicContractRestrictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicContractRestrictions.swift; sourceTree = "<group>"; };
@@ -338,7 +335,6 @@
 		766EE43020CF07F200F8D8C5 /* FairplayCertificateCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairplayCertificateCache.swift; sourceTree = "<group>"; };
 		766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
 		766FE474203C2B10003B9B90 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
-		767EFCE6216278F200F6CC74 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
 		767EFCE9216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+AdService.swift"; sourceTree = "<group>"; };
 		767EFCEE21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TimedMetadata.swift"; sourceTree = "<group>"; };
 		7686A8BF2040281C0002E2B6 /* LanguagePreferencesSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePreferencesSpec.swift; sourceTree = "<group>"; };
@@ -551,10 +547,10 @@
 		767EFCE82162790100F6CC74 /* AdService */ = {
 			isa = PBXGroup;
 			children = (
-				767EFCE6216278F200F6CC74 /* AdService.swift */,
-				7619B484216F253B00EE0DC8 /* AdPlayerProxy.swift */,
+				76150E7E218782A000AABE89 /* AdService.swift */,
+				76150E7F218782A000AABE89 /* AdTechWrapper.swift */,
+				76150E7B2187826E00AABE89 /* AdPlayerProxy.swift */,
 				7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */,
-				7619B48A216F25EF00EE0DC8 /* AdTechWrapper.swift */,
 				7619B4A321773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift */,
 			);
 			path = AdService;
@@ -1049,10 +1045,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				760801E02069306E007F59D5 /* MRRFairplayRequester.swift in Sources */,
-				767FB4B2217FC7B400BC087A /* AdInteractionPolicy.swift in Sources */,
+				767FB4B2217FC7B400BC087A /* (null) in Sources */,
 				760801E12069306E007F59D5 /* Paused.swift in Sources */,
 				760801E22069306E007F59D5 /* ChannelPlayable.swift in Sources */,
-				7619B49B21764FE300EE0DC8 /* AdService.swift in Sources */,
 				760801E32069306E007F59D5 /* ContextStartTime.swift in Sources */,
 				760801E42069306E007F59D5 /* ExposureContext.swift in Sources */,
 				760801E52069306E007F59D5 /* CMTime+Extensions.swift in Sources */,
@@ -1063,17 +1058,16 @@
 				760801E92069306E007F59D5 /* Completed.swift in Sources */,
 				760801EA2069306E007F59D5 /* HandshakeStarted.swift in Sources */,
 				760801EB2069306E007F59D5 /* PlaybackEntitlement+Extensions.swift in Sources */,
-				767FB4B1217FC7B400BC087A /* AdPlayerProxy.swift in Sources */,
 				760801EC2069306E007F59D5 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				760801ED2069306E007F59D5 /* PlayReady.swift in Sources */,
 				760801EE2069306E007F59D5 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
+				76150E7D2187826F00AABE89 /* AdPlayerProxy.swift in Sources */,
 				760801EF2069306E007F59D5 /* BufferingStopped.swift in Sources */,
 				760801F02069306E007F59D5 /* SWXMLHash.swift in Sources */,
 				760801F12069306E007F59D5 /* AssetPlayable.swift in Sources */,
 				760801F22069306E007F59D5 /* ServerTimeProvider.swift in Sources */,
 				760801F32069306E007F59D5 /* ExposureAnalytics.swift in Sources */,
 				760801F42069306E007F59D5 /* ExposureContext+Warning.swift in Sources */,
-				767FB4B0217FC7B400BC087A /* AdService.swift in Sources */,
 				7696508520B2E64000B76A14 /* Trace.swift in Sources */,
 				760801F52069306E007F59D5 /* InitCompleted.swift in Sources */,
 				760801F62069306E007F59D5 /* PlaybackProperties.swift in Sources */,
@@ -1094,14 +1088,14 @@
 				760802022069306E007F59D5 /* MonotonicTimeService.swift in Sources */,
 				760802032069306E007F59D5 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				760802042069306E007F59D5 /* AssetIdentifier.swift in Sources */,
+				76150E83218782A000AABE89 /* AdTechWrapper.swift in Sources */,
 				760802062069306E007F59D5 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				760802072069306E007F59D5 /* Aborted.swift in Sources */,
-				767FB4B4217FC7B400BC087A /* AdTechWrapper.swift in Sources */,
 				766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				760802082069306E007F59D5 /* ExposureSource.swift in Sources */,
-				7619B49E21764FE300EE0DC8 /* AdTechWrapper.swift in Sources */,
 				7644FBBE21134BCA006CEBF0 /* DrmEvent.swift in Sources */,
 				7619B4AC21773F3D00EE0DC8 /* BasicContractRestrictions.swift in Sources */,
+				76150E81218782A000AABE89 /* AdService.swift in Sources */,
 				760802092069306E007F59D5 /* ContractRestrictionsService.swift in Sources */,
 				7608020A2069306E007F59D5 /* DeviceInfo.swift in Sources */,
 				7608020B2069306E007F59D5 /* ExposureContext+Error.swift in Sources */,
@@ -1113,7 +1107,6 @@
 				760802112069306E007F59D5 /* BufferingStarted.swift in Sources */,
 				7619B4A521773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */,
 				760802122069306E007F59D5 /* Resumed.swift in Sources */,
-				7619B49C21764FE300EE0DC8 /* AdPlayerProxy.swift in Sources */,
 				760802132069306E007F59D5 /* ExposureFairplayRequester.swift in Sources */,
 				760802142069306E007F59D5 /* ProgramChanged.swift in Sources */,
 				7644FBBB21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
@@ -1218,13 +1211,13 @@
 				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
 				76A89C5220207AB200C23579 /* PlaybackProperties.swift in Sources */,
 				767EFCEF21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
-				7619B485216F253C00EE0DC8 /* AdPlayerProxy.swift in Sources */,
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
 				7608003E2064EA79007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */,
 				76A89D9A2020F41F00C23579 /* Playback.swift in Sources */,
 				76EBF03A215E3E0600503146 /* Reachability.swift in Sources */,
 				76A89C5920207AB200C23579 /* ProgramService.swift in Sources */,
 				767EFCEA216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift in Sources */,
+				76150E7C2187826F00AABE89 /* AdPlayerProxy.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
 				76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
@@ -1234,12 +1227,14 @@
 				76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */,
 				76A89C5320207AB200C23579 /* AssetSource.swift in Sources */,
 				76A89C5820207AB200C23579 /* MonotonicTimeService.swift in Sources */,
+				76150E82218782A000AABE89 /* AdTechWrapper.swift in Sources */,
 				76A89C4B20207AB200C23579 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A29D39205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
 				766EE43120CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
+				76150E80218782A000AABE89 /* AdService.swift in Sources */,
 				7644FBBD21134BCA006CEBF0 /* DrmEvent.swift in Sources */,
 				76A89C5720207AB200C23579 /* ContractRestrictionsService.swift in Sources */,
 				7619B4A421773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */,
@@ -1251,7 +1246,6 @@
 				76A89C5420207AB200C23579 /* ChannelSource.swift in Sources */,
 				76A89C4920207AB200C23579 /* HLSNative+ExposureContext+Seek.swift in Sources */,
 				76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */,
-				7619B48B216F25EF00EE0DC8 /* AdTechWrapper.swift in Sources */,
 				76A89D9E2020F41F00C23579 /* Resumed.swift in Sources */,
 				76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */,
 				76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */,
@@ -1260,7 +1254,6 @@
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
 				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
-				767EFCE7216278F200F6CC74 /* AdService.swift in Sources */,
 				7635AECB202AE0B2001512BF /* ContextPositionSeekable.swift in Sources */,
 				7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				76A89C6520207B2400C23579 /* Playable.swift in Sources */,
