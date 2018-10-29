@@ -20,7 +20,8 @@ import Player
 open class AssetSource: ExposureSource {
     public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
         if let adService = adService {
-            adService.prepareAsset(source: url) {
+            let sourceUrl = entitlement.adMediaLocator ?? entitlement.mediaLocator
+            adService.prepareAsset(source: sourceUrl) {
                 callback($0)
             }
         }

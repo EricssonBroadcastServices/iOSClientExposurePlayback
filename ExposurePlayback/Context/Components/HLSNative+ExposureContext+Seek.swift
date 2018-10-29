@@ -57,20 +57,39 @@ extension Player where Tech == HLSNative<ExposureContext> {
     public func seek(toTime timeInterval: Int64) {
         guard let source = tech.currentSource else { return }
         guard let currentTimestamp = playheadTime else { return }
-        let seekDisabled = source.contractRestrictionsService.canSeek(from: currentTimestamp, to: timeInterval, using: source.entitlement)
-        guard seekDisabled == nil else {
+        /// Contract restrictions only work with zero-based offsets, not unix timestamps, so we convert `timeInterval` to zero-based offset and feed that.
+        let currentPosition = playheadPosition
+        let targetPosition = timeInterval.positionFrom(referenceTime: currentTimestamp, referencePosition: currentPosition)
+        
+        let seekAllowed = source.contractRestrictionsService.canSeek(fromPosition: currentPosition, toPosition: targetPosition)
+        guard seekAllowed else {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
-            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
+            let reason: ExposureContext.Warning.ContractRestrictions = currentTimestamp < timeInterval ? .fastForwardDisabled : .rewindDisabled
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: reason))
             tech.eventDispatcher.onWarning(tech, source, warning)
             source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
             return
         }
         
+        source.adService?.seekRequestInitiated(fromPosition: currentPosition)
+        let destinationPosition = source.contractRestrictionsService.willSeek(fromPosition: currentPosition, toPosition: targetPosition)
+        source.adService?.seekRequestTriggered(withTargetPosition: targetPosition)
+        /// Contract restrictions only work with zero-based offsets, not unix timestamps. If the `ContractRestrictionsService` modifies the allowed offset the returned value will be in zero-based offset. Convert it back to a unix timestamp based offset and perform the seek
+        let destination = destinationPosition.timestampFrom(referenceTime: currentTimestamp, referencePosition: currentPosition)
+        
+        if destination != timeInterval {
+            // Contract restriction service modified the target offset
+            let reason = ExposureContext.Warning.ContractRestrictions.policyChangedTargetSeekOffset(requested: timeInterval, allowed: destination)
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: reason))
+            tech.eventDispatcher.onWarning(tech, source, warning)
+            source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
+        }
+        
         if let contextSeekable = source as? ContextTimeSeekable {
-            contextSeekable.handleSeek(toTime: timeInterval, for: self, in: context)
+            contextSeekable.handleSeek(toTime: destination, for: self, in: context)
         }
         else {
-            tech.seek(toTime: timeInterval)
+            tech.seek(toTime: destination)
         }
     }
     
@@ -81,20 +100,34 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter position: target offset in milliseconds
     public func seek(toPosition position: Int64) {
         guard let source = tech.currentSource else { return }
-        let seekDisabled = source.contractRestrictionsService.canSeek(from: playheadPosition, to: position, using: source.entitlement)
-        guard seekDisabled == nil else {
+        let origin = playheadPosition
+        let seekAllowed = source.contractRestrictionsService.canSeek(fromPosition: origin, toPosition: position)
+        guard seekAllowed else {
             // Seeking is disabled. Trigger warning and ignore the seek atempt
-            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: seekDisabled!)
+            let reason: ExposureContext.Warning.ContractRestrictions = playheadPosition < position ? .fastForwardDisabled : .rewindDisabled
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: reason))
             tech.eventDispatcher.onWarning(tech, source, warning)
             source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
             return
         }
         
+        source.adService?.seekRequestInitiated(fromPosition: origin)
+        let destination = source.contractRestrictionsService.willSeek(fromPosition: origin, toPosition: position)
+        source.adService?.seekRequestTriggered(withTargetPosition: position)
+        
+        if destination != position {
+            // Contract restriction service modified the target offset
+            let reason = ExposureContext.Warning.ContractRestrictions.policyChangedTargetSeekOffset(requested: position, allowed: destination)
+            let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: reason))
+            tech.eventDispatcher.onWarning(tech, source, warning)
+            source.analyticsConnector.onWarning(tech: tech, source: source, warning: warning)
+        }
+        
         if let contextSeekable = source as? ContextPositionSeekable {
-            contextSeekable.handleSeek(toPosition: position, for: self, in: context)
+            contextSeekable.handleSeek(toPosition: destination, for: self, in: context)
         }
         else {
-            tech.seek(toPosition: position)
+            tech.seek(toPosition: destination)
         }
     }
     
