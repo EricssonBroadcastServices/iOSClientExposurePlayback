@@ -39,7 +39,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     it("should allow seek") {
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
@@ -69,7 +69,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek if entitled") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -93,7 +93,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek with warning message") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -120,7 +120,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek with warning message") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -146,7 +146,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek if encountering epg gap") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -172,7 +172,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should stop with error if not entitled") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -205,7 +205,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     it("should seek to live point") {
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
@@ -234,7 +234,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek and deliver warning") {
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
@@ -271,7 +271,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek with warning message") {
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
@@ -297,7 +297,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek if encountering epg gap") {
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
@@ -325,7 +325,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should stop playback with error") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["rwEnabled"] = true
@@ -349,7 +349,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                         it("should allow playback") {
                             // Configure the playable
                             let provider = MockedProgramEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                            provider.mockedRequestEntitlement = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
@@ -378,7 +378,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                 context("Enforce FastForward") {
                     it("should restrict seeking forward") {
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
@@ -403,7 +403,7 @@ class DynamicProgramSourceSeekToTimeSpec: QuickSpec {
                 context("Enforce Rewind") {
                     it("should restrict seeking back") {
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                        provider.mockedRequestEntitlement = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false

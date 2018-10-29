@@ -507,7 +507,7 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+            provider.mockedRequestEntitlement = { _,_,_, callback in
                 callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
@@ -569,7 +569,7 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+            provider.mockedRequestEntitlement = { _,_,_, callback in
                 var json = PlaybackEntitlement.requiedJson
                 json["mediaLocator"] = "file://play/.isml"
                 json["playToken"] = "ProgramSevicedFetchedEntitlement"
