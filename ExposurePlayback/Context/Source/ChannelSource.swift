@@ -36,31 +36,41 @@ extension ChannelSource: ContextTimeSeekable {
         // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
         handleSeek(toTime: timeInterval, for: player, in: context) { [weak self] lastTimestamp in
             // After seekable range.
-            //
-            // ChannelSource is always considered to be live which means seeking beyond the last seekable range would be impossible.
-            //
-            // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
-            //
-            // Note: `delta` in this aspect is the *time behind live*
-            let delta = player.liveDelay ?? 0
-            if (timeInterval - delta) <= lastTimestamp {
-                self?.handleGoLive(player: player, in: context)
-            }
-            else {
-                let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: timeInterval, livePoint: lastTimestamp))
-                player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
-                guard let `self` = self else { return }
-                self.analyticsConnector.onWarning(tech: player.tech, source: self, warning: warning)
-            }
+            self?.handleSeekBeyondLivePoint(lastOffset: lastTimestamp, targetTime: timeInterval, for: player, in: context)
+        }
+    }
+    
+    /// Handles seeking beyond the live edge.
+    ///
+    /// This can be done both through zero-based offset and unix timestamp. ChannelSource is always considered to be live which means seeking beyond the last seekable range would be impossible.
+    ///
+    /// - parameters:
+    ///     - lastOffset: the last buffer offset (either zero based or unix timestamp), ie the live point.
+    ///     - targetTime: the target offset, either zero based or unix timestamp, but it must match the scale supplied by `lastOffset`
+    ///     - player: The player
+    ///     - context: The playback context
+    fileprivate func handleSeekBeyondLivePoint(lastOffset: Int64, targetTime: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        // We should give some "lee-way": ie if the `timeInterval` is `delta` more than the seekable range, we consider this a seek to the live point.
+        //
+        // Note: `delta` in this aspect is the *time behind live*
+        let delta = player.liveDelay ?? 0
+        if (targetTime - delta) <= lastOffset {
+            self.handleGoLive(player: player, in: context)
+        }
+        else {
+            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: targetTime, livePoint: lastOffset))
+            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+            self.analyticsConnector.onWarning(tech: player.tech, source: self, warning: warning)
         }
     }
 }
 
 extension ChannelSource: ContextPositionSeekable {
     internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        if let playheadTime = player.playheadTime {
-            let timeInterval = position.timestampFrom(referenceTime: playheadTime, referencePosition: player.playheadPosition)
-            handleSeek(toTime: timeInterval, for: player, in: context)
+        // NOTE: ChannelSource playback is by definition done with a *live manifest*, ie dynamic and growing.
+        handleSeek(toPosition: position, for: player, in: context) { [weak self] _, lastPosition in
+            // After seekable range.
+            self?.handleSeekBeyondLivePoint(lastOffset: lastPosition, targetTime: position, for: player, in: context)
         }
     }
 }

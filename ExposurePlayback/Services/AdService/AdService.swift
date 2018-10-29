@@ -1,5 +1,5 @@
 //
-//  AdServiceProvider.swift
+//  AdService.swift
 //  ExposurePlayback-iOS
 //
 //  Created by Fredrik Sjöberg on 2018-10-01.

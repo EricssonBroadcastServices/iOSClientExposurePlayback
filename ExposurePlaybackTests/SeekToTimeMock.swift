@@ -326,7 +326,6 @@ class SeekToTimeMock {
         let livePointDelay: Int64 = 25 * 1000
         
         let currentDate = seekTarget - livePointOffet - overshot
-        
         let env = TestEnv(environment: environment, sessionToken: token)
         env.player.context.isDynamicManifest = { _,_ in return true }
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: livePointOffet))
@@ -342,8 +341,7 @@ class SeekToTimeMock {
         }
         
         // ServerTime is required for LiveDelay to work properly
-        _ = env.player.serverTime
-        
+        env.player.serverTime(forceRefresh: true) { print("runAfterSeekableRangeBeyondLive",$0) }
         // Mock the ProgramService
         env.mockProgramService{ environment, sessionToken, channelId in
             let provider = MockedProgramProvider()
@@ -509,7 +507,7 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+            provider.mockedRequestEntitlement = { _,_,_, callback in
                 callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
@@ -571,7 +569,7 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_,_, callback in
+            provider.mockedRequestEntitlement = { _,_,_, callback in
                 var json = PlaybackEntitlement.requiedJson
                 json["mediaLocator"] = "file://play/.isml"
                 json["playToken"] = "ProgramSevicedFetchedEntitlement"

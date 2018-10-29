@@ -17,7 +17,14 @@
 #### Features
 * `EMP-11839` Introduced `AdService` to handle server side ad insertion.
 * `EMP-11894` `ContractRestrictionsService` exposed as a public protocol and is now a part of source instead of context.
-* `EMP-11852` Expanded `AdService` to handle contract restrictions through specific ad playback policies if required. 
+* `EMP-11852` Expanded `AdService` to handle contract restrictions through specific ad playback policies if required.
+
+#### Bug Fixes
+* `EMP-11909` Fixed inconsistent behaviour when seeking by position in a *unix time based stream*. Bounds checking and relevant callbacks should now use the correct offset.
+
+#### Changes
+* `EMP-11894` Contract restrictions service now part of source instead of context.
+>>>>>>> master
 
 #### Known Limitations
 * `EMP-11863` *Carthage*, using `xcodebuild` and `Xcode10`s new build system, fails to resolve and link the correct dependencies when `ExposurePlayback` is included as a dependency.

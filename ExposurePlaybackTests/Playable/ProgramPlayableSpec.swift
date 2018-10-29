@@ -14,9 +14,9 @@ import Foundation
 @testable import ExposurePlayback
 
 internal class MockedProgramEntitlementProvider: ProgramEntitlementProvider {
-    var mockedRequestEntitlement: (String, String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_,_ in }
-    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
-        mockedRequestEntitlement(programId, channelId, sessionToken, environment, callback)
+    var mockedRequestEntitlement: (String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_ in }
+    func requestEntitlement(programId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
+        mockedRequestEntitlement(programId, sessionToken, environment, callback)
     }
 }
 
@@ -36,7 +36,7 @@ class ProgramPlayableSpec: QuickSpec {
             
             it("Should prepare source with valid entitlement response") {
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                provider.mockedRequestEntitlement = { _,_,_, callback in
                     guard let result = PlaybackEntitlement.validJson.decode(PlaybackEntitlement.self) else {
                         callback(nil,ExposureError.generalError(error: MockedError.generalError), nil)
                         return
@@ -58,7 +58,7 @@ class ProgramPlayableSpec: QuickSpec {
             
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                provider.mockedRequestEntitlement = { _,_,_, callback in
                     callback(nil,ExposureError.generalError(error: MockedError.generalError), nil)
                 }
                 let playable = ProgramPlayable(assetId: "programId", channelId: "channelId", entitlementProvider: provider)

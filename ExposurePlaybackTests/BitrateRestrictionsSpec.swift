@@ -59,7 +59,7 @@ class BitrateRestrictionSpec: QuickSpec {
                 
                 // Configure the playable
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_,_, callback in
+                provider.mockedRequestEntitlement = { _,_,_, callback in
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = "file://play/.isml"
                     json["playSessionId"] = "BitrateSession"
