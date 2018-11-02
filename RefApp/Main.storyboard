@@ -61,10 +61,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kym-WL-9TW" userLabel="Env">
-                                <rect key="frame" x="51.5" y="137" width="272" height="106"/>
+                                <rect key="frame" x="51.5" y="137" width="272.5" height="106"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Exp. URL ex. https://domain.topdomain" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-S3-7ra">
-                                        <rect key="frame" x="0.0" y="0.0" width="272" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="272.5" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -112,6 +112,7 @@
                         <constraints>
                             <constraint firstItem="ePN-Io-Yxy" firstAttribute="top" secondItem="kym-WL-9TW" secondAttribute="bottom" constant="8" symbolic="YES" id="Dux-6r-E8q" userLabel="Login.top = Env.bottom +30"/>
                             <constraint firstItem="ePN-Io-Yxy" firstAttribute="width" secondItem="rez-At-wIx" secondAttribute="height" multiplier="3:23" id="LzP-N0-ulh"/>
+                            <constraint firstItem="ePN-Io-Yxy" firstAttribute="width" secondItem="rez-At-wIx" secondAttribute="width" id="W7D-q2-SYf"/>
                             <constraint firstItem="kym-WL-9TW" firstAttribute="top" secondItem="U0J-9t-0nQ" secondAttribute="top" constant="73" id="XXq-mr-AGv" userLabel="Env.top = Safe Area.top + 40"/>
                             <constraint firstItem="kym-WL-9TW" firstAttribute="centerX" secondItem="U0J-9t-0nQ" secondAttribute="centerX" id="gYp-i2-Gsk"/>
                             <constraint firstItem="kym-WL-9TW" firstAttribute="width" secondItem="rez-At-wIx" secondAttribute="height" multiplier="272:667" id="nZh-92-459"/>
