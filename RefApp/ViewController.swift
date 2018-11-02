@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var buisnessUnit: UITextField!
-
+    
     @IBAction func Login(_ sender: Any) {
         guard let testedUrl = expUrl.text, let testedCustomer = customer.text, let testedBuisnessUnit = buisnessUnit.text, testedUrl != "", testedCustomer != "", testedBuisnessUnit != "" else {
             let alert = UIAlertController(title: "Invalid env", message: "Provide a valid env", preferredStyle: .alert)
@@ -28,9 +28,9 @@ class ViewController: UIViewController {
         }
         let environment = Environment(baseUrl: testedUrl, customer: testedCustomer, businessUnit: testedBuisnessUnit)
         
-        UserDefaults.standard.set(expUrl.text!, forKey: "expUrl")
-        UserDefaults.standard.set(customer.text!, forKey: "customer")
-        UserDefaults.standard.set(buisnessUnit.text!, forKey: "buisnessUnit")
+        UserDefaults.standard.set(testedUrl, forKey: "expUrl")
+        UserDefaults.standard.set(testedCustomer, forKey: "customer")
+        UserDefaults.standard.set(testedBuisnessUnit, forKey: "buisnessUnit")
         
         onEnvironment(environment)
         
@@ -48,7 +48,6 @@ class ViewController: UIViewController {
                 }
                 self?.navigationController?.popViewController(animated: true)
         }
-        
     }
     
     var onError: (ExposureError) -> Void = { _ in }

@@ -30,7 +30,6 @@ class PlayerViewController: UIViewController {
         // Do any additional setup after loading the view.
         player = Player(environment: environment, sessionToken: token)
         player.onError { [weak self](player, source, error) in
-            print(error.message)
             
             self?.activityIndicator.stopAnimating()
             let alert = UIAlertController(title: "Can't play asset", message: error.message, preferredStyle: .alert)
@@ -49,16 +48,4 @@ class PlayerViewController: UIViewController {
         player.configure(playerView: view)
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

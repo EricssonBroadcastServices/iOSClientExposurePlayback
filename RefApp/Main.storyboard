@@ -120,10 +120,10 @@
                         <viewLayoutGuide key="safeArea" id="U0J-9t-0nQ"/>
                     </view>
                     <connections>
-                        <outlet property="Password" destination="3Fh-oQ-ykh" id="ZyY-rY-CoI"/>
                         <outlet property="buisnessUnit" destination="aNM-ev-rim" id="iVj-80-dze"/>
                         <outlet property="customer" destination="sjG-KT-5Fm" id="yxr-BJ-FfV"/>
                         <outlet property="expUrl" destination="cxF-S3-7ra" id="eiW-bh-M1C"/>
+                        <outlet property="password" destination="3Fh-oQ-ykh" id="Q4C-BB-Fgg"/>
                         <outlet property="username" destination="h8E-W8-M5l" id="WSE-Tm-0cP"/>
                     </connections>
                 </viewController>
