@@ -13,9 +13,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if let image = UIImage(named: "redbee") {
+            let logoView = UIImageView(image: image, constrainedByHeight: 40)
+            
+            if let root = window?.rootViewController as? UINavigationController{
+                root.viewControllers.first?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoView)
+            }
+        }
         return true
     }
 
