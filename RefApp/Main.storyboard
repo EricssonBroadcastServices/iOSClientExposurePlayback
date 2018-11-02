@@ -84,19 +84,19 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ePN-Io-Yxy" userLabel="Login">
-                                <rect key="frame" x="144" y="340" width="87" height="106"/>
+                                <rect key="frame" x="144" y="251" width="87" height="106"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h8E-W8-M5l">
                                         <rect key="frame" x="0.0" y="0.0" width="87" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" textContentType="username"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Fh-oQ-ykh">
                                         <rect key="frame" x="2" y="38" width="83.5" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bFl-wE-Yl0">
                                         <rect key="frame" x="24.5" y="76" width="38" height="30"/>
@@ -110,9 +110,9 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ePN-Io-Yxy" firstAttribute="top" secondItem="kym-WL-9TW" secondAttribute="bottom" constant="8" symbolic="YES" id="Dux-6r-E8q" userLabel="Login.top = Env.bottom +30"/>
                             <constraint firstItem="ePN-Io-Yxy" firstAttribute="width" secondItem="rez-At-wIx" secondAttribute="height" multiplier="3:23" id="LzP-N0-ulh"/>
-                            <constraint firstItem="U0J-9t-0nQ" firstAttribute="bottom" secondItem="ePN-Io-Yxy" secondAttribute="bottom" constant="221" id="TYY-Y8-gYw"/>
-                            <constraint firstItem="kym-WL-9TW" firstAttribute="top" secondItem="U0J-9t-0nQ" secondAttribute="top" constant="73" id="XXq-mr-AGv"/>
+                            <constraint firstItem="kym-WL-9TW" firstAttribute="top" secondItem="U0J-9t-0nQ" secondAttribute="top" constant="73" id="XXq-mr-AGv" userLabel="Env.top = Safe Area.top + 40"/>
                             <constraint firstItem="kym-WL-9TW" firstAttribute="centerX" secondItem="U0J-9t-0nQ" secondAttribute="centerX" id="gYp-i2-Gsk"/>
                             <constraint firstItem="kym-WL-9TW" firstAttribute="width" secondItem="rez-At-wIx" secondAttribute="height" multiplier="272:667" id="nZh-92-459"/>
                             <constraint firstItem="ePN-Io-Yxy" firstAttribute="centerX" secondItem="U0J-9t-0nQ" secondAttribute="centerX" id="rMf-5T-ukT"/>

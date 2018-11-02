@@ -18,20 +18,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var buisnessUnit: UITextField!
-    
 
     @IBAction func Login(_ sender: Any) {
         guard let testedUrl = expUrl.text, let testedCustomer = customer.text, let testedBuisnessUnit = buisnessUnit.text, testedUrl != "", testedCustomer != "", testedBuisnessUnit != "" else {
             let alert = UIAlertController(title: "Invalid env", message: "Provide a valid env", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel) { _ in })
-            
             self.present(alert, animated: true)
             return
         }
         let environment = Environment(baseUrl: testedUrl, customer: testedCustomer, businessUnit: testedBuisnessUnit)
         
-        onEnvironment(environment)
+        UserDefaults.standard.set(expUrl.text!, forKey: "expUrl")
+        UserDefaults.standard.set(customer.text!, forKey: "customer")
+        UserDefaults.standard.set(buisnessUnit.text!, forKey: "buisnessUnit")
         
+        onEnvironment(environment)
         
         Authenticate(environment: environment)
             .login(username: username.text!, password: password.text!)
@@ -43,17 +44,12 @@ class ViewController: UIViewController {
                 }
 
                 if let error = $0.error {
-                    print(error.message)
                     self?.onError(error)
                 }
+                self?.navigationController?.popViewController(animated: true)
         }
-        UserDefaults.standard.set(expUrl.text!, forKey: "expUrl")
-        UserDefaults.standard.set(customer.text!, forKey: "customer")
-        UserDefaults.standard.set(buisnessUnit.text!, forKey: "buisnessUnit")        
         
-        navigationController?.popViewController(animated: true)
     }
-    
     
     var onError: (ExposureError) -> Void = { _ in }
     var onAuth: (SessionToken) -> Void = { _ in }
@@ -61,12 +57,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         expUrl.text = UserDefaults.standard.string(forKey: "expUrl")
         customer.text = UserDefaults.standard.string(forKey: "customer")
         buisnessUnit.text = UserDefaults.standard.string(forKey: "buisnessUnit")
     }
-
-
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }
-

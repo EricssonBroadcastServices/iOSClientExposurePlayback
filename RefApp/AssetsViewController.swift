@@ -63,15 +63,9 @@ class AssetsViewController: UITableViewController {
                 print(String(self.assets.count), " items found", "one")
                 self.tableView.reloadData()
             }
-        
-        
-        
     }
-    
-
-    
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
@@ -89,6 +83,9 @@ class AssetsViewController: UITableViewController {
             
             destination.onError = { [weak self] error in
                 print(error.message)
+                let alert = UIAlertController(title: "Error, please try again", message: error.message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel) { _ in })
+                self?.present(alert, animated: true)
             }
             
         }
@@ -102,8 +99,6 @@ class AssetsViewController: UITableViewController {
             }
         }
     }
- 
-
 }
 
 extension AssetsViewController {
@@ -111,12 +106,7 @@ extension AssetsViewController {
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return assets.count
     }
-    
-    
-    // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-    // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
-    
-    
+   
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
