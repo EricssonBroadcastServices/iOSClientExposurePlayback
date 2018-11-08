@@ -13,7 +13,7 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
-## 2.0.93
+## 2.0.95
 
 #### Changes
 * Source preparation for ad-based playback now requires both an `adMediaLocator` and an attached `AdService` to work.
