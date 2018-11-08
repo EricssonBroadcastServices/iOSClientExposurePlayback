@@ -19,9 +19,8 @@ import Player
 /// * `.defaultBehavior` Playback starts from the live edge
 open class ChannelSource: ExposureSource {
     public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
-        if let adService = adService {
-            let sourceUrl = entitlement.adMediaLocator ?? entitlement.mediaLocator
-            adService.prepareChannel(source: sourceUrl) {
+        if let adService = adService, let adMediaLocator = entitlement.adMediaLocator {
+            adService.prepareChannel(source: adMediaLocator) {
                 callback($0)
             }
         }
