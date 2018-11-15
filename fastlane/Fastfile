@@ -100,10 +100,16 @@ platform :ios do
     end
     
     private_lane :fix_dependencies do
-        version = get_version_number(
-                                     xcodeproj: ENV["XCODE_PROJECT"],
-                                     target: ENV["RELEASE_VERSION_TARGET"]
-                                     )
+        playerVersion = get_version_number(
+                                           xcodeproj: ENV["PLAYER_PROJECT"],
+                                           target: ENV["PLAYER_TARGET"]
+                                           )
+        exposureVersion = get_version_number(
+                                             xcodeproj: ENV["EXPOSURE_PROJECT"],
+                                             target: ENV["EXPOSURE_TARGET"]
+                                             )
+        
+        
         cartfile = File.expand_path("..",Dir.pwd) + "/Cartfile"
         UI.message(cartfile)
         if File.exists?(cartfile)
@@ -111,9 +117,11 @@ platform :ios do
             begin
                 File.open(cartfile, 'r') do |file|
                     file.each_line do |line|
-                        if line.include? "EricssonBroadcastServices/"
-                            temp_file.puts line.gsub('"master"',"== "+version)
-                            else
+                        if line.include? "EricssonBroadcastServices/iOSClientPlayer"
+                            temp_file.puts line.gsub('"master"',"~> "+playerVersion)
+                        elsif line.include? "EricssonBroadcastServices/iOSClientExposure"
+                            temp_file.puts line.gsub('"master"',"~> "+exposureVersion)
+                        else
                             temp_file.puts line
                         end
                     end
