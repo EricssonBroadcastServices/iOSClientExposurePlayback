@@ -102,7 +102,7 @@ platform :ios do
     lane :fix_dependencies do
         carthage(
                  command: "update",
-                 platform: "iOS, tvOS",
+                 platform: "iOS,tvOS",
                  use_submodules: true,
                  use_ssh: false,
                  use_binaries: false,
