@@ -99,16 +99,26 @@ platform :ios do
                   
     end
     
-    private_lane :fix_dependencies do
+    lane :fix_dependencies do
+        carthage(
+                 command: "update",
+                 platform: "iOS, tvOS",
+                 use_submodules: true,
+                 use_ssh: false,
+                 use_binaries: false,
+                 no_build: true
+                 )
+        
         playerVersion = get_version_number(
                                            xcodeproj: ENV["PLAYER_PROJECT"],
                                            target: ENV["PLAYER_TARGET"]
                                            )
+        UI.message("Player Version #{playerVersion}")
         exposureVersion = get_version_number(
                                              xcodeproj: ENV["EXPOSURE_PROJECT"],
                                              target: ENV["EXPOSURE_TARGET"]
                                              )
-        
+        UI.message("Exposure Version #{exposureVersion}")
         
         cartfile = File.expand_path("..",Dir.pwd) + "/Cartfile"
         UI.message(cartfile)
