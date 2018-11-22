@@ -9,7 +9,7 @@
 import UIKit
 
 
-/// RedBeeMedia Custom UITextFieldw
+/// RedBeeMedia Custom UITextField
 class RBMTextField: UITextField {
     
     private var placeHolderText: String
