@@ -30,6 +30,6 @@ class RBMButton: UIButton {
         setTitleColor(UIColor.white, for: .normal)
         layer.borderColor = ColorState.active.textFieldPlaceholder.cgColor
         layer.cornerRadius = 5
-        layer.borderWidth = 0.2
+        layer.borderWidth = 1
     }
 }
