@@ -21,6 +21,7 @@
 
 #### Changes
 * `EMP-12204` Load the project from programmatically created views instead from the storyboard. 
+* `EMP-12205` Create the authentication view to allow login through username and password. 
 
 ## 2.0.95
 

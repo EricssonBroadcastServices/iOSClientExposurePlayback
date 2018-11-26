@@ -144,7 +144,7 @@ extension EnvironmentViewController {
 // MARK: - Navigation
 extension EnvironmentViewController {
     
-    /// Navigate Login Page after validation
+    /// Navigate to Login Page after validation
     @objc fileprivate func navigateToLogin() {
         
         view.endEditing(true)
@@ -162,6 +162,11 @@ extension EnvironmentViewController {
                 return
         }
         
+        let environment = Environment(baseUrl: environmentUrl, customer: customerName, businessUnit: businessUnit)
+        
+        let loginViewController = LoginViewController()
+        loginViewController.environment = environment
+        self.navigationController?.pushViewController(loginViewController, animated: true)
         
     }
 }
