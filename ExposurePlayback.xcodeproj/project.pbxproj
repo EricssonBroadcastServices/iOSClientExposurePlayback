@@ -285,6 +285,15 @@
 		76EBF03A215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76EBF03B215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
+		785B37F321A301A900FB7C7B /* UIView+Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B37F221A301A900FB7C7B /* UIView+Anchor.swift */; };
+		785B380321A4135A00FB7C7B /* UIView+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B380221A4135A00FB7C7B /* UIView+Keyboard.swift */; };
+		785B380821A41AC500FB7C7B /* IbcScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B380721A41AC500FB7C7B /* IbcScheme.swift */; };
+		785B380A21A41CC900FB7C7B /* UIColor+hexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B380921A41CC900FB7C7B /* UIColor+hexColor.swift */; };
+		785B380C21A421F300FB7C7B /* RBMTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B380B21A421F300FB7C7B /* RBMTextField.swift */; };
+		785B380E21A5481900FB7C7B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B380D21A5481900FB7C7B /* UIViewController+Alert.swift */; };
+		785B381B21A58B6A00FB7C7B /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B381A21A58B6A00FB7C7B /* MainNavigationController.swift */; };
+		785B382121A59CB700FB7C7B /* EnvironmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B382021A59CB700FB7C7B /* EnvironmentViewController.swift */; };
+		785B382421A59DD000FB7C7B /* RBMButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785B382321A59DD000FB7C7B /* RBMButton.swift */; };
 		9B17CDF92189E763009C95C4 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B17CDF82189E763009C95C4 /* AssetsViewController.swift */; };
 		9B17CDFC2189EC4D009C95C4 /* UIImageView+constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B17CDFB2189EC4D009C95C4 /* UIImageView+constraint.swift */; };
 		9B17CDFE218AEF7A009C95C4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B17CDFD218AEF7A009C95C4 /* Main.storyboard */; };
@@ -500,6 +509,15 @@
 		76EBF036215E30E000503146 /* ConnectionChanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionChanged.swift; sourceTree = "<group>"; };
 		76EBF039215E3E0600503146 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
+		785B37F221A301A900FB7C7B /* UIView+Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Anchor.swift"; sourceTree = "<group>"; };
+		785B380221A4135A00FB7C7B /* UIView+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Keyboard.swift"; sourceTree = "<group>"; };
+		785B380721A41AC500FB7C7B /* IbcScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IbcScheme.swift; sourceTree = "<group>"; };
+		785B380921A41CC900FB7C7B /* UIColor+hexColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexColor.swift"; sourceTree = "<group>"; };
+		785B380B21A421F300FB7C7B /* RBMTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMTextField.swift; sourceTree = "<group>"; };
+		785B380D21A5481900FB7C7B /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		785B381A21A58B6A00FB7C7B /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		785B382021A59CB700FB7C7B /* EnvironmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentViewController.swift; sourceTree = "<group>"; };
+		785B382321A59DD000FB7C7B /* RBMButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMButton.swift; sourceTree = "<group>"; };
 		9B17CDF82189E763009C95C4 /* AssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
 		9B17CDFB2189EC4D009C95C4 /* UIImageView+constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+constraint.swift"; sourceTree = "<group>"; };
 		9B17CDFD218AEF7A009C95C4 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -604,6 +622,9 @@
 		766BC3E0218894FB00D8537F /* RefApp */ = {
 			isa = PBXGroup;
 			children = (
+				785B381921A58B5C00FB7C7B /* Navigation */,
+				785B380421A41A9A00FB7C7B /* Utilities */,
+				785B37F421A301D900FB7C7B /* ViewControllers */,
 				766BC3E1218894FB00D8537F /* AppDelegate.swift */,
 				766BC3E3218894FB00D8537F /* ViewController.swift */,
 				9B17CDF82189E763009C95C4 /* AssetsViewController.swift */,
@@ -942,10 +963,48 @@
 			path = Playable;
 			sourceTree = "<group>";
 		};
+		785B37F421A301D900FB7C7B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				785B382021A59CB700FB7C7B /* EnvironmentViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		785B380421A41A9A00FB7C7B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				785B382221A59DB900FB7C7B /* Theme */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		785B381921A58B5C00FB7C7B /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				785B381A21A58B6A00FB7C7B /* MainNavigationController.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		785B382221A59DB900FB7C7B /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				785B380721A41AC500FB7C7B /* IbcScheme.swift */,
+				785B380B21A421F300FB7C7B /* RBMTextField.swift */,
+				785B382321A59DD000FB7C7B /* RBMButton.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		9B17CDFA2189EC13009C95C4 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
 				9B17CDFB2189EC4D009C95C4 /* UIImageView+constraint.swift */,
+				785B37F221A301A900FB7C7B /* UIView+Anchor.swift */,
+				785B380221A4135A00FB7C7B /* UIView+Keyboard.swift */,
+				785B380921A41CC900FB7C7B /* UIColor+hexColor.swift */,
+				785B380D21A5481900FB7C7B /* UIViewController+Alert.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1302,11 +1361,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				785B382121A59CB700FB7C7B /* EnvironmentViewController.swift in Sources */,
 				766BC3E4218894FB00D8537F /* ViewController.swift in Sources */,
 				766BC3E2218894FB00D8537F /* AppDelegate.swift in Sources */,
+				785B380E21A5481900FB7C7B /* UIViewController+Alert.swift in Sources */,
 				9B17CDF92189E763009C95C4 /* AssetsViewController.swift in Sources */,
 				9B17CE06218B3F17009C95C4 /* PlayerViewController.swift in Sources */,
+				785B381B21A58B6A00FB7C7B /* MainNavigationController.swift in Sources */,
 				9B17CDFC2189EC4D009C95C4 /* UIImageView+constraint.swift in Sources */,
+				785B37F321A301A900FB7C7B /* UIView+Anchor.swift in Sources */,
+				785B380C21A421F300FB7C7B /* RBMTextField.swift in Sources */,
+				785B380321A4135A00FB7C7B /* UIView+Keyboard.swift in Sources */,
+				785B380A21A41CC900FB7C7B /* UIColor+hexColor.swift in Sources */,
+				785B382421A59DD000FB7C7B /* RBMButton.swift in Sources */,
+				785B380821A41AC500FB7C7B /* IbcScheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

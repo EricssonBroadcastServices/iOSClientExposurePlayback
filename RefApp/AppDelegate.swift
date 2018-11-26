@@ -14,13 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        if let image = UIImage(named: "redbee") {
-            let logoView = UIImageView(image: image, constrainedByHeight: 40)
-            
-            if let root = window?.rootViewController as? UINavigationController{
-                root.viewControllers.first?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoView)
-            }
-        }
+
+        window = UIWindow()
+        let rootViewController = MainNavigationController()
+        window?.rootViewController = rootViewController
+        window?.makeKeyAndVisible()
+        
         return true
     }
 
