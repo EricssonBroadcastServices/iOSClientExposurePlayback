@@ -32,11 +32,13 @@ class LoginViewController: UIViewController {
     
     let usernameTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Username", comment: ""))
+        textfield.textContentType = UITextContentType.username
         return textfield
     }()
     
     let passwordTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Password", comment: ""))
+        textfield.textContentType = UITextContentType.password
         textfield.isSecureTextEntry = true
         return textfield
     }()
@@ -160,7 +162,9 @@ extension LoginViewController {
             .validate()
             .response{ [weak self] in
                 if let error = $0.error {
-                    self?.popupAlert(title: error.message , message: error.localizedDescription, actions: [okAction], preferedStyle: .alert)
+                    
+                    let message = "\(error.code) " + error.message + "\n" + (error.info ?? "")
+                    self?.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
                 }
                 
                 if let credentials = $0.value {
