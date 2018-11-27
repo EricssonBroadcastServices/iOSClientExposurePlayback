@@ -170,6 +170,9 @@ extension LoginViewController {
                 if let credentials = $0.value {
                     StorageProvider.store(environment: self?.environment)
                     StorageProvider.store(sessionToken: credentials.sessionToken)
+                    
+                    let navigationController = MainNavigationController()
+                    self?.parent?.present(navigationController, animated: true, completion: nil)
 
                 }
         }
