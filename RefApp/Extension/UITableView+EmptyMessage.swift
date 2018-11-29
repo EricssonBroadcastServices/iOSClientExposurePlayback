@@ -19,7 +19,7 @@ extension UITableView {
             self.bounds.size.width, height: self.bounds.size.height))
         let messageLabel = UILabel(frame: rect)
         messageLabel.text = message
-        messageLabel.textColor = ColorState.active.textFieldPlaceholder
+        messageLabel.textColor = ColorState.active.text
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .center;
         messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
@@ -31,6 +31,10 @@ extension UITableView {
     
     /// Hide empty message when there is data available to show
     func hideEmptyMessage() {
+        let rect = CGRect(origin: CGPoint(x: 0,y :0), size: CGSize(width:
+            self.bounds.size.width, height: self.bounds.size.height))
+        let view = UIView(frame: rect)
+        view.backgroundColor = ColorState.active.background
         self.backgroundView = .none
     }
 }

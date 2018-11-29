@@ -30,16 +30,14 @@ class AssetListTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = NSLocalizedString("Assets", comment: "")
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationBar.barStyle = .black
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = ColorState.active.background
         
         addLogoutBarButtonItem()
         self.generateTableViewContent()
     }
-    
     
     /// Add left bar button item
     fileprivate func addLogoutBarButtonItem() {
@@ -63,9 +61,8 @@ extension AssetListTableViewController {
         }
         
         let query = "assetType=MOVIE"
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
-        }
+        loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
+        
     }
     
     /// Load the assets from the Exposure API
@@ -107,10 +104,8 @@ extension AssetListTableViewController {
     /// - Parameter assets: loaded assets from Exposure API
     func assetsDidLoad(_ assets: [Asset]) {
         datasource = .make(for: assets)
-        DispatchQueue.main.async {
-            self.tableView.dataSource = self.datasource
-            self.tableView.reloadData()
-        }
+        self.tableView.dataSource = self.datasource
+        self.tableView.reloadData()
     }
 }
 
@@ -138,9 +133,7 @@ extension AssetListTableViewController {
         let navigationController = MainNavigationController()
         
         guard let environment = StorageProvider.storedEnvironment, let sessionToken = StorageProvider.storedSessionToken else {
-            
             self.present(navigationController, animated: true, completion: nil)
-            
             return
         }
         

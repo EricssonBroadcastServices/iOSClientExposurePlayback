@@ -52,6 +52,9 @@ extension TableViewDataSource where Model == Asset {
     static func make(for assets: [Asset], reuseIdentifier:String = "assetListTableViewCell") -> TableViewDataSource {
         
         return TableViewDataSource(models: assets, reuseIdentifier: reuseIdentifier) { (asset, cell) in
+            cell.selectionStyle = .none
+            cell.backgroundColor = ColorState.active.background
+            cell.textLabel?.textColor = ColorState.active.text
             cell.textLabel?.text = asset.localized?.first?.title
         }
     }

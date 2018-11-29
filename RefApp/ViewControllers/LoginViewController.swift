@@ -171,9 +171,10 @@ extension LoginViewController {
                     StorageProvider.store(environment: self?.environment)
                     StorageProvider.store(sessionToken: credentials.sessionToken)
                     
-                    let navigationController = MainNavigationController()
-                    self?.parent?.present(navigationController, animated: true, completion: nil)
-
+                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                    guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
+                    mainNavigationController.viewControllers = [AssetListTableViewController()]
+                    self?.dismiss(animated: true, completion: nil)
                 }
         }
     }
