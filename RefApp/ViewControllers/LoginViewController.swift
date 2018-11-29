@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
     
     let usernameTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Username", comment: ""))
-        if #available(iOS 10, *) {
+        if #available(iOS 11, *) {
             textfield.textContentType = UITextContentType.username
         }
         return textfield
@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
     
     let passwordTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Password", comment: ""))
-        if #available(iOS 10, *) {
+        if #available(iOS 11, *) {
             textfield.textContentType = UITextContentType.password
         }
         textfield.isSecureTextEntry = true
