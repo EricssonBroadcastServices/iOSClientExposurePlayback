@@ -20,7 +20,12 @@ class MainNavigationController: UINavigationController {
         self.navigationBar.barTintColor = ColorState.active.background
         self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: ColorState.active.textFieldPlaceholder]
         
-        perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
+        if StorageProvider.storedSessionToken != nil {
+            let assetlistViewController = AssetListTableViewController()
+            viewControllers = [assetlistViewController]
+        } else {
+            perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
+        }
     }
     
     

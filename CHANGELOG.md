@@ -18,10 +18,14 @@
 
 #### Features
 * `EMP-12204` Introduced `RBMTheme` to handle common UI elements related to the reference app.
+* `EMP-12206` Added `TableViewDataSource` class to handle `UITableViewDataSource`.
+* `EMP-12206` Added `UITableView+EmptyMessage` to show empty message when `UITableView`  has no data .
+
 
 #### Changes
 * `EMP-12204` Load the project from programmatically created views instead from the storyboard. 
 * `EMP-12205` Create the authentication view to allow login through username and password. 
+* `EMP-12206` Create the asset list view to show the assets fetched from the Exposure API.
 
 ## 2.0.95
 
