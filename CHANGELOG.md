@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.0.97` Release - [2.0.97](#2097)
 * `2.0.96` Release - [2.0.96](#2096)
 * `2.0.95` Release - [2.0.95](#2095)
 * `2.0.93` Release - [2.0.93](#2093)
@@ -19,13 +20,15 @@
 #### Changes
 * `EMP-12207` Create the player view to demonstrate the SDK playback lifecycle.
 
+#### Bug Fixes
+* Log message instead of hierarchy from error if the root error is an `ExposureError` 
+
 ## 2.0.96
 
 #### Features
 * `EMP-12204` Introduced `RBMTheme` to handle common UI elements related to the reference app.
 * `EMP-12206` Added `TableViewDataSource` class to handle `UITableViewDataSource`.
 * `EMP-12206` Added `UITableView+EmptyMessage` to show empty message when `UITableView`  has no data .
-
 
 #### Changes
 * `EMP-12204` Load the project from programmatically created views instead from the storyboard. 

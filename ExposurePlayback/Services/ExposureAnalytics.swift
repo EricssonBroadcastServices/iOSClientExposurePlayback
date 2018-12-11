@@ -376,53 +376,56 @@ extension ExposureAnalytics: AnalyticsProvider {
         
         let structure = buildErrorStructure(hierarchy: [], nextError: error)
         
-        let info = structure.isEmpty ? nil : structure.map{ "\($0):" + $1 }.joined(separator: " << ")
-        
-        guard let rootError = structure.last else {
+        guard let rootError = structure.0.last else {
             return Playback.Error(timestamp: timestamp,
                                   offsetTime: offset,
                                   message: error.message,
                                   code: error.code,
-                                  info: info,
+                                  info: nil,
                                   details: error.info)
         }
         
+        let hierarchy = structure.0.map{ "\($0):" + $1 }.joined(separator: " << ")
+        
         return Playback.Error(timestamp: timestamp,
                               offsetTime: offset,
-                              message: rootError.1,
+                              message: structure.1,
                               code: rootError.0,
-                              info: info,
+                              info: hierarchy,
                               details: error.info)
     }
     
-    private func buildErrorStructure(hierarchy: [(Int, String)], nextError error: Error) -> [(Int, String)] {
+    private func buildErrorStructure(hierarchy: [(Int, String)], nextError error: Error) -> ([(Int, String)], String) {
         var result = hierarchy
         if let exposureError = error as? ExposureError {
             result.append((exposureError.code, exposureError.domain))
             if let underlyingError = exposureError.underlyingError {
                 return buildErrorStructure(hierarchy: result, nextError: underlyingError)
             }
-            return result
+            return (result, exposureError.message)
         }
         else if let expanded = error as? ExpandedError {
             result.append((expanded.code, expanded.domain))
             if let underlyingError = expanded.underlyingError {
                 return buildErrorStructure(hierarchy: result, nextError: underlyingError)
             }
-            return result
+            return (result, expanded.message)
         }
         else if let expanded = error as? Exposure.Request.Networking {
             result.append((expanded.code, expanded.domain))
-            return result
+            return (result, expanded.message)
         }
         else if let nsError = error as? NSError {
             result.append((nsError.code, nsError.domain))
             if let underlyingError = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
                 return buildErrorStructure(hierarchy: result, nextError: underlyingError)
             }
-            return result
+            return (result, nsError.domain)
         }
-        return result
+        else {
+            result.append((-999, "UNKNOWN_DOMAIN"))
+            return (result, "UNKNOWN_ERROR")
+        }
     }
     
     
