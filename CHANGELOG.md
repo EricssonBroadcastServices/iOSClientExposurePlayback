@@ -14,6 +14,11 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.0.97
+
+#### Changes
+* `EMP-12207` Create the player view to demonstrate the SDK playback lifecycle.
+
 ## 2.0.96
 
 #### Features

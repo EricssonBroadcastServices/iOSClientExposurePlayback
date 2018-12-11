@@ -23,7 +23,6 @@ class AssetListTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.assetsDidLoad([])
     }
     
     override func viewDidLoad() {
@@ -45,6 +44,7 @@ class AssetListTableViewController: UITableViewController {
         button.addTarget(self, action:#selector(handleLogout), for: .touchUpInside)
         button.setTitle(NSLocalizedString("Logout", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
+        button.sizeToFit()
         let barButton = UIBarButtonItem(customView: button)
         self.navigationItem.leftBarButtonItem = barButton
     }
@@ -60,9 +60,8 @@ extension AssetListTableViewController {
             return
         }
         
-        let query = "assetType=MOVIE"
+        let query = "assetType=MOVIE" // MOVIE / TV_CHANNEL
         loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
-        
     }
     
     /// Load the assets from the Exposure API
@@ -108,6 +107,54 @@ extension AssetListTableViewController {
         self.tableView.reloadData()
     }
 }
+
+
+// MARK: - TableView Delegate
+extension AssetListTableViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if assets[indexPath.row].assetId != "" {
+            
+            let destinationViewController = PlayerViewController()
+            let asset = assets[indexPath.row]
+            destinationViewController.environment = StorageProvider.storedEnvironment
+            destinationViewController.sessionToken = StorageProvider.storedSessionToken
+            destinationViewController.channel = asset
+            
+            /// Optional playback properties
+            let properties = PlaybackProperties(autoplay: true,
+                                                playFrom: .bookmark,
+                                                language: .custom(text: "fr", audio: "en"),
+                                                maxBitrate: 300000)
+            
+            destinationViewController.playbackProperties = properties
+            
+            if let type = asset.type {
+                switch type {
+                case "LIVE_EVENT":
+                    destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
+                case "TV_CHANNEL":
+                    destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
+                case "MOVIE":
+                    destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
+                default:
+                    destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
+                    break
+                }
+            }
+
+            self.navigationController?.pushViewController(destinationViewController, animated: false)
+            tableView.deselectRow(at: indexPath, animated: true)
+            
+        } else {
+            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+            })
+            self.popupAlert(title: "Sorry", message: "No asset id was found", actions: [okAction])
+        }
+    }
+}
+
 
 // MARK: - Actions
 extension AssetListTableViewController {

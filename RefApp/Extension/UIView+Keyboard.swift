@@ -24,7 +24,7 @@ extension UIView {
     @objc
     func keyboardWillShow(notification: Notification) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.frame = CGRect(x: 0, y: -90, width: self.frame.width, height: self.frame.height)
+            self.frame = CGRect(x: 0, y: -150, width: self.frame.width, height: self.frame.height)
         }, completion: nil)
     }
     
