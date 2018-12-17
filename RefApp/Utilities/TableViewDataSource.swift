@@ -55,7 +55,7 @@ extension TableViewDataSource where Model == Asset {
             cell.selectionStyle = .none
             cell.backgroundColor = ColorState.active.background
             cell.textLabel?.textColor = ColorState.active.text
-            cell.textLabel?.text = asset.localized?.first?.title
+            cell.textLabel?.text = asset.localized?.first?.title ?? asset.assetId
         }
     }
 }

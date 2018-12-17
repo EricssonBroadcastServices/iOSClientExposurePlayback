@@ -17,9 +17,10 @@
 * `0.77.x` Releases - [0.77.0](#0770)
 
 ## 2.0.98
-#### Features
 
+#### Features
 * `EMP-12351` Expanded support for custom environment in  *Exposure*
+* `EMP-12207` Create the player view to demonstrate the SDK playback lifecycle.
 
 ## 2.0.97
 

@@ -33,3 +33,31 @@ class RBMButton: UIButton {
         layer.borderWidth = 1
     }
 }
+
+
+/// Custom UIButton for playercontrols
+class RBMPlayerControlButton: UIButton {
+    
+    private var titleText: String
+    private var target: Any
+    private var action: Selector
+    
+    required init(titleText: String, target: Any, action: Selector ) {
+        self.titleText = titleText
+        self.target = target
+        self.action = action
+        super.init(frame: .zero)
+        setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup() {
+        backgroundColor = UIColor.clear
+        setTitle(titleText, for: .normal)
+        setTitleColor(ColorState.active.textFieldPlaceholder, for: .normal)
+        addTarget(target, action: action, for: .touchUpInside)
+    }
+}
