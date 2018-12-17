@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.0.98` Release - [2.0.98](#2098)
 * `2.0.97` Release - [2.0.97](#2097)
 * `2.0.96` Release - [2.0.96](#2096)
 * `2.0.95` Release - [2.0.95](#2095)
@@ -14,6 +15,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.0.98
+#### Features
+
+* `EMP-12351` Expanded support for custom environment in  *Exposure*
 
 ## 2.0.97
 
