@@ -176,6 +176,10 @@ extension PlayerViewController {
                 self.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
         }
         
+        .onWarning{ [weak self] player, source, warning in
+            guard let `self` = self else { return }
+            self.showToastMessage(message: warning.message, duration: 5)
+        }
         
         // Playback Progress
         programBasedTimeline.onSeek = { [weak self] offset in

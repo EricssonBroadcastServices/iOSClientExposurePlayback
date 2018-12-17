@@ -70,6 +70,7 @@ class PlayerControls: UIView {
     let manageTimeShift: RBMTextField = {
         let textField = RBMTextField(placeHolderText: "10")
         textField.text = "10"
+        textField.keyboardType = .numberPad
         return textField
     }()
 
@@ -79,6 +80,7 @@ class PlayerControls: UIView {
     let manageTimeShiftLabel: RBMTextField = {
         let textField = RBMTextField(placeHolderText: "10")
         textField.text = "10"
+        textField.keyboardType = .numberPad
         return textField
     }()
     

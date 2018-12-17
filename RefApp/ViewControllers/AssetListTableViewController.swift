@@ -28,8 +28,6 @@ class AssetListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = NSLocalizedString("Assets", comment: "")
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = ColorState.active.background
@@ -60,7 +58,7 @@ extension AssetListTableViewController {
             return
         }
         
-        let query = "assetType=MOVIE" // MOVIE / TV_CHANNEL
+        let query = "assetType=TV_CHANNEL" // MOVIE / TV_CHANNEL
         loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
     }
     
@@ -113,45 +111,36 @@ extension AssetListTableViewController {
 extension AssetListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if assets[indexPath.row].assetId != "" {
-            
-            let destinationViewController = PlayerViewController()
-            let asset = assets[indexPath.row]
-            destinationViewController.environment = StorageProvider.storedEnvironment
-            destinationViewController.sessionToken = StorageProvider.storedSessionToken
-            destinationViewController.channel = asset
-            
-            /// Optional playback properties
-            let properties = PlaybackProperties(autoplay: true,
-                                                playFrom: .bookmark,
-                                                language: .custom(text: "fr", audio: "en"),
-                                                maxBitrate: 300000)
-            
-            destinationViewController.playbackProperties = properties
-            
-            if let type = asset.type {
-                switch type {
-                case "LIVE_EVENT":
-                    destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
-                case "TV_CHANNEL":
-                    destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
-                case "MOVIE":
-                    destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
-                default:
-                    destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
-                    break
-                }
+        let asset = assets[indexPath.row]
+        let destinationViewController = PlayerViewController()
+        destinationViewController.environment = StorageProvider.storedEnvironment
+        destinationViewController.sessionToken = StorageProvider.storedSessionToken
+        destinationViewController.channel = asset
+        
+        /// Optional playback properties
+        let properties = PlaybackProperties(autoplay: true,
+                                            playFrom: .bookmark,
+                                            language: .custom(text: "fr", audio: "en"),
+                                            maxBitrate: 300000)
+        
+        destinationViewController.playbackProperties = properties
+        
+        if let type = asset.type {
+            switch type {
+            case "LIVE_EVENT":
+                destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
+            case "TV_CHANNEL":
+                destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
+            case "MOVIE":
+                destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
+            default:
+                destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
+                break
             }
-
-            self.navigationController?.pushViewController(destinationViewController, animated: false)
-            tableView.deselectRow(at: indexPath, animated: true)
-            
-        } else {
-            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
-                (alert: UIAlertAction!) -> Void in
-            })
-            self.popupAlert(title: "Sorry", message: "No asset id was found", actions: [okAction])
         }
+        
+        self.navigationController?.pushViewController(destinationViewController, animated: false)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
