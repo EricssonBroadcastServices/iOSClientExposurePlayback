@@ -61,11 +61,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            
+                            callback(json.decode(PlaybackEntitlement.self),PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .defaultBehaviour)
@@ -104,11 +105,11 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .userLocale)
@@ -147,11 +148,11 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .custom(text: nil, audio: "custom"))
@@ -190,11 +191,11 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .defaultBehaviour)
@@ -233,11 +234,11 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .userLocale)
@@ -276,11 +277,11 @@ class LanguagePreferencesSpec: QuickSpec {
                         
                         // Configure the playable
                         let provider = MockedProgramEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["playSessionId"] = "playSessionId"
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                         let properties = PlaybackProperties(language: .custom(text: custom, audio: nil))

@@ -14,7 +14,8 @@ extension PlaybackEntitlement {
         let fairplayJson:[String: Any] = [
             "secondaryMediaLocator":"secondaryMediaLocator",
             "certificateUrl":"certificateUrl",
-            "licenseAcquisitionUrl":"licenseAcquisitionUrl"
+            "licenseAcquisitionUrl":"licenseAcquisitionUrl",
+            "licenseServerUrl": "licenseServerUrl"
         ]
         let json:[String: Any] = [
             "playToken":"playToken",

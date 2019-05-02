@@ -34,17 +34,31 @@ class AssetSourceStartTimeSpec: QuickSpec {
             func generatePlayable(pipe: String = "file://play/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int? = nil) -> AssetPlayable {
                 // Configure the playable
                 let provider = MockedAssetEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_, callback in
+                
+                provider.mockedRequestEntitlementV2 = { _,_,_,callback in
+                    
+                    
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = pipe
+                    
+                    /* var bookmarks: [String : Any] = [
+                        "liveTime" : 10,
+                        "lastViewedOffset" : 10,
+                        "lastViewedTime" : 10
+                    ] */
+                    
                     if let offset = lastViewedOffset {
                         json["lastViewedOffset"] = offset
+                        //bookmarks["lastViewedOffset"] = offset
                     }
                     if let offset = lastViewedTime {
                         json["lastViewedTime"] = offset
+                        //bookmarks["lastViewedTime"] = offset
                     }
-                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
+
+                    callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self),nil, nil)
                 }
+                
                 return AssetPlayable(assetId: "assetId", entitlementProvider: provider)
             }
             

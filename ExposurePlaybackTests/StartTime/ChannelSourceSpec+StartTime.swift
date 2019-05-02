@@ -33,16 +33,40 @@ class ChannelSourceStartTimeSpec: QuickSpec {
             func generatePlayable(pipe: String = "file://play/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int64? = nil) -> ChannelPlayable {
                 // Configure the playable
                 let provider = MockedChannelEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_, callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = pipe
+                    
+                    //PlayBack Entitlement V2 Booksmarks
+                    var bookmarks: [String : Any] = [
+                        "liveTime" : 10,
+                        "lastViewedOffset" : 10,
+                        "lastViewedTime" : 10
+                    ]
+                    
                     if let offset = lastViewedOffset {
                         json["lastViewedOffset"] = offset
+                        bookmarks["lastViewedOffset"] = offset
                     }
                     if let offset = lastViewedTime {
                         json["lastViewedTime"] = offset
+                        bookmarks["lastViewedTime"] = offset
                     }
-                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                    
+                    // Live will be true for a channel
+                    let streamInfo: [String: Any] = [
+                        "live" : true,
+                        "static" : false,
+                        "event" : false,
+                        "start" : 0,
+                        "channelId" : "channelId",
+                        "programId" : "programId"
+                    ]
+                    var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                    entitlementVersion2Json["streamInfo"] = streamInfo
+                    entitlementVersion2Json["bookmarks"] = bookmarks
+                    
+                    callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                 }
                 return ChannelPlayable(assetId: "assetId", entitlementProvider: provider)
             }

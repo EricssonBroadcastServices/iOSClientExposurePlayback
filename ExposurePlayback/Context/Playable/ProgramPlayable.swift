@@ -10,8 +10,9 @@ import Foundation
 import Exposure
 
 internal protocol ProgramEntitlementProvider {
-    func requestEntitlement(programId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
+    func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
     
+    func requestEntitlementV2(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
 /// Defines a `Playable` for the specific program
@@ -25,20 +26,104 @@ public struct ProgramPlayable: Playable {
     internal var entitlementProvider: ProgramEntitlementProvider = ExposureEntitlementProvider()
     
     internal struct ExposureEntitlementProvider: ProgramEntitlementProvider {
-        func requestEntitlement(programId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
-            let params: [String: String] = [
-                "drm":"FAIRPLAY",
-                "format":"HLS"
-            ]
+        func requestEntitlement(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
             
-            ExposureApi<PlaybackEntitlement>(environment: environment, endpoint: "/entitlement/program/\(programId)/play", parameters: params, method: .post, sessionToken: sessionToken)
-                .request(encoding: JSONEncoding())
-                .validate()
-                .response{
-                    callback($0.value, $0.error, $0.response)
+            /*
+             When using Programplayable implementation in the frontEnd app developer will use programId & channel Id. But programId is not the same as assetId.
+             To use the new V2/Play end point we have to use assetId. So to get the assetId we need to make an extra API call.
+             */
+            self.getAssetId(environment: environment, sessionToken: sessionToken, channelId: channelId, programId: programId, callback: { assetId, error, response in
+                
+                guard let assetId = assetId else {
+                    callback(nil, error, response)
+                    return
+                }
+                
+                self.requestEntitlementV2(programId: assetId, channelId: channelId, using: sessionToken, in: environment, callback: { entitlementV1, entitlementV2, error, response in
                     
+                    guard let entitlementV2 = entitlementV2 else { return
+                        callback(nil, error, response)
+                    }
+                    let (convertedEntitlement, error ) = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: entitlementV2)
+                    
+                    guard let playbackEntitlement = convertedEntitlement else {
+                        callback(nil, error, response)
+                        return
+                    }
+                    
+                    callback(playbackEntitlement, error, response )
+                    
+                })
+            })
+            
+        }
+        
+        
+        /// Use `GET /v1/customer/{customerUnit}/businessunit/{businessUnit}/epg/{channelId}/program/{programId}` Endpoint to fetch the assetId through programId
+        ///
+        /// - Parameters:
+        ///   - environment: enviornment
+        ///   - sessionToken: session token
+        ///   - channelId: channel id
+        ///   - programId: program id
+        ///   - callback: call back will return assetId, exposure error & response
+        internal func getAssetId(environment: Environment, sessionToken: SessionToken, channelId: String, programId: String, callback: @escaping (String?, ExposureError?, HTTPURLResponse?) -> Void) {
+            ExposureApi<EPGResponse>(environment: environment, endpoint: "/epg/"+channelId+"/program/"+programId, query: "onlyPublished=true&&includeUserData=false", method: .get, sessionToken: sessionToken)
+                .request()
+                .response{
+                    guard let asset =  $0.value?.asset else {
+                        callback(nil, $0.error, $0.response )
+                        return
+                    }
+                    callback(asset.assetId, nil, $0.response )
             }
         }
+        
+        
+        /// Request entitlement play version two & create program playable
+        ///
+        /// - Parameters:
+        ///   - programId: programId
+        ///   - channelId: channelId
+        ///   - sessionToken: session token
+        ///   - environment: exposure enviornment
+        ///   - callback: callback
+        func requestEntitlementV2(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
+            
+            self.getAssetId(environment: environment, sessionToken: sessionToken, channelId: channelId, programId: programId, callback: { assetId, error, response in
+                
+                guard let assetId = assetId else {
+                    callback(nil, nil, error, response)
+                    return
+                }
+                
+                Entitlement(environment: environment,
+                            sessionToken: sessionToken)
+                    .enigmaAsset(assetId: assetId)
+                    .request()
+                    .validate()
+                    .response{
+                        guard let enetitlementV2Response =  $0.value else {
+                            callback(nil, nil, $0.error, $0.response)
+                            return
+                        }
+                        
+                        let (convertedEntitlement, error) = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: enetitlementV2Response)
+                        guard let playbackEntitlement = convertedEntitlement else {
+                            callback(nil, nil ,error, $0.response )
+                            return
+                        }
+                        callback(playbackEntitlement, enetitlementV2Response, $0.error, $0.response)
+                }
+            })
+        }
+        
+    }
+    
+    /// EPG Response :- Only match asset from the response
+    public struct EPGResponse: Decodable {
+        /// Body of the document
+        public let asset: Asset
     }
 }
 
@@ -56,14 +141,25 @@ extension ProgramPlayable {
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
     public func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        entitlementProvider.requestEntitlement(programId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
-            if let value = entitlement {
-                let source = ProgramSource(entitlement: value, assetId: self.assetId, channelId: self.channelId)
+        entitlementProvider.requestEntitlementV2(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlementV1, entitlementV2, error, response in
+            if let value = entitlementV2 {
+                
+                guard let playbackEntitlement = entitlementV1 else {
+                    callback(nil, error)
+                    return
+                }
+                
+                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
                 source.response = response
                 callback(source, nil)
+                
             }
             else if let error = error {
                 callback(nil,error)
+            }
+            else {
+                print("Some unkown error occured while prepareSource in ProgramPlayable")
+                callback(nil,nil)
             }
         }
     }
@@ -71,16 +167,27 @@ extension ProgramPlayable {
 
 extension ProgramPlayable {
     public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
-        entitlementProvider.requestEntitlement(programId: assetId, using: sessionToken, in: environment) { entitlement, error, response in
-            if let value = entitlement {
-                let source = ProgramSource(entitlement: value, assetId: self.assetId, channelId: self.channelId)
+        entitlementProvider.requestEntitlementV2(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlementV1, entitlementV2, error, response in
+            if let value = entitlementV2 {
+                guard let playbackEntitlement = entitlementV1 else {
+                    callback(nil, error, response)
+                    return
+                }
+                
+                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
                 source.response = response
                 callback(source, nil, response)
+                
             }
             else if let error = error {
                 callback(nil,error,response)
             }
+            else {
+                print("Some unkown error occured while prepareSourceWithResponse in ProgramPlayable")
+                callback(nil,nil,response)
+            }
         }
     }
 }
+
 

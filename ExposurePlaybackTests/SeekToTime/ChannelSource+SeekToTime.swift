@@ -33,11 +33,20 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     it("should allow seek") {
                         // Configure the playable
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            
+                            let contractRestrictions: [String: Any] = [
+                                "ffEnabled" : true
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
+                            
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
@@ -62,11 +71,18 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek if entitled") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                
+                                let contractRestrictions: [String: Any] = [
+                                    "ffEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -86,11 +102,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek with warning message") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                let contractRestrictions: [String: Any] = [
+                                    "ffEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                             
@@ -113,11 +135,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek with warning message") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                let contractRestrictions: [String: Any] = [
+                                    "ffEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -139,11 +167,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should allow seek if encountering epg gap") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                let contractRestrictions: [String: Any] = [
+                                    "ffEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -165,11 +199,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should stop with error if not entitled") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                let contractRestrictions: [String: Any] = [
+                                    "ffEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -198,11 +238,18 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     it("should seek to live point") {
                         // Configure the playable
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            
+                            let contractRestrictions: [String: Any] = [
+                                "ffEnabled" : true
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -235,11 +282,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek and deliver warning") {
                         // Configure the playable
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            let contractRestrictions: [String: Any] = [
+                                "ffEnabled" : true
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -272,11 +325,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek with warning message") {
                         // Configure the playable
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            let contractRestrictions: [String: Any] = [
+                                "rwEnabled" : true
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -298,11 +357,18 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                     it("should ignore seek if encountering epg gap") {
                         // Configure the playable
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["rwEnabled"] = true
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            
+                            let contractRestrictions: [String: Any] = [
+                                "rwEnabled" : true
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -326,11 +392,17 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should stop playback with error") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["rwEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                                let contractRestrictions: [String: Any] = [
+                                    "rwEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                             }
                             let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
@@ -350,16 +422,31 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         it("should allow playback") {
                             // Configure the playable
                             let provider = MockedChannelEntitlementProvider()
-                            provider.mockedRequestEntitlement = { _,_,_, callback in
+                            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                                 var json = PlaybackEntitlement.requiedJson
                                 json["mediaLocator"] = "file://play/.isml"
                                 json["ffEnabled"] = true
                                 json["rwEnabled"] = true
                                 json["timeshiftEnabled"] = true
-                                callback(json.decode(PlaybackEntitlement.self), nil, nil)
-                            }
-                            let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
+                                
+                                let contractRestrictions: [String: Any] = [
+                                    "airplayEnabled" : true,
+                                    "ffEnabled" : true,
+                                    "maxBitrate" : 20,
+                                    "maxResHeight" : 30,
+                                    "minBitrate": 10,
+                                    "rwEnabled": true,
+                                    "timeshiftEnabled" : true
+                                ]
+                                
+                                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
+                                
+                            }
+                            
+                            let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
 
                             // Initiate test
                             let currentDate = Date().unixEpoch
@@ -380,13 +467,24 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 context("Enforce FastForward") {
                     it("should restrict seeking forward") {
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            
+                            let contractRestrictions: [String: Any] = [
+                                "ffEnabled" : false,
+                                "rwEnabled": false,
+                                "timeshiftEnabled" : false
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["playSessionId"] = "SeekToLiveTrigger"
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
@@ -406,13 +504,23 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                 context("Enforce Rewind") {
                     it("should restrict seeking back") {
                         let provider = MockedChannelEntitlementProvider()
-                        provider.mockedRequestEntitlement = { _,_,_, callback in
+                        provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                             var json = PlaybackEntitlement.requiedJson
                             json["mediaLocator"] = "file://play/.isml"
                             json["ffEnabled"] = false
                             json["rwEnabled"] = false
                             json["timeshiftEnabled"] = false
-                            callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                            let contractRestrictions: [String: Any] = [
+                                "ffEnabled" : false,
+                                "rwEnabled": false,
+                                "timeshiftEnabled" : false
+                            ]
+                            
+                            var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                            entitlementVersion2Json["playSessionId"] = "SeekToLiveTrigger"
+                            entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                            
+                            callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                         }
                         let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                         
