@@ -178,7 +178,8 @@ extension LoginViewController {
                     
                     let rootViewController = UIApplication.shared.keyWindow?.rootViewController
                     guard let mainNavigationController = rootViewController as? MainNavigationController else { return }
-                    mainNavigationController.viewControllers = [AssetListTableViewController()]
+                    // mainNavigationController.viewControllers = [AssetListTableViewController()]
+                    mainNavigationController.viewControllers = [SelectionTableViewController()]
                     self?.dismiss(animated: true, completion: nil)
                 }
         }

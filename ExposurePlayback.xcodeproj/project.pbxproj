@@ -284,6 +284,8 @@
 		76EBF03A215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76EBF03B215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
+		781341A5228014B800ECAC6B /* SelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781341A4228014B800ECAC6B /* SelectionTableViewController.swift */; };
+		781341A7228028D800ECAC6B /* EPGListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781341A6228028D800ECAC6B /* EPGListViewController.swift */; };
 		7831FACA2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		784E3AD321B16B0A00C986CF /* RBMPlayerControlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */; };
@@ -524,6 +526,8 @@
 		76EBF036215E30E000503146 /* ConnectionChanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionChanged.swift; sourceTree = "<group>"; };
 		76EBF039215E3E0600503146 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
+		781341A4228014B800ECAC6B /* SelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionTableViewController.swift; sourceTree = "<group>"; };
+		781341A6228028D800ECAC6B /* EPGListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGListViewController.swift; sourceTree = "<group>"; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
 		784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMPlayerControlLabel.swift; sourceTree = "<group>"; };
 		784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VodBasedTimeline.swift; sourceTree = "<group>"; };
@@ -1027,7 +1031,9 @@
 			children = (
 				785B382021A59CB700FB7C7B /* EnvironmentViewController.swift */,
 				78D236DC21ABFEFC00E366B0 /* LoginViewController.swift */,
+				781341A4228014B800ECAC6B /* SelectionTableViewController.swift */,
 				78D236E621AD2F0600E366B0 /* AssetListTableViewController.swift */,
+				781341A6228028D800ECAC6B /* EPGListViewController.swift */,
 				9B17CE05218B3F17009C95C4 /* PlayerViewController.swift */,
 				78DE9FD621B9362C00C24CDE /* TrackSelectionViewController.swift */,
 			);
@@ -1473,7 +1479,9 @@
 				78DE9FD721B9362C00C24CDE /* TrackSelectionViewController.swift in Sources */,
 				785B380821A41AC500FB7C7B /* IbcScheme.swift in Sources */,
 				78A90C5421C7C87B00B3B626 /* UIViewController+Toast.swift in Sources */,
+				781341A5228014B800ECAC6B /* SelectionTableViewController.swift in Sources */,
 				784E3AD921B16B6E00C986CF /* ProgramBasedTimeline.swift in Sources */,
+				781341A7228028D800ECAC6B /* EPGListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
