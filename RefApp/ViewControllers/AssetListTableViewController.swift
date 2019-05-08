@@ -168,7 +168,7 @@ extension AssetListTableViewController {
     }
     
     
-    /// Handle the playing a channel : ChannelPlayable or AssetPlayable
+    /// Handle the play : ChannelPlayable or AssetPlayable
     ///
     /// - Parameters:
     ///   - playable: channelPlayable / AssetPlayable

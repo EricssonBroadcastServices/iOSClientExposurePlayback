@@ -167,15 +167,17 @@ extension EPGListViewController {
     /// - Parameters:
     ///   - channel: channel
     ///   - start: start time
-    ///   - end: <#end description#>
+    ///   - end: end time
     ///   - environment: environment
     ///   - sessionToken: session token
     ///   - callback: callback
     fileprivate func fetchEpg(for channel: Asset, from start: Int64, to end: Int64, environment: Environment, sessionToken: SessionToken, callback: @escaping (ChannelEpg?, ExposureError?) -> Void) {
         // Fetch Epg
-        let query = "onlyPublished=true&includeUserData=\(sessionToken != nil)&fieldSet=ALL&pageSize=500&pageNumber=1&from=\(start)&to=\(end)"
         
-        ExposureApi<Exposure.ChannelEpg>(environment: environment, endpoint: "/epg/"+channel.assetId, query: query, method: .get, sessionToken: sessionToken)
+        FetchEpg(environment: environment)
+            .channel(id: channel.assetId)
+            .filter(starting: start, ending: end)
+            .filter(onlyPublished: true)
             .request()
             .validate()
             .response{

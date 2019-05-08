@@ -68,14 +68,18 @@ public struct ProgramPlayable: Playable {
         ///   - programId: program id
         ///   - callback: call back will return assetId, exposure error & response
         internal func getAssetId(environment: Environment, sessionToken: SessionToken, channelId: String, programId: String, callback: @escaping (String?, ExposureError?, HTTPURLResponse?) -> Void) {
-            ExposureApi<EPGResponse>(environment: environment, endpoint: "/epg/"+channelId+"/program/"+programId, query: "onlyPublished=true&&includeUserData=false", method: .get, sessionToken: sessionToken)
+            
+            FetchEpg(environment: environment)
+                .channel(id: channelId, programId: programId)
                 .request()
+                .validate()
                 .response{
                     guard let asset =  $0.value?.asset else {
                         callback(nil, $0.error, $0.response )
                         return
                     }
                     callback(asset.assetId, nil, $0.response )
+
             }
         }
         
