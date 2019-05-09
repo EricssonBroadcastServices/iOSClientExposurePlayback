@@ -101,9 +101,12 @@ extension AssetPlayable {
                     return
                 }
                 
-                // Live event :- ToDo
+                // Live event :- TODO
                 if value.streamInfo.event == true {
-                    print("This is a live event handle accordingly")
+                    print("This is a live event handle accordingly : handle as a normal program for now ")
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                    source.response = response
+                    callback(source, nil)
                 }
                 
                 // This is a live program
@@ -175,7 +178,10 @@ extension AssetPlayable {
                 
                 // Live event - TODO
                 if value.streamInfo.event == true {
-                    print("This is a live event , handle accordingly")
+                    print("This is a live event , handle accordingly :- handle as a normal program for now ")
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                    source.response = response
+                    callback(source, nil)
                 }
                    
                 // Dynamic catchup as live
