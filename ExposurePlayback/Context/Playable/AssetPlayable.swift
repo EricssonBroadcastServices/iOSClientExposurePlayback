@@ -178,10 +178,10 @@ extension AssetPlayable {
                 
                 // Live event - TODO
                 if value.streamInfo.event == true {
-                    print("This is a live event , handle accordingly :- handle as a normal program for now ")
+                    print("This is a live event , handle accordingly :- handle as a normal program for now 7")
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
-                    callback(source, nil)
+                    callback(source, nil, response)
                 }
                    
                 // Dynamic catchup as live
