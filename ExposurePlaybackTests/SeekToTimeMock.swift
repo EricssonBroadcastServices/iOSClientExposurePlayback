@@ -507,8 +507,8 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_, callback in
-                callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
+            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                callback(nil, nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 404, message: "SOME_ERROR")), nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
         }
@@ -569,14 +569,28 @@ class SeekToTimeMock {
         // Mock the ProgramService playable generator
         env.mockProgramServicePlayable{ program in
             let provider = MockedProgramEntitlementProvider()
-            provider.mockedRequestEntitlement = { _,_,_, callback in
+            provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                 var json = PlaybackEntitlement.requiedJson
                 json["mediaLocator"] = "file://play/.isml"
                 json["playToken"] = "ProgramSevicedFetchedEntitlement"
                 json["ffEnabled"] = false
                 json["rwEnabled"] = false
                 json["timeshiftEnabled"] = false
-                callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                
+                let contractRestrictions: [String: Any] = [
+                    "airplayEnabled" : true,
+                    "ffEnabled" : false,
+                    "maxBitrate" : 20,
+                    "maxResHeight" : 30,
+                    "minBitrate": 10,
+                    "rwEnabled": false,
+                    "timeshiftEnabled" : false
+                ]
+                
+                var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                entitlementVersion2Json["contractRestrictions"] = contractRestrictions
+                
+                callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
             }
             return ProgramPlayable(assetId: program.programId, channelId: program.channelId, entitlementProvider: provider)
         }

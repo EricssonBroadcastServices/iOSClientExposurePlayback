@@ -34,17 +34,44 @@ class ProgramSourceStartTimeSpec: QuickSpec {
             func generatePlayable(pipe: String = "file://play/.isml", lastViewedOffset: Int? = nil, lastViewedTime: Int64? = nil, live: Bool = false) -> ProgramPlayable {
                 // Configure the playable
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_, callback in
+                
+                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                    
+                    // PlaybackEntitlement V1
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = pipe
+                    json["live"] = live
+                    
+                    //PlayBack Entitlement V2 Booksmarks
+                    var bookmarks: [String : Any] = [
+                        "liveTime" : 10,
+                        "lastViewedOffset" : 10,
+                        "lastViewedTime" : 10
+                    ]
+                    
                     if let offset = lastViewedOffset {
                         json["lastViewedOffset"] = offset
+                        bookmarks["lastViewedOffset"] = offset
                     }
                     if let offset = lastViewedTime {
                         json["lastViewedTime"] = offset
+                        bookmarks["lastViewedTime"] = offset
                     }
-                    json["live"] = live
-                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                    
+                    let streamInfo: [String: Any] = [
+                        "live" : live,
+                        "static" : false,
+                        "event" : false,
+                        "start" : 0,
+                        "channelId" : "channelId",
+                        "programId" : "programId"
+                    ]
+                    
+                    var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                    entitlementVersion2Json["streamInfo"] = streamInfo
+                    entitlementVersion2Json["bookmarks"] = bookmarks
+                    
+                    callback(json.decode(PlaybackEntitlement.self), entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                 }
                 return ProgramPlayable(assetId: "assetId", channelId: "channelId", entitlementProvider: provider)
             }

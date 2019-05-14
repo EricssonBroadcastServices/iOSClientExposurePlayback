@@ -44,18 +44,21 @@ open class ExposureSource: MediaSource {
     /// Service that manages contract restrictions
     public var contractRestrictionsService: ContractRestrictionsService
     
+    public var streamingInfo: StreamInfo?
+    
     /// Creates a new `ExposureSource`
     ///
     /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
     ///
     /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
     /// - parameter assetId: The id for the asset
-    public init(entitlement: PlaybackEntitlement, assetId: String) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
+        self.streamingInfo = streamingInfo
         self.response = nil
     }
     
@@ -66,7 +69,7 @@ open class ExposureSource: MediaSource {
     /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
     /// - parameter assetId: The id for the asset
     /// - parameter response: HTTP response received when requesting the entitlement
-    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)

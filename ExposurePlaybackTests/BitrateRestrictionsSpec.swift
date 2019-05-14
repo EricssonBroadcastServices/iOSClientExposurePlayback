@@ -59,11 +59,24 @@ class BitrateRestrictionSpec: QuickSpec {
                 
                 // Configure the playable
                 let provider = MockedProgramEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_, callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                     var json = PlaybackEntitlement.requiedJson
                     json["mediaLocator"] = "file://play/.isml"
                     json["playSessionId"] = "BitrateSession"
-                    callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                    
+                    let streamInfo: [String: Any] = [
+                        "live" : false,
+                        "static" : false,
+                        "event" : false,
+                        "start" : 0,
+                        "channelId" : "channelId",
+                        "programId" : "programId"
+                    ]
+                    
+                    var entitlementVersion2Json = PlayBackEntitlementV2.requiedJson
+                    entitlementVersion2Json["streamInfo"] = streamInfo
+                    entitlementVersion2Json["playSessionId"] = "BitrateSession"
+                    callback(json.decode(PlaybackEntitlement.self),entitlementVersion2Json.decode(PlayBackEntitlementV2.self), nil, nil)
                 }
                 let playable = ProgramPlayable(assetId: "program1", channelId: "channelId", entitlementProvider: provider)
                 let properties = PlaybackProperties(maxBitrate: preferredBitRate)

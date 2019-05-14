@@ -12,6 +12,7 @@ import ExposurePlayback
 
 class AssetListTableViewController: UITableViewController {
     
+    var selectedAsssetType: String!
     var assets = [Asset]()
     var sessionToken: SessionToken?
     
@@ -31,20 +32,8 @@ class AssetListTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = ColorState.active.background
-        
-        addLogoutBarButtonItem()
+
         self.generateTableViewContent()
-    }
-    
-    /// Add left bar button item
-    fileprivate func addLogoutBarButtonItem() {
-        let button = UIButton()
-        button.addTarget(self, action:#selector(handleLogout), for: .touchUpInside)
-        button.setTitle(NSLocalizedString("Logout", comment: ""), for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.sizeToFit()
-        let barButton = UIBarButtonItem(customView: button)
-        self.navigationItem.leftBarButtonItem = barButton
     }
 }
 
@@ -54,11 +43,18 @@ extension AssetListTableViewController {
     /// Generate tableview content by loading assets from API
     fileprivate func generateTableViewContent() {
         guard let environment = StorageProvider.storedEnvironment, let _ = StorageProvider.storedSessionToken else {
-            logoutUser()
+            
+            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+                
+            })
+            
+            let message = "Invalid Session Token, please login again"
+            self.popupAlert(title: "Error" , message: message, actions: [okAction], preferedStyle: .alert)
             return
         }
         
-        let query = "assetType=TV_CHANNEL" // MOVIE / TV_CHANNEL
+        let query = "assetType=" + selectedAsssetType // MOVIE / TV_CHANNEL
         loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
     }
     
@@ -67,7 +63,7 @@ extension AssetListTableViewController {
     /// - Parameters:
     ///   - query: The optional query to filter by Ex:assetType=TV_CHANNEL
     ///   - environment: Customer specific *Exposure* environment
-    ///   - endpoint: Base exposure url. This is the customer specific URL to Exposure
+    ///   - endpoint: Base exposure url. This isStaticCachupAsLiveis the customer specific URL to Exposure
     ///   - method: http method - GET
     fileprivate func loadAssets(query: String, environment: Environment, endpoint: String, method: HTTPMethod) {
         ExposureApi<AssetList>(environment: environment,
@@ -104,6 +100,8 @@ extension AssetListTableViewController {
         self.tableView.dataSource = self.datasource
         self.tableView.reloadData()
     }
+    
+    
 }
 
 
@@ -112,10 +110,73 @@ extension AssetListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let asset = assets[indexPath.row]
+        
+        if let type = asset.type {
+            switch type {
+            case "LIVE_EVENT":
+                let playable = AssetPlayable(assetId: asset.assetId)
+                self.handlePlay(playable: playable, asset: asset)
+                
+            case "TV_CHANNEL":
+                self.showOptions(asset: asset)
+            case "MOVIE":
+                let playable = AssetPlayable(assetId: asset.assetId)
+                self.handlePlay(playable: playable, asset: asset)
+
+            default:
+                let playable = AssetPlayable(assetId: asset.assetId)
+                self.handlePlay(playable: playable, asset: asset)
+
+                break
+            }
+        }
+        
+    }
+    
+    
+    
+    /// Show options for the channel: Play using AssetPlay / ChannelPlay or Navigate to EPG View
+    ///
+    /// - Parameter asset: asset
+    fileprivate func showOptions(asset: Asset) {
+        
+        let message = "Choose option"
+        
+        let playChannelPlayable = UIAlertAction(title: "Play Channel Using Channel Playable - Test Only", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            let playable = ChannelPlayable(assetId: asset.assetId)
+            self.handlePlay(playable: playable, asset: asset)
+           
+        })
+        
+        let playAssetPlayable = UIAlertAction(title: "Play Channel Using Asset Playable", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            let playable = AssetPlayable(assetId: asset.assetId)
+            self.handlePlay(playable: playable, asset: asset)
+        })
+        
+        let gotoEPG = UIAlertAction(title: "Go to EPG View", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.showEPGView(asset: asset)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        self.popupAlert(title: nil, message: message, actions: [playAssetPlayable, playChannelPlayable, gotoEPG, cancelAction], preferedStyle: .actionSheet)
+    }
+    
+    
+    /// Handle the play : ChannelPlayable or AssetPlayable
+    ///
+    /// - Parameters:
+    ///   - playable: channelPlayable / AssetPlayable
+    ///   - asset: asset
+    func handlePlay(playable : Playable, asset: Asset) {
         let destinationViewController = PlayerViewController()
         destinationViewController.environment = StorageProvider.storedEnvironment
         destinationViewController.sessionToken = StorageProvider.storedSessionToken
-        destinationViewController.channel = asset
         
         /// Optional playback properties
         let properties = PlaybackProperties(autoplay: true,
@@ -124,77 +185,17 @@ extension AssetListTableViewController {
                                             maxBitrate: 300000)
         
         destinationViewController.playbackProperties = properties
-        
-        if let type = asset.type {
-            switch type {
-            case "LIVE_EVENT":
-                destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
-            case "TV_CHANNEL":
-                destinationViewController.playable = ChannelPlayable(assetId: asset.assetId)
-            case "MOVIE":
-                destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
-            default:
-                destinationViewController.playable = AssetPlayable(assetId: asset.assetId)
-                break
-            }
-        }
+        destinationViewController.playable = playable
         
         self.navigationController?.pushViewController(destinationViewController, animated: false)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
-
-// MARK: - Actions
-extension AssetListTableViewController {
-    
-    /// User confirmation for logout
-    @objc fileprivate func handleLogout() {
-        let title = NSLocalizedString("Log out", comment: "")
-        let message = NSLocalizedString("Do you want to log out from the application ?", comment: "")
-        
-        let logOutAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: UIAlertAction.Style.default, handler: { alert -> Void in
-            self.logoutUser()
-        })
-        
-        let cancelAction = UIAlertAction(title: NSLocalizedString("No", comment: ""), style: UIAlertAction.Style.default, handler: {
-            (action : UIAlertAction!) -> Void in })
-        
-        self.popupAlert(title: title, message: message, actions: [logOutAction, cancelAction])
     }
     
-    /// Log out the user from the application
-    fileprivate func logoutUser() {
-        
-        let navigationController = MainNavigationController()
-        
-        guard let environment = StorageProvider.storedEnvironment, let sessionToken = StorageProvider.storedSessionToken else {
-            self.present(navigationController, animated: true, completion: nil)
-            return
-        }
-        
-        Authenticate(environment: environment)
-            .logout(sessionToken: sessionToken)
-            .request()
-            .validate()
-            .responseData{ data, error in
-                if let error = error {
-                    let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
-                        (alert: UIAlertAction!) -> Void in
-                        
-                        StorageProvider.store(environment: nil)
-                        StorageProvider.store(sessionToken: nil)
-                        self.present(navigationController, animated: true, completion: nil)
-                    })
-                    
-                    let message = "\(error.code) " + error.message + "\n" + (error.info ?? "")
-                    self.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
-                }
-                else {
-                    StorageProvider.store(environment: nil)
-                    StorageProvider.store(sessionToken: nil)
-                    self.present(navigationController, animated: true, completion: nil)
-                }
-        }
+    
+    /// Navigate to EPG View
+    func showEPGView(asset: Asset) {
+        let destinationViewController = EPGListViewController()
+        destinationViewController.channel = asset
+        self.navigationController?.pushViewController(destinationViewController, animated: false)
     }
+
 }

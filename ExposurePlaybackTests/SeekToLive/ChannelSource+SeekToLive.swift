@@ -33,14 +33,29 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                 it("should allow playback") {
                     // Configure the playable
                     let provider = MockedChannelEntitlementProvider()
-                    provider.mockedRequestEntitlement = { _,_,_, callback in
+                    provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
                         json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                        
+                        let contractRestrictions: [String: Any] = [
+                            "airplayEnabled" : true,
+                            "ffEnabled" : false,
+                            "maxBitrate" : 20,
+                            "maxResHeight" : 30,
+                            "minBitrate": 10,
+                            "rwEnabled": false,
+                            "timeshiftEnabled" : false
+                        ]
+                        
+                        var entitlementJson2 = PlayBackEntitlementV2.requiedJson
+                        entitlementJson2["playSessionId"] = "SeekToLiveTrigger"
+                        entitlementJson2["contractRestrictions"] = contractRestrictions
+                        
+                        callback(json.decode(PlaybackEntitlement.self), entitlementJson2.decode(PlayBackEntitlementV2.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -55,18 +70,32 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
             // MARK: + Error fetching EPG
             context("Error fetching EPG") {
                 it("should allow seek to live with warning message") {
-                    
-
+                
                     // Configure the playable
                     let provider = MockedChannelEntitlementProvider()
-                    provider.mockedRequestEntitlement = { _,_,_, callback in
+                    provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
                         json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                        
+                        let contractRestrictions: [String: Any] = [
+                            "airplayEnabled" : true,
+                            "ffEnabled" : false,
+                            "maxBitrate" : 20,
+                            "maxResHeight" : 30,
+                            "minBitrate": 10,
+                            "rwEnabled": false,
+                            "timeshiftEnabled" : false
+                        ]
+                        
+                        var entitlementJson2 = PlayBackEntitlementV2.requiedJson
+                        entitlementJson2["playSessionId"] = "SeekToLiveTrigger"
+                        entitlementJson2["contractRestrictions"] = contractRestrictions
+                        
+                        callback(json.decode(PlaybackEntitlement.self), entitlementJson2.decode(PlayBackEntitlementV2.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -89,13 +118,28 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                 it("should allow seek to live with warning message") {
                     // Configure the playable
                     let provider = MockedChannelEntitlementProvider()
-                    provider.mockedRequestEntitlement = { _,_,_, callback in
+                    provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
                         json["mediaLocator"] = "file://play/.isml"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                        
+                        
+                        let contractRestrictions: [String: Any] = [
+                            "airplayEnabled" : true,
+                            "ffEnabled" : false,
+                            "maxBitrate" : 20,
+                            "maxResHeight" : 30,
+                            "minBitrate": 10,
+                            "rwEnabled": false,
+                            "timeshiftEnabled" : false
+                        ]
+                        
+                        var entitlementJson2 = PlayBackEntitlementV2.requiedJson
+                        entitlementJson2["contractRestrictions"] = contractRestrictions
+                        
+                        callback(json.decode(PlaybackEntitlement.self), entitlementJson2.decode(PlayBackEntitlementV2.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -113,14 +157,29 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                 it("should allow seek to live if encountering epg gap") {
                     // Configure the playable
                     let provider = MockedChannelEntitlementProvider()
-                    provider.mockedRequestEntitlement = { _,_,_, callback in
+                    provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
                         json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                        
+                        let contractRestrictions: [String: Any] = [
+                            "airplayEnabled" : true,
+                            "ffEnabled" : false,
+                            "maxBitrate" : 20,
+                            "maxResHeight" : 30,
+                            "minBitrate": 10,
+                            "rwEnabled": false,
+                            "timeshiftEnabled" : false
+                        ]
+                        
+                        var entitlementJson2 = PlayBackEntitlementV2.requiedJson
+                        entitlementJson2["playSessionId"] = "SeekToLiveTrigger"
+                        entitlementJson2["contractRestrictions"] = contractRestrictions
+                        
+                        callback(json.decode(PlaybackEntitlement.self), entitlementJson2.decode(PlayBackEntitlementV2.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)
@@ -136,18 +195,31 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
             // MARK: + NOT_ENTITLED
             context("NOT_ENTITLED") {
                 it("should stop with error if not entitled") {
-                    
-
                     // Configure the playable
                     let provider = MockedChannelEntitlementProvider()
-                    provider.mockedRequestEntitlement = { _,_,_, callback in
+                    provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                         var json = PlaybackEntitlement.requiedJson
                         json["mediaLocator"] = "file://play/.isml"
                         json["playSessionId"] = "SeekToLiveTrigger"
                         json["ffEnabled"] = false
                         json["rwEnabled"] = false
                         json["timeshiftEnabled"] = false
-                        callback(json.decode(PlaybackEntitlement.self), nil, nil)
+                        
+                        let contractRestrictions: [String: Any] = [
+                            "airplayEnabled" : true,
+                            "ffEnabled" : false,
+                            "maxBitrate" : 20,
+                            "maxResHeight" : 30,
+                            "minBitrate": 10,
+                            "rwEnabled": false,
+                            "timeshiftEnabled" : false
+                        ]
+                        
+                        var entitlementJson2 = PlayBackEntitlementV2.requiedJson
+                        entitlementJson2["playSessionId"] = "SeekToLiveTrigger"
+                        entitlementJson2["contractRestrictions"] = contractRestrictions
+                        
+                        callback(json.decode(PlaybackEntitlement.self), entitlementJson2.decode(PlayBackEntitlementV2.self), nil, nil)
                     }
                     let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                     let properties = PlaybackProperties(playFrom: .defaultBehaviour)

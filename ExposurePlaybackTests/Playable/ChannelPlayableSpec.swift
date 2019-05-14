@@ -14,7 +14,16 @@ import Foundation
 @testable import ExposurePlayback
 
 internal class MockedChannelEntitlementProvider: ChannelEntitlementProvider {
+    
+    func requestEntitlementV2(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
+        mockedRequestEntitlementV2(channelId, sessionToken, environment, callback)
+    }
+
     var mockedRequestEntitlement: (String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_ in }
+    
+    var mockedRequestEntitlementV2: (String, SessionToken, Environment, (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_ in }
+    
+    
     func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
         mockedRequestEntitlement(channelId, sessionToken, environment, callback)
     }
@@ -44,6 +53,22 @@ class ChannelPlayableSpec: QuickSpec {
                     }
                     callback(result,nil,nil)
                 }
+                
+                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                    // EntitlementV2
+                    guard let entitlementV2 = PlayBackEntitlementV2.validJson.decode(PlayBackEntitlementV2.self) else {
+                        callback(nil, nil,ExposureError.generalError(error: MockedError.generalError), nil)
+                        return
+                    }
+                    
+                    // ENtitlement V1
+                    guard let entitlementV1 = PlaybackEntitlement.validJson.decode(PlaybackEntitlement.self) else {
+                        callback(nil,nil,ExposureError.generalError(error: MockedError.generalError), nil)
+                        return
+                    }
+                    callback(entitlementV1, entitlementV2, nil, nil)
+                }
+                
                 let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
@@ -58,8 +83,8 @@ class ChannelPlayableSpec: QuickSpec {
             
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedChannelEntitlementProvider()
-                provider.mockedRequestEntitlement = { _,_,_, callback in
-                    callback(nil,ExposureError.generalError(error: MockedError.generalError),nil)
+                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                    callback(nil,nil,ExposureError.generalError(error: MockedError.generalError),nil)
                 }
                 let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                 var source: ExposureSource? = nil
