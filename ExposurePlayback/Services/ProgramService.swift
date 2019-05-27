@@ -12,6 +12,9 @@ import Player
 
 internal protocol ProgramProvider {
     func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void)
+    func fetchCurrentProgram(on channelId: String, program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
+    func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
+    func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
     func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
 }
 
@@ -111,6 +114,60 @@ public class ProgramService {
     
     internal var provider: ProgramProvider
     internal struct ExposureProgramProvider: ProgramProvider {
+        
+        
+        /// Fetch next program
+        ///
+        /// - Parameters:
+        ///   - program: current program
+        ///   - environment: exposure environment 
+        ///   - callback: callback to fire once the event is fired.
+        func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+            FetchEpg(environment: environment)
+                .next(programId: program.programId)
+                .request()
+                .validate()
+                .response {
+                    callback($0.value, $0.error)
+            }
+        }
+        
+        
+        /// Fetch the previous program
+        ///
+        /// - Parameters:
+        ///   - program: current program
+        ///   - environment: exposure enviornment
+        ///   - callback: callback to fire once the event is fired.
+        func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+            FetchEpg(environment: environment)
+                .previous(programId: program.programId)
+                .request()
+                .validate()
+                .response {
+                    callback($0.value, $0.error)
+            }
+        }
+        
+        
+        
+        /// Fetch current program
+        ///
+        /// - Parameters:
+        ///   - channelId: channelId
+        ///   - program: programId
+        ///   - environment: exposure enviornment
+        ///   - callback: callback to fire once the event is fired.
+        func fetchCurrentProgram(on channelId: String, program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+            FetchEpg(environment: environment)
+            .channel(id: channelId, programId: program.programId)
+            .request()
+            .validate()
+            .response() {
+                callback($0.value, $0.error)
+            }
+        }
+        
         func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void) {
             FetchEpg(environment: environment)
                 .channel(id: channelId)
@@ -118,7 +175,9 @@ public class ProgramService {
                 .filter(onlyPublished: true)
                 .request()
                 .validate()
-                .response{ callback($0.value?.programs, $0.error) }
+                .response{
+                    callback($0.value?.programs, $0.error)
+            }
         }
         
         
@@ -148,7 +207,48 @@ extension ProgramService {
     }
     
     fileprivate func fetchProgram(timestamp: Int64, callback: @escaping (Program?, ExposureContext.Warning.ProgramService?) -> Void) {
-        provider.fetchPrograms(on: channelId, timestamp: timestamp, using: environment) { [weak self] newPrograms, error in
+        
+       guard let currentProgram = currentProgram else { return }
+        
+        // Check current program to see if it was extended
+        provider.fetchCurrentProgram(on: channelId, program: currentProgram, using: environment, callback: { [weak self] program, error in
+            guard let self = `self` else {
+                callback(nil, nil )
+                return
+            }
+            guard let endTime = program?.endDate else {
+                callback(nil, nil )
+                return
+            }
+            
+            // Program end time has changed :- Program extended
+            if endTime != currentProgram.endDate {
+                callback(program, nil)
+            } else {
+                self.provider.fetchNextProgram(on: currentProgram, using: self.environment, callback: { [weak self ] nextProgram, error in
+                    guard let `self` = self else { return }
+                    guard error == nil else {
+                        // There was an error fetching the program. Be permissive and allow playback
+                        callback(nil, .fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
+                        return
+                    }
+                    if nextProgram != nil {
+                        if nextProgram?.startDate?.millisecondsSince1970 != currentProgram.endDate?.millisecondsSince1970 {
+                            // EPG HAS A GAP (nextprogram start time is not equal to the current program's end time )
+                            callback(nil, nil)
+                        } else {
+                            callback(nextProgram, nil)
+                        }
+                    }
+                    else {
+                        // GAP in EPG
+                        callback(nil, .gapInEpg(timestamp: timestamp, channelId: self.channelId))
+                    }
+                })
+            }
+        })
+    
+        /* provider.fetchPrograms(on: channelId, timestamp: timestamp, using: environment) { [weak self] newPrograms, error in
             guard let `self` = self else { return }
             guard error == nil else {
                 // There was an error fetching the program. Be permissive and allow playback
@@ -165,7 +265,7 @@ extension ProgramService {
                 /// If we are missing Epg, playback is allowed to continue.
                 callback(nil, .gapInEpg(timestamp: timestamp, channelId: self.channelId))
             }
-        }
+        } */
     }
     
     fileprivate func validate(program: Program, callback: @escaping (ExposureContext.Warning.ProgramService?, String?) -> Void) {
@@ -188,13 +288,22 @@ extension ProgramService {
         }
     }
     
-    internal func handleProgramChanged(program: Program?) {
+    internal func handleProgramChanged(program: Program?, isExtendedProgram: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
             let current = self.activeProgram
             self.activeProgram = program
-            if current?.programId != program?.programId {
+            if current?.programId != program?.programId && isExtendedProgram == false {
                 self.onProgramChanged(program)
+            }
+            
+            // The current program has extended, call program changed even if it's the same program
+            else if ( current?.programId == program?.programId && isExtendedProgram == true ) {
+                self.onProgramChanged(program)
+            }
+            
+            else {
+                // Do nothing
             }
         }
     }
@@ -270,19 +379,18 @@ extension ProgramService {
             guard let `self` = self else { return }
             guard error == nil else {
                 // We are permissive on errors, allow playback
-                self.handleProgramChanged(program: nil)
+                self.handleProgramChanged(program: nil, isExtendedProgram: false)
                 self.onWarning(.fetchingCurrentProgramFailed(timestamp: timestamp, channelId: self.channelId, error: error))
                 return
             }
             
             guard let programs = newPrograms, let program = self.requestedProgram(for: timestamp, fromCandidates: programs) else {
                 // There is no program, validation can not occur, allow playback
-                self.handleProgramChanged(program: nil)
+                self.handleProgramChanged(program: nil, isExtendedProgram: false)
                 self.onWarning(.gapInEpg(timestamp: timestamp, channelId: self.channelId))
                 return
             }
-            
-            self.handleProgramChanged(program: program)
+            self.handleProgramChanged(program: program, isExtendedProgram: false)
             self.startValidationTimer(onTimestamp: timestamp, for: program)
         }
     }
@@ -320,7 +428,9 @@ extension ProgramService {
                                 self.onWarning(warning)
                             }
                             // Trigger the program change no matter what
-                            self.handleProgramChanged(program: program)
+                            // If the program has extended, it needs to be handled : isExtendedProgram => true
+                            let isextended = program?.programId == self.currentProgram?.programId ? true : false
+                            self.handleProgramChanged(program: program, isExtendedProgram: isextended)
                             
                             if let program = program {
                                 // If we received a program, validate that
@@ -382,5 +492,42 @@ extension ProgramService {
             
             callback(program, nil)
         }
+    }
+}
+
+// MARK: - Next & Previous Program
+extension ProgramService {
+    
+    /// Call the provider for next program
+    ///
+    /// - Parameters:
+    ///   - program: current program
+    ///   - callback: callback: callback to fire once the event is fired.
+    func nextProgram(program: Program, callback: @escaping (Program?, ExposureError?) -> Void) {
+        
+        let currentTimeStamp = Date().millisecondsSince1970
+        guard let start = currentProgram?.startDate?.millisecondsSince1970, let end = currentProgram?.endDate?.millisecondsSince1970 else { return }
+        if start <= currentTimeStamp && currentTimeStamp < end {
+            let error = NSError(domain: "This is a live Program, navigating to the next program is not allowed", code: 40, userInfo: nil)
+            self.onWarning(.navigateToNextProgramFailed(programId: program.programId, channelId: channelId, error: ExposureError.generalError(error: error)))
+            callback(nil, nil)
+        }
+        else {
+            provider.fetchNextProgram(on: program, using: environment, callback: { nextProgram, error in
+                callback(nextProgram, error)
+            })
+        }
+    }
+    
+    
+    /// Call the provider for previous program
+    ///
+    /// - Parameters:
+    ///   - program: current program
+    ///   - callback: callback: callback to fire once the event is fired.
+    func previousProgram(program: Program, callback: @escaping (Program?, ExposureError?) -> Void) {
+        provider.fetchPreviousProgram(on: program, using: environment, callback: { previousProgram, error in
+            callback(previousProgram, error)
+        })
     }
 }

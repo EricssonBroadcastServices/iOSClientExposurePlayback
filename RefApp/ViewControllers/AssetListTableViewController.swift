@@ -142,6 +142,11 @@ extension AssetListTableViewController {
         
         let message = "Choose option"
         
+        let gotoEPG = UIAlertAction(title: "Go to EPG View", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.showEPGView(asset: asset)
+        })
+        
         let playChannelPlayable = UIAlertAction(title: "Play Channel Using Channel Playable - Test Only", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             let playable = ChannelPlayable(assetId: asset.assetId)
@@ -155,16 +160,13 @@ extension AssetListTableViewController {
             self.handlePlay(playable: playable, asset: asset)
         })
         
-        let gotoEPG = UIAlertAction(title: "Go to EPG View", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
-            self.showEPGView(asset: asset)
-        })
+
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction!) -> Void in
         })
         
-        self.popupAlert(title: nil, message: message, actions: [playAssetPlayable, playChannelPlayable, gotoEPG, cancelAction], preferedStyle: .actionSheet)
+        self.popupAlert(title: nil, message: message, actions: [gotoEPG, playAssetPlayable, playChannelPlayable, cancelAction], preferedStyle: .actionSheet)
     }
     
     

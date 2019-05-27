@@ -84,6 +84,9 @@ class PlayerControls: UIView {
         return textField
     }()
     
+    let nextProgramButton = RBMPlayerControlButton(titleText: "Next Program", target: self, action: #selector(nextProgram))
+    let previousProgramButton = RBMPlayerControlButton(titleText: "Previous Program", target: self, action: #selector(previousProgram))
+    
     var onSeekingTime: (Int64) -> Void = { _ in }
     var onSeeking: (Int64) -> Void = { _ in }
     var onTimeTick: () -> Void = { }
@@ -92,6 +95,8 @@ class PlayerControls: UIView {
     var onGoLive: () -> Void = { }
     var onStartOver: () -> Void = { }
     var onCC: () -> Void = { }
+    var onNextProgram: () -> Void  = {}
+    var onPreviousProgram: ()-> Void = {}
     
     fileprivate let queue = DispatchQueue(label: "com.emp.refApp.timestamp",
                                           qos: DispatchQoS.background,
@@ -173,6 +178,9 @@ extension PlayerControls {
         manageTimeShift.heightAnchor.constraint(equalTo: playerControlsView.heightAnchor, multiplier: 1/9).isActive = true
 
         manageTimeShiftLabel.heightAnchor.constraint(equalTo: playerControlsView.heightAnchor, multiplier: 1/9).isActive = true
+        
+        playerControlsView.addArrangedSubview(nextProgramButton)
+        playerControlsView.addArrangedSubview(previousProgramButton)
     }
 }
 
@@ -218,6 +226,14 @@ extension PlayerControls {
     
     @objc func ccAction() {
         onCC()
+    }
+    
+    @objc func nextProgram() {
+        onNextProgram()
+    }
+    
+    @objc func previousProgram() {
+        onPreviousProgram()
     }
     
 }

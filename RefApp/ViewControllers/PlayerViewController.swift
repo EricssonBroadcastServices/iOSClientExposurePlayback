@@ -54,7 +54,7 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = channel?.localized?.first?.title
+        self.title = channel?.assetId
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -83,7 +83,7 @@ class PlayerViewController: UIViewController {
     }
     
     deinit {
-        view.unbindToKeyboard()
+        // view.unbindToKeyboard()
     }
 }
 
@@ -99,9 +99,10 @@ extension PlayerViewController {
         
         // The preparation and loading process can be followed by listening to associated events.
         player
-            .onPlaybackCreated{ player, source in
+            .onPlaybackCreated{ [weak self] player, source in
                 // Fires once the associated MediaSource has been created.
                 // Playback is not ready to start at this point.
+                self?.updateTimeLine(streamingInfo: source.streamingInfo)
             }
             .onPlaybackPrepared{ player, source in
                 // Published when the associated MediaSource completed asynchronous loading of relevant properties.
@@ -224,24 +225,49 @@ extension PlayerViewController {
     ///
     /// - Parameter properties: playback properties
     func startPlayBack(properties: PlaybackProperties = PlaybackProperties() ) {
+        
         if let playable = playable {
-            if playable is ProgramPlayable || playable is ChannelPlayable {
+            vodBasedTimeline.isHidden = true
+            programBasedTimeline.isHidden = true
+            player.startPlayback(playable: playable, properties: properties)
+        }
+    }
+    
+    func updateTimeLine(streamingInfo: StreamInfo?) {
+        
+        guard let streamingInfo = streamingInfo else {
+            print("Streaming Info is empty :: Using PlayV1 ")
+            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+            })
+            let message = "Streaming Info is missing in the play response : You are using a older version of the SDK"
+            self.popupAlert(title: "Error" , message: message, actions: [okAction], preferedStyle: .alert)
+            return
+        }
+            if streamingInfo.live == true && streamingInfo.staticProgram == false {
                 vodBasedTimeline.isHidden = true
                 vodBasedTimeline.stopLoop()
                 programBasedTimeline.isHidden = false
                 programBasedTimeline.startLoop()
             }
-            else if playable is AssetPlayable {
+                
+                // This is a catchup program
+            else if streamingInfo.live == false && streamingInfo.staticProgram == false {
+                vodBasedTimeline.isHidden = true
+                vodBasedTimeline.stopLoop()
+                programBasedTimeline.isHidden = false
+                programBasedTimeline.startLoop()
+            }
+                // This is a vod asset
+            else if streamingInfo.staticProgram == true {
+                vodBasedTimeline.isHidden = false
+                vodBasedTimeline.startLoop()
                 programBasedTimeline.isHidden = true
                 programBasedTimeline.stopLoop()
-                vodBasedTimeline.isHidden = false
-                controls.programIdLabel.text = playable.assetId
-                vodBasedTimeline.startLoop()
-            } else {
-                // Handle some other type, if available
             }
-            player.startPlayback(playable: playable, properties: properties)
-        }
+            else {
+                print("something else")
+            }
     }
     
     func update(withProgram program: Program?) {
@@ -356,6 +382,8 @@ extension PlayerViewController {
             }
             
             self.controls.playHeadPositionValueLabel.text = String(self.player.playheadPosition/1000)
+            
+            
         }
         
         controls.onStartOver = { [weak self] in
@@ -412,6 +440,16 @@ extension PlayerViewController {
             
             self.present(trackSelectionVC, animated: false, completion: nil)
             
+        }
+        
+        controls.onNextProgram = { [weak self] in
+            guard let `self` = self else { return }
+            self.player.nextProgram()
+        }
+        
+        controls.onPreviousProgram = { [weak self] in
+            guard let `self` = self else { return }
+            self.player.previousProgram()
         }
     }
 }

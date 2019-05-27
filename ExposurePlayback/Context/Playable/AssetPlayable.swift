@@ -101,9 +101,8 @@ extension AssetPlayable {
                     return
                 }
                 
-                // Live event :- TODO
+                // Live event
                 if value.streamInfo.event == true {
-                    print("This is a live event handle accordingly : handle as a normal program for now ")
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
@@ -176,9 +175,8 @@ extension AssetPlayable {
                     return
                 }
                 
-                // Live event - TODO
+                // Live event 
                 if value.streamInfo.event == true {
-                    print("This is a live event , handle accordingly :- handle as a normal program for now 7")
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)

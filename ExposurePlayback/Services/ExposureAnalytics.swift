@@ -252,8 +252,8 @@ extension ExposureAnalytics {
     /// Returns an indcation if Airplay is active.
     fileprivate var isAirplaySession: String? {
         /// EMP-11647: If this is an Airplay session, return `AVAudioSessionPortAirPlay`
-        let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSessionPortAirPlay }
-        return !connectedAirplayPorts.isEmpty ? AVAudioSessionPortAirPlay : nil
+        let connectedAirplayPorts = AVAudioSession.sharedInstance().currentRoute.outputs.filter{ $0.portType == AVAudioSession.Port.airPlay }
+        return !connectedAirplayPorts.isEmpty ? AVAudioSession.Port.airPlay.rawValue : nil
     }
 }
 

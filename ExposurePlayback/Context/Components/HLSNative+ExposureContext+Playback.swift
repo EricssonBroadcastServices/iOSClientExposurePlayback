@@ -237,10 +237,19 @@ extension ExposureContext {
         
         service.onProgramChanged = { [weak self, weak tech, weak source] program in
             guard let `self` = self, let tech = tech, let source = source else { return }
+
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
                     exposureProvider.onProgramChanged(tech: tech, source: source, program: program)
                 }
+            }
+            
+            // If the program is a live event & if there is EPG Gap player should stop playing : If the program has a gap, programId should be nil
+            if source.streamingInfo?.event == true && program?.programId == nil {
+                // Player should stop
+                tech.stop()
+            } else {
+                // Do nothing: Allow continue playback
             }
             self.onProgramChanged(program, source)
         }
