@@ -30,12 +30,12 @@ class LanguagePreferencesSpec: QuickSpec {
                 let sel = MockedAVMediaSelectionOption()
                 sel.mockedDisplayName = $0
                 sel.mockedExtendedLanguageTag = $1
-                sel.mockedMediaType = $2
+                sel.mockedMediaType = AVMediaType(rawValue: $2)
                 
                 let other = MockedAVMediaSelectionOption()
                 other.mockedDisplayName = "FAKE LANG"
                 other.mockedExtendedLanguageTag = "fakeLang"
-                other.mockedMediaType = $2
+                other.mockedMediaType = AVMediaType(rawValue: $2)
                 
                 return [sel, other]
             }

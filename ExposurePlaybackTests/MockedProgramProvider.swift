@@ -23,5 +23,14 @@ class MockedProgramProvider: ProgramProvider {
     func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
         mockedValidate(assetId, environment, sessionToken, callback)
     }
+    
+    var mockedNextProgram: (Program, Environment, (Program?, ExposureError?) -> Void) -> Void = { _,_,_ in }
+    func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+        mockedNextProgram(program, environment, callback)
+    }
+    var mockedPreviousProgram: (Program, Environment, (Program?, ExposureError?) -> Void) -> Void = { _,_,_ in }
+    func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
+        mockedPreviousProgram(program, environment, callback)
+    }
 }
 

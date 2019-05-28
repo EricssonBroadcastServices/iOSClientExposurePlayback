@@ -90,7 +90,7 @@ class MockedAVPlayerItem: AVPlayerItem {
         return mockedDuration
     }
     
-    var mockedStatus: AVPlayerItemStatus = .unknown {
+    var mockedStatus: AVPlayerItem.Status = .unknown {
         willSet {
             self.willChangeValue(forKey: "status")
         }
@@ -98,7 +98,7 @@ class MockedAVPlayerItem: AVPlayerItem {
             self.didChangeValue(forKey: "status")
         }
     }
-    override var status: AVPlayerItemStatus {
+    override var status: AVPlayerItem.Status {
         return mockedStatus
     }
     
@@ -155,12 +155,14 @@ class MockedAVMediaSelectionGroup: AVMediaSelectionGroup {
 }
 
 class MockedAVMediaSelectionOption: AVMediaSelectionOption {
-    var mockedMediaType: String = "mediaType"
-    override var mediaType: String {
+    var mockedMediaType: AVMediaType = AVMediaType(rawValue: "mediaType")
+    
+    override var mediaType: AVMediaType {
         return mockedMediaType
     }
     
     var mockedDisplayName: String = "Display Name"
+    
     override var displayName: String {
         return mockedDisplayName
     }

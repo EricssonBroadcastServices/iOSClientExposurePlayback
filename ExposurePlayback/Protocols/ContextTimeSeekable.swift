@@ -28,7 +28,7 @@ extension ContextTimeSeekable {
                     //      * playback will be stopped and unloaded
                     player.tech.seek(toTime: timeInterval) { [weak service] success in
                         // We should not send programChanged event until we have actually arrived at the target timestamp
-                        if success { service?.handleProgramChanged(program: program) }
+                        if success { service?.handleProgramChanged(program: program, isExtendedProgram: false) }
                     }
                 }
                 
@@ -73,7 +73,7 @@ extension ContextTimeSeekable where Self: ContextPositionSeekable {
                     //      * playback will be stopped and unloaded
                     player.tech.seek(toPosition: position) { [weak service] success in
                         // We should not send programChanged event until we have actually arrived at the target timestamp
-                        if success { service?.handleProgramChanged(program: program) }
+                        if success { service?.handleProgramChanged(program: program, isExtendedProgram: false) }
                     }
                 }
                 

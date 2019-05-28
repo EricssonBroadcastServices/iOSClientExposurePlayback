@@ -16,6 +16,12 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.0.108
+
+#### Features
+* `EMP-12764` Expanded support for next & previous programs.
+* `EMP-12717` Expanded support for the live events. 
+
 ## 2.0.98
 
 #### Features

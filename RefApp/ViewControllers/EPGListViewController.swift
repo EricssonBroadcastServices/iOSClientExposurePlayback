@@ -109,10 +109,11 @@ extension EPGListViewController {
         let destinationViewController = PlayerViewController()
         destinationViewController.environment = StorageProvider.storedEnvironment
         destinationViewController.sessionToken = StorageProvider.storedSessionToken
+        destinationViewController.channel = asset
         
         /// Optional playback properties
         let properties = PlaybackProperties(autoplay: true,
-                                            playFrom: .bookmark,
+                                            playFrom: .defaultBehaviour,
                                             language: .custom(text: "fr", audio: "en"),
                                             maxBitrate: 300000)
         

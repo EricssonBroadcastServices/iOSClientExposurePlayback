@@ -49,7 +49,7 @@ extension ContextGoLive {
                 //      * playback will be stopped and unloaded
                 player.tech.seek(toTime: last) { [weak programService] success in
                     // We should not send programChanged event until we have actually arrived at the target timestamp
-                    if success { programService?.handleProgramChanged(program: program) }
+                    if success { programService?.handleProgramChanged(program: program, isExtendedProgram: false) }
                 }
             }
         }

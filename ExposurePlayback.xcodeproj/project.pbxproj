@@ -121,7 +121,6 @@
 		7608026220693193007F59D5 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
 		7608026320693193007F59D5 /* BitrateChangedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */; };
 		7608026420693193007F59D5 /* CreatedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD02021CCC000C23579 /* CreatedSpec.swift */; };
-		7608026720693193007F59D5 /* Mockingjay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89CFF202098CA00C23579 /* Mockingjay.framework */; };
 		7608026820693193007F59D5 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D00202098CA00C23579 /* Nimble.framework */; };
 		7608026A20693193007F59D5 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D02202098CA00C23579 /* Quick.framework */; };
 		76080272206933D2007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080274206933D2007F59D5 /* Exposure.framework */; };
@@ -215,7 +214,6 @@
 		76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89CF42020958000C23579 /* ProgramServiceSpec.swift */; };
 		76A89CF82020958000C23579 /* ContractRestrictionsServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89CF52020958000C23579 /* ContractRestrictionsServiceSpec.swift */; };
 		76A89CF9202098CA00C23579 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89CFE202098CA00C23579 /* Exposure.framework */; };
-		76A89CFA202098CA00C23579 /* Mockingjay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89CFF202098CA00C23579 /* Mockingjay.framework */; };
 		76A89CFB202098CA00C23579 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D00202098CA00C23579 /* Nimble.framework */; };
 		76A89CFC202098CA00C23579 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D01202098CA00C23579 /* Player.framework */; };
 		76A89CFD202098CA00C23579 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D02202098CA00C23579 /* Quick.framework */; };
@@ -286,7 +284,6 @@
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
 		781341A5228014B800ECAC6B /* SelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781341A4228014B800ECAC6B /* SelectionTableViewController.swift */; };
 		781341A7228028D800ECAC6B /* EPGListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 781341A6228028D800ECAC6B /* EPGListViewController.swift */; };
-		7831FACA2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		784E3AD321B16B0A00C986CF /* RBMPlayerControlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */; };
 		784E3AD721B16B5B00C986CF /* VodBasedTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */; };
@@ -314,6 +311,9 @@
 		78DE9FDD21BA654500C24CDE /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DE9FDC21BA654500C24CDE /* TrackModel.swift */; };
 		78DF4A0B225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */; };
 		78DF4A1B225F239800B8348A /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
+		78EEDA79229D4EDB00C2FEE5 /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
+		78EEDA7A229D50C600C2FEE5 /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */; };
+		78EEDA7C229D517900C2FEE5 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		9B17CDFC2189EC4D009C95C4 /* UIImageView+constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B17CDFB2189EC4D009C95C4 /* UIImageView+constraint.swift */; };
 		9B17CE06218B3F17009C95C4 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B17CE05218B3F17009C95C4 /* PlayerViewController.swift */; };
 /* End PBXBuildFile section */
@@ -576,7 +576,6 @@
 				7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */,
 				76080276206933EA007F59D5 /* Exposure.framework in Frameworks */,
 				76080277206933EA007F59D5 /* Player.framework in Frameworks */,
-				7608026720693193007F59D5 /* Mockingjay.framework in Frameworks */,
 				7608026820693193007F59D5 /* Nimble.framework in Frameworks */,
 				7608026A20693193007F59D5 /* Quick.framework in Frameworks */,
 			);
@@ -606,7 +605,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				76A89CF9202098CA00C23579 /* Exposure.framework in Frameworks */,
-				76A89CFA202098CA00C23579 /* Mockingjay.framework in Frameworks */,
 				76A89CFB202098CA00C23579 /* Nimble.framework in Frameworks */,
 				76A89CFC202098CA00C23579 /* Player.framework in Frameworks */,
 				76A89CFD202098CA00C23579 /* Quick.framework in Frameworks */,
@@ -1314,6 +1312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78EEDA7A229D50C600C2FEE5 /* PlaybackEntitlementV2+Extension.swift in Sources */,
 				760801E02069306E007F59D5 /* MRRFairplayRequester.swift in Sources */,
 				767FB4B2217FC7B400BC087A /* (null) in Sources */,
 				760801E12069306E007F59D5 /* Paused.swift in Sources */,
@@ -1375,6 +1374,7 @@
 				7608020F2069306E007F59D5 /* ChannelSource.swift in Sources */,
 				760802102069306E007F59D5 /* HLSNative+ExposureContext+Seek.swift in Sources */,
 				760802112069306E007F59D5 /* BufferingStarted.swift in Sources */,
+				78EEDA79229D4EDB00C2FEE5 /* EnigmaPlayable.swift in Sources */,
 				7619B4A521773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */,
 				760802122069306E007F59D5 /* Resumed.swift in Sources */,
 				760802132069306E007F59D5 /* ExposureFairplayRequester.swift in Sources */,
@@ -1403,6 +1403,7 @@
 				7608023720693193007F59D5 /* MockedAVPlayer.swift in Sources */,
 				7608023820693193007F59D5 /* TestEnv.swift in Sources */,
 				7608023920693193007F59D5 /* BitrateRestrictionsSpec.swift in Sources */,
+				78EEDA7C229D517900C2FEE5 /* PlayBackEntitlementV2+Extensions.swift in Sources */,
 				7608023A20693193007F59D5 /* DeviceInfoSpec.swift in Sources */,
 				7608023B20693193007F59D5 /* PlayReadySpec.swift in Sources */,
 				7608023C20693193007F59D5 /* AbortedSpec.swift in Sources */,
@@ -1497,7 +1498,6 @@
 				76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */,
 				7635AEC5202ADFDE001512BF /* CMTime+Extensions.swift in Sources */,
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
-				7831FACA2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */,
 				76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				7635AEC9202AE0A2001512BF /* ContextTimeSeekable.swift in Sources */,
 				78DF4A1B225F239800B8348A /* EnigmaPlayable.swift in Sources */,
@@ -1678,7 +1678,7 @@
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1702,7 +1702,7 @@
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1721,7 +1721,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
@@ -1738,7 +1738,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlaybackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
@@ -1841,6 +1841,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1893,6 +1894,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1916,7 +1918,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1938,7 +1940,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1955,7 +1957,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlaybackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1971,7 +1973,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlaybackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
