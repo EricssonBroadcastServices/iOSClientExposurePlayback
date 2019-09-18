@@ -12,8 +12,14 @@ import Exposure
 
 class SelectionTableViewController: UITableViewController {
    
-    var sections = ["MOVIE", "TV_CHANNEL", "LIVE_EVENT"]
+    /// "MOVIE", "TV_CHANNEL", "LIVE_EVENTS" : => WILL USE ASSET ENDPOINT WITH FILTER : assetType
+    /// "LIVE_EVENTS_USING_EVENT_ENDPOINT" :==> WILL USE EVENT ENDPOINT IN THE EXPOSURE
+    var sections = ["MOVIE", "TV_CHANNEL", "LIVE_EVENTS", "LIVE_EVENTS_USING_EVENT_ENDPOINT"]
+    
+    
     let cellIdentifier = "cellIdentifier"
+    
+    var events = [Asset]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

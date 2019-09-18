@@ -34,6 +34,7 @@ class AssetListTableViewController: UITableViewController {
         tableView.backgroundColor = ColorState.active.background
 
         self.generateTableViewContent()
+
     }
 }
 
@@ -54,8 +55,12 @@ extension AssetListTableViewController {
             return
         }
         
-        let query = "assetType=" + selectedAsssetType // MOVIE / TV_CHANNEL
-        loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
+        if selectedAsssetType == "LIVE_EVENTS_USING_EVENT_ENDPOINT" {
+            self.loadEvents(environment: environment)
+        } else {
+            let query = "assetType=" + selectedAsssetType // MOVIE / TV_CHANNEL
+            loadAssets(query: query, environment: environment, endpoint: "/content/asset", method: HTTPMethod.get)
+        }
     }
     
     /// Load the assets from the Exposure API
@@ -89,8 +94,88 @@ extension AssetListTableViewController {
                     self?.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
                 }
         }
+        
+        
+        /* let _ = FetchAsset(environment: environment)
+         .list()
+         .show(page: 1, spanning: 100)
+         .filter(onlyPublished: true)
+         .use(fieldSet: .all)
+         .sort(on: "-created")
+         .filter(on:query)
+         .request()
+         .validate()
+         .response { [weak self] in
+         guard let `self` = self else { return }
+         if let _ = $0.value, let allAssets = $0.value?.items {
+         
+         self.assets = allAssets
+         self.assetsDidLoad(allAssets)
+         }
+         
+         if let error = $0.error {
+         let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+         (alert: UIAlertAction!) -> Void in
+         self.assetsDidLoad([])
+         })
+         
+         let message = "\(error.code) " + error.message + "\n" + (error.info ?? "")
+         self.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
+         }
+         } */
+        
     }
     
+    
+    
+    
+    
+    /// This is a sample implementation of how to fetch live events from the Exposure `Event` EndPoint
+    ///
+    /// - Parameter environment: Customer specific *Exposure* environment
+    fileprivate func loadEvents(environment: Environment) {
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        FetchEvent(environment: environment)
+            .list(date: formatter.string(from: date) )
+            .filter(daysBackward: 2, daysForward: 85)
+            .sort(on: "-created")
+            .show(page: 1, spanning: 100)
+            .request()
+            .validate()
+            .response { [weak self] in
+                
+                guard let `self` = self else { return }
+                if let _ = $0.value, let allAssets = $0.value?.items {
+                    
+                    var eventAssets = [Asset]()
+                    
+                    for event in allAssets {
+                        if let asset = event.asset {
+                            eventAssets.append(asset)
+                        }
+                    }
+                    
+                    self.assets = eventAssets
+                    self.assetsDidLoad(eventAssets)
+                    
+                }
+                
+                if let error = $0.error {
+                    let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+                        (alert: UIAlertAction!) -> Void in
+                        self.assetsDidLoad([])
+                    })
+                    
+                    let message = "\(error.code) " + error.message + "\n" + (error.info ?? "")
+                    self.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
+                }
+                
+        }
+    }
     
     /// Create the datasource for the tableview
     ///
@@ -108,7 +193,6 @@ extension AssetListTableViewController {
 // MARK: - TableView Delegate
 extension AssetListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let asset = assets[indexPath.row]
         
         if let type = asset.type {
