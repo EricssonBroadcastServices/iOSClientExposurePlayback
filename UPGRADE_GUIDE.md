@@ -1,5 +1,8 @@
 # Upgrade Guide
 
+## 2.1.00
+Project is updated to use Swift version 4.2 
+
 ## 2.0.81
 
 Release `2.0.81` adds `tvOS` support by introducing a new *target*, `Player-tvOS`. Client application developers working with the *tvOS* platform should embedd the product of this target in their *tvOS* applications.
