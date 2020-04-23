@@ -9,9 +9,6 @@
 import Foundation
 import Exposure
 
-
-
-/// This should be deprecated when the all customers ( Thuis ) moved to AssetPlayable()
 internal protocol ChannelEntitlementProvider {
     
     func requestEntitlement(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
@@ -19,6 +16,7 @@ internal protocol ChannelEntitlementProvider {
     func requestEntitlementV2(channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
+@available(*, deprecated, message: "You can use AssetPlayable & pass assetType if needed")
 /// Defines a `Playable` for the specific channel. Will play the currently live program
 public struct ChannelPlayable: Playable {
     /// The channel id

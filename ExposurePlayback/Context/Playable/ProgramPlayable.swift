@@ -15,6 +15,7 @@ internal protocol ProgramEntitlementProvider {
     func requestEntitlementV2(programId: String, channelId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
+@available(*, deprecated, message: "You can use AssetPlayable & pass assetType if needed")
 /// Defines a `Playable` for the specific program
 public struct ProgramPlayable: Playable {
     /// The program Id for the program
