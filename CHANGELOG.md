@@ -17,6 +17,11 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.1.130
+
+#### Changes
+* `EMP-14239` Updated reference app to use AssetType enum.
+
 ## 2.1.00
 * Released 31 January 2020
 
