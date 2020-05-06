@@ -20,6 +20,7 @@
 ## 2.1.130
 
 #### Changes
+* `EMP-14239` Add option to pass assetType when creating AssetPlayable
 * `EMP-14239` Updated reference app to use AssetType enum.
 
 ## 2.1.00
