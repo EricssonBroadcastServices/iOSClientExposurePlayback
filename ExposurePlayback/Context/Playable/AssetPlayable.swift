@@ -19,6 +19,7 @@ internal protocol AssetEntitlementProvider {
 public struct AssetPlayable: Playable {
     /// The asset id
     public let assetId: String
+    public let assetType: AssetType?
     
     internal var entitlementProvider: AssetEntitlementProvider = ExposureEntitlementProvider()
     
@@ -76,8 +77,9 @@ public struct AssetPlayable: Playable {
 }
 
 extension AssetPlayable {
-    public init(assetId: String) {
+    public init(assetId: String, assetType: AssetType? = nil ) {
         self.assetId = assetId
+        self.assetType = assetType
     }
 }
 

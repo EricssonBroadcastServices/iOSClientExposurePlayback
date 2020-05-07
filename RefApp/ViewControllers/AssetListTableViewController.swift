@@ -197,13 +197,13 @@ extension AssetListTableViewController {
         
         if let type = asset.type {
             switch type {
-            case "LIVE_EVENT":
+            case AssetType.LIVE_EVENT:
                 let playable = AssetPlayable(assetId: asset.assetId)
                 self.handlePlay(playable: playable, asset: asset)
                 
-            case "TV_CHANNEL":
+            case AssetType.TV_CHANNEL:
                 self.showOptions(asset: asset)
-            case "MOVIE":
+            case AssetType.MOVIE:
                 let playable = AssetPlayable(assetId: asset.assetId)
                 self.handlePlay(playable: playable, asset: asset)
 
