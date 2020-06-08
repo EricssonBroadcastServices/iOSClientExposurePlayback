@@ -10,6 +10,7 @@ import UIKit
 import Exposure
 import ExposurePlayback
 import Player
+import AVFoundation.AVFAudio.AVAudioSession
 
 class PlayerViewController: UIViewController {
     
@@ -20,8 +21,9 @@ class PlayerViewController: UIViewController {
     var program: Program?
     var channel: Asset?
     
+    let audioSession = AVAudioSession.sharedInstance()
+    var offlineMediaPlayable: OfflineMediaPlayable?
     var playbackProperties = PlaybackProperties()
-    
     fileprivate(set) var player: Player<HLSNative<ExposureContext>>!
     
     /// Main ContentView which holds player view & player control views
@@ -65,6 +67,7 @@ class PlayerViewController: UIViewController {
         }
         
         setupPlayer(environment, sessionToken)
+        self.enableAudioSeesionForPlayer()
     }
     
     override func didMove(toParent parent: UIViewController?) {
@@ -77,7 +80,7 @@ class PlayerViewController: UIViewController {
             player.stop()
         }
     }
-
+    
     @objc func dissmissKeyboard() {
         view.endEditing(true)
     }
@@ -103,14 +106,14 @@ extension PlayerViewController {
                 // Fires once the associated MediaSource has been created.
                 // Playback is not ready to start at this point.
                 self?.updateTimeLine(streamingInfo: source.streamingInfo)
-            }
-            .onPlaybackPrepared{ player, source in
-                // Published when the associated MediaSource completed asynchronous loading of relevant properties.
-                // Playback is not ready to start at this point.
-            }
-            .onPlaybackReady{ player, source in
-                // When this event fires starting playback is possible (playback can optionally be set to autoplay instead)
-                player.play()
+        }
+        .onPlaybackPrepared{ player, source in
+            // Published when the associated MediaSource completed asynchronous loading of relevant properties.
+            // Playback is not ready to start at this point.
+        }
+        .onPlaybackReady{ player, source in
+            // When this event fires starting playback is possible (playback can optionally be set to autoplay instead)
+            player.play()
         }
         
         // Once playback is in progress the Player continuously publishes events related media status and user interaction.
@@ -120,23 +123,23 @@ extension PlayerViewController {
                 // This is a one-time event.
                 guard let `self` = self else { return }
                 self.togglePlayPauseButton(paused: false)
-            }
-            .onPlaybackPaused{ [weak self] player, source in
-                // Fires when the playback pauses for some reason
-                guard let `self` = self else { return }
-                self.togglePlayPauseButton(paused: true)
-            }
-            .onPlaybackResumed{ [weak self] player, source in
-                // Fires when the playback resumes from a paused state
-                guard let `self` = self else { return }
-                self.togglePlayPauseButton(paused: false)
-            }
-            .onPlaybackAborted{ player, source in
-                // Published once the player.stop() method is called.
-                // This is considered a user action
-            }
-            .onPlaybackCompleted{ player, source in
-                // Published when playback reached the end of the current media.
+        }
+        .onPlaybackPaused{ [weak self] player, source in
+            // Fires when the playback pauses for some reason
+            guard let `self` = self else { return }
+            self.togglePlayPauseButton(paused: true)
+        }
+        .onPlaybackResumed{ [weak self] player, source in
+            // Fires when the playback resumes from a paused state
+            guard let `self` = self else { return }
+            self.togglePlayPauseButton(paused: false)
+        }
+        .onPlaybackAborted{ player, source in
+            // Published once the player.stop() method is called.
+            // This is considered a user action
+        }
+        .onPlaybackCompleted{ player, source in
+            // Published when playback reached the end of the current media.
         }
         
         // Besides playback control events Player also publishes several status related events.
@@ -145,24 +148,24 @@ extension PlayerViewController {
                 // Update user facing program information
                 guard let `self` = self else { return }
                 self.update(withProgram: program)
-            }
-            .onEntitlementResponse { [weak self] player, source, entitlement in
-                // Fires when a new entitlement is received, such as after attempting to start playback
-                guard let `self` = self else { return }
-                self.update(contractRestrictions: entitlement)
-            }
-            .onBitrateChanged{ player, source, bitrate in
-                // Published whenever the current bitrate changes
-                //self?.updateQualityIndicator(with: bitrate)
-            }
-            .onBufferingStarted{ player, source in
-                // Fires whenever the buffer is unable to keep up with playback
-            }
-            .onBufferingStopped{ player, source in
-                // Fires when buffering is no longer needed
-            }
-            .onDurationChanged{ player, source in
-                // Published when the active media received an update to its duration property
+        }
+        .onEntitlementResponse { [weak self] player, source, entitlement in
+            // Fires when a new entitlement is received, such as after attempting to start playback
+            guard let `self` = self else { return }
+            self.update(contractRestrictions: entitlement)
+        }
+        .onBitrateChanged{ player, source, bitrate in
+            // Published whenever the current bitrate changes
+            //self?.updateQualityIndicator(with: bitrate)
+        }
+        .onBufferingStarted{ player, source in
+            // Fires whenever the buffer is unable to keep up with playback
+        }
+        .onBufferingStopped{ player, source in
+            // Fires when buffering is no longer needed
+        }
+        .onDurationChanged{ player, source in
+            // Published when the active media received an update to its duration property
         }
         
         // Error handling can be done by listening to associated event.
@@ -176,7 +179,7 @@ extension PlayerViewController {
                 let message = "\(error.code) " + error.message + "\n" + (error.info ?? "")
                 self.popupAlert(title: error.domain , message: message, actions: [okAction], preferedStyle: .alert)
         }
-        
+            
         .onWarning{ [weak self] player, source, warning in
             guard let `self` = self else { return }
             self.showToastMessage(message: warning.message, duration: 5)
@@ -226,48 +229,67 @@ extension PlayerViewController {
     /// - Parameter properties: playback properties
     func startPlayBack(properties: PlaybackProperties = PlaybackProperties() ) {
         
-        if let playable = playable {
-            vodBasedTimeline.isHidden = true
-            programBasedTimeline.isHidden = true
-            player.startPlayback(playable: playable, properties: properties)
+        if let offlineMediaPlayable = offlineMediaPlayable {
+            
+            player.startPlayback(offlineMediaPlayable: OfflineMediaPlayable(assetId: offlineMediaPlayable.assetId, entitlement: offlineMediaPlayable.entitlement, url: offlineMediaPlayable.urlAsset.url))
+            
+            //  player.startPlayback(assetId: playable?.assetId ?? "", entitlement: entitlement, asset: avURLAsset, properties: properties)
+        } else {
+            if let playable = playable {
+                vodBasedTimeline.isHidden = true
+                programBasedTimeline.isHidden = true
+                
+                player.startPlayback(playable: playable, properties: properties)
+            }
         }
+        
+        
+        
+        
     }
     
     func updateTimeLine(streamingInfo: StreamInfo?) {
         
         guard let streamingInfo = streamingInfo else {
-            print("Streaming Info is empty :: Using PlayV1 ")
-            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
-                (alert: UIAlertAction!) -> Void in
-            })
-            let message = "Streaming Info is missing in the play response : You are using a older version of the SDK"
-            self.popupAlert(title: "Error" , message: message, actions: [okAction], preferedStyle: .alert)
+            // print("Streaming Info is empty :: Using PlayV1 ")
+            // let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .cancel, handler: {
+            //     (alert: UIAlertAction!) -> Void in
+            // })
+            
+            // let message = "Streaming Info is missing in the play response : You are using a older version of the SDK"
+            // self.popupAlert(title: "Error" , message: message, actions: [okAction], preferedStyle: .alert)
+            
+            vodBasedTimeline.isHidden = false
+            vodBasedTimeline.startLoop()
+            programBasedTimeline.isHidden = true
+            programBasedTimeline.stopLoop()
+            
             return
         }
-            if streamingInfo.live == true && streamingInfo.staticProgram == false {
-                vodBasedTimeline.isHidden = true
-                vodBasedTimeline.stopLoop()
-                programBasedTimeline.isHidden = false
-                programBasedTimeline.startLoop()
-            }
-                
-                // This is a catchup program
-            else if streamingInfo.live == false && streamingInfo.staticProgram == false {
-                vodBasedTimeline.isHidden = true
-                vodBasedTimeline.stopLoop()
-                programBasedTimeline.isHidden = false
-                programBasedTimeline.startLoop()
-            }
-                // This is a vod asset
-            else if streamingInfo.staticProgram == true {
-                vodBasedTimeline.isHidden = false
-                vodBasedTimeline.startLoop()
-                programBasedTimeline.isHidden = true
-                programBasedTimeline.stopLoop()
-            }
-            else {
-                print("something else")
-            }
+        if streamingInfo.live == true && streamingInfo.staticProgram == false {
+            vodBasedTimeline.isHidden = true
+            vodBasedTimeline.stopLoop()
+            programBasedTimeline.isHidden = false
+            programBasedTimeline.startLoop()
+        }
+            
+            // This is a catchup program
+        else if streamingInfo.live == false && streamingInfo.staticProgram == false {
+            vodBasedTimeline.isHidden = true
+            vodBasedTimeline.stopLoop()
+            programBasedTimeline.isHidden = false
+            programBasedTimeline.startLoop()
+        }
+            // This is a vod asset
+        else if streamingInfo.staticProgram == true {
+            vodBasedTimeline.isHidden = false
+            vodBasedTimeline.startLoop()
+            programBasedTimeline.isHidden = true
+            programBasedTimeline.stopLoop()
+        }
+        else {
+            print("something else")
+        }
     }
     
     func update(withProgram program: Program?) {
@@ -483,6 +505,33 @@ extension PlayerViewController {
         
         mainContentView.addArrangedSubview(controls)
         
+    }
+}
+
+extension PlayerViewController {
+    /// Enable the audio session for player
+    fileprivate func enableAudioSeesionForPlayer() {
+        do {
+            if #available(iOS 11.0, *) {
+                try audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.moviePlayback, policy: .longForm)
+            }
+            else {
+                try audioSession.setCategory(AVAudioSession.Category.playback)
+            }
+            try audioSession.setActive(true)
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
+    }
+    
+    
+    /// Disable player audio session & continue the background playback
+    fileprivate func resumeBackgroundAudio() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            print ("setActive(false) ERROR : \(error)")
+        }
     }
 }
 

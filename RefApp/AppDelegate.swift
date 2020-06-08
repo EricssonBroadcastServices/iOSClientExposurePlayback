@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Download
+import Exposure
+import ExposureDownload
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,6 +43,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
     }
 
+    
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        if identifier == SessionConfigurationIdentifier.default.rawValue {
+            print("🛏 Rejoining session \(identifier)")
+            let sessionManager = ExposureSessionManager.shared.manager
+            sessionManager.backgroundCompletionHandler = completionHandler
+            
+            sessionManager.restoreTasks { downloadTasks in
+                downloadTasks.forEach {
+                    print("🛏 found",$0.taskDescription ?? "")
+                    // Restore state
+                                        // log(downloadTask: $0)
+                }
+            } 
+        }
+    }
+    
+    private func log(downloadTask: ExposureDownloadTask) {
+        downloadTask.onCanceled{ task, url in
+            print("📱 Media Download canceled",task.configuration.identifier,url)
+            }
+            .onPrepared { _ in
+                print("📱 Media Download prepared")
+            }
+            .onSuspended { _ in
+                print("📱 Media Download Suspended")
+            }
+            .onResumed { _ in
+                print("📱 Media Download Resumed")
+            }
+            .onProgress { _, progress in
+                print("📱 Percent",progress.current*100,"%")
+            }
+            .onShouldDownloadMediaOption{ _,_ in
+                print("📱 Select media option")
+                return nil
+            }
+            .onDownloadingMediaOption{ _,_ in
+                print("📱 Downloading media option")
+            }
+            .onError {_, url, error in
+                print("📱 Download error: \(error)",url ?? "")
+            }
+            .onCompleted { _, url in
+                print("📱 Download completed: \(url)")
+            }
+    }
 
 }
 
+class ExposureSessionManager {
+    static let shared = ExposureSessionManager()
+    
+    let manager = Download.SessionManager<ExposureDownloadTask>()
+}

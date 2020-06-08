@@ -44,9 +44,161 @@ extension Player where Tech == HLSNative<ExposureContext> {
         let playable: Playable = programId != nil ? ProgramPlayable(assetId: programId!, channelId: channelId) : ChannelPlayable(assetId: channelId)
         startPlayback(playable: playable, properties: properties)
     }
+    
+    public func startPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties = PlaybackProperties()) {
+        
+        context.startOfflineMediaPlayback(offlineMediaPlayable: offlineMediaPlayable, properties: properties, tech: tech)
+    }
 }
 
 extension ExposureContext {
+    
+    internal func startOfflineMediaPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
+        
+        let entitlementResponse = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: offlineMediaPlayable.entitlement)
+        if let entitlement = entitlementResponse.0 {
+            let source = ExposureSource(entitlement: entitlement, assetId: offlineMediaPlayable.assetId, response: nil, streamingInfo: offlineMediaPlayable.entitlement.streamInfo)
+            
+            // onEntitlementResponse(source.entitlement, source)
+            
+            /// Assign the providers
+            // source.analyticsConnector.providers = providers
+            
+            /// Ask if an optional AdService is available
+            // onAdServiceRequested(source)
+            
+            /// Make sure StartTime is configured if specified by user
+            tech.startTime(byDelegate: self)
+            
+            /// Update tech autoplay settings from PlaybackProperties
+            tech.autoplay = playbackProperties.autoplay
+            
+            /// Assign language preferences
+            switch playbackProperties.language {
+            case .defaultBehaviour:
+                print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+            case .userLocale:
+                let locale = Locale.current.languageCode
+                tech.preferredTextLanguage = locale
+                tech.preferredAudioLanguage = locale
+            case let .custom(text: text, audio: audio):
+                tech.preferredTextLanguage = text
+                tech.preferredAudioLanguage = audio
+            }
+            
+            
+            
+            /// Create HLS configuration
+            let configuration = HLSNativeConfiguration(drm: source.fairplayRequester,
+                                                       preferredMaxBitrate: playbackProperties.maxBitrate)
+            
+            source.prepareSourceUrl{ _ in
+//                guard let `self` = self, let tech = tech, let source = source else {
+//                    // TODO: Trigger warning?
+//                    return
+//                }
+
+                source.proxyUrl = offlineMediaPlayable.urlAsset.url
+
+                /// Load tech
+                tech.load(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
+                    guard let `self` = self, let tech = tech, let source = source else {
+                        return
+                        
+                    }
+                    /// Start ProgramService
+                    self.prepareProgramService(source: source, tech: tech)
+                }
+            }
+            
+            /// Hook DRM analytics events
+            if let fairplayRequester = source.fairplayRequester as? EMUPFairPlayRequester {
+                fairplayRequester.onCertificateRequest = { [weak tech, weak source] in
+                    guard let tech = tech, let source = source else { return }
+                    source.analyticsConnector.providers.forEach{
+                        if let drmProvider = $0 as? DrmAnalyticsProvider {
+                            drmProvider.onCertificateRequest(tech: tech, source: source)
+                        }
+                    }
+                }
+                
+                fairplayRequester.onCertificateResponse = { [weak tech, weak source] certError in
+                    guard let tech = tech, let source = source else {
+                        return
+                        
+                    }
+                    source.analyticsConnector.providers.forEach{
+                        if let drmProvider = $0 as? DrmAnalyticsProvider {
+                            drmProvider.onCertificateResponse(tech: tech, source: source, error: certError)
+                        }
+                    }
+                }
+                /// Hook license request and response listener
+                fairplayRequester.onLicenseRequest = { [weak tech, weak source] in
+                    guard let tech = tech, let source = source else { return }
+                    source.analyticsConnector.providers.forEach{
+                        if let drmProvider = $0 as? DrmAnalyticsProvider {
+                            drmProvider.onLicenseRequest(tech: tech, source: source)
+                        }
+                    }
+                }
+                
+                fairplayRequester.onLicenseResponse = { [weak tech, weak source] licenseError in
+                    guard let tech = tech, let source = source else { return }
+                    source.analyticsConnector.providers.forEach{
+                        if let drmProvider = $0 as? DrmAnalyticsProvider {
+                            drmProvider.onLicenseResponse(tech: tech, source: source, error: licenseError)
+                        }
+                    }
+                }
+            }
+            
+            
+            /* source.analyticsConnector.providers.forEach{
+                /// Analytics Session Invalidation Detection
+                if let exposureAnalytics = $0 as? ExposureAnalytics {
+                    exposureAnalytics.onExposureResponseMessage = { [weak tech, weak source] reason in
+                        guard let tech = tech, let source = source else { return }
+                        switch (reason.httpCode, reason.message) {
+                        case (401, "INVALID_SESSION_TOKEN"):
+                            let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: ExposureError.exposureResponse(reason: reason)))
+                            tech.eventDispatcher.onError(tech, source, contextError)
+                            source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
+                            tech.stop()
+                        default:
+                            print("===",reason.httpCode,reason.message)
+                        }
+                    }
+                }
+                
+                
+                /// EMP related startup analytics
+                if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                    exposureProvider.onHandshakeStarted(tech: tech, source: source)
+                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in
+                        guard let `self` = self, let tech = tech else { return nil }
+                        
+                        guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }
+                        return heartbeatsProvider.heartbeat(for: tech, in: self)
+                    }
+                }
+                
+            } */
+            
+            /// Hook connection changed analytics events
+            /* reachability?.onReachabilityChanged = { [weak tech, weak source] connection in
+                source?.analyticsConnector.providers.forEach{
+                    if let exposureAnalytics = $0 as? ExposureAnalytics {
+                        exposureAnalytics.onConnectionChanged(tech: tech, source: source, type: connection)
+                    }
+                }
+            } */
+        }
+        
+
+    }
+    
+    
     /// Initiates a playback session with the supplied `Playable`
     ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
@@ -133,7 +285,10 @@ extension ExposureContext {
                 }
                 
                 fairplayRequester.onCertificateResponse = { [weak tech, weak source] certError in
-                    guard let tech = tech, let source = source else { return }
+                    guard let tech = tech, let source = source else {
+                        return
+                        
+                    }
                     source.analyticsConnector.providers.forEach{
                         if let drmProvider = $0 as? DrmAnalyticsProvider {
                             drmProvider.onCertificateResponse(tech: tech, source: source, error: certError)
