@@ -10,10 +10,9 @@ import UIKit
 import ExposureDownload
 import ExposurePlayback
 
-class DownloadListTableViewController: UITableViewController {
+class DownloadListTableViewController: UITableViewController, EnigmaDownloadManager {
     
     var downloadedAssets: [OfflineMediaAsset]?
-    let sessionManager = ExposureSessionManager.shared.manager
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +23,10 @@ class DownloadListTableViewController: UITableViewController {
         
         self.refreshTableView()
         
-        
     }
     
     func refreshTableView() {
-        downloadedAssets = self.sessionManager.offlineAssets()
+        downloadedAssets = enigmaDownloadManager.getDownloadedAssets()
         tableView.reloadData()
     }
     
@@ -72,7 +70,7 @@ class DownloadListTableViewController: UITableViewController {
             if let asset = self.downloadedAssets?[row] {
                 
                 // Developers can use ExposureDownloadTask delete option to delete an already downloaded asset
-                self.sessionManager.delete(assetId: asset.assetId)
+                self.enigmaDownloadManager.removeDownloadedAsset(assetId: asset.assetId)
                 self.refreshTableView()
             }
         })
@@ -84,7 +82,7 @@ class DownloadListTableViewController: UITableViewController {
                 
                 // Developers can check if an asset is already downloaded by passing an assetId.
                 // If the asset is already downloaded, API will return OfflineMediaAsset which has assetId, entitlement, urlAsset etc.
-                let offlineMedia = self.sessionManager.offline(assetId: asset.assetId)
+                let offlineMedia = self.enigmaDownloadManager.offline(assetId: asset.assetId)
                 let urlAsset = offlineMedia?.urlAsset
                 
                 if let entitlement = offlineMedia?.entitlement, let urlAsset = urlAsset {

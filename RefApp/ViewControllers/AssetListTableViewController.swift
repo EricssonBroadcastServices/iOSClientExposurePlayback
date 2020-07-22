@@ -11,7 +11,7 @@ import Exposure
 import ExposurePlayback
 import ExposureDownload
 
-class AssetListTableViewController: UITableViewController {
+class AssetListTableViewController: UITableViewController, EnigmaDownloadManager {
     
     var selectedAsssetType: String!
     var assets = [Asset]()
@@ -19,8 +19,7 @@ class AssetListTableViewController: UITableViewController {
     var sessionToken: SessionToken?
     
     let cellId = "assetListTableViewCell"
-    
-    let sessionManager = ExposureSessionManager.shared.manager
+
     
     // MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +39,7 @@ class AssetListTableViewController: UITableViewController {
         self.generateTableViewContent()
         
         // All downloaded assets
-        downloadedAssets = self.sessionManager.offlineAssets()
+        downloadedAssets = self.enigmaDownloadManager.getDownloadedAssets()
         
     }
 }
@@ -79,7 +78,7 @@ extension AssetListTableViewController {
     
     
     func refreshTableView() {
-        downloadedAssets = self.sessionManager.offlineAssets()
+        downloadedAssets = self.enigmaDownloadManager.getDownloadedAssets()
         tableView.reloadData()
     }
     

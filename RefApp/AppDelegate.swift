@@ -12,7 +12,7 @@ import Exposure
 import ExposureDownload
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, EnigmaDownloadManager {
 
     var window: UIWindow?
 
@@ -47,10 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         if identifier == SessionConfigurationIdentifier.default.rawValue {
             print("🛏 Rejoining session \(identifier)")
-            let sessionManager = ExposureSessionManager.shared.manager
-            sessionManager.backgroundCompletionHandler = completionHandler
             
-            sessionManager.restoreTasks { downloadTasks in
+            self.enigmaDownloadManager.backgroundCompletionHandler = completionHandler
+            
+            enigmaDownloadManager.restoreTasks { downloadTasks in
                 downloadTasks.forEach {
                     print("🛏 found",$0.taskDescription ?? "")
                     // Restore state
@@ -93,8 +93,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-class ExposureSessionManager {
-    static let shared = ExposureSessionManager()
-    
-    let manager = Download.SessionManager<ExposureDownloadTask>()
-}

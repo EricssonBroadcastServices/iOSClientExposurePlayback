@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import ExposurePlayback
 import Exposure
+import ExposurePlayback
+import ExposureDownload
 
 enum DownloadState: String {
     
@@ -31,14 +32,13 @@ enum DownloadState: String {
     case prepared
 }
 
-class AssetDetailsViewController: UITableViewController {
+class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
+   
     
     var assetId = String()
     var downloadState = DownloadState.notDownloaded
     
     var sections = ["Play Asset", "Download", "Show Download Info"]
-    
-    let sessionManager = ExposureSessionManager.shared.manager
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,14 +49,15 @@ class AssetDetailsViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = ColorState.active.background
         
+        
         // Check if this asset is available in downloads
-        if self.sessionManager.offline(assetId: assetId) != nil {
+        if self.enigmaDownloadManager.offline(assetId: assetId) != nil {
             downloadState = DownloadState.downloaded
         }
     }
     
     func refreshTableView() {
-        if self.sessionManager.offline(assetId: assetId) != nil {
+        if self.enigmaDownloadManager.offline(assetId: assetId) != nil {
             downloadState = DownloadState.downloaded
         }
         tableView.reloadData()
@@ -134,7 +135,7 @@ class AssetDetailsViewController: UITableViewController {
                 (alert: UIAlertAction!) -> Void in
                 
                 // Developers can use ExposureDownloadTask delete option to delete an already downloaded asset
-                self.sessionManager.delete(assetId: self.assetId)
+                self.enigmaDownloadManager.removeDownloadedAsset(assetId: self.assetId)
                 self.downloadState = .notDownloaded
                 
                 self.refreshTableView()
@@ -154,7 +155,7 @@ class AssetDetailsViewController: UITableViewController {
             return
         }
          
-        let task = self.sessionManager.download(assetId: assetId, using: session, in: environment)
+        let task = self.enigmaDownloadManager.download(assetId: assetId, using: session, in: environment)
         let cell = tableView.cellForRow(at: indexPath) as! AssetListTableViewCell
         
         let message = "Do you want to suspend the video"
@@ -203,47 +204,43 @@ class AssetDetailsViewController: UITableViewController {
             return
         }
         
-        // Fetch download info related to the asset
-        FetchDownloadinfo(assetId: assetId, environment: environment, sessionToken: session)
-            .request()
-            .validate()
-            .response { info in
+        self.enigmaDownloadManager.getDownloadableInfo(assetId: assetId, environment: environment, sessionToken: session) { [weak self] info in
+            if let downloadInfo = info {
                 
-                if let downloadInfo = info.value {
+                // print("AUDIO DOWNLOAD INFO ", downloadInfo.audios )
+                // print("VIDEOS DOWNLOAD INFO " , downloadInfo.videos )
+                // print("SUBS DOWNLOAD INDO ", downloadInfo.subtitles )
+                
+                var allVideoTracks = [UIAlertAction]()
+                
+                // Check if the asset has any video tracks
+                if downloadInfo.videos.count > 0 {
                     
-                    // print("AUDIO DOWNLOAD INFO ", downloadInfo.audios )
-                    // print("VIDEOS DOWNLOAD INFO " , downloadInfo.videos )
-                    // print("SUBS DOWNLOAD INDO ", downloadInfo.subtitles )
-                    
-                    var allVideoTracks = [UIAlertAction]()
-                    
-                    // Check if the asset has any video tracks
-                    if downloadInfo.videos.count > 0 {
+                    for (_,video) in (downloadInfo.videos).enumerated() {
                         
-                        for (_,video) in (downloadInfo.videos).enumerated() {
-                            
-                            let action = UIAlertAction(title: "bitrate - \(video.bitrate)", style: .default, handler: {
-                                (alert: UIAlertAction!) -> Void in
-                                self.downloadAsset(indexPath: indexPath , videoTrack: video.bitrate)
-                            })
-                            allVideoTracks.append(action)
-                        }
-                        
-                        let message = "Select bit rate to download the video"
-                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                        let action = UIAlertAction(title: "bitrate - \(video.bitrate)", style: .default, handler: {
                             (alert: UIAlertAction!) -> Void in
+                            self?.downloadAsset(indexPath: indexPath , videoTrack: video.bitrate)
                         })
-                        
-                        allVideoTracks.append(cancelAction)
-                        
-                        self.popupAlert(title: "Download Info", message: message, actions: allVideoTracks, preferedStyle: .actionSheet)
-                    } else {
-                        
-                        // No Video Tracks available so start downloading , start downloading the default video tracks
-                        self.downloadAsset(indexPath: indexPath, videoTrack: nil)
+                        allVideoTracks.append(action)
                     }
                     
+                    let message = "Select bit rate to download the video"
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                        (alert: UIAlertAction!) -> Void in
+                    })
+                    
+                    allVideoTracks.append(cancelAction)
+                    
+                    self?.popupAlert(title: "Download Info", message: message, actions: allVideoTracks, preferedStyle: .actionSheet)
+                } else {
+                    
+                    // No Video Tracks available so start downloading , start downloading the default video tracks
+                    self?.downloadAsset(indexPath: indexPath, videoTrack: nil)
                 }
+            } else {
+                print("Asset does not have any downloadable info")
+            }
         }
     }
     
@@ -267,7 +264,7 @@ class AssetDetailsViewController: UITableViewController {
         })
         
         
-        let task = self.sessionManager.download(assetId: assetId, using: session, in: environment)
+        let task = self.enigmaDownloadManager.download(assetId: assetId, using: session, in: environment)
         
         switch downloadState {
         case .prepared:
@@ -281,7 +278,7 @@ class AssetDetailsViewController: UITableViewController {
                 (alert: UIAlertAction!) -> Void in
                 
                 // Developers can use ExposureDownloadTask delete option to delete an already downloaded asset
-                self.sessionManager.delete(assetId: self.assetId)
+                self.enigmaDownloadManager.removeDownloadedAsset(assetId: self.assetId)
                 self.refreshTableView()
                 
             })
@@ -310,66 +307,81 @@ class AssetDetailsViewController: UITableViewController {
             
             
         case .notDownloaded:
-            CheckAssetRights(environment: environment, assetId: assetId)
-                .isAvailableToDownload { [weak self] isAvailableToDownload in
-                    
-                    if isAvailableToDownload {
-                        
-                        // task.createAndConfigureTask(with: [:], using: task.configuration, callback:{_,_  in})
-                        task.onCanceled{ task, url in
-                            print("📱 Media Download canceled",task.configuration.identifier,url)
-                        }
-                        .onPrepared { _ in
-                            print("📱 Media Download prepared")
-                            cell.downloadStateLabel.text = "Media Download prepared"
-                            self?.downloadState = DownloadState.prepared
+            
+            // Developers should fetch AvailabilityKeys related the currently logged user before checking if an asset is available to download for the user
+            GetAvailabilityKeys(environment: environment, sessionToken: session)
+                       .request()
+                       .validate()
+                        .response { result in
                             
-                            task.resume()
-                        }
-                        .onSuspended { _ in
-                            print("📱 Media Download Suspended")
-                            cell.downloadStateLabel.text = "Media Download Suspended"
-                            self?.downloadState = DownloadState.suspended
-                        }
-                        .onResumed { _ in
-                            print("📱 Media Download Resumed")
-                            cell.downloadStateLabel.text = "Media Download Resumed"
-                            self?.downloadState = DownloadState.downloading
+                            if let error = result.error {
+                                print("Error " , error)
+                            }
                             
-                        }
-                        .onProgress { _, progress in
-                            print("📱 Percent", progress.current*100,"%")
-                            cell.downloadStateLabel.text = "Downloading"
-                            cell.downloadProgressView.progress = Float(progress.current)
-                            self?.downloadState = DownloadState.downloading
-                        }
-                        .onShouldDownloadMediaOption{ _,_ in
-                            print("📱 Select media option")
-                            return nil
-                        }
-                        .onDownloadingMediaOption{ _,_ in
-                            print("📱 Downloading media option")
-                        }
-                        .onError {_, url, error in
-                            print("📱 Download error: \(error)",url ?? "")
-                            cell.downloadStateLabel.text = "Download error"
-                            cell.downloadProgressView.progress = 0
-                        }
-                        .onCompleted { _, url in
-                            print("📱 Download completed: \(url)")
-                            cell.downloadStateLabel.text = "Download completed"
-                            // self?.tableView.reloadData()
-                            
-                            self?.downloadState = DownloadState.downloaded
-                        }.prepare(lazily: false)
-                        
-                        // If there is a video track , start downloading the sepcific
-                        if let videoTrack = videoTrack {
-                            task.use(bitrate: Int64(exactly: videoTrack))
-                        }
-                    } else {
-                        self?.popupAlert(title: nil, message: message, actions: [cancelAction], preferedStyle: .actionSheet)
-                    }
+                            if let keys = result.value {
+                                
+                                print("availabilityKeys ",  keys )
+                                
+                                self.enigmaDownloadManager.isAvailableToDownload(assetId: self.assetId, environment: environment, availabilityKeys: keys.availabilityKeys ?? [] ) { [weak self] isAvailableToDownload in
+                                    if isAvailableToDownload {
+                                        
+                                        // task.createAndConfigureTask(with: [:], using: task.configuration, callback:{_,_  in})
+                                        task.onCanceled{ task, url in
+                                            print("📱 Media Download canceled",task.configuration.identifier,url)
+                                        }
+                                        .onPrepared { _ in
+                                            print("📱 Media Download prepared")
+                                            cell.downloadStateLabel.text = "Media Download prepared"
+                                            self?.downloadState = DownloadState.prepared
+                                            
+                                            task.resume()
+                                        }
+                                        .onSuspended { _ in
+                                            print("📱 Media Download Suspended")
+                                            cell.downloadStateLabel.text = "Media Download Suspended"
+                                            self?.downloadState = DownloadState.suspended
+                                        }
+                                        .onResumed { _ in
+                                            print("📱 Media Download Resumed")
+                                            cell.downloadStateLabel.text = "Media Download Resumed"
+                                            self?.downloadState = DownloadState.downloading
+                                            
+                                        }
+                                        .onProgress { _, progress in
+                                            print("📱 Percent", progress.current*100,"%")
+                                            cell.downloadStateLabel.text = "Downloading"
+                                            cell.downloadProgressView.progress = Float(progress.current)
+                                            self?.downloadState = DownloadState.downloading
+                                        }
+                                        .onShouldDownloadMediaOption{ _,_ in
+                                            print("📱 Select media option")
+                                            return nil
+                                        }
+                                        .onDownloadingMediaOption{ _,_ in
+                                            print("📱 Downloading media option")
+                                        }
+                                        .onError {_, url, error in
+                                            print("📱 Download error: \(error)",url ?? "")
+                                            cell.downloadStateLabel.text = "Download error"
+                                            cell.downloadProgressView.progress = 0
+                                        }
+                                        .onCompleted { _, url in
+                                            print("📱 Download completed: \(url)")
+                                            cell.downloadStateLabel.text = "Download completed"
+                                            // self?.tableView.reloadData()
+                                            
+                                            self?.downloadState = DownloadState.downloaded
+                                        }.prepare(lazily: false)
+                                        
+                                        // If there is a video track , start downloading the sepcific
+                                        if let videoTrack = videoTrack {
+                                            task.use(bitrate: Int64(exactly: videoTrack))
+                                        }
+                                    } else {
+                                        self?.popupAlert(title: nil, message: message, actions: [cancelAction], preferedStyle: .actionSheet)
+                                    }
+                            }
+                }
             }
             
         default:
@@ -387,29 +399,52 @@ class AssetDetailsViewController: UITableViewController {
             return
         }
         
-        // Fetch download info related to the asset
-        FetchDownloadinfo(assetId: assetId, environment: environment, sessionToken: session)
-            .request()
-            .validate()
-            .response { info in
+        
+        GetAvailabilityKeys(environment: environment, sessionToken: session)
+                   .request()
+                   .validate()
+                    .response { result in
+                        
+                        if let error = result.error {
+                            print("Error " , error)
+                        }
+                        
+                        if let keys = result.value {
+                            print("availabilityKeys ",  keys )
+                        }
+                        
+                        
                 
-                if let downloadInfo = info.value {
-                    
-                    // print("AUDIO DOWNLOAD INFO ", downloadInfo.audios )
-                    // print("VIDEOS DOWNLOAD INFO " , downloadInfo.videos )
-                    // print("SUBS DOWNLOAD INDO ", downloadInfo.subtitles )
-                    
-                    let message = "Video : \(downloadInfo.videos) \n\n Audios : \(downloadInfo.audios) \n\n Subtitles: \(downloadInfo.subtitles)"
-                    
-                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-                        (alert: UIAlertAction!) -> Void in
-                    })
-                    
-                    self.popupAlert(title: "Download Info", message: message, actions: [cancelAction], preferedStyle: .actionSheet)
-                    
-                    
-                }
+        }
+    
+        
+        self.enigmaDownloadManager.isAvailableToDownload(assetId: assetId, environment: environment, availabilityKeys: [ "free_product_enigma",
+           "free_enigma",
+           "bf24fa94-6c65-4022-8df1-0830e1e22ff2_enigma",
+           "EnigmaFVOD_enigma",
+           "79a29cf5-fab9-476d-82ab-e4a062f304ff_enigma",
+           "6979434e-973a-4069-b4c9-5eee38d3c63d_enigma"]) { [weak self] isAvailableToDownload in
+            print("isAvailableToDownload ", isAvailableToDownload )
+        }
+        
+         // Get download info related to the asset
+        enigmaDownloadManager.getDownloadableInfo(assetId: assetId, environment: environment, sessionToken: session ) { [ weak self] info in
+            if let downloadInfo = info {
                 
+                // print("AUDIO DOWNLOAD INFO ", downloadInfo.audios )
+                // print("VIDEOS DOWNLOAD INFO " , downloadInfo.videos )
+                // print("SUBS DOWNLOAD INDO ", downloadInfo.subtitles )
+                
+                let message = "Video : \(downloadInfo.videos) \n\n Audios : \(downloadInfo.audios) \n\n Subtitles: \(downloadInfo.subtitles)"
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                })
+                
+                self?.popupAlert(title: "Download Info", message: message, actions: [cancelAction], preferedStyle: .actionSheet)
+                
+                
+            }
         }
         
     }
