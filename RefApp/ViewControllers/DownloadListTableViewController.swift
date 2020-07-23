@@ -82,10 +82,10 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
                 
                 // Developers can check if an asset is already downloaded by passing an assetId.
                 // If the asset is already downloaded, API will return OfflineMediaAsset which has assetId, entitlement, urlAsset etc.
-                let offlineMedia = self.enigmaDownloadManager.offline(assetId: asset.assetId)
-                let urlAsset = offlineMedia?.urlAsset
+                let downloadedAsset = self.enigmaDownloadManager.offline(assetId: asset.assetId)
+                let urlAsset = downloadedAsset?.urlAsset
                 
-                if let entitlement = offlineMedia?.entitlement, let urlAsset = urlAsset {
+                if let entitlement = downloadedAsset?.entitlement, let urlAsset = urlAsset {
 
                     let destinationViewController = PlayerViewController()
                     destinationViewController.environment = StorageProvider.storedEnvironment

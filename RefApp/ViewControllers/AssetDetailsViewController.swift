@@ -166,13 +166,8 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
         
         let suspendAction = UIAlertAction(title: "Suspend", style: .default, handler: {
            (alert: UIAlertAction!) -> Void in
-
-             print("DOWNLOAD SHOULD BE SUSPENDED ")
             task.suspend()
             task.onSuspended(callback: { suspendedTask in
-                
-                print("DOWNLOAD SUSPENDED " , suspendedTask.state)
-                
                 self.downloadState = .suspended
                 cell.downloadStateLabel.text = "Media Download Suspended"
             })
@@ -182,8 +177,6 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
         
         let cancelDownloadAction = UIAlertAction(title: "Cancel Download", style: .default, handler: {
            (alert: UIAlertAction!) -> Void in
-            
-            print("DOWNLOAD SHOULD BE Cancelled ")
             task.cancel()
             task.onCanceled(callback: { cancelledTask, url  in
                 self.downloadState = .cancelled
@@ -319,14 +312,11 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                             }
                             
                             if let keys = result.value {
-                                
-                                print("availabilityKeys ",  keys )
-                                
                                 self.enigmaDownloadManager.isAvailableToDownload(assetId: self.assetId, environment: environment, availabilityKeys: keys.availabilityKeys ?? [] ) { [weak self] isAvailableToDownload in
                                     if isAvailableToDownload {
                                         
                                         // task.createAndConfigureTask(with: [:], using: task.configuration, callback:{_,_  in})
-                                        task.onCanceled{ task, url in
+                                        task.onCanceled { task, url in
                                             print("📱 Media Download canceled",task.configuration.identifier,url)
                                         }
                                         .onPrepared { _ in
@@ -399,34 +389,24 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
             return
         }
         
-        
-        GetAvailabilityKeys(environment: environment, sessionToken: session)
-                   .request()
-                   .validate()
-                    .response { result in
-                        
-                        if let error = result.error {
-                            print("Error " , error)
-                        }
-                        
-                        if let keys = result.value {
-                            print("availabilityKeys ",  keys )
-                        }
-                        
-                        
-                
-        }
-    
-        
-        self.enigmaDownloadManager.isAvailableToDownload(assetId: assetId, environment: environment, availabilityKeys: [ "free_product_enigma",
-           "free_enigma",
-           "bf24fa94-6c65-4022-8df1-0830e1e22ff2_enigma",
-           "EnigmaFVOD_enigma",
-           "79a29cf5-fab9-476d-82ab-e4a062f304ff_enigma",
-           "6979434e-973a-4069-b4c9-5eee38d3c63d_enigma"]) { [weak self] isAvailableToDownload in
-            print("isAvailableToDownload ", isAvailableToDownload )
-        }
-        
+//
+//        GetAvailabilityKeys(environment: environment, sessionToken: session)
+//                   .request()
+//                   .validate()
+//                    .response { result in
+//
+//                        if let error = result.error {
+//                            print("Error " , error)
+//                        }
+//
+//                        if let keys = result.value {
+//                            print("availabilityKeys ",  keys )
+//                        }
+//
+//
+//
+//        }
+//
          // Get download info related to the asset
         enigmaDownloadManager.getDownloadableInfo(assetId: assetId, environment: environment, sessionToken: session ) { [ weak self] info in
             if let downloadInfo = info {
