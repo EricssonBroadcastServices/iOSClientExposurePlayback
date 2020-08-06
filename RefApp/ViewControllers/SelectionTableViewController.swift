@@ -11,10 +11,10 @@ import UIKit
 import Exposure
 
 class SelectionTableViewController: UITableViewController {
-   
+    
     /// "MOVIE", "TV_CHANNEL", "LIVE_EVENTS" : => WILL USE ASSET ENDPOINT WITH FILTER : assetType
     /// "LIVE_EVENTS_USING_EVENT_ENDPOINT" :==> WILL USE EVENT ENDPOINT IN THE EXPOSURE
-    var sections = ["MOVIE", "TV_CHANNEL", "LIVE_EVENTS", "LIVE_EVENTS_USING_EVENT_ENDPOINT"]
+    var sections = ["MOVIE", "TV_CHANNEL", "LIVE_EVENTS", "LIVE_EVENTS_USING_EVENT_ENDPOINT", "DOWNLOADED"]
     
     
     let cellIdentifier = "cellIdentifier"
@@ -47,7 +47,7 @@ class SelectionTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return sections.count
+        return sections.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,10 +61,17 @@ class SelectionTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let destinationViewController = AssetListTableViewController()
-        destinationViewController.selectedAsssetType = sections[indexPath.row]
-        self.navigationController?.pushViewController(destinationViewController, animated: false)
-        tableView.deselectRow(at: indexPath, animated: true)
+        if sections[indexPath.row] == "DOWNLOADED"{
+            let destinationViewController = DownloadListTableViewController()
+            self.navigationController?.pushViewController(destinationViewController, animated: false)
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            let destinationViewController = AssetListTableViewController()
+            destinationViewController.selectedAsssetType = sections[indexPath.row]
+            self.navigationController?.pushViewController(destinationViewController, animated: false)
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+        
     }
 }
 

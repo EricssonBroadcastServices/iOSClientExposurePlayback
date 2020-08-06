@@ -47,6 +47,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
 }
 
 extension ExposureContext {
+    
     /// Initiates a playback session with the supplied `Playable`
     ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
@@ -133,7 +134,10 @@ extension ExposureContext {
                 }
                 
                 fairplayRequester.onCertificateResponse = { [weak tech, weak source] certError in
-                    guard let tech = tech, let source = source else { return }
+                    guard let tech = tech, let source = source else {
+                        return
+                        
+                    }
                     source.analyticsConnector.providers.forEach{
                         if let drmProvider = $0 as? DrmAnalyticsProvider {
                             drmProvider.onCertificateResponse(tech: tech, source: source, error: certError)
@@ -216,8 +220,11 @@ extension ExposureContext {
         }
     }
     
-    private func prepareProgramService(source: ExposureSource, tech: HLSNative<ExposureContext>) {
-        guard let serviceEnabled = source as? ProgramServiceEnabled else { return }
+    func prepareProgramService(source: ExposureSource, tech: HLSNative<ExposureContext>) {
+        guard let serviceEnabled = source as? ProgramServiceEnabled else {
+            return
+            
+        }
         let service = programServiceGenerator(environment, sessionToken, serviceEnabled.programServiceChannelId)
         
         programService = service
