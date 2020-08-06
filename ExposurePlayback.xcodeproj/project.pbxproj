@@ -289,6 +289,8 @@
 		782D4C65246155320072FF63 /* ExposureDownload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 781F439C24603A2300610321 /* ExposureDownload.framework */; };
 		782D4C66246155320072FF63 /* ExposureDownload.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 781F439C24603A2300610321 /* ExposureDownload.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
+		784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
+		784D1E6E24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
 		784E3AD321B16B0A00C986CF /* RBMPlayerControlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */; };
 		784E3AD721B16B5B00C986CF /* VodBasedTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */; };
 		784E3AD921B16B6E00C986CF /* ProgramBasedTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD821B16B6E00C986CF /* ProgramBasedTimeline.swift */; };
@@ -307,6 +309,7 @@
 		7867DFA92475102200379519 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7867DFA72475102200379519 /* OfflineMediaPlayable.swift */; };
 		786C1818247E4E460039B52C /* AssetDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C1817247E4E460039B52C /* AssetDetailsViewController.swift */; };
 		78A568DF248E67AD0003A270 /* EnvironmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A568DE248E67AD0003A270 /* EnvironmentViewController.swift */; };
+		78A568EB248E74390003A270 /* Matchfile in Resources */ = {isa = PBXBuildFile; fileRef = 78A568EA248E74390003A270 /* Matchfile */; };
 		78A90C5421C7C87B00B3B626 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A90C5321C7C87B00B3B626 /* UIViewController+Toast.swift */; };
 		78D236DD21ABFEFC00E366B0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D236DC21ABFEFC00E366B0 /* LoginViewController.swift */; };
 		78D236DF21AC1BFB00E366B0 /* StorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D236DE21AC1BFB00E366B0 /* StorageProvider.swift */; };
@@ -555,6 +558,7 @@
 		781F439A246039A900610321 /* Download.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Download.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		781F439C24603A2300610321 /* ExposureDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ExposureDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
+		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
 		784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMPlayerControlLabel.swift; sourceTree = "<group>"; };
 		784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VodBasedTimeline.swift; sourceTree = "<group>"; };
 		784E3AD821B16B6E00C986CF /* ProgramBasedTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramBasedTimeline.swift; sourceTree = "<group>"; };
@@ -572,6 +576,7 @@
 		7867DFA72475102200379519 /* OfflineMediaPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMediaPlayable.swift; sourceTree = "<group>"; };
 		786C1817247E4E460039B52C /* AssetDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailsViewController.swift; sourceTree = "<group>"; };
 		78A568DE248E67AD0003A270 /* EnvironmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentViewController.swift; sourceTree = "<group>"; };
+		78A568EA248E74390003A270 /* Matchfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Matchfile; sourceTree = "<group>"; };
 		78A90C5321C7C87B00B3B626 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		78D236DC21ABFEFC00E366B0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		78D236DE21AC1BFB00E366B0 /* StorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProvider.swift; sourceTree = "<group>"; };
@@ -710,6 +715,7 @@
 		766BC3E0218894FB00D8537F /* RefApp */ = {
 			isa = PBXGroup;
 			children = (
+				78A568EA248E74390003A270 /* Matchfile */,
 				785B381921A58B5C00FB7C7B /* Navigation */,
 				785B380421A41A9A00FB7C7B /* Utilities */,
 				78DE9FDB21BA653200C24CDE /* Model */,
@@ -870,6 +876,7 @@
 			children = (
 				76A89C2E20207AB100C23579 /* HLSNative+ExposureContext+Creation.swift */,
 				76A89C2F20207AB100C23579 /* HLSNative+ExposureContext+Playback.swift */,
+				784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */,
 				76A89C3020207AB100C23579 /* HLSNative+ExposureContext+Program.swift */,
 				76A89C3120207AB100C23579 /* HLSNative+ExposureContext+Seek.swift */,
 				76A89C3220207AB100C23579 /* HLSNative+ExposureContext+ServerTime.swift */,
@@ -1089,6 +1096,7 @@
 		785B37F421A301D900FB7C7B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				78A568DE248E67AD0003A270 /* EnvironmentViewController.swift */,
 				78D236DC21ABFEFC00E366B0 /* LoginViewController.swift */,
 				781341A4228014B800ECAC6B /* SelectionTableViewController.swift */,
 				78D236E621AD2F0600E366B0 /* AssetListTableViewController.swift */,
@@ -1097,7 +1105,6 @@
 				9B17CE05218B3F17009C95C4 /* PlayerViewController.swift */,
 				78DE9FD621B9362C00C24CDE /* TrackSelectionViewController.swift */,
 				78DA582A247BA5FB006668DE /* DownloadListTableViewController.swift */,
-				78A568DE248E67AD0003A270 /* EnvironmentViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1348,7 +1355,7 @@
 					};
 					766BC3DE218894FB00D8537F = {
 						CreatedOnToolsVersion = 10.0;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					76A89BFA202072D100C23579 = {
 						CreatedOnToolsVersion = 9.2;
@@ -1420,6 +1427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				766BC3EC218894FC00D8537F /* LaunchScreen.storyboard in Resources */,
+				78A568EB248E74390003A270 /* Matchfile in Resources */,
 				766BC3E9218894FC00D8537F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1538,6 +1546,7 @@
 				760802152069306E007F59D5 /* ProgramSource.swift in Sources */,
 				760802162069306E007F59D5 /* BitrateChanged.swift in Sources */,
 				760802172069306E007F59D5 /* StartCasting.swift in Sources */,
+				784D1E6E24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
 				760802182069306E007F59D5 /* ContextPositionSeekable.swift in Sources */,
 				760802192069306E007F59D5 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7608021A2069306E007F59D5 /* Playable.swift in Sources */,
@@ -1719,6 +1728,7 @@
 				7644FBBA21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
 				7619B4A821773F1B00EE0DC8 /* ContractRestrictionsPolicy.swift in Sources */,
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
+				784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
 				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
 				7635AECB202AE0B2001512BF /* ContextPositionSeekable.swift in Sources */,
@@ -1942,17 +1952,17 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8FMS6Q4V7B;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 3P5CH3HLZN;
 				INFOPLIST_FILE = RefApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.RefApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.SampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.emp.ExposurePlayback.SampleApp";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1966,16 +1976,16 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8FMS6Q4V7B;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 3P5CH3HLZN;
 				INFOPLIST_FILE = RefApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.RefApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.SampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.emp.ExposurePlayback.SampleApp";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

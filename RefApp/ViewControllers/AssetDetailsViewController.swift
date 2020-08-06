@@ -51,13 +51,13 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
         
         
         // Check if this asset is available in downloads
-        if self.enigmaDownloadManager.offline(assetId: assetId) != nil {
+        if self.enigmaDownloadManager.getDownloadedAsset(assetId: assetId) != nil {
             downloadState = DownloadState.downloaded
         }
     }
     
     func refreshTableView() {
-        if self.enigmaDownloadManager.offline(assetId: assetId) != nil {
+        if self.enigmaDownloadManager.getDownloadedAsset(assetId: assetId) != nil {
             downloadState = DownloadState.downloaded
         }
         tableView.reloadData()

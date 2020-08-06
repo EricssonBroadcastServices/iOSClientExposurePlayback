@@ -69,7 +69,7 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
             
             if let asset = self.downloadedAssets?[row] {
                 
-                // Developers can use ExposureDownloadTask delete option to delete an already downloaded asset
+                // Developers can use ExposureDownloadTask removeDownloadedAsset option to delete an already downloaded asset
                 self.enigmaDownloadManager.removeDownloadedAsset(assetId: asset.assetId)
                 self.refreshTableView()
             }
@@ -82,7 +82,7 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
                 
                 // Developers can check if an asset is already downloaded by passing an assetId.
                 // If the asset is already downloaded, API will return OfflineMediaAsset which has assetId, entitlement, urlAsset etc.
-                let downloadedAsset = self.enigmaDownloadManager.offline(assetId: asset.assetId)
+                let downloadedAsset = self.enigmaDownloadManager.getDownloadedAsset(assetId: asset.assetId)
                 let urlAsset = downloadedAsset?.urlAsset
                 
                 if let entitlement = downloadedAsset?.entitlement, let urlAsset = urlAsset {
@@ -98,8 +98,6 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
                                                         maxBitrate: 300000)
                     
                     destinationViewController.playbackProperties = properties
-                    
-                    // Developers can create an OfflineMediaPlayable & pass it to the player to play any offline media.
                     destinationViewController.offlineMediaPlayable = OfflineMediaPlayable(assetId: asset.assetId, entitlement: entitlement, url: urlAsset.url)
                     
                     self.navigationController?.pushViewController(destinationViewController, animated: false)

@@ -231,6 +231,9 @@ extension AssetListTableViewController {
                 
                 if let value = $0.value {
                     self?.assets = value.items ?? []
+                    
+                    self?.assets.sort(by:{ $0.localized?.first?.title ?? "" < $1.localized?.first?.title ?? "" })
+                    
                     self?.refreshTableView()
                 }
                 

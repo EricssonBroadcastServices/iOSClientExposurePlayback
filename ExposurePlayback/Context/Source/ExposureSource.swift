@@ -55,7 +55,7 @@ open class ExposureSource: MediaSource {
     public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?) {
         self.entitlement = entitlement
         self.assetId = assetId
-        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.streamingInfo = streamingInfo
@@ -72,7 +72,7 @@ open class ExposureSource: MediaSource {
     public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?) {
         self.entitlement = entitlement
         self.assetId = assetId
-        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement) : MRRFairplayRequester(entitlement: entitlement)
+        self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.response = response

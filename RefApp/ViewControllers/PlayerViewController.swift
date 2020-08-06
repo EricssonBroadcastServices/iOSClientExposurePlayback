@@ -230,10 +230,7 @@ extension PlayerViewController {
     func startPlayBack(properties: PlaybackProperties = PlaybackProperties() ) {
         
         if let offlineMediaPlayable = offlineMediaPlayable {
-            
-            player.startPlayback(offlineMediaPlayable: OfflineMediaPlayable(assetId: offlineMediaPlayable.assetId, entitlement: offlineMediaPlayable.entitlement, url: offlineMediaPlayable.urlAsset.url))
-            
-            //  player.startPlayback(assetId: playable?.assetId ?? "", entitlement: entitlement, asset: avURLAsset, properties: properties)
+            player.startPlayback(offlineMediaPlayable: offlineMediaPlayable)
         } else {
             if let playable = playable {
                 vodBasedTimeline.isHidden = true
