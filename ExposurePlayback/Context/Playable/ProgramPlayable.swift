@@ -154,7 +154,7 @@ extension ProgramPlayable {
                     return
                 }
                 
-                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                 source.response = response
                 callback(source, nil)
                 
@@ -179,7 +179,7 @@ extension ProgramPlayable {
                     return
                 }
                 
-                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                 source.response = response
                 callback(source, nil, response)
                 

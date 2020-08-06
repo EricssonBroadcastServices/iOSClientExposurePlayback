@@ -57,9 +57,9 @@ class TrackSelectionViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
- 
+        
         setupLayout()
-    
+        
     }
     
     override func viewDidLoad() {
@@ -85,7 +85,7 @@ class TrackSelectionViewController: UIViewController {
     var onDidSelectAudio: (TrackModel?) -> Void = { _ in }
     var onDidSelectText: (TrackModel?) -> Void = { _ in }
     var onDismissed: () -> Void = { }
-
+    
 }
 
 extension TrackSelectionViewController {
@@ -97,7 +97,7 @@ extension TrackSelectionViewController {
                 return IndexPath(row: index, section: 0)
             }
             return nil
-            }.last
+        }.last
     }
     
     func assign(text: MediaGroup?) {
@@ -108,7 +108,7 @@ extension TrackSelectionViewController {
                 return IndexPath(row: index, section: 0)
             }
             return nil
-            }.last
+        }.last
     }
     
     private func prepareViewModels(for mediaGroup: MediaGroup?) -> [TrackSelectionViewModel] {
@@ -144,23 +144,23 @@ extension TrackSelectionViewController: UITableViewDelegate {
         }
         return nil
     }
-
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let track = viewModels(for: tableView)[indexPath.row]
-
+        
         if tableView == audioTableView {
             cell.accessibilityIdentifier = "Audio-\(indexPath.row)"
         }
         if tableView == subtitlesTableView {
             cell.accessibilityIdentifier = "Text-\(indexPath.row)"
         }
-
+        
         cell.backgroundColor = ColorState.active.accentedBackground
         cell.textLabel?.textColor = ColorState.active.text
         cell.textLabel?.text = track.displayName
         cell.accessoryType = selectedIndexPath(for: tableView) == indexPath ? .checkmark : .none
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if let selected = selectedIndexPath(for: tableView), indexPath != selected {
@@ -168,8 +168,8 @@ extension TrackSelectionViewController: UITableViewDelegate {
             if let currentlySelected = selectedIndexPath(for: tableView) {
                 tableView.cellForRow(at: currentlySelected)?.accessoryType = .none
             }
-
-
+            
+            
             if tableView == audioTableView {
                 selectedAudio = indexPath
                 onDidSelectAudio(viewModels(for: tableView)[indexPath.row].model)
@@ -188,7 +188,7 @@ extension TrackSelectionViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels(for: tableView).count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
     }

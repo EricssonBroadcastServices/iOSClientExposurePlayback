@@ -30,17 +30,20 @@ class EnvironmentViewController: UIViewController {
     
     let environmentUrlTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: "Exposure base URL")
+        textfield.text = ""
         return textfield
     }()
     
     let customerNameTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Customer Name", comment: ""))
+        textfield.text = ""
         return textfield
     }()
     
     let businessUnitTextField: RBMTextField = {
         let textfield = RBMTextField(placeHolderText: NSLocalizedString("Business Unit", comment: ""))
         textfield.backgroundColor = ColorState.active.textFieldBackground
+        textfield.text = ""
         return textfield
     }()
     
@@ -67,6 +70,8 @@ class EnvironmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -105,7 +110,7 @@ extension EnvironmentViewController {
         if #available(iOS 11, *) {
             
             topHolderView.anchor(top: view.safeAreaLayoutGuide.topAnchor, bottom: bottomHolderView.topAnchor, leading: view.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor)
-        
+            
             bottomHolderView.anchor(top: topHolderView.bottomAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor)
             
             environmentUrlTextField.anchor(top: bottomHolderView.topAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 20, left: 16, bottom: 0, right: -16))
@@ -135,7 +140,7 @@ extension EnvironmentViewController {
         
         logoImageView.anchor(top: nil, bottom: topHolderView.bottomAnchor, leading: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: 0))
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-
+        
         bottomHolderView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 2/3).isActive = true
     }
 }

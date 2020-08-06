@@ -104,43 +104,43 @@ extension AssetPlayable {
                 }
                 
                 // Live event
-                if value.streamInfo.event == true {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                if value.streamInfo?.event == true {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 // This is a live program
-                if value.streamInfo.live == true && value.streamInfo.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                if value.streamInfo?.live == true && value.streamInfo?.staticProgram == false {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
                     
                 }
                 
                 // Dynamic catchup as live
-                else if value.streamInfo.staticProgram == false && value.streamInfo.start != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 // Static catch up as live
-                else if value.streamInfo.staticProgram == true && value.streamInfo.end != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
                 }
     
                     
                 // Catchup
-                else if value.streamInfo.live == false && value.streamInfo.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil)
                 }
                 // VOD Asset
-                else if value.streamInfo.staticProgram == true {
+                else if value.streamInfo?.staticProgram == true {
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil)
                     source.response = response
                     callback(source, nil)
@@ -164,6 +164,9 @@ extension AssetPlayable {
             }
         }
     }
+    
+    
+    
 }
 
 extension AssetPlayable {
@@ -178,43 +181,43 @@ extension AssetPlayable {
                 }
                 
                 // Live event 
-                if value.streamInfo.event == true {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                if value.streamInfo?.event == true {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)
                 }
                    
                 // Dynamic catchup as live
-                else if value.streamInfo.staticProgram == false && value.streamInfo.start != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)
                 }
                    
                 // Static catchup as live
-                else if value.streamInfo.staticProgram == true && value.streamInfo.end != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)
                 }
                     
                 // This is a live program
-                else if value.streamInfo.live == true && value.streamInfo.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.live == true && value.streamInfo?.staticProgram == false {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)
                     
                 }
                     
                 // Catchup program
-                else if value.streamInfo.live == false && value.streamInfo.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo.channelId ?? "", streamingInfo: value.streamInfo)
+                else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)
                 }
                     
                 // This is a vod asset
-                else if value.streamInfo.staticProgram == true {
+                else if value.streamInfo?.staticProgram == true {
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo)
                     source.response = response
                     callback(source, nil, response)

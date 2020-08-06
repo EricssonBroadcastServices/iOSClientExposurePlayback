@@ -8,16 +8,17 @@
 
 import Foundation
 import AVFoundation
-import Player
 import Exposure
 
 internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     var keyValidationError: Error?
     
-    init(entitlement: PlaybackEntitlement) {
+    init(entitlement: PlaybackEntitlement, assetId: String) {
         self.entitlement = entitlement
+        self.assetId = assetId
     }
     
+    internal let assetId: String
     internal let entitlement: PlaybackEntitlement
     internal let resourceLoadingRequestQueue = DispatchQueue(label: "com.emp.exposurePlayback.fairplay.emup.requests")
     internal let customScheme = "skd"
@@ -28,9 +29,15 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
         return ckc
     }
     
-    /// Streaming requests normally always contact the remote for license and certificates.
+    /// Streaming requests normally always contact the remote for license and certificates but if it's a downloaded asset we do not need to contact the remote server
     internal func shouldContactRemote(for resourceLoadingRequest: AVAssetResourceLoadingRequest) throws -> Bool {
-        return true
+
+        // Check if we can handle the request with a previously persisted content key
+        if try !persistedContentKeyExists(for: assetId) {
+            return true
+        } else {
+            return false
+        }
     }
     
     internal var onCertificateRequest: () -> Void = { }
@@ -74,6 +81,8 @@ extension EMUPFairPlayRequester {
             do {
                 if try weakSelf.shouldContactRemote(for: resourceLoadingRequest) {
                     weakSelf.handle(resourceLoadingRequest: resourceLoadingRequest)
+                } else {
+                    weakSelf.handleOffline(resourceLoadingRequest: resourceLoadingRequest)
                 }
             }
             catch {
@@ -84,6 +93,48 @@ extension EMUPFairPlayRequester {
         }
         
         return true
+    }
+}
+
+extension EMUPFairPlayRequester {
+    
+    fileprivate func handleOffline(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
+        guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
+                let error = ExposureContext.Error.fairplay(reason: .invalidContentIdentifier)
+                self.keyValidationError = error
+                resourceLoadingRequest.finishLoading(with: error)
+            }
+            return
+        }
+        
+       
+        
+        do {
+            
+           guard let dataRequest = resourceLoadingRequest.dataRequest else {
+                let error = ExposureContext.Error.fairplay(reason: .missingDataRequest)
+                self.keyValidationError = error
+                resourceLoadingRequest.finishLoading(with: error)
+                return
+            }
+            
+            if let keyData = try persistedContentKey(for: assetId) {
+                resourceLoadingRequest.contentInformationRequest?.contentType = AVStreamingKeyDeliveryPersistentContentKeyType
+                
+                let contentKey = try self.onSuccessfulRetrieval(of: keyData, for: resourceLoadingRequest)
+                
+                // Provide data to the loading request.
+                dataRequest.respond(with: contentKey)
+                resourceLoadingRequest.finishLoading()
+
+                
+            }
+        } catch {
+            self.keyValidationError = error
+            resourceLoadingRequest.finishLoading(with: error)
+        }
     }
 }
 
@@ -119,7 +170,7 @@ extension EMUPFairPlayRequester {
         /// Fetch the certificate
         fetchApplicationCertificate(url: certificateUrl) { [weak self] certificate, cachedResponse, certificateError in
             guard let `self` = self else { return }
-            
+
             /// Trigger the certificate response listener
             if !cachedResponse {
                 self.onCertificateResponse(certificateError)
@@ -136,8 +187,6 @@ extension EMUPFairPlayRequester {
             if let certificate = certificate {
                 do {
                     let spcData = try resourceLoadingRequest.streamingContentKeyRequestData(forApp: certificate, contentIdentifier: contentIdentifier, options: self.resourceLoadingRequestOptions)
-                    
-                    
                     guard let licenseUrl = self.licenseUrl else {
                         let missingLicenseUrlError = ExposureContext.Error.fairplay(reason: .missingContentKeyContextUrl)
                         self.keyValidationError = missingLicenseUrlError
@@ -393,5 +442,53 @@ extension EMUPFairPlayRequester {
     fileprivate var licenseUrl: URL? {
         guard let urlString = entitlement.fairplay?.licenseAcquisitionUrl else { return nil }
         return URL(string: urlString)
+    }
+}
+
+
+//MARK: Check for persistedContentKeys
+extension EMUPFairPlayRequester {
+    internal func contentKeyDirectory() throws -> URL {
+        let contentKeyDirectory =  try FileManager
+            .default
+            .url(for: .documentDirectory,
+                 in: .userDomainMask,
+                 appropriateFor: nil,
+                 create: true)
+            .appendingPathComponent("emp")
+            .appendingPathComponent("exposure")
+            .appendingPathComponent("offlineMedia")
+            .appendingPathComponent("keys", isDirectory: true)
+        return contentKeyDirectory
+    }
+    
+    internal func contentKeyUrl(for assetId: String) throws -> URL {
+        return try contentKeyDirectory().appendingPathComponent("\(assetId)-key")
+    }
+    
+    public func persistedContentKeyExists(for assetId: String) throws -> Bool {
+        let url = try contentKeyUrl(for: assetId)
+        return FileManager.default.fileExists(atPath: url.path)
+    }
+    
+    public func deletePersistedContentKey(for assetId: String) throws {
+        let url = try contentKeyUrl(for: assetId)
+        print("deletePersistedContentKey Persisted CKC",assetId,url)
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            print("Persisted CKC? : NO")
+            return
+        }
+        try FileManager.default.removeItem(at: url)
+    }
+    
+    internal func persistedContentKey(for assetId: String) throws -> Data? {
+        let url = try contentKeyUrl(for: assetId)
+        print("persistedContentKey : Persisted CKC",assetId,url)
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            print("Persisted CKC? : NO")
+            return nil
+        }
+        print("Persisted CKC? : YES")
+        return try Data(contentsOf: url)
     }
 }
