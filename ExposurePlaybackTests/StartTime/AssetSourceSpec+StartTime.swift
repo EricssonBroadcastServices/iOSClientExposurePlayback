@@ -58,7 +58,7 @@ class AssetSourceStartTimeSpec: QuickSpec {
 
                     callback(json.decode(PlaybackEntitlement.self), PlayBackEntitlementV2.requiedJson.decode(PlayBackEntitlementV2.self),nil, nil)
                 }
-                
+
                 return AssetPlayable(assetId: "assetId", assetType: .MOVIE, entitlementProvider: provider)
             }
             

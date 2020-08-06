@@ -12,9 +12,9 @@
 	url = https://github.com/Quick/Quick.git
 [submodule "Carthage/Checkouts/iOSClientDownload"]
 	path = Carthage/Checkouts/iOSClientDownload
-	url = https://github.com/EricssonBroadcastServices/iOSClientDownload
+	url = https://github.com/EricssonBroadcastServices/iOSClientDownload.git
 	branch = EMP-14376
 [submodule "Carthage/Checkouts/iOSClientExposureDownload"]
 	path = Carthage/Checkouts/iOSClientExposureDownload
-	url = https://github.com/EricssonBroadcastServices/iOSClientExposureDownload
+	url = https://github.com/EricssonBroadcastServices/iOSClientExposureDownload.git
 	branch = EMP-14376

@@ -61,7 +61,9 @@ class AssetPlayableSpec: QuickSpec {
                 }
                 
                 
+
                 let playable = AssetPlayable(assetId: "channelId", assetType: .TV_CHANNEL, entitlementProvider: provider)
+
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
                 playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
@@ -78,7 +80,9 @@ class AssetPlayableSpec: QuickSpec {
                 provider.mockedRequestEntitlementV2 = { _,_,_, callback in
                     callback(nil,nil,ExposureError.generalError(error: MockedError.generalError), nil)
                 }
+                
                 let playable = AssetPlayable(assetId: "assetId", assetType: .MOVIE, entitlementProvider: provider)
+
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
                 playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
