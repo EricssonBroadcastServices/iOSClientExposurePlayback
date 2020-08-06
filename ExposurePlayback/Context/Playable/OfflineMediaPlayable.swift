@@ -9,8 +9,6 @@
 import Foundation
 import Exposure
 import AVKit
-import Download
-
 
 ///// Playable that can be use to play downloaded assets
 public struct OfflineMediaPlayable {

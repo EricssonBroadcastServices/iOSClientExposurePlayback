@@ -291,6 +291,8 @@
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
 		784D1E6E24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
+		784D1E7824DC3169000F5C34 /* download.md in Resources */ = {isa = PBXBuildFile; fileRef = 784D1E7724DC3169000F5C34 /* download.md */; };
+		784D1E7924DC3169000F5C34 /* download.md in Resources */ = {isa = PBXBuildFile; fileRef = 784D1E7724DC3169000F5C34 /* download.md */; };
 		784E3AD321B16B0A00C986CF /* RBMPlayerControlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */; };
 		784E3AD721B16B5B00C986CF /* VodBasedTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */; };
 		784E3AD921B16B6E00C986CF /* ProgramBasedTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E3AD821B16B6E00C986CF /* ProgramBasedTimeline.swift */; };
@@ -559,6 +561,7 @@
 		781F439C24603A2300610321 /* ExposureDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ExposureDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
 		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
+		784D1E7724DC3169000F5C34 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
 		784E3AD221B16B0A00C986CF /* RBMPlayerControlLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMPlayerControlLabel.swift; sourceTree = "<group>"; };
 		784E3AD621B16B5B00C986CF /* VodBasedTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VodBasedTimeline.swift; sourceTree = "<group>"; };
 		784E3AD821B16B6E00C986CF /* ProgramBasedTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramBasedTimeline.swift; sourceTree = "<group>"; };
@@ -851,6 +854,7 @@
 				76BCE05D204807B900F1E49C /* live-and-catchup-playback.md */,
 				76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */,
 				76BCE07220482CE600F1E49C /* migrating-from-mrr.md */,
+				784D1E7724DC3169000F5C34 /* download.md */,
 			);
 			path = Documentation;
 			sourceTree = SOURCE_ROOT;
@@ -1412,6 +1416,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				784D1E7924DC3169000F5C34 /* download.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1436,6 +1441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				784D1E7824DC3169000F5C34 /* download.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1864,6 +1870,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1873,7 +1880,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.1.130;
+				MARKETING_VERSION = 2.2.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1889,6 +1896,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1898,7 +1906,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.1.130;
+				MARKETING_VERSION = 2.2.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1958,6 +1966,7 @@
 				INFOPLIST_FILE = RefApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.SampleApp;
@@ -1982,6 +1991,7 @@
 				INFOPLIST_FILE = RefApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback.SampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2111,6 +2121,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -2120,7 +2131,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.1.130;
+				MARKETING_VERSION = 2.2.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -2134,6 +2145,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -2143,7 +2155,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.1.130;
+				MARKETING_VERSION = 2.2.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

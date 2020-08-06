@@ -11,6 +11,7 @@
     - [Live and Catchup](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/live-and-catchup-playback.md)
     - [Error Handling and Warning Messages](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/error-handling-and-warning-messages.md)
     - [Migrating from MRR](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/migrating-from-mrr.md)
+    - [Playback of Downloaded Assets](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/Documentation/download.md)
 * [Release Notes](#release-notes)
 * [Upgrade Guides](#upgrade-guides)
 * [Known Limitations](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/KNOWN_LIMITATIONS.md)
