@@ -36,7 +36,7 @@ public struct EnigmaPlayable {
             playTokenExpiration: String(entitlementV2.playTokenExpiration),
             mediaLocator: (format.mediaLocator),
             playSessionId: entitlementV2.playSessionId,
-            live: entitlementV2.streamInfo.live ?? false,
+            live: entitlementV2.streamInfo?.live ?? false,
             ffEnabled: entitlementV2.contractRestrictions?.ffEnabled ?? true,
             timeshiftEnabled: entitlementV2.contractRestrictions?.timeshiftEnabled ?? true,
             rwEnabled: entitlementV2.contractRestrictions?.rwEnabled ?? true,

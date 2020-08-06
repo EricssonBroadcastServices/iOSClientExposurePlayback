@@ -18,6 +18,11 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.2.000
+#### Features
+* `EMP-14376` Add support for playing downloaded assets using  `OfflineMediaPlayable`
+* `EMP-14376` Update example project to show downloading assets & playback of downloaded assets
+
 ## 2.1.130
 
 #### Changes

@@ -68,7 +68,7 @@ class EPGListViewController: UITableViewController  {
             }
         }
         
-       
+        
     }
 }
 
@@ -140,7 +140,7 @@ extension EPGListViewController {
             return
         }
         
-       
+        
         let date = Date()
         let start = (date.subtract(days: 1) ?? date).millisecondsSince1970
         let end = (date.add(hours: 4) ?? date).millisecondsSince1970
