@@ -50,11 +50,17 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
         cell.selectionStyle = .none
         cell.backgroundColor = ColorState.active.background
         cell.textLabel?.textColor = ColorState.active.text
+        cell.detailTextLabel?.textColor = ColorState.active.text
         
         if let asset = downloadedAssets?[indexPath.row] {
             cell.textLabel?.text = asset.assetId
+            
+            let expired = self.enigmaDownloadManager.isExpired(assetId: asset.assetId)
+            if expired {
+                print("Download has expired")
+            }
         }
-        
+         
         return cell
     }
     
@@ -75,6 +81,28 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
             }
         })
         
+        let refreshAction = UIAlertAction(title: "Refresh Liscence", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            
+            guard let session = StorageProvider.storedSessionToken, let environment = StorageProvider.storedEnvironment else {
+                print("No Session token or enviornment providec ")
+                return
+            }
+            
+            if let asset = self.downloadedAssets?[row] {
+                
+                // Developers can use the same download task to refresh the licence if it has expired.
+                let task = self.enigmaDownloadManager.download(assetId: asset.assetId, using: session, in: environment)
+                task.refreshLicence()
+                task.onError {_, url, error in
+                    print("📱 RefreshLicence Task failed with an error: \(error)",url ?? "")
+                }
+                .onCompleted { _, url in
+                    print("📱 RefreshLicence Task completed: \(url)")
+                }
+            }
+        })
+        
         let playOffline = UIAlertAction(title: "Play Offline", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             
@@ -86,6 +114,7 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
                 let urlAsset = downloadedAsset?.urlAsset
                 
                 if let entitlement = downloadedAsset?.entitlement, let urlAsset = urlAsset {
+                    
 
                     let destinationViewController = PlayerViewController()
                     destinationViewController.environment = StorageProvider.storedEnvironment
@@ -108,6 +137,6 @@ class DownloadListTableViewController: UITableViewController, EnigmaDownloadMana
             
         })
         
-        self.popupAlert(title: nil, message: message, actions: [playOffline, deletelAction, cancelAction], preferedStyle: .actionSheet)
+        self.popupAlert(title: nil, message: message, actions: [playOffline, refreshAction, deletelAction, cancelAction], preferedStyle: .actionSheet)
     }
 }
