@@ -88,7 +88,7 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                 self.suspendOrCancelDownload(assetId: assetId, indexPath: indexPath)
             case .suspended:
                 print("SUSPENDED")
-                self.downloadAsset(indexPath: indexPath, videoTrack: nil)
+                self.downloadAsset(indexPath: indexPath, videoTrack: nil, audios: nil, subtitles: nil)
             case .cancelled:
                 print("Cancelled")
             case .prepared:
@@ -213,7 +213,8 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                         
                         let action = UIAlertAction(title: "bitrate - \(video.bitrate)", style: .default, handler: {
                             (alert: UIAlertAction!) -> Void in
-                            self?.downloadAsset(indexPath: indexPath , videoTrack: video.bitrate)
+                        
+                            self?.downloadAsset(indexPath: indexPath , videoTrack: video.bitrate , audios: downloadInfo.audios , subtitles: downloadInfo.subtitles )
                         })
                         allVideoTracks.append(action)
                     }
@@ -229,7 +230,7 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                 } else {
                     
                     // No Video Tracks available so start downloading , start downloading the default video tracks
-                    self?.downloadAsset(indexPath: indexPath, videoTrack: nil)
+                    self?.downloadAsset(indexPath: indexPath, videoTrack: nil, audios: nil , subtitles: nil )
                 }
             } else {
                 print("Asset does not have any downloadable info")
@@ -242,7 +243,7 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
     /// - Parameters:
     ///   - indexPath: indexPath
     ///   - videoTrack: Selected videoTrack
-    func downloadAsset(indexPath: IndexPath, videoTrack: Int?) {
+    func downloadAsset(indexPath: IndexPath, videoTrack: Int?, audios: [Audios]?, subtitles: [Subtitles]?) {
         
         let cell = tableView.cellForRow(at: indexPath) as! AssetListTableViewCell
         
@@ -258,6 +259,8 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
         
         
         let task = self.enigmaDownloadManager.download(assetId: assetId, using: session, in: environment)
+        
+
         
         switch downloadState {
         case .prepared:
@@ -314,9 +317,13 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                             if let keys = result.value {
                                 self.enigmaDownloadManager.isAvailableToDownload(assetId: self.assetId, environment: environment, availabilityKeys: keys.availabilityKeys ?? [] ) { [weak self] isAvailableToDownload in
                                     if isAvailableToDownload {
+        
+                                        task.addAllAdditionalMedia()
+                                            
+                                            // .addAudios(hlsNames: ["French", "German"])
+                                            // .addSubtitles(hlsNames: ["French"])
                                         
-                                        // task.createAndConfigureTask(with: [:], using: task.configuration, callback:{_,_  in})
-                                        task.onCanceled { task, url in
+                                        .onCanceled { task, url in
                                             print("📱 Media Download canceled",task.configuration.identifier,url)
                                         }
                                         .onPrepared { _ in
@@ -332,7 +339,7 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                                             self?.downloadState = DownloadState.suspended
                                         }
                                         .onResumed { _ in
-                                            print("📱 Media Download Resumed")
+                                            print("📱 Media Download Resumed ")
                                             cell.downloadStateLabel.text = "Media Download Resumed"
                                             self?.downloadState = DownloadState.downloading
                                             
@@ -342,13 +349,6 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                                             cell.downloadStateLabel.text = "Downloading"
                                             cell.downloadProgressView.progress = Float(progress.current)
                                             self?.downloadState = DownloadState.downloading
-                                        }
-                                        .onShouldDownloadMediaOption{ _,_ in
-                                            print("📱 Select media option")
-                                            return nil
-                                        }
-                                        .onDownloadingMediaOption{ _,_ in
-                                            print("📱 Downloading media option")
                                         }
                                         .onError {_, url, error in
                                             print("📱 Download error: \(error)",url ?? "")
@@ -363,10 +363,12 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
                                             self?.downloadState = DownloadState.downloaded
                                         }.prepare(lazily: false)
                                         
+                                
                                         // If there is a video track , start downloading the sepcific
                                         if let videoTrack = videoTrack {
                                             task.use(bitrate: Int64(exactly: videoTrack))
                                         }
+                                       
                                     } else {
                                         self?.popupAlert(title: nil, message: message, actions: [cancelAction], preferedStyle: .actionSheet)
                                     }
@@ -441,7 +443,7 @@ class AssetDetailsViewController: UITableViewController, EnigmaDownloadManager {
         
         /// Optional playback properties
         let properties = PlaybackProperties(autoplay: true,
-                                            playFrom: .bookmark,
+                                            playFrom: .beginning,
                                             language: .custom(text: "fr", audio: "en"))
         
         destinationViewController.playbackProperties = properties
