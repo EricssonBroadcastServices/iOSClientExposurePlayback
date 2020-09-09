@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.2.10` Release - [2.2.10](#2210)
 * `2.1.130` Release - [2.1.130](#21130)
 * `2.1.00` Release - [2.1.00](#2100)
 * `2.0.98` Release - [2.0.98](#2098)
@@ -17,6 +18,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.2.100
+#### Features
+* `EMP-14806` Update sample application to show how to use downloads & download additional media. 
 
 ## 2.2.000
 #### Features
