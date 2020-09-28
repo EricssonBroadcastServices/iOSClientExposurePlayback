@@ -221,12 +221,11 @@ extension ExposureContext {
     }
     
     func prepareProgramService(source: ExposureSource, tech: HLSNative<ExposureContext>) {
-        guard let serviceEnabled = source as? ProgramServiceEnabled else {
-            return
-            
-        }
-        let service = programServiceGenerator(environment, sessionToken, serviceEnabled.programServiceChannelId)
         
+        guard let serviceEnabled = source as? ProgramSource else { return }
+
+        let service = programServiceGenerator(environment, sessionToken, serviceEnabled.channelId)
+
         programService = service
         
         service.currentPlayheadTime = { [weak tech] in return tech?.playheadTime }
@@ -235,7 +234,10 @@ extension ExposureContext {
         
         service.playbackRateObserver = tech.observeRateChanges { [weak service] tech, source, rate in
             if tech.isPlaying {
-                service?.startMonitoring()
+                // When playing a channel ( without EPG ) , it does not return a program, so we will create a fake program with the values from the streaminginfo
+                service?.startMonitoring(streamingInfo: source?.streamingInfo)
+                
+                // service?.startMonitoring()
             }
             else {
                 service?.pause()
@@ -257,6 +259,7 @@ extension ExposureContext {
                 tech.stop()
             } else {
                 // Do nothing: Allow continue playback
+                // print("Do nothing: Allow continue playback")
             }
             self.onProgramChanged(program, source)
         }

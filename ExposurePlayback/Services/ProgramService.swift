@@ -278,18 +278,25 @@ extension ProgramService {
             guard let `self` = self else { return }
             let current = self.activeProgram
             self.activeProgram = program
-            if current?.programId != program?.programId && isExtendedProgram == false {
-                self.onProgramChanged(program)
+            
+            if  program?.programId != nil {
+                if current?.programId != program?.programId && isExtendedProgram == false {
+                               self.onProgramChanged(program)
+                   }
+                   
+                   // The current program has extended, call program changed even if it's the same program
+                   else if ( current?.programId == program?.programId && isExtendedProgram == true ) {
+                       self.onProgramChanged(program)
+                   }
+                   else {
+                       // print("Do Nothing ")
+                       // Do nothing
+                   }
+            } else {
+                self.onProgramChanged(current)
             }
             
-            // The current program has extended, call program changed even if it's the same program
-            else if ( current?.programId == program?.programId && isExtendedProgram == true ) {
-                self.onProgramChanged(program)
-            }
-            
-            else {
-                // Do nothing
-            }
+           
         }
     }
 }
@@ -355,7 +362,7 @@ extension ProgramService {
         return 0
     }
     
-    internal func startMonitoring() {
+    internal func startMonitoring(streamingInfo: StreamInfo?) {
         stopFetchTimer()
         stopProgramChangeTimer()
         
@@ -372,7 +379,11 @@ extension ProgramService {
             
             guard let programs = newPrograms, let program = self.requestedProgram(for: timestamp, fromCandidates: programs) else {
                 // There is no program, validation can not occur, allow playback
-                self.handleProgramChanged(program: nil, isExtendedProgram: false)
+                
+                // Create a fake program & pass it to the player
+                let program = Program(programId: self.channelId, assetId: self.channelId, channelId: self.channelId, startTime: String(streamingInfo?.start ?? 0), endTime: nil)
+                
+                self.handleProgramChanged(program: program, isExtendedProgram: false)
                 self.onWarning(.gapInEpg(timestamp: timestamp, channelId: self.channelId))
                 return
             }
