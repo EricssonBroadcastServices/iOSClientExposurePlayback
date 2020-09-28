@@ -71,7 +71,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
                     service.isPlaying = { return true }
 
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
                 }
 
@@ -119,7 +119,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
                     service.fuzzyConfiguration.fuzzyFactor = 1000
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
                     
                     expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 5)
                     expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
@@ -144,7 +144,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
                     expect(warningMessage?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
                 }
 
@@ -165,7 +165,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
                 }
 
@@ -193,7 +193,7 @@ class ProgramServiceSpec: QuickSpec {
                         warningMessage = warning
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
                     service.isEntitled(toPlay: currentDate) { _ in }
                     expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
                 }
@@ -231,7 +231,7 @@ class ProgramServiceSpec: QuickSpec {
                         notEntitledMessage = message
                     }
 
-                    service.startMonitoring()
+                    service.startMonitoring(streamingInfo: nil)
 
 
                     var successCalled = false
@@ -273,7 +273,7 @@ class ProgramServiceSpec: QuickSpec {
                     notEntitledMessage = message
                 }
 
-                service.startMonitoring()
+                service.startMonitoring(streamingInfo: nil)
 
                 var successCalled = false
                 service.isEntitled(toPlay: currentDate) { program in
