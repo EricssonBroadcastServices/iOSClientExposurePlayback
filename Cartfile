@@ -1,4 +1,2 @@
 github "EricssonBroadcastServices/iOSClientPlayer" "master"
 github "EricssonBroadcastServices/iOSClientExposure" "master"
-github "EricssonBroadcastServices/iOSClientDownload" "master"
-github "EricssonBroadcastServices/iOSClientExposureDownload" "master"
