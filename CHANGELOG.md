@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.2.20` Release - [2.2.20](#2220)
 * `2.2.10` Release - [2.2.10](#2210)
 * `2.1.130` Release - [2.1.130](#21130)
 * `2.1.00` Release - [2.1.00](#2100)
@@ -18,6 +19,12 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.2.200
+#### Changes
+* `EMP-15073` Remove example application from the project 
+* `EMP-15073` Remove unused sub modules
+
 
 ## 2.2.100
 #### Features
