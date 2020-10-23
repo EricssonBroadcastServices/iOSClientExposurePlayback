@@ -53,9 +53,9 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let seekTarget = Date().unixEpoch
                         let env = SeekToTimeMock().runWithinBoundsTest(playable: playable, seekTarget: seekTarget)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect{ env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                     }
                 }
                 
@@ -91,9 +91,9 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             
                             let env = SeekToTimeMock().runAfterBoundsEntitledTest(playable: playable, seekTarget: seekTarget)
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
 
@@ -122,11 +122,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let env = SeekToTimeMock().runAfterBoundsErrorFetchingEpg(playable: playable, seekTarget: seekTarget)
                             
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
-                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: .seconds(5))
+                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
 
@@ -154,11 +154,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             
                             let env = SeekToTimeMock().runAfterBoundsErrorValidating(playable: playable, seekTarget: seekTarget)
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
-                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: .seconds(5))
+                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
 
@@ -186,11 +186,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             
                             let env = SeekToTimeMock().runAfterBoundsGapInEpg(playable: playable, seekTarget: seekTarget)
                             
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
-                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: .seconds(5))
+                            expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - seekTarget) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
 
@@ -218,7 +218,7 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             
                             let env = SeekToTimeMock().runAfterBoundsNotEntitled(playable: playable, seekTarget: seekTarget)
                             
-                            expect(env.error).toEventuallyNot(beNil(), timeout: 5)
+                            expect(env.error).toEventuallyNot(beNil(), timeout: .seconds(5))
                             expect(env.error?.code).toEventually(equal(403))
                             expect(env.error?.message).toEventually(equal("NOT_ENTITLED"))
                         }
@@ -261,15 +261,15 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let env = SeekToTimeMock().runAfterSeekableRangeBeyondLive(playable: playable, seekTarget: seekTarget, overshot: overshot)
                         
                         let dif: Int64? = 1000
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         expect{
                             if let val = env.player.playheadTime {
                                 return abs(val - (seekTarget - overshot))
                             }
                             return nil
 //                            return env.player.playheadTime != nil ? abs(env.player.playheadTime! - (seekTarget - overshot)) : nil
-                            }.toEventually(beLessThan(dif), timeout: 5)
+                            }.toEventually(beLessThan(dif), timeout: .seconds(5))
                     }
                 }
 
@@ -303,10 +303,10 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let env = SeekToTimeMock().runAfterSeekableRangeBeyondLive(playable: playable, seekTarget: seekTarget, overshot: overshot)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Requested seek time"), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Requested seek time"), timeout: .seconds(5))
                     }
                 }
             }
@@ -344,11 +344,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let seekOffset: Int64 = 60 * 60 * 1000 / 4
                         let env = SeekToTimeMock().runBeforeSeekableRangeErrorFetchingEpg(playable: playable, currentDate: currentDate, seekOffset: seekOffset)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: .seconds(5))
+                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                     }
                 }
 
@@ -377,11 +377,11 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let seekOffset: Int64 = 60 * 60 * 1000 / 4
                         let env = SeekToTimeMock().runBeforeSeekableRangeGapInEpg(playable: playable, currentDate: currentDate, seekOffset: seekOffset)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: .seconds(5))
+                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                     }
                 }
 
@@ -411,9 +411,9 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let seekOffset: Int64 = 60 * 60 * 1000 / 4
                             let env = SeekToTimeMock().runBeforeSeekableRangeProgramServiceSeekErrorPlaycall(playable: playable, currentDate: currentDate, seekOffset: seekOffset)
                             
-                            expect(env.error).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.error?.message).toEventually(equal("SOME_ERROR"), timeout: 5)
-                            expect(env.error?.code).toEventually(equal(404), timeout: 5)
+                            expect(env.error).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.error?.message).toEventually(equal("SOME_ERROR"), timeout: .seconds(5))
+                            expect(env.error?.code).toEventually(equal(404), timeout: .seconds(5))
                         }
                     }
 
@@ -454,10 +454,10 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                             let env = SeekToTimeMock().runBeforeSeekableRangeProgramServiceSeekEntitled(playable: playable, currentDate: currentDate, seekOffset: seekOffset)
                             
 
-                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: 5)
-                            expect{ return self.playFrom(player: env.player, target: currentDate - seekOffset) }.toEventually(beLessThan(1000), timeout: 5)
+                            expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: .seconds(5))
+                            expect{ return self.playFrom(player: env.player, target: currentDate - seekOffset) }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
                 }
@@ -494,10 +494,10 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let seekOffset: Int64 = 60 * 60 * 1000 / 4
                         let env = SeekToTimeMock().runEnforceContractRestrictions(playable: playable, currentDate: currentDate, seekOffset: seekOffset)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Contract restrictions disables fast forwarding"), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Contract restrictions disables fast forwarding"), timeout: .seconds(5))
                     }
                 }
                 
@@ -530,10 +530,10 @@ class ChannelSourceSeekToTimeSpec: QuickSpec {
                         let seekOffset: Int64 = 60 * 60 * 1000 / 4
                         let env = SeekToTimeMock().runEnforceContractRestrictions(playable: playable, currentDate: currentDate, seekOffset: -seekOffset)
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Contract restrictions disabled rewinding"), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Contract restrictions disabled rewinding"), timeout: .seconds(5))
                     }
                 }
             }

@@ -450,8 +450,8 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
                             expect(env.player.startTime).to(beNil())
                             expect(env.player.startPosition).to(beNil())
-                            expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: 5)
+                            expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: .seconds(5))
                         }
                     }
                     
@@ -470,8 +470,8 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                             expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
                             expect(env.player.startTime).to(beNil())
                             expect(env.player.startPosition).to(equal(segmentLength))
-                            expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                            expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: 5)
+                            expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                            expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: .seconds(5))
                         }
                     }
                 }
@@ -524,8 +524,8 @@ class ProgramSourceStartTimeSpec: QuickSpec {
                         expect(env.player.tech.currentAsset).toEventuallyNot(beNil())
                         expect(env.player.startTime).to(beNil())
                         expect(env.player.startPosition).to(beNil())
-                        expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: 5)
+                        expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.warning?.message).toEventually(contain("Invalid start time"), timeout: .seconds(5))
                     }
                 }
             }

@@ -75,12 +75,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("Swedish"), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal("sv"), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: 5)
+                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("Swedish"), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal("sv"), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: .seconds(5))
                     }
                 }
                 
@@ -118,12 +118,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("DISPLAY_"+locale), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal(locale), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: 5)
+                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("DISPLAY_"+locale), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal(locale), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: .seconds(5))
                     }
                 }
                 
@@ -161,12 +161,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("DISPLAY_"+custom), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal(custom), timeout: 5)
-                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: 5)
+                        expect(env.player.tech.selectedAudioTrack?.name).toEventually(equal("DISPLAY_"+custom), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.extendedLanguageTag).toEventually(equal(custom), timeout: .seconds(5))
+                        expect(env.player.tech.selectedAudioTrack?.type).toEventually(equal("audio"), timeout: .seconds(5))
                     }
                 }
             }
@@ -204,12 +204,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("Swedish"), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal("sv"), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: 5)
+                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("Swedish"), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal("sv"), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: .seconds(5))
                     }
                 }
                 
@@ -247,12 +247,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("DISPLAY_"+locale), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal(locale), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: 5)
+                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("DISPLAY_"+locale), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal(locale), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: .seconds(5))
                     }
                 }
                 
@@ -290,12 +290,12 @@ class LanguagePreferencesSpec: QuickSpec {
                         env.player.startPlayback(playable: playable, properties: properties)
                         
                         
-                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: 5)
+                        expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                        expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         
-                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("DISPLAY_"+custom), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal(custom), timeout: 5)
-                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: 5)
+                        expect(env.player.tech.selectedTextTrack?.name).toEventually(equal("DISPLAY_"+custom), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.extendedLanguageTag).toEventually(equal(custom), timeout: .seconds(5))
+                        expect(env.player.tech.selectedTextTrack?.type).toEventually(equal("subtitle"), timeout: .seconds(5))
                     }
                 }
             }
