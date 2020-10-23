@@ -72,7 +72,7 @@ class ProgramServiceSpec: QuickSpec {
                     service.isPlaying = { return true }
 
                     service.startMonitoring()
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: 5)
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerSecondProgram"), timeout: .seconds(5))
                 }
 
                 it("Should send message when not entitled") {
@@ -121,8 +121,8 @@ class ProgramServiceSpec: QuickSpec {
                     service.fuzzyConfiguration.fuzzyFactor = 1000
                     service.startMonitoring()
                     
-                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: 5)
-                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
+                    expect(service.currentProgram?.assetId).toEventually(equal("validationTriggerNotEntitledSecondProgram"), timeout: .seconds(5))
+                    expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: .seconds(5))
                 }
             }
 
@@ -145,7 +145,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring()
-                    expect(warningMessage?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
+                    expect(warningMessage?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: .seconds(5))
                 }
 
                 it("if error on program fetch at startup") {
@@ -166,7 +166,7 @@ class ProgramServiceSpec: QuickSpec {
                     }
 
                     service.startMonitoring()
-                    expect(warningMessage?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
+                    expect(warningMessage?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: .seconds(5))
                 }
 
                 it("if error on program validation") {
@@ -195,7 +195,7 @@ class ProgramServiceSpec: QuickSpec {
 
                     service.startMonitoring()
                     service.isEntitled(toPlay: currentDate) { _ in }
-                    expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
+                    expect(warningMessage?.message).toEventually(contain("Program Service failed to validate program"), timeout: .seconds(5))
                 }
             }
 
@@ -242,10 +242,10 @@ class ProgramServiceSpec: QuickSpec {
                         }
                     }
 
-                    expect(successCalled).toEventually(beTrue(), timeout: 5)
-                    expect(notEntitledMessage).toEventually(beNil(), timeout: 5)
-                    expect(programs.count).toEventually(equal(1), timeout: 5)
-                    expect(service.currentProgram?.assetId).toEventually(equal("timestampWithinActiveProgram"), timeout: 5)
+                    expect(successCalled).toEventually(beTrue(), timeout: .seconds(5))
+                    expect(notEntitledMessage).toEventually(beNil(), timeout: .seconds(5))
+                    expect(programs.count).toEventually(equal(1), timeout: .seconds(5))
+                    expect(service.currentProgram?.assetId).toEventually(equal("timestampWithinActiveProgram"), timeout: .seconds(5))
                 }
             }
 
@@ -281,8 +281,8 @@ class ProgramServiceSpec: QuickSpec {
                 }
 
 
-                expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: 5)
-                expect(successCalled).toEventually(beFalse(), timeout: 5)
+                expect(notEntitledMessage).toEventually(equal("NOT_ENTITLED"), timeout: .seconds(5))
+                expect(successCalled).toEventually(beFalse(), timeout: .seconds(5))
             }
         }
     }

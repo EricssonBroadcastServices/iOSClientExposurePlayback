@@ -62,7 +62,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     
                     let env = SeekToLiveMock().runEntitledTest(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
                     expect(env.player.currentProgram?.programId).toEventually(equal("program2"))
                 }
             }
@@ -102,9 +102,9 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
 
                     let env = SeekToLiveMock().runErrorFetchingEpgTest(playable: playable, properties: properties)
 
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: 5)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(env.warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: .seconds(5))
                 }
             }
 
@@ -147,8 +147,8 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
                     let env = SeekToLiveMock().runErrorValidatingEntitlementTest(playable: playable, properties: properties)
 
                      expect(env.player.currentProgram?.programId).toEventually(equal("program2"))
-                    expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: 5)
+                    expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(env.warning?.message).toEventually(contain("Program Service failed to validate program"), timeout: .seconds(5))
                 }
             }
 
@@ -186,9 +186,9 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
 
                     let env = SeekToLiveMock().runGapInEpgTest(playable: playable, properties: properties)
                     
-                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.warning).toEventuallyNot(beNil(), timeout: 5)
-                    expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: 5)
+                    expect(env.player.tech.currentAsset).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(env.warning).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(env.warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: .seconds(5))
                 }
             }
 
@@ -226,7 +226,7 @@ class ChannelSourceSeekToLiveSpec: QuickSpec {
 
                     let env = SeekToLiveMock().runNotEntitledTest(playable: playable, properties: properties)
 
-                    expect(env.error).toEventuallyNot(beNil(), timeout: 5)
+                    expect(env.error).toEventuallyNot(beNil(), timeout: .seconds(5))
                     expect(env.error?.code).toEventually(equal(403))
                     expect(env.error?.message).toEventually(equal("NOT_ENTITLED"))
                 }

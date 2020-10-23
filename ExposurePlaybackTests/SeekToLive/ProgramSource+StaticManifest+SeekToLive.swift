@@ -112,9 +112,9 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
 
-                    expect(error).toEventuallyNot(beNil(), timeout: 5)
-                    expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: 5)
-                    expect(error?.code).toEventually(equal(404), timeout: 5)
+                    expect(error).toEventuallyNot(beNil(), timeout: .seconds(5))
+                    expect(error?.message).toEventually(equal("SOME_ERROR"), timeout: .seconds(5))
+                    expect(error?.code).toEventually(equal(404), timeout: .seconds(5))
                 }
             }
             
@@ -215,7 +215,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     }
                     env.player.startPlayback(playable: playable, properties: properties)
                     
-                    expect(env.player.currentProgram?.programId).toEventually(equal("program2"), timeout: 5)
+                    expect(env.player.currentProgram?.programId).toEventually(equal("program2"), timeout: .seconds(5))
                 }
             }
         }

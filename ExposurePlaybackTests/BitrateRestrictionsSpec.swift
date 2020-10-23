@@ -83,7 +83,7 @@ class BitrateRestrictionSpec: QuickSpec {
                 
                 env.player.startPlayback(playable: playable, properties: properties)
                 
-                expect(env.player.tech.preferredMaxBitrate).toEventually(equal(preferredBitRate), timeout: 5)
+                expect(env.player.tech.preferredMaxBitrate).toEventually(equal(preferredBitRate), timeout: .seconds(5))
             }
         }
     }
