@@ -1,4 +1,4 @@
-github "EricssonBroadcastServices/iOSClientExposure" "84d27be800db30c65c472a294aa7f5784751ffb1"
-github "EricssonBroadcastServices/iOSClientPlayer" "b8b557cb4fe64a451dc55721f42b447c2e3f0e70"
+github "EricssonBroadcastServices/iOSClientExposure" "v2.2.200"
+github "EricssonBroadcastServices/iOSClientPlayer" "v2.2.300"
 github "Quick/Nimble" "v9.0.0"
 github "Quick/Quick" "v3.0.0"
