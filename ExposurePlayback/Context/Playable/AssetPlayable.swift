@@ -10,13 +10,14 @@ import Foundation
 import Exposure
 
 internal protocol AssetEntitlementProvider {
-    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
+    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment,  include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
     
-    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
+    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
 /// Defines a `Playable` for the specific vod asset
 public struct AssetPlayable: Playable {
+
     /// The asset id
     public let assetId: String
     public let assetType: AssetType?
@@ -24,9 +25,9 @@ public struct AssetPlayable: Playable {
     internal var entitlementProvider: AssetEntitlementProvider = ExposureEntitlementProvider()
     
     internal struct ExposureEntitlementProvider: AssetEntitlementProvider {
-        func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
-            
-            self.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, callback: { entitlementV1, entitlementV2, error, response in
+        func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
+                
+            self.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, callback: { entitlementV1, entitlementV2, error, response in
                 
                 guard let entitlementV2 = entitlementV2 else { return
                     callback(nil, error, response)
@@ -42,7 +43,7 @@ public struct AssetPlayable: Playable {
                 
             })
         }
-        
+
         
         
         /// Request playback entitlement version 2
@@ -52,26 +53,50 @@ public struct AssetPlayable: Playable {
         ///   - sessionToken: session token
         ///   - environment: exposure enviornment
         ///   - callback: callbacks
-        func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
-            Entitlement(environment: environment,
-                        sessionToken: sessionToken)
-                .enigmaAsset(assetId: assetId)
-                .request()
-                .validate()
-                .response{
+        func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
+            
+            // Check if whether the app developer has pass AdsOptions to target ads
+            if let adsOptions = adsOptions {
+                Entitlement(environment: environment,
+                            sessionToken: sessionToken)
+                    .enigmaAsset(assetId: assetId, includeAds: adsOptions)
+                    .request()
+                    .validate()
+                    .response{
+                        guard let enetitlementV2Response =  $0.value else {
+                            callback(nil, nil, $0.error, $0.response)
+                            return
+                        }
+                        
+                        let (convertedEntitlement, error) = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: enetitlementV2Response)
+                        guard let playbackEntitlement = convertedEntitlement else {
+                            callback(nil, nil ,error, $0.response )
+                            return
+                        }
+                        callback( playbackEntitlement ,enetitlementV2Response, $0.error, $0.response)
+                }
+            } else {
+                Entitlement(environment: environment,
+                            sessionToken: sessionToken)
+                    .enigmaAsset(assetId: assetId)
+                    .request()
+                    .validate()
+                    .response{
 
-                    guard let enetitlementV2Response =  $0.value else {
-                        callback(nil, nil, $0.error, $0.response)
-                        return
-                    }
-                    
-                    let (convertedEntitlement, error) = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: enetitlementV2Response)
-                    guard let playbackEntitlement = convertedEntitlement else {
-                        callback(nil, nil ,error, $0.response )
-                        return
-                    }
-                    callback( playbackEntitlement ,enetitlementV2Response, $0.error, $0.response)
+                        guard let enetitlementV2Response =  $0.value else {
+                            callback(nil, nil, $0.error, $0.response)
+                            return
+                        }
+                        
+                        let (convertedEntitlement, error) = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: enetitlementV2Response)
+                        guard let playbackEntitlement = convertedEntitlement else {
+                            callback(nil, nil ,error, $0.response )
+                            return
+                        }
+                        callback( playbackEntitlement ,enetitlementV2Response, $0.error, $0.response)
+                }
             }
+            
         }
     }
 }
@@ -89,13 +114,13 @@ extension AssetPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        prepareAssetSource(environment: environment, sessionToken: sessionToken, callback: callback)
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, callback: callback)
     }
     
-    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?,  callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         
-        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment) { entitlementV1, entitlementV2, error, response in
+        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions) { entitlementV1, entitlementV2, error, response in
             
             if let value = entitlementV2 {
                 guard let playbackEntitlement = entitlementV1 else {
@@ -170,8 +195,8 @@ extension AssetPlayable {
 }
 
 extension AssetPlayable {
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
-        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment) { entitlementV1, entitlementV2, error, response in
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?,  callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions) { entitlementV1, entitlementV2, error, response in
             
             if let value = entitlementV2 {
                 

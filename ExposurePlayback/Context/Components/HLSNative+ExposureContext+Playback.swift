@@ -18,8 +18,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter assetId: EMP `Playable` for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
-    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties()) {
-        context.startPlayback(playable: playable, properties: properties, tech: tech)
+    /// - parameter properties: AdsOptions Client / device specific information that can be used for ad targeting
+    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil) {
+        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions)
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -32,6 +33,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         let playable = AssetPlayable(assetId: assetId)
         startPlayback(playable: playable, properties: properties)
     }
+    
     
     /// Initiates a playback session by requesting an entitlement for `channelId` will start live playback. Optionally, users can specify a `programId` as well, which will request program playback.
     ///
@@ -55,7 +57,7 @@ extension ExposureContext {
     /// - parameter assetId: EMP `Playable` for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter tech: Tech to do the playback on
-    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil ) {
         playbackProperties = properties
         
         // Generate the analytics providers
@@ -68,7 +70,7 @@ extension ExposureContext {
             }
         }
         
-        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken) { [weak self, weak tech] source, error, response in
+        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
             self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
         }

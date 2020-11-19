@@ -145,7 +145,7 @@ extension ProgramPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         entitlementProvider.requestEntitlementV2(programId: assetId, channelId: channelId, using: sessionToken, in: environment) { entitlementV1, entitlementV2, error, response in
             if let value = entitlementV2 {
                 

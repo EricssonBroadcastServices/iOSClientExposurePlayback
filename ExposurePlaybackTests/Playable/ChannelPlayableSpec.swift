@@ -72,7 +72,7 @@ class ChannelPlayableSpec: QuickSpec {
                 let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil) { src, err in
                     source = src
                     error = err
                 }
@@ -89,7 +89,7 @@ class ChannelPlayableSpec: QuickSpec {
                 let playable = ChannelPlayable(assetId: "channelId", entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil) { src, err in
                     source = src
                     error = err
                 }

@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.2.30` Release - [2.2.30](#2230)
 * `2.2.20` Release - [2.2.20](#2220)
 * `2.2.10` Release - [2.2.10](#2210)
 * `2.1.130` Release - [2.1.130](#21130)
@@ -19,6 +20,12 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+
+## 2.2.300
+#### Features
+* `EMP-15242` Add support to pass `AdsOptions`  when starting a playback
+
 
 ## 2.2.200
 #### Changes

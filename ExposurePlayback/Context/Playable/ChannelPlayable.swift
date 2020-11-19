@@ -92,7 +92,7 @@ extension ChannelPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         prepareChannelSource(environment: environment, sessionToken: sessionToken, callback: callback)
     }
     
