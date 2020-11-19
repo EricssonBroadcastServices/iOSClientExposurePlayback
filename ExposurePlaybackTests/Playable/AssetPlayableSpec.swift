@@ -14,17 +14,18 @@ import Foundation
 @testable import ExposurePlayback
 
 internal class MockedAssetEntitlementProvider: AssetEntitlementProvider {
-    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
+   
+    var mockedRequestEntitlement: (String, SessionToken, Environment, AdsOptions?, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_,_  in }
+    
+    var mockedRequestEntitlementV2: (String, SessionToken, Environment, AdsOptions?, (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_,_  in }
+    
+    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
+        mockedRequestEntitlement(assetId, sessionToken, environment,adsOptions, callback)
     }
     
-    
-    var mockedRequestEntitlement: (String, SessionToken, Environment, (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_ in }
-    
-    var mockedRequestEntitlementV2: (String, SessionToken, Environment, (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) -> Void = { _,_,_,_ in }
-    
-    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
+    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
   
-        mockedRequestEntitlementV2(assetId, sessionToken, environment, callback)
+        mockedRequestEntitlementV2(assetId, sessionToken, environment,adsOptions, callback)
     }
 
 }
@@ -45,7 +46,7 @@ class AssetPlayableSpec: QuickSpec {
             
             it("Should prepare source with valid entitlement response") {
                 let provider = MockedAssetEntitlementProvider()
-                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_,_, callback in
                     // EntitlementV2
                     guard let entitlementV2 = PlayBackEntitlementV2.validJson.decode(PlayBackEntitlementV2.self) else {
                         callback(nil, nil,ExposureError.generalError(error: MockedError.generalError), nil)
@@ -64,7 +65,7 @@ class AssetPlayableSpec: QuickSpec {
                 let playable = AssetPlayable(assetId: "channelId", assetType: nil, entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil) { src, err in
                     source = src
                     error = err
                 }
@@ -75,13 +76,13 @@ class AssetPlayableSpec: QuickSpec {
             
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedAssetEntitlementProvider()
-                provider.mockedRequestEntitlementV2 = { _,_,_, callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_,_, callback in
                     callback(nil,nil,ExposureError.generalError(error: MockedError.generalError), nil)
                 }
                 let playable = AssetPlayable(assetId: "assetId", assetType: nil, entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil) { src, err in
                     source = src
                     error = err
                 }
