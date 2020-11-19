@@ -123,11 +123,13 @@ player
 #### Starting Playback
 Client applications start playback by supplying `Player` with a `Playable`.
 
-In order to play a live channel simply create a `ChannelPlayable` specifying the channelId and pass that as a parameter to the `startPlayback(playable:properties:)` method. This will start the currently live program.
+**With the SDK `2.xxx` up versions we have deprecated the `ChannelPlayable` & `ProgramPlayable` . Instead now you can simply 
+create an `AssetPlayable` to play a live channel , programme or vod assets.**
+
 
 ```Swift
-let channelPlayable = ChannelPlayable(assetId: "channelId")
-player.startPlayback(playable: channelPlayable)
+let assetPlayable = AssetPlayable(assetId: "assetId")
+player.startPlayback(playable: assetPlayable)
 ```
 
 Optionally, client applications can set specific playback options by specifying them in `PlaybackProperties`. These options include maximum bitrate, autoplay mode, custom start time and language preferences.
@@ -138,20 +140,9 @@ let properties = PlaybackProperties(autoPlay: true,
                                     language: .custom(text: "fr", audio: "en"),
                                     maxBitrate: 300000)
 
-player.startPlayback(playable: channelPlayable, properties: properties)
+player.startPlayback(playable: assetPlayable, properties: properties)
 ```
 
-In a similair manner, specific programs may be started by supplying a `ProgramPlayable` and Vods by supplying an `AssetPlayable`.
-
-```Swift
-let programPlayable = ProgramPlayable(assetId: "programId", channelId: "channelId")
-player.startPlayback(playable: programPlayable)
-```
-
-```Swift
-let assetPlayable = AssetPlayable(assetId: "assetId")
-player.startPlayback(playable: assetPlayable)
-```
 
 #### Playback Progress
 Playback progress is available in two formats. Playhead position reports the position timestamp using the internal buffer time reference in milliseconds. It is also possible to seek to an offset relative to the current position
@@ -174,3 +165,17 @@ let thirtyMinutes = 30 * 60 * 1000
 let thirtyMinutesAgo = Date().millisecondsSince1970 - thirtyMinutes
 player.seek(toTime: thirtyMinutesAgo)
 ```
+
+#### Server-Side Ad Insertion (SSAI)
+
+if you are planning to use server side ads insertion with the player you can set `AdsOptions` to pass client / device specific information that can be used for ad targeting when starting the playback.
+
+
+```Swift
+let adsOptions = AdsOptions(latitude: 18.000, longitude: 18.000, mute: true, consent: "consent", deviceMake: "deviceMake", ifa: "ifa", gdprOptin: true)
+player.startPlayback(playable: assetPlayable, properties: properties, adsOptions: adsOptions)
+```
+
+
+
+
