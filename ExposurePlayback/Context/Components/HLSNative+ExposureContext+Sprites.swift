@@ -43,7 +43,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
                             if error == nil {
                                 if let localURL = localURL {
                                     if let urlContent = try? String(contentsOf: localURL) {
-                                        print(urlContent)
+                                        // print(urlContent)
                                         
                                         do {
                                             let webVTT = try WebVTTParser(string: urlContent, vttUrl: url).parse()

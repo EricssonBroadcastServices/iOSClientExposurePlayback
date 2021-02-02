@@ -21,7 +21,7 @@ internal class ImageFileManager {
     
     /// Create a directory with the given assetId
     func createDirectory() {
-        guard let applicationSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
+        guard let applicationSupportDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else { return }
         
         let applicationDirectoryUrl = applicationSupportDirectory.appendingPathComponent(Bundle.main.bundleIdentifier ?? "com.redbee.exposureplayback")
         
@@ -37,7 +37,7 @@ internal class ImageFileManager {
     /// Get the directory url for a given assetId
     /// - Returns: url
     func getDirectoryUrl() -> URL? {
-        guard let applicationSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+        guard let applicationSupportDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
         
             let directoryURL = applicationSupportDirectory.appendingPathComponent(Bundle.main.bundleIdentifier ?? "com.redbee.exposureplayback")
             let documentURL = directoryURL.appendingPathComponent (assetId)
