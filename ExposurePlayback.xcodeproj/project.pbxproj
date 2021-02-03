@@ -294,6 +294,8 @@
 		78B66D9D25C982D000280701 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66D9B25C982D000280701 /* DownloadOperation.swift */; };
 		78B66DA325C982EA00280701 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66DA225C982EA00280701 /* AsynchronousOperation.swift */; };
 		78B66DA425C982EA00280701 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66DA225C982EA00280701 /* AsynchronousOperation.swift */; };
+		78B66E6F25CA8DF600280701 /* sprites.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B66E6E25CA8DF600280701 /* sprites.md */; };
+		78B66E7025CA8DF600280701 /* sprites.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B66E6E25CA8DF600280701 /* sprites.md */; };
 		78B670A525B9804B00786C49 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670A425B9804B00786C49 /* WebVTT.swift */; };
 		78B670A625B9804B00786C49 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670A425B9804B00786C49 /* WebVTT.swift */; };
 		78B670AC25B9806400786C49 /* WebVTTParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670AB25B9806400786C49 /* WebVTTParser.swift */; };
@@ -502,6 +504,7 @@
 		78B66D9425C982B600280701 /* ImageFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
 		78B66D9B25C982D000280701 /* DownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
 		78B66DA225C982EA00280701 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
+		78B66E6E25CA8DF600280701 /* sprites.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sprites.md; sourceTree = "<group>"; };
 		78B670A425B9804B00786C49 /* WebVTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVTT.swift; sourceTree = "<group>"; };
 		78B670AB25B9806400786C49 /* WebVTTParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVTTParser.swift; sourceTree = "<group>"; };
 		78B670B925B9809100786C49 /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
@@ -709,6 +712,7 @@
 				76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */,
 				76BCE07220482CE600F1E49C /* migrating-from-mrr.md */,
 				784D1E7724DC3169000F5C34 /* download.md */,
+				78B66E6E25CA8DF600280701 /* sprites.md */,
 			);
 			path = Documentation;
 			sourceTree = SOURCE_ROOT;
@@ -1100,6 +1104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7924DC3169000F5C34 /* download.md in Resources */,
+				78B66E7025CA8DF600280701 /* sprites.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1115,6 +1120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7824DC3169000F5C34 /* download.md in Resources */,
+				78B66E6F25CA8DF600280701 /* sprites.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1459,7 +1465,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1469,7 +1475,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1485,7 +1491,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1495,7 +1501,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1661,7 +1667,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1671,7 +1677,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1685,7 +1691,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1695,7 +1701,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

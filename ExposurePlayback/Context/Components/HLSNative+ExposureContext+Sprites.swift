@@ -19,14 +19,18 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - quality: JPEG Quality : lowest = 0 | low = 0.25 | medium  = 0.5 | high = 0.75 | highest = 1
     ///   - callback: completion SpriteData array
     /// - Returns: self
-    public func activateSprites(assetId: String, width: Int, quality: JPEGQuality = .medium, callback: @escaping ([SpriteData]?, Error?) -> Void) -> Self   {
+    public func activateSprites(assetId: String, width: Int? = nil, quality: JPEGQuality = .highest, callback: @escaping ([SpriteData]?, Error?) -> Void) -> Self   {
         
         /// Find if there is any vtt file with the given resolution / width
         if let data = UserDefaults.standard.value(forKey:"sprites") as? Data {
             
             let sprites = try? PropertyListDecoder().decode(Array<Sprites>.self, from: data)
             
-            let matchedSprite = sprites?.first(where: { $0.width == width })
+            var spriteWidth = width
+            // if the width is nil, assign the width of the first available sprite's width
+            if width == nil { spriteWidth = sprites?.first?.width }
+            
+            let matchedSprite = sprites?.first(where: { $0.width == spriteWidth })
             
             if let url = matchedSprite?.vtt {
                 
