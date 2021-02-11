@@ -31,9 +31,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
             if width == nil { spriteWidth = sprites?.first?.width }
             
             let matchedSprite = sprites?.first(where: { $0.width == spriteWidth })
-            
+
             if let url = matchedSprite?.vtt {
-                
+
                 // Remove any spritesData cache available in the UserDefaults
                 UserDefaults.standard.removeObject(forKey: "spritesData")
       
@@ -79,8 +79,17 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                         
                                         
                                         
+                                    } else {
+                                        let error = NSError(domain: "VTT stream content is missing", code: 51, userInfo: nil)
+                                        callback(nil, ExposureError.generalError(error: error))
                                     }
+                                } else {
+                                    let error = NSError(domain: "VTT url is missing", code: 50, userInfo: nil)
+                                    callback(nil, ExposureError.generalError(error: error))
                                 }
+                            } else {
+                                print(" vtt stream download task failed with an error")
+                                callback(nil, error)
                             }
                             
                         }
@@ -90,6 +99,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
                 let error = NSError(domain: "Coudn't find a vtt file with the given resolution", code: 55, userInfo: nil)
                 callback(nil, ExposureError.generalError(error: error))
             }
+        } else {
+            let error = NSError(domain: "Sprites are empty in the session", code: 56, userInfo: nil)
+            callback(nil, ExposureError.generalError(error: error))
         }
 
         return self
@@ -136,6 +148,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
                     callback(nil)
                 }
             })
+            callback(nil)
         return self
     }
 }

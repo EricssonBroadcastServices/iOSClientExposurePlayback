@@ -22,7 +22,6 @@ internal class DownloadOperation : AsynchronousOperation {
                 /// Get the sprite image names
                 if let spriteImageName = url.absoluteString.components(separatedBy: "/").last {
                     if let file = ImageFileManager(assetId: assetId).getDirectoryUrl() {
-                        
                         /// Create sprite image name file url
                         let spriteImage =  file.appendingPathComponent(spriteImageName)
                         
@@ -35,7 +34,7 @@ internal class DownloadOperation : AsynchronousOperation {
                             }
                         }
                     } else {
-                        print(" applicationSupportDirectory can not be find")
+                        print(" applicationSupportDirectory can not be found")
                     }
                 }
             } catch {

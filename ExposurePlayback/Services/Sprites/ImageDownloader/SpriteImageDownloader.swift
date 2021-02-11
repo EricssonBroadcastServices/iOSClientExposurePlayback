@@ -22,7 +22,7 @@ internal class SpriteImageDownloader {
     
     public func downloadImagesInQue(urlStrings: [String], quality: JPEGQuality) {
         
-        queue.maxConcurrentOperationCount = 4
+        //  queue.maxConcurrentOperationCount = 4
         
         let _ = ImageFileManager(assetId: assetId).createDirectory()
         
@@ -49,7 +49,14 @@ internal class SpriteImageDownloader {
                     completion(image, nil)
                     return
                 }
+            } else {
+                // print(" Assigninig image to UIImage was failed ")
+                completion(nil,nil)
+                
             }
+        } else {
+            // print(" spriteImageName could not be found " )
+            completion(nil, nil)
         }
     }
     
