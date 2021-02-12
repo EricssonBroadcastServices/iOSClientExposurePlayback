@@ -17,7 +17,7 @@ internal protocol AssetEntitlementProvider {
 
 /// Defines a `Playable` for the specific vod asset
 public struct AssetPlayable: Playable {
-
+    
     /// The asset id
     public let assetId: String
     public let assetType: AssetType?
@@ -26,7 +26,7 @@ public struct AssetPlayable: Playable {
     
     internal struct ExposureEntitlementProvider: AssetEntitlementProvider {
         func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
-                
+            
             self.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, callback: { entitlementV1, entitlementV2, error, response in
                 
                 guard let entitlementV2 = entitlementV2 else { return
@@ -43,7 +43,7 @@ public struct AssetPlayable: Playable {
                 
             })
         }
-
+        
         
         
         /// Request playback entitlement version 2
@@ -74,7 +74,7 @@ public struct AssetPlayable: Playable {
                             return
                         }
                         callback( playbackEntitlement ,enetitlementV2Response, $0.error, $0.response)
-                }
+                    }
             } else {
                 Entitlement(environment: environment,
                             sessionToken: sessionToken)
@@ -82,7 +82,7 @@ public struct AssetPlayable: Playable {
                     .request()
                     .validate()
                     .response{
-
+                        
                         guard let enetitlementV2Response =  $0.value else {
                             callback(nil, nil, $0.error, $0.response)
                             return
@@ -94,7 +94,7 @@ public struct AssetPlayable: Playable {
                             return
                         }
                         callback( playbackEntitlement ,enetitlementV2Response, $0.error, $0.response)
-                }
+                    }
             }
             
         }
@@ -120,8 +120,13 @@ extension AssetPlayable {
     
     internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?,  callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         
+        
+        // Remove any sprites from UserDefaults if available
+        UserDefaults.standard.removeObject(forKey: "sprites")
+        
+        
         entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions) { entitlementV1, entitlementV2, error, response in
-            
+ 
             if let value = entitlementV2 {
                 guard let playbackEntitlement = entitlementV1 else {
                     callback(nil, error)
@@ -145,38 +150,53 @@ extension AssetPlayable {
                 
                 // Dynamic catchup as live
                 else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 // Static catch up as live
                 else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     source.response = response
                     callback(source, nil)
                 }
-    
-                    
+                
+                
                 // Catchup
                 else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     source.response = response
                     callback(source, nil)
                 }
                 // VOD Asset
                 else if value.streamInfo?.staticProgram == true {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil, sprites: value.sprites)
+                    
+                    
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    source.response = response
+                    callback(source, nil)
+
+                }
+                
+                // Some other assettype: Trying to use AssetPlay
+                else {
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil, sprites: nil)
                     source.response = response
                     callback(source, nil)
                 }
                 
-                    // Some other assettype: Trying to use AssetPlay
-                else {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil)
-                    source.response = response
-                    callback(source, nil)
-                }
+               
             }
             // Entitlment V2 has empty value : Error in prepareSource
             else if let error = error {
@@ -189,13 +209,14 @@ extension AssetPlayable {
             }
         }
     }
-    
-    
-    
 }
 
 extension AssetPlayable {
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?,  callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        
+        // Remove any sprites from UserDefaults if available
+        UserDefaults.standard.removeObject(forKey: "sprites")
+        
         entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions) { entitlementV1, entitlementV2, error, response in
             
             if let value = entitlementV2 {
@@ -211,21 +232,29 @@ extension AssetPlayable {
                     source.response = response
                     callback(source, nil, response)
                 }
-                   
+                
                 // Dynamic catchup as live
                 else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    
                     source.response = response
                     callback(source, nil, response)
                 }
-                   
+                
                 // Static catchup as live
                 else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    
                     source.response = response
                     callback(source, nil, response)
                 }
-                    
+                
                 // This is a live program
                 else if value.streamInfo?.live == true && value.streamInfo?.staticProgram == false {
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
@@ -233,24 +262,32 @@ extension AssetPlayable {
                     callback(source, nil, response)
                     
                 }
-                    
+                
                 // Catchup program
                 else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    
                     source.response = response
                     callback(source, nil, response)
                 }
-                    
+                
                 // This is a vod asset
                 else if value.streamInfo?.staticProgram == true {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites)
+
+                    // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
+                    
                     source.response = response
                     callback(source, nil, response)
                 }
-                    
+                
                 // Something else -> Trying to play as an asset
                 else {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil, sprites: nil)
                     source.response = response
                     callback(source, nil, response)
                 }

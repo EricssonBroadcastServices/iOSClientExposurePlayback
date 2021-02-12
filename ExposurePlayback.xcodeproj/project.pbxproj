@@ -280,6 +280,30 @@
 		784D1E7924DC3169000F5C34 /* download.md in Resources */ = {isa = PBXBuildFile; fileRef = 784D1E7724DC3169000F5C34 /* download.md */; };
 		7867DFA82475102200379519 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7867DFA72475102200379519 /* OfflineMediaPlayable.swift */; };
 		7867DFA92475102200379519 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7867DFA72475102200379519 /* OfflineMediaPlayable.swift */; };
+		787BFB0C25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */; };
+		787BFB0D25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */; };
+		787BFB3F25C458B6008EF464 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB3E25C458B6008EF464 /* String+Extensions.swift */; };
+		787BFB4025C458B6008EF464 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB3E25C458B6008EF464 /* String+Extensions.swift */; };
+		78B66B2025C7E6E500280701 /* SpriteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66B1F25C7E6E500280701 /* SpriteData.swift */; };
+		78B66B2125C7E6E500280701 /* SpriteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66B1F25C7E6E500280701 /* SpriteData.swift */; };
+		78B66B9125C7F7C000280701 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66B9025C7F7C000280701 /* UIImage+Extension.swift */; };
+		78B66B9225C7F7C000280701 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66B9025C7F7C000280701 /* UIImage+Extension.swift */; };
+		78B66D9525C982B600280701 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66D9425C982B600280701 /* ImageFileManager.swift */; };
+		78B66D9625C982B600280701 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66D9425C982B600280701 /* ImageFileManager.swift */; };
+		78B66D9C25C982D000280701 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66D9B25C982D000280701 /* DownloadOperation.swift */; };
+		78B66D9D25C982D000280701 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66D9B25C982D000280701 /* DownloadOperation.swift */; };
+		78B66DA325C982EA00280701 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66DA225C982EA00280701 /* AsynchronousOperation.swift */; };
+		78B66DA425C982EA00280701 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B66DA225C982EA00280701 /* AsynchronousOperation.swift */; };
+		78B66E6F25CA8DF600280701 /* sprites.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B66E6E25CA8DF600280701 /* sprites.md */; };
+		78B66E7025CA8DF600280701 /* sprites.md in Resources */ = {isa = PBXBuildFile; fileRef = 78B66E6E25CA8DF600280701 /* sprites.md */; };
+		78B670A525B9804B00786C49 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670A425B9804B00786C49 /* WebVTT.swift */; };
+		78B670A625B9804B00786C49 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670A425B9804B00786C49 /* WebVTT.swift */; };
+		78B670AC25B9806400786C49 /* WebVTTParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670AB25B9806400786C49 /* WebVTTParser.swift */; };
+		78B670AD25B9806400786C49 /* WebVTTParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670AB25B9806400786C49 /* WebVTTParser.swift */; };
+		78B670BA25B9809100786C49 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670B925B9809100786C49 /* Scanner.swift */; };
+		78B670BB25B9809100786C49 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670B925B9809100786C49 /* Scanner.swift */; };
+		78B670E125BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */; };
+		78B670E225BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */; };
 		78DF4A0B225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */; };
 		78DF4A1B225F239800B8348A /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
 		78EEDA79229D4EDB00C2FEE5 /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
@@ -473,6 +497,18 @@
 		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
 		784D1E7724DC3169000F5C34 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
 		7867DFA72475102200379519 /* OfflineMediaPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMediaPlayable.swift; sourceTree = "<group>"; };
+		787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Sprites.swift"; sourceTree = "<group>"; };
+		787BFB3E25C458B6008EF464 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		78B66B1F25C7E6E500280701 /* SpriteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteData.swift; sourceTree = "<group>"; };
+		78B66B9025C7F7C000280701 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		78B66D9425C982B600280701 /* ImageFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
+		78B66D9B25C982D000280701 /* DownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
+		78B66DA225C982EA00280701 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
+		78B66E6E25CA8DF600280701 /* sprites.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sprites.md; sourceTree = "<group>"; };
+		78B670A425B9804B00786C49 /* WebVTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVTT.swift; sourceTree = "<group>"; };
+		78B670AB25B9806400786C49 /* WebVTTParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVTTParser.swift; sourceTree = "<group>"; };
+		78B670B925B9809100786C49 /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
+		78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteImageDownloader.swift; sourceTree = "<group>"; };
 		78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlementV2+Extension.swift"; sourceTree = "<group>"; };
 		78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaPlayable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -676,6 +712,7 @@
 				76BCE05F2048236E00F1E49C /* error-handling-and-warning-messages.md */,
 				76BCE07220482CE600F1E49C /* migrating-from-mrr.md */,
 				784D1E7724DC3169000F5C34 /* download.md */,
+				78B66E6E25CA8DF600280701 /* sprites.md */,
 			);
 			path = Documentation;
 			sourceTree = SOURCE_ROOT;
@@ -711,6 +748,7 @@
 				76A29D38205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift */,
 				767EFCE9216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift */,
 				767EFCEE21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift */,
+				787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -741,6 +779,7 @@
 		76A89C4120207AB100C23579 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				78B670A325B9802B00786C49 /* Sprites */,
 				7619B4A621773F0500EE0DC8 /* ContractRestrictions */,
 				76A89D672020F3CF00C23579 /* ExposureAnalytics.swift */,
 				76A89C4320207AB100C23579 /* MonotonicTimeService.swift */,
@@ -810,6 +849,8 @@
 				7635AEC4202ADFDE001512BF /* CMTime+Extensions.swift */,
 				766FE470203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift */,
 				78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */,
+				787BFB3E25C458B6008EF464 /* String+Extensions.swift */,
+				78B66B9025C7F7C000280701 /* UIImage+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -889,6 +930,29 @@
 				76CD5AF3202DBF2300941ABC /* ProgramPlayableSpec.swift */,
 			);
 			path = Playable;
+			sourceTree = "<group>";
+		};
+		78B66D9325C9829A00280701 /* ImageDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */,
+				78B66D9425C982B600280701 /* ImageFileManager.swift */,
+				78B66D9B25C982D000280701 /* DownloadOperation.swift */,
+				78B66DA225C982EA00280701 /* AsynchronousOperation.swift */,
+			);
+			path = ImageDownloader;
+			sourceTree = "<group>";
+		};
+		78B670A325B9802B00786C49 /* Sprites */ = {
+			isa = PBXGroup;
+			children = (
+				78B66D9325C9829A00280701 /* ImageDownloader */,
+				78B670A425B9804B00786C49 /* WebVTT.swift */,
+				78B670AB25B9806400786C49 /* WebVTTParser.swift */,
+				78B670B925B9809100786C49 /* Scanner.swift */,
+				78B66B1F25C7E6E500280701 /* SpriteData.swift */,
+			);
+			path = Sprites;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1040,6 +1104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7924DC3169000F5C34 /* download.md in Resources */,
+				78B66E7025CA8DF600280701 /* sprites.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1055,6 +1120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7824DC3169000F5C34 /* download.md in Resources */,
+				78B66E6F25CA8DF600280701 /* sprites.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1140,7 @@
 			files = (
 				78EEDA7A229D50C600C2FEE5 /* PlaybackEntitlementV2+Extension.swift in Sources */,
 				760801E02069306E007F59D5 /* MRRFairplayRequester.swift in Sources */,
+				78B670E225BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */,
 				767FB4B2217FC7B400BC087A /* (null) in Sources */,
 				760801E12069306E007F59D5 /* Paused.swift in Sources */,
 				760801E22069306E007F59D5 /* ChannelPlayable.swift in Sources */,
@@ -1082,9 +1149,11 @@
 				760801E52069306E007F59D5 /* CMTime+Extensions.swift in Sources */,
 				760801E62069306E007F59D5 /* ScrubbedTo.swift in Sources */,
 				760801E72069306E007F59D5 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
+				78B670BB25B9809100786C49 /* Scanner.swift in Sources */,
 				760801E82069306E007F59D5 /* ContextTimeSeekable.swift in Sources */,
 				76010C882125B364008DB688 /* StopAirplay.swift in Sources */,
 				760801E92069306E007F59D5 /* Completed.swift in Sources */,
+				787BFB0D25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
 				760801EA2069306E007F59D5 /* HandshakeStarted.swift in Sources */,
 				760801EB2069306E007F59D5 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				760801EC2069306E007F59D5 /* HLSNative+ExposureContext+Program.swift in Sources */,
@@ -1100,6 +1169,7 @@
 				7696508520B2E64000B76A14 /* Trace.swift in Sources */,
 				760801F52069306E007F59D5 /* InitCompleted.swift in Sources */,
 				760801F62069306E007F59D5 /* PlaybackProperties.swift in Sources */,
+				787BFB4025C458B6008EF464 /* String+Extensions.swift in Sources */,
 				760801F72069306E007F59D5 /* ProgramPlayable.swift in Sources */,
 				760801F82069306E007F59D5 /* SWXMLHash+TypeConversion.swift in Sources */,
 				7619B4A921773F1B00EE0DC8 /* ContractRestrictionsPolicy.swift in Sources */,
@@ -1110,10 +1180,12 @@
 				76B7B13621482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				7867DFA92475102200379519 /* OfflineMediaPlayable.swift in Sources */,
 				760801FC2069306E007F59D5 /* Created.swift in Sources */,
+				78B670AD25B9806400786C49 /* WebVTTParser.swift in Sources */,
 				760801FD2069306E007F59D5 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				760801FE2069306E007F59D5 /* UIDevice+Extensions.swift in Sources */,
 				760801FF2069306E007F59D5 /* HeartbeatsProvider.swift in Sources */,
 				760802002069306E007F59D5 /* Heartbeat.swift in Sources */,
+				78B66DA425C982EA00280701 /* AsynchronousOperation.swift in Sources */,
 				760802012069306E007F59D5 /* AssetSource.swift in Sources */,
 				760802022069306E007F59D5 /* MonotonicTimeService.swift in Sources */,
 				760802032069306E007F59D5 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
@@ -1124,6 +1196,7 @@
 				766EE43220CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				760802082069306E007F59D5 /* ExposureSource.swift in Sources */,
 				7644FBBE21134BCA006CEBF0 /* DrmEvent.swift in Sources */,
+				78B66B9225C7F7C000280701 /* UIImage+Extension.swift in Sources */,
 				7619B4AC21773F3D00EE0DC8 /* BasicContractRestrictions.swift in Sources */,
 				76150E81218782A000AABE89 /* AdService.swift in Sources */,
 				760802092069306E007F59D5 /* ContractRestrictionsService.swift in Sources */,
@@ -1137,15 +1210,19 @@
 				760802112069306E007F59D5 /* BufferingStarted.swift in Sources */,
 				78EEDA79229D4EDB00C2FEE5 /* EnigmaPlayable.swift in Sources */,
 				7619B4A521773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift in Sources */,
+				78B66D9625C982B600280701 /* ImageFileManager.swift in Sources */,
 				760802122069306E007F59D5 /* Resumed.swift in Sources */,
 				760802132069306E007F59D5 /* ExposureFairplayRequester.swift in Sources */,
 				760802142069306E007F59D5 /* ProgramChanged.swift in Sources */,
+				78B66B2125C7E6E500280701 /* SpriteData.swift in Sources */,
 				7644FBBB21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
 				760802152069306E007F59D5 /* ProgramSource.swift in Sources */,
 				760802162069306E007F59D5 /* BitrateChanged.swift in Sources */,
 				760802172069306E007F59D5 /* StartCasting.swift in Sources */,
 				784D1E6E24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
+				78B670A625B9804B00786C49 /* WebVTT.swift in Sources */,
 				760802182069306E007F59D5 /* ContextPositionSeekable.swift in Sources */,
+				78B66D9D25C982D000280701 /* DownloadOperation.swift in Sources */,
 				760802192069306E007F59D5 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7608021A2069306E007F59D5 /* Playable.swift in Sources */,
 				7619B49F21764FEB00EE0DC8 /* HLSNative+ExposureContext+AdService.swift in Sources */,
@@ -1218,6 +1295,7 @@
 			files = (
 				78DF4A0B225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift in Sources */,
 				76A89C4E20207AB200C23579 /* MRRFairplayRequester.swift in Sources */,
+				78B670E125BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */,
 				76A89D992020F41F00C23579 /* Paused.swift in Sources */,
 				76A89C5020207AB200C23579 /* ChannelPlayable.swift in Sources */,
 				7635AECD202AE0D2001512BF /* ContextStartTime.swift in Sources */,
@@ -1226,9 +1304,11 @@
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
 				76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				7635AEC9202AE0A2001512BF /* ContextTimeSeekable.swift in Sources */,
+				78B670BA25B9809100786C49 /* Scanner.swift in Sources */,
 				78DF4A1B225F239800B8348A /* EnigmaPlayable.swift in Sources */,
 				76010C872125B364008DB688 /* StopAirplay.swift in Sources */,
 				76A89D8C2020F41F00C23579 /* Completed.swift in Sources */,
+				787BFB0C25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
 				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,
 				766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				7619B489216F258D00EE0DC8 /* AdServiceEventProvider.swift in Sources */,
@@ -1244,6 +1324,7 @@
 				76A89DA52020F9E800C23579 /* ExposureContext+Warning.swift in Sources */,
 				7696508420B2E64000B76A14 /* Trace.swift in Sources */,
 				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
+				787BFB3F25C458B6008EF464 /* String+Extensions.swift in Sources */,
 				76A89C5220207AB200C23579 /* PlaybackProperties.swift in Sources */,
 				767EFCEF21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
 				76A89C5120207AB200C23579 /* ProgramPlayable.swift in Sources */,
@@ -1254,10 +1335,12 @@
 				767EFCEA216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift in Sources */,
 				7867DFA82475102200379519 /* OfflineMediaPlayable.swift in Sources */,
 				76150E7C2187826F00AABE89 /* AdPlayerProxy.swift in Sources */,
+				78B670AC25B9806400786C49 /* WebVTTParser.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
 				76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
 				76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
+				78B66DA325C982EA00280701 /* AsynchronousOperation.swift in Sources */,
 				76A89D662020F36400C23579 /* UIDevice+Extensions.swift in Sources */,
 				766FE475203C2B10003B9B90 /* HeartbeatsProvider.swift in Sources */,
 				76A89D972020F41F00C23579 /* Heartbeat.swift in Sources */,
@@ -1268,6 +1351,7 @@
 				76A89D882020F41F00C23579 /* AssetIdentifier.swift in Sources */,
 				76A29D39205ACA930047B546 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				76A89D862020F41F00C23579 /* Aborted.swift in Sources */,
+				78B66B9125C7F7C000280701 /* UIImage+Extension.swift in Sources */,
 				766EE43120CF07F200F8D8C5 /* FairplayCertificateCache.swift in Sources */,
 				76A89C5520207AB200C23579 /* ExposureSource.swift in Sources */,
 				76150E80218782A000AABE89 /* AdService.swift in Sources */,
@@ -1281,15 +1365,19 @@
 				7635AEC7202AE07E001512BF /* ContextGoLive.swift in Sources */,
 				76A89C5420207AB200C23579 /* ChannelSource.swift in Sources */,
 				76A89C4920207AB200C23579 /* HLSNative+ExposureContext+Seek.swift in Sources */,
+				78B66D9525C982B600280701 /* ImageFileManager.swift in Sources */,
 				76A89D8A2020F41F00C23579 /* BufferingStarted.swift in Sources */,
 				76A89D9E2020F41F00C23579 /* Resumed.swift in Sources */,
 				76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */,
+				78B66B2025C7E6E500280701 /* SpriteData.swift in Sources */,
 				76A89D9D2020F41F00C23579 /* ProgramChanged.swift in Sources */,
 				7644FBBA21134843006CEBF0 /* DrmAnalyticsProvider.swift in Sources */,
 				7619B4A821773F1B00EE0DC8 /* ContractRestrictionsPolicy.swift in Sources */,
 				76A89C5620207AB200C23579 /* ProgramSource.swift in Sources */,
 				784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
+				78B670A525B9804B00786C49 /* WebVTT.swift in Sources */,
 				76A89D892020F41F00C23579 /* BitrateChanged.swift in Sources */,
+				78B66D9C25C982D000280701 /* DownloadOperation.swift in Sources */,
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
 				7635AECB202AE0B2001512BF /* ContextPositionSeekable.swift in Sources */,
 				7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
@@ -1377,17 +1465,17 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 6;
+				DYLIB_CURRENT_VERSION = 3;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ExposurePlayback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1403,17 +1491,17 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 6;
+				DYLIB_CURRENT_VERSION = 3;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ExposurePlayback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1490,7 +1578,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1551,7 +1639,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1579,17 +1667,17 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 6;
+				DYLIB_CURRENT_VERSION = 3;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ExposurePlayback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1603,17 +1691,17 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 6;
+				DYLIB_CURRENT_VERSION = 3;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ExposurePlayback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.300;
+				MARKETING_VERSION = 2.2.400;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

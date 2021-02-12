@@ -44,32 +44,42 @@ open class ExposureSource: MediaSource {
     /// Service that manages contract restrictions
     public var contractRestrictionsService: ContractRestrictionsService
     
+    /// streaming information from the play request
     public var streamingInfo: StreamInfo?
+    
+    /// sprites which include vtt url & the width of each sprite image
+    public var sprites: [Sprites]?
     
     /// Creates a new `ExposureSource`
     ///
     /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
     ///
-    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
-    /// - parameter assetId: The id for the asset
-    public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?) {
+    /// - Parameters:
+    ///   - entitlement: `PlaybackEntitlement` used to play the asset
+    ///   - assetId: assetId: The id for the asset
+    ///   - streamingInfo: streaming information from the play request
+    ///   - sprites: sprites information from the play request
+    public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil ) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.streamingInfo = streamingInfo
+        self.sprites = sprites
         self.response = nil
     }
     
     /// Creates a new `ExposureSource`
     ///
     /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
-    ///
-    /// - parameter entitlement: `PlaybackEntitlement` used to play the asset
-    /// - parameter assetId: The id for the asset
-    /// - parameter response: HTTP response received when requesting the entitlement
-    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?) {
+    /// - Parameters:
+    ///   - entitlement: PlaybackEntitlement` used to play the asset
+    ///   - assetId: The id for the asset
+    ///   - response: HTTP response received when requesting the entitlement
+    ///   - streamingInfo: streaming information from the play request
+    ///   - sprites: sprites information from the play request
+    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil ) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
