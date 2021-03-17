@@ -35,7 +35,7 @@ class AssetSourceStartTimeSpec: QuickSpec {
                 // Configure the playable
                 let provider = MockedAssetEntitlementProvider()
                 
-                provider.mockedRequestEntitlementV2 = { _,_,_,_,callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_,_,_, callback in
                     
                     
                     var json = PlaybackEntitlement.requiedJson

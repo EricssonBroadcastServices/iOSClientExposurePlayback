@@ -44,22 +44,15 @@ public struct AssetPlayable: Playable {
             })
         }
         
-        
-        
         /// Request playback entitlement version 2
-        ///
         /// - Parameters:
         ///   - assetId: assetId
         ///   - sessionToken: session token
         ///   - environment: exposure enviornment
+        ///   - adsOptions: Server side Ad options
+        ///   - adobePrimetimeMediaToken: adobePrimetimeMediaToken
         ///   - callback: callbacks
         func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
-            
-//            var headers:[String: String] = [:]
-//
-//            if let adobeprimeToken = adobePrimetimeMediaToken {
-//                headers = ["X-Adobe-Primetime-MediaToken":adobeprimeToken]
-//            }
             
             // Check if whether the app developer has pass AdsOptions to target ads
             if let adsOptions = adsOptions {
