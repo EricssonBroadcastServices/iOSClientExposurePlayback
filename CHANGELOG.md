@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.2.50` Release - [2.2.50](#2250)
 * `2.2.40` Release - [2.2.40](#2240)
 * `2.2.30` Release - [2.2.30](#2230)
 * `2.2.20` Release - [2.2.20](#2220)
@@ -22,6 +23,10 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+
+## 2.2.500
+#### Features
+* `EMP-15794` Add support for `Adobe Primetime Media Token parameter` 
 
 ## 2.2.400
 #### Features
