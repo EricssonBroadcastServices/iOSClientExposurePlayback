@@ -18,9 +18,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter assetId: EMP `Playable` for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
-    /// - parameter properties: AdsOptions Client / device specific information that can be used for ad targeting
-    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil) {
-        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions)
+    /// - parameter AdsOptions: Client / device specific information that can be used for ad targeting
+    /// - parameter adobePrimetimeMediaToken:  X-Adobe-Primetime-MediaToken
+    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil ) {
+        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken)
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -29,7 +30,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter assetId: EMP asset id for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
-    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties()) {
+    /// - parameter adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
+    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil) {
         let playable = AssetPlayable(assetId: assetId)
         startPlayback(playable: playable, properties: properties)
     }
@@ -51,13 +53,15 @@ extension Player where Tech == HLSNative<ExposureContext> {
 extension ExposureContext {
     
     /// Initiates a playback session with the supplied `Playable`
-    ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
     ///
-    /// - parameter assetId: EMP `Playable` for which to request playback.
-    /// - parameter properties: Properties specifying additional configuration for the playback
-    /// - parameter tech: Tech to do the playback on
-    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil ) {
+    /// - Parameters:
+    ///   - playable: EMP `Playable` for which to request playback.
+    ///   - properties: Properties specifying additional configuration for the playback
+    ///   - tech: Tech to do the playback on
+    ///   - adsOptions: Client / device specific information that can be used for ad targeting
+    ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil ) {
         playbackProperties = properties
         
         // Generate the analytics providers
@@ -70,7 +74,7 @@ extension ExposureContext {
             }
         }
         
-        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions) { [weak self, weak tech] source, error, response in
+        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
             self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
         }
