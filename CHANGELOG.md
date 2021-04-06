@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.2.51` Release - [2.2.51](#2251)
 * `2.2.50` Release - [2.2.50](#2250)
 * `2.2.40` Release - [2.2.40](#2240)
 * `2.2.30` Release - [2.2.30](#2230)
@@ -23,6 +24,9 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.2.510
+#### Changes
+* `EMP-15910` Change minimum support version to iOS 11
 
 ## 2.2.500
 #### Features
