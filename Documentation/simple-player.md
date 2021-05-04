@@ -143,6 +143,12 @@ let properties = PlaybackProperties(autoPlay: true,
 player.startPlayback(playable: assetPlayable, properties: properties)
 ```
 
+If application developers want to disable the analytics for the playback they can pass `enableAnalytics` property when starting a playback. By default analytics are enabled for the player. 
+
+```Swift
+player.startPlayback(playable: assetPlayable, properties: properties, enableAnalytics: false)
+```
+
 
 #### Playback Progress
 Playback progress is available in two formats. Playhead position reports the position timestamp using the internal buffer time reference in milliseconds. It is also possible to seek to an offset relative to the current position
