@@ -55,9 +55,7 @@ extension Playback.Heartbeat: AnalyticsEvent {
         }
         
         if let cdnInfo = cdnInfo {
-            json[JSONKeys.profile.rawValue] = cdnInfo.profile
-            json[JSONKeys.host.rawValue] = cdnInfo.host
-            json[JSONKeys.provider.rawValue] = cdnInfo.provider
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
         }
         
         if let analyticsInfo = analyticsInfo {
@@ -77,14 +75,12 @@ extension Playback.Heartbeat: AnalyticsEvent {
         case offsetTime = "OffsetTime"
         
         // CDN
-        case profile = "profile"
-        case host = "host"
-        case provider = "provider"
+        case CDNVendor = "CDNVendor"
         
         // Analytics info from entitlement
-        case bucket = "bucket"
-        case postInterval = "postInterval"
-        case tag = "tag"
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
     }

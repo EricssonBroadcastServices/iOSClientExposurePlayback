@@ -54,7 +54,7 @@ class DeviceInfoSpec: QuickSpec {
                 expect(json["Manufacturer"] as? String).to(equal(manufacturer))
                 expect(json["Connection"] as? String).to(equal("WiFi"))
                 expect(json["Type"] as? String).to(equal("Airplay"))
-                expect(json.count).to(equal(9))
+                expect(json.count).to(equal(10))
             }
             
         }

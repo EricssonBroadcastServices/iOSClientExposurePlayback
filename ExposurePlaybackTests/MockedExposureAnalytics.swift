@@ -13,7 +13,10 @@ import Player
 @testable import ExposurePlayback
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
-    required init(environment: Environment, sessionToken: SessionToken) {
+    
+    
+    
+    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?) {
         self.environment = environment
         self.sessionToken = sessionToken
     }

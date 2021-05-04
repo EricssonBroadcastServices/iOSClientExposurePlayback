@@ -63,9 +63,7 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         }
         
         if let cdnInfo = cdnInfo {
-            params[JSONKeys.profile.rawValue] = cdnInfo.profile
-            params[JSONKeys.host.rawValue] = cdnInfo.host
-            params[JSONKeys.provider.rawValue] = cdnInfo.provider
+            params[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
         }
         
         if let analyticsInfo = analyticsInfo {
@@ -87,14 +85,12 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case programId = "ProgramId"
         
         // CDN
-        case profile = "profile"
-        case host = "host"
-        case provider = "provider"
+        case CDNVendor = "CDNVendor"
         
         // Analytics info from entitlement
-        case bucket = "bucket"
-        case postInterval = "postInterval"
-        case tag = "tag"
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
     }

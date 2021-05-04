@@ -40,7 +40,7 @@ class ProgramChangedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["ProgramId"] as? String).to(equal(programId))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
-                expect(json.count).to(equal(5))
+                expect(json.count).to(equal(6))
             }
         }
     }

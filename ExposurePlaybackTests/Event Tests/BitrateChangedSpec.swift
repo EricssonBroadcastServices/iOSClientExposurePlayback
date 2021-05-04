@@ -38,7 +38,7 @@ class BitrateChangedSpec: QuickSpec {
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(5))
             }
         }
     }
