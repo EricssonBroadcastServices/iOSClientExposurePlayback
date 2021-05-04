@@ -30,7 +30,6 @@
 #### Features
 * `EMP-15925` Analytics Enhancements 
 * `EMP-15925` Now developers can disable analytics when playing content.
-* `EMP-15983` use `PlaybackProperties` when using offline playback 
 
 
 ## 2.2.510
