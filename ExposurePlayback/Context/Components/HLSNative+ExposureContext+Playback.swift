@@ -20,8 +20,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter AdsOptions: Client / device specific information that can be used for ad targeting
     /// - parameter adobePrimetimeMediaToken:  X-Adobe-Primetime-MediaToken
-    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil ) {
-        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken)
+    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true ) {
+        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics)
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -31,9 +31,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter assetId: EMP asset id for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
-    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil) {
+    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true) {
         let playable = AssetPlayable(assetId: assetId)
-        startPlayback(playable: playable, properties: properties)
+        startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics)
     }
     
     
@@ -61,7 +61,7 @@ extension ExposureContext {
     ///   - tech: Tech to do the playback on
     ///   - adsOptions: Client / device specific information that can be used for ad targeting
     ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
-    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil ) {
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true ) {
         playbackProperties = properties
         
         // Generate the analytics providers
@@ -76,16 +76,24 @@ extension ExposureContext {
         
         playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
-            self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
+            if enableAnalytics == true {
+                self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
+            } else {
+                self.handle(source: source, error: error, providers: nil, tech: tech, exposureResponse: response)
+            }
+            
         }
     }
     
-    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider], tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?) {
+    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider]? = nil , tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?) {
         if let source = source {
             onEntitlementResponse(source.entitlement, source)
             
             /// Assign the providers
-            source.analyticsConnector.providers = providers
+            if let providers = providers {
+                source.analyticsConnector.providers = providers
+            }
+            
             
             /// Ask if an optional AdService is available
             onAdServiceRequested(source)
@@ -216,11 +224,15 @@ extension ExposureContext {
             /// Deliver error
             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             let nilSource: ExposureSource? = nil
-            providers.forEach{
-                /// EMP-11667: If Exposure returned an error, (ie an ExposureResponseMessage, for example NOT_ENTITLED), no Source object is created. This means we need to set the `X-Request-Id` before we finalize the session.
-                ($0 as? ExposureAnalytics)?.exposureEntitlementHTTPURLResponse = exposureResponse
-                $0.onError(tech: tech, source: nilSource, error: contextError)
+            
+            if let providers = providers {
+                providers.forEach{
+                    /// EMP-11667: If Exposure returned an error, (ie an ExposureResponseMessage, for example NOT_ENTITLED), no Source object is created. This means we need to set the `X-Request-Id` before we finalize the session.
+                    ($0 as? ExposureAnalytics)?.exposureEntitlementHTTPURLResponse = exposureResponse
+                    $0.onError(tech: tech, source: nilSource, error: contextError)
+                }
             }
+            
             tech.stop()
             tech.eventDispatcher.onError(tech, nilSource, contextError)
         }

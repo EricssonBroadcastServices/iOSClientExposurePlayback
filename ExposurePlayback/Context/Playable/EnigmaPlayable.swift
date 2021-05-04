@@ -54,7 +54,7 @@ public struct EnigmaPlayable {
             lastViewedTime: entitlementV2.bookmarks?.lastViewedTime ?? nil,
             liveTime: entitlementV2.bookmarks?.liveTime ?? nil ,
             productId: entitlementV2.productId,
-            adMediaLocator: nil)
+            adMediaLocator: nil, cdn: entitlementV2.cdn , analytics: entitlementV2.analytics)
         
         return (playbackEntitlement, nil)
     }

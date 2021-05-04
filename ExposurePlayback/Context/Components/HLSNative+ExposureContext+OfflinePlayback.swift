@@ -28,15 +28,17 @@
         ///   - tech: Tech to do the playback on
         internal func startOfflineMediaPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
             
+            playbackProperties = properties
+            
             let entitlementResponse = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: offlineMediaPlayable.entitlement)
             if let entitlement = entitlementResponse.0 {
                 
-                let source = ExposureSource(entitlement: entitlement, assetId: offlineMediaPlayable.assetId, response: nil, streamingInfo: offlineMediaPlayable.entitlement.streamInfo )
+                let source = ExposureSource(entitlement: entitlement, assetId: offlineMediaPlayable.assetId, response: nil, streamingInfo: offlineMediaPlayable.entitlement.streamInfo)
                 
                 // onEntitlementResponse(source.entitlement, source)
                 
                 /// Assign the providers : TODO
-                // source.analyticsConnector.providers = providers
+                // source.analyticsConnector.providers = providers4
                 
                 /// Make sure StartTime is configured if specified by user
                 tech.startTime(byDelegate: self)

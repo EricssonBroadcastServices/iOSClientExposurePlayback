@@ -862,30 +862,30 @@
 		76A89D692020F41F00C23579 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				76A89D7C2020F41F00C23579 /* InitCompleted.swift */,
+				76A89D712020F41F00C23579 /* Created.swift */,
+				76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */,
+				76A89D802020F41F00C23579 /* PlayReady.swift */,
+				76A89D852020F41F00C23579 /* Started.swift */,
+				76A89D7D2020F41F00C23579 /* Paused.swift */,
+				76A89D822020F41F00C23579 /* Resumed.swift */,
 				76A89D6A2020F41F00C23579 /* Aborted.swift */,
-				76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */,
 				76A89D6D2020F41F00C23579 /* BitrateChanged.swift */,
 				76A89D6E2020F41F00C23579 /* BufferingStarted.swift */,
 				76A89D6F2020F41F00C23579 /* BufferingStopped.swift */,
 				76A89D702020F41F00C23579 /* Completed.swift */,
-				76A89D712020F41F00C23579 /* Created.swift */,
-				76A89D722020F41F00C23579 /* DeviceInfo.swift */,
 				76A89D792020F41F00C23579 /* Error.swift */,
-				76A89D7A2020F41F00C23579 /* HandshakeStarted.swift */,
 				76A89D7B2020F41F00C23579 /* Heartbeat.swift */,
-				76A89D7C2020F41F00C23579 /* InitCompleted.swift */,
-				76A89D7D2020F41F00C23579 /* Paused.swift */,
 				76A89D7E2020F41F00C23579 /* Playback.swift */,
-				76A89D802020F41F00C23579 /* PlayReady.swift */,
 				76A89D812020F41F00C23579 /* ProgramChanged.swift */,
-				76A89D822020F41F00C23579 /* Resumed.swift */,
 				76A89D832020F41F00C23579 /* ScrubbedTo.swift */,
 				76A89D842020F41F00C23579 /* StartCasting.swift */,
-				76A89D852020F41F00C23579 /* Started.swift */,
 				76A29D3A205FB6C70047B546 /* StartAirplay.swift */,
 				76010C862125B364008DB688 /* StopAirplay.swift */,
 				7696508320B2E64000B76A14 /* Trace.swift */,
 				7644FBBC21134BCA006CEBF0 /* DrmEvent.swift */,
+				76A89D722020F41F00C23579 /* DeviceInfo.swift */,
+				76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */,
 				76EBF036215E30E000503146 /* ConnectionChanged.swift */,
 			);
 			path = Events;
@@ -1471,7 +1471,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1481,7 +1481,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.500;
+				MARKETING_VERSION = 2.2.600;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1497,7 +1497,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1507,7 +1507,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.500;
+				MARKETING_VERSION = 2.2.600;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1679,7 +1679,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1689,7 +1689,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.510;
+				MARKETING_VERSION = 2.2.600;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1703,7 +1703,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1713,7 +1713,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.510;
+				MARKETING_VERSION = 2.2.600;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

@@ -30,13 +30,20 @@ extension Playback {
         /// Error Details, such as stack trace or expanded error info
         internal let details: String?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, info: String? = nil, details: String? = nil) {
+        internal var cdnInfo: CDNInfoFromEntitlement?
+        
+        internal var analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, info: String? = nil, details: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.message = message
             self.code = code
             self.info = info
             self.details = details
+            
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -70,6 +77,20 @@ extension Playback.Error: AnalyticsEvent {
             json[JSONKeys.details.rawValue] = details
         }
         
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.profile.rawValue] = cdnInfo.profile
+            json[JSONKeys.host.rawValue] = cdnInfo.host
+            json[JSONKeys.provider.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return json
     }
     
@@ -81,6 +102,18 @@ extension Playback.Error: AnalyticsEvent {
         case code = "Code"
         case info = "Info"
         case details = "Details"
+        
+        // CDN
+        case profile = "profile"
+        case host = "host"
+        case provider = "provider"
+        
+        // Analytics info from entitlement
+        case bucket = "bucket"
+        case postInterval = "postInterval"
+        case tag = "tag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }
 

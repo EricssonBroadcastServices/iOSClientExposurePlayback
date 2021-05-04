@@ -16,9 +16,16 @@ extension Playback {
         
         internal let assetData: PlaybackIdentifier?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier? = nil) {
+        internal let cdnInfo: CDNInfoFromEntitlement?
+        
+        internal let analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.assetData = assetData
+            
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -55,6 +62,20 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
             params[JSONKeys.programId.rawValue] = programId
         }
         
+        if let cdnInfo = cdnInfo {
+            params[JSONKeys.profile.rawValue] = cdnInfo.profile
+            params[JSONKeys.host.rawValue] = cdnInfo.host
+            params[JSONKeys.provider.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            params[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            params[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            params[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return params
     }
     
@@ -64,6 +85,18 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
+        
+        // CDN
+        case profile = "profile"
+        case host = "host"
+        case provider = "provider"
+        
+        // Analytics info from entitlement
+        case bucket = "bucket"
+        case postInterval = "postInterval"
+        case tag = "tag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }
 
