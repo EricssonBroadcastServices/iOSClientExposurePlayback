@@ -18,9 +18,15 @@ extension Playback {
         /// Offset in the video sequence where the playback was stopped. This would typically be equal to the length of the asset in milliseconds.
         internal let offsetTime: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64?) {
+        internal var cdnInfo: CDNInfoFromEntitlement?
+        
+        internal var analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -44,6 +50,18 @@ extension Playback.Completed: AnalyticsEvent {
             json[JSONKeys.offsetTime.rawValue] = value
         }
         
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return json
     }
     
@@ -51,5 +69,15 @@ extension Playback.Completed: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }

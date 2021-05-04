@@ -50,6 +50,7 @@ open class ExposureSource: MediaSource {
     /// sprites which include vtt url & the width of each sprite image
     public var sprites: [Sprites]?
     
+    
     /// Creates a new `ExposureSource`
     ///
     /// - note: Creation of *raw* `ExposureSource`s is discouraged. Please use the specialized subclasses such as `AssetSource`, `ProgramSource` or `ChannelSource`
@@ -85,6 +86,7 @@ open class ExposureSource: MediaSource {
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
+        self.sprites = sprites
         self.response = response
     }
     

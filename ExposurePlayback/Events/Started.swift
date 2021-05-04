@@ -48,7 +48,11 @@ extension Playback {
         /// `X-Playback-Session-Id` used to track segment and manifest requests
         internal let segmentRequestId: String?
         
-        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaLocator: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil, segmentRequestId: String? = nil) {
+        internal let cdnInfo: CDNInfoFromEntitlement?
+        
+        internal let analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, assetData: PlaybackIdentifier, mediaLocator: String, offsetTime: Int64?, videoLength: Int64? = nil, bitrate: Int64? = nil, referenceTime: Int64? = nil, segmentRequestId: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.requiredAssetData = assetData
             self.mediaLocator = mediaLocator
@@ -57,6 +61,8 @@ extension Playback {
             self.bitrate = bitrate
             self.referenceTime = referenceTime
             self.segmentRequestId = segmentRequestId
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -111,6 +117,18 @@ extension Playback.Started: AnalyticsEvent {
             params[JSONKeys.segmentRequestId.rawValue] = value
         }
         
+        if let cdnInfo = cdnInfo {
+            params[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            params[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            params[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            params[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return params
     }
     
@@ -127,6 +145,16 @@ extension Playback.Started: AnalyticsEvent {
         case bitrate = "Bitrate"
         case referenceTime = "ReferenceTime"
         case segmentRequestId = "X-Playback-Session-Id"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }
 

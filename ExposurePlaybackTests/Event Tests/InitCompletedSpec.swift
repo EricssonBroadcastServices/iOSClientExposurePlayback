@@ -32,7 +32,7 @@ class InitCompletedSpec: QuickSpec {
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
-                expect(json.count).to(equal(2))
+                expect(json.count).to(equal(3))
             }
         }
     }

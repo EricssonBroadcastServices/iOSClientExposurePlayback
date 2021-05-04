@@ -21,10 +21,17 @@ internal struct DeviceInfo {
     /// Indicates the connection type
     internal let connection: String
     
-    internal init(timestamp: Int64, connection: String, type: String? = nil) {
+    internal var cdnInfo: CDNInfoFromEntitlement?
+    
+    internal var analyticsInfo: AnalyticsFromEntitlement?
+    
+    internal init(timestamp: Int64, connection: String, type: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
         self.timestamp = timestamp
         self.connection = connection
         self.type = type
+        
+        self.cdnInfo = cdnInfo
+        self.analyticsInfo = analyticsInfo
     }
 }
 
@@ -101,6 +108,18 @@ extension DeviceInfo: AnalyticsEvent {
             params[JSONKeys.type.rawValue] = value
         }
         
+        if let cdnInfo = cdnInfo {
+            params[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            params[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            params[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            params[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return params
     }
     
@@ -115,5 +134,15 @@ extension DeviceInfo: AnalyticsEvent {
         case manufacturer = "Manufacturer"
         case type = "Type"
         case connection = "Connection"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import Exposure
 
 extension Playback {
-    /// Player has resumed playing the asset that was paused.
+    /// AV player is ready to play the asset
     internal struct PlayReady {
         internal let timestamp: Int64
         
@@ -26,12 +26,18 @@ extension Playback {
         /// `X-Playback-Session-Id` used to track segment and manifest requests
         internal let segmentRequestId: String?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, tech: String, techVersion: String, segmentRequestId: String? = nil) {
+        internal let cdnInfo: CDNInfoFromEntitlement?
+        
+        internal let analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, tech: String, techVersion: String, segmentRequestId: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.tech = tech
             self.techVersion = techVersion
             self.segmentRequestId = segmentRequestId
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -61,6 +67,18 @@ extension Playback.PlayReady: AnalyticsEvent {
             json[JSONKeys.segmentRequestId.rawValue] = value
         }
         
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return json
     }
     
@@ -71,5 +89,15 @@ extension Playback.PlayReady: AnalyticsEvent {
         case tech = "Technology"
         case techVersion = "TechVersion"
         case segmentRequestId = "X-Playback-Session-Id"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }

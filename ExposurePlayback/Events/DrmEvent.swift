@@ -23,12 +23,18 @@ extension Playback {
         /// Additional detailed information
         internal let info: String?
         
+        internal var cdnInfo: CDNInfoFromEntitlement?
         
-        internal init(timestamp: Int64, message: Message, code: Int? = nil, info: String? = nil) {
+        internal var analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, message: Message, code: Int? = nil, info: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.message = message
             self.code = code
             self.info = info
+            
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
         
         internal enum Message: String {
@@ -66,6 +72,18 @@ extension Playback.DRM: AnalyticsEvent {
             json[JSONKeys.info.rawValue] = value
         }
         
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return json
     }
     
@@ -75,5 +93,15 @@ extension Playback.DRM: AnalyticsEvent {
         case message = "Message"
         case code = "Code"
         case info = "Info"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }

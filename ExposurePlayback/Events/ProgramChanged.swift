@@ -23,11 +23,18 @@ extension Playback {
         /// Length in milliseconds of this program, according to the EPG
         let videoLength: Int64?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, programId: String, videoLength: Int64? = nil) {
+        internal var cdnInfo: CDNInfoFromEntitlement?
+        
+        internal var analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, offsetTime: Int64?, programId: String, videoLength: Int64? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.programId = programId
             self.videoLength = videoLength
+            
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -56,6 +63,18 @@ extension Playback.ProgramChanged: AnalyticsEvent {
             json[JSONKeys.videoLength.rawValue] = videoLength
         }
         
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
         return json
     }
     
@@ -65,6 +84,16 @@ extension Playback.ProgramChanged: AnalyticsEvent {
         case offsetTime = "OffsetTime"
         case programId = "ProgramId"
         case videoLength = "VideoLength"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }
 

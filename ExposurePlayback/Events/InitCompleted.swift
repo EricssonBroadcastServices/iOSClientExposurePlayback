@@ -14,8 +14,14 @@ extension Playback {
     internal struct InitCompleted {
         internal let timestamp: Int64
         
-        internal init(timestamp: Int64) {
+        internal let cdnInfo: CDNInfoFromEntitlement?
+        
+        internal let analyticsInfo: AnalyticsFromEntitlement?
+        
+        internal init(timestamp: Int64, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
+            self.cdnInfo = cdnInfo
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -30,15 +36,40 @@ extension Playback.InitCompleted: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
-        return [
+        
+        var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp
         ]
+        
+        if let cdnInfo = cdnInfo {
+            json[JSONKeys.CDNVendor.rawValue] = cdnInfo.provider
+        }
+        
+        if let analyticsInfo = analyticsInfo {
+            json[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            json[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            json[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
+        json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        
+       return json
     }
     
     internal enum JSONKeys: String {
         case eventType = "EventType"
         case timestamp = "Timestamp"
+        
+        // CDN
+        case CDNVendor = "CDNVendor"
+        
+        // Analytics info from entitlement
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
+        
+        case StreamingTechnology = "StreamingTechnology"
     }
 }
 

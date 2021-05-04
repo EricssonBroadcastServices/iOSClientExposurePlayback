@@ -12,7 +12,7 @@ import Exposure
 
 /// Extends the `Player` built in protocol defining analytics events with *Exposure* specific analytics
 public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
-    init(environment: Environment, sessionToken: SessionToken)
+    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement? )
     
     /// Exposure environment used for the active session.
     ///
