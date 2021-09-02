@@ -50,6 +50,10 @@ open class ExposureSource: MediaSource {
     /// sprites which include vtt url & the width of each sprite image
     public var sprites: [Sprites]?
     
+    public var ads: Ads?
+    
+    public var durationInMs: Double?
+    
     
     /// Creates a new `ExposureSource`
     ///
@@ -60,7 +64,7 @@ open class ExposureSource: MediaSource {
     ///   - assetId: assetId: The id for the asset
     ///   - streamingInfo: streaming information from the play request
     ///   - sprites: sprites information from the play request
-    public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil ) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil, ads: Ads? = nil, durationInMs: Double? = nil  ) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
@@ -69,6 +73,8 @@ open class ExposureSource: MediaSource {
         self.streamingInfo = streamingInfo
         self.sprites = sprites
         self.response = nil
+        self.ads = ads
+        self.durationInMs = durationInMs
     }
     
     /// Creates a new `ExposureSource`
@@ -80,14 +86,16 @@ open class ExposureSource: MediaSource {
     ///   - response: HTTP response received when requesting the entitlement
     ///   - streamingInfo: streaming information from the play request
     ///   - sprites: sprites information from the play request
-    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil ) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, response: HTTPURLResponse?, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil, ads: Ads? = nil, durationInMs: Double? = nil ) {
         self.entitlement = entitlement
         self.assetId = assetId
         self.fairplayRequester = entitlement.isUnifiedPackager ? EMUPFairPlayRequester(entitlement: entitlement, assetId: assetId) : MRRFairplayRequester(entitlement: entitlement)
         self.contractRestrictionsService = BasicContractRestrictions(entitlement: entitlement)
         self.mediaSourceRequestHeaders = [:]
         self.sprites = sprites
+        self.ads = ads
         self.response = response
+        self.durationInMs = durationInMs
     }
     
     deinit {

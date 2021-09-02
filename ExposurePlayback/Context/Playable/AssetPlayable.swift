@@ -134,14 +134,14 @@ extension AssetPlayable {
                 
                 // Live event
                 if value.streamInfo?.event == true {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 // This is a live program
                 if value.streamInfo?.live == true && value.streamInfo?.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                     
@@ -152,7 +152,7 @@ extension AssetPlayable {
 
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
@@ -162,7 +162,7 @@ extension AssetPlayable {
 
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
@@ -172,14 +172,13 @@ extension AssetPlayable {
                 else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
                 // VOD Asset
                 else if value.streamInfo?.staticProgram == true {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil, sprites: value.sprites)
-                    
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads, durationInMs: value.durationInMs)
                     
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
@@ -190,7 +189,7 @@ extension AssetPlayable {
                 
                 // Some other assettype: Trying to use AssetPlay
                 else {
-                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: nil, sprites: nil)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }

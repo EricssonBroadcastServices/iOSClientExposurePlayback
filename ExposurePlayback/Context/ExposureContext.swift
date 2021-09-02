@@ -50,6 +50,30 @@ public class ExposureContext: MediaContext {
     /// Tracks the internal adService callback
     internal var onAdServiceRequested: (Source) -> Void = { _ in }
     
+    
+    /// Tracks the internal adService callback
+    internal var onServerSideAd: (Source, Ads?) -> Void = { _,_  in }
+    
+    /// Tracks the internal adService ad end
+    internal var onPlaybackStartWithAds: (Int64, Float, [Float]) -> Void = { _, _, _ in }
+    
+    /// Tracks the internal adService ad start
+    internal var onServerSideAdStarted: (ContractRestrictionsService, Bool, Double?) -> Void = { _, _, _ in }
+    
+    /// Tracks the internal adService ad end
+    internal var onServerSideAdEnded: (ContractRestrictionsService) -> Void = { _ in }
+    
+    /// Tracks the internal adService ad start
+    internal var onServerSideAdShouldSkip: (Double) -> Void = { _ in }
+    
+    
+    /// Tracks the clip start event
+    internal var onClipStarted: (Int64, Int64) -> Void = { _, _ in }
+    
+    /// Tracks the clip end event
+    internal var onClipEnded: (Int64, Int64) -> Void = { _, _ in }
+    
+    
     /// Specifies playback related behaviour
     internal(set) public var playbackProperties: PlaybackProperties = PlaybackProperties()
     
@@ -92,7 +116,6 @@ public class ExposureContext: MediaContext {
     }
     
     deinit {
-        print("ExposureContext deinit")
         reachability?.stopNotifier()
     }
 }

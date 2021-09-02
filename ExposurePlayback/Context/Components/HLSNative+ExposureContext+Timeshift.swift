@@ -20,6 +20,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         guard source.contractRestrictionsService.canPause(at: tech.playheadPosition) else {
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: .timeshiftDisabled))
             tech.eventDispatcher.onWarning(tech, source, warning)
+            source.adService?.playbackPaused()
             source.analyticsConnector.onWarning(tech: self.tech, source: source, warning: warning)
             return
         }

@@ -273,6 +273,8 @@
 		76EBF03A215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76EBF03B215E3E0600503146 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EBF039215E3E0600503146 /* Reachability.swift */; };
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
+		780761CF26A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */; };
+		780761D026A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		78455DC1261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		78455DC2261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
@@ -493,6 +495,7 @@
 		76EBF036215E30E000503146 /* ConnectionChanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionChanged.swift; sourceTree = "<group>"; };
 		76EBF039215E3E0600503146 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
+		780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSideAdService.swift; sourceTree = "<group>"; };
 		781F439A246039A900610321 /* Download.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Download.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		781F439C24603A2300610321 /* ExposureDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ExposureDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
@@ -607,6 +610,7 @@
 				76150E7B2187826E00AABE89 /* AdPlayerProxy.swift */,
 				7619B488216F258D00EE0DC8 /* AdServiceEventProvider.swift */,
 				7619B4A321773E1B00EE0DC8 /* AdServiceContractRestrictionsProvider.swift */,
+				780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */,
 			);
 			path = AdService;
 			sourceTree = "<group>";
@@ -1162,6 +1166,7 @@
 				787BFB0D25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
 				760801EA2069306E007F59D5 /* HandshakeStarted.swift in Sources */,
 				760801EB2069306E007F59D5 /* PlaybackEntitlement+Extensions.swift in Sources */,
+				780761D026A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */,
 				760801EC2069306E007F59D5 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				760801ED2069306E007F59D5 /* PlayReady.swift in Sources */,
 				760801EE2069306E007F59D5 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
@@ -1317,6 +1322,7 @@
 				787BFB0C25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
 				76A89D962020F41F00C23579 /* HandshakeStarted.swift in Sources */,
 				766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */,
+				780761CF26A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */,
 				7619B489216F258D00EE0DC8 /* AdServiceEventProvider.swift in Sources */,
 				76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				7619B4AB21773F3D00EE0DC8 /* BasicContractRestrictions.swift in Sources */,
@@ -1481,7 +1487,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.600;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1507,7 +1513,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.600;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1689,7 +1695,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.600;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1713,7 +1719,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.2.600;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
