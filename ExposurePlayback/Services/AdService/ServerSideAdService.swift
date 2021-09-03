@@ -562,9 +562,9 @@ extension ServerSideAdService {
                     if let _ = response as? HTTPURLResponse {
                         // print(" Ad tracking was success" )
                     }
+                    group.leave()
                 }
                 task.resume()
-                group.leave()
             } else {
                 group.leave()
             }
