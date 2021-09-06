@@ -514,18 +514,18 @@ public class ServerSideAdService: AdService {
                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: (Int(currentDuration + duration)) )
                             
                             // If the first clip is an Ad, we directly Ad it
-                            // self.adMarkerPositions.append(currentDuration)
+                            self.adMarkerPositions.append(markerPoint)
                         } else if index != 0 && index != clips.count {
                             // check if the just previous clip was an Ad, if so we will skip it
                             let previousClip = clips[index - 1]
                             if previousClip.category != "ad" {
                                 let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
-                                // self.adMarkerPositions.append(currentDuration)
+                                self.adMarkerPositions.append(markerPoint)
                             }
                         } else if index == clips.count {
                             // If the last clip is an Ad, we directly Ad it
-                            // self.adMarkerPositions.append(totalDuration)
                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(totalDuration), endOffset: Int(totalDuration))
+                            self.adMarkerPositions.append(markerPoint)
                         }
 
                     } else {
