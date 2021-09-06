@@ -55,7 +55,7 @@ public class ExposureContext: MediaContext {
     internal var onServerSideAd: (Source, Ads?) -> Void = { _,_  in }
     
     /// Tracks the internal adService ad end
-    internal var onPlaybackStartWithAds: (Int64, Float, [Float]) -> Void = { _, _, _ in }
+    internal var onPlaybackStartWithAds: (Int64, Float, [MarkerPoint]) -> Void = { _, _, _ in }
     
     /// Tracks the internal adService ad start
     internal var onServerSideAdStarted: (ContractRestrictionsService, Bool, Double?) -> Void = { _, _, _ in }

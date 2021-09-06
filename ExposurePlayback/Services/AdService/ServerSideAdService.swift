@@ -37,7 +37,7 @@ public class ServerSideAdService: AdService {
     
     fileprivate var allTimelineContent : [TimelineContent] = []
     
-    private var adMarkerPositions: [Float] = []
+    private var adMarkerPositions: [MarkerPoint] = []
     
     private var timeInterval: Double = 0
     private var timer : Timer?
@@ -509,23 +509,30 @@ public class ServerSideAdService: AdService {
                 
                 // Clips is an ad, should add an adMarker to the timeLine on ad starting point
                 else if clip.category == "ad" {
-                    if index == 0 {
-                        // If the first clip is an Ad, we directly Ad it
-                        self.adMarkerPositions.append(currentDuration)
-                    } else if index != 0 && index != clips.count {
-                        // check if the just previous clip was an Ad, if so we will skip it
-                        let previousClip = clips[index - 1]
-                        if previousClip.category != "ad" {
-                            self.adMarkerPositions.append(currentDuration)
+                    if let duration = clip.duration   {
+                        if index == 0 {
+                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: (Int(currentDuration + duration)) )
+                            
+                            // If the first clip is an Ad, we directly Ad it
+                            // self.adMarkerPositions.append(currentDuration)
+                        } else if index != 0 && index != clips.count {
+                            // check if the just previous clip was an Ad, if so we will skip it
+                            let previousClip = clips[index - 1]
+                            if previousClip.category != "ad" {
+                                let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
+                                // self.adMarkerPositions.append(currentDuration)
+                            }
+                        } else if index == clips.count {
+                            // If the last clip is an Ad, we directly Ad it
+                            // self.adMarkerPositions.append(totalDuration)
+                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(totalDuration), endOffset: Int(totalDuration))
                         }
-                    } else if index == clips.count {
-                        // If the last clip is an Ad, we directly Ad it
-                        self.adMarkerPositions.append(totalDuration)
+
+                    } else {
+                        // print(" Clip type is something else : Not a vod neither ad")
+                    }
                     }
 
-                } else {
-                    // print(" Clip type is something else : Not a vod neither ad")
-                }
                 
                 // Add the clip duration to currentTotalDuration
                 if let duration = clip.duration   {
@@ -537,7 +544,6 @@ public class ServerSideAdService: AdService {
                     
                     allTimelineContent.append(timelineContent)
                     currentDuration = currentDuration + duration
-                        
                 }
             }
 
