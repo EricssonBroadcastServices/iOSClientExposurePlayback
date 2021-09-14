@@ -57,16 +57,16 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 extension Player where Tech == HLSNative<ExposureContext> {
     @discardableResult
-    public func onServerSideAdStarted(callback: @escaping (ContractRestrictionsService, Bool, Double?) -> Void) -> Self {
-        context.onServerSideAdStarted = { [weak self] contractRestrictionService, isWatched, skipTime  in
+    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, Bool, Double?) -> Void) -> Self {
+        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, isWatched, skipTime  in
             callback(contractRestrictionService, isWatched, skipTime)
         }
         return self
     }
     
     @discardableResult
-    public func onServerSideAdEnded(callback: @escaping (ContractRestrictionsService) -> Void) -> Self {
-        context.onServerSideAdEnded = { contractRestrictionService  in
+    public func onDidPresentInterstitial(callback: @escaping (ContractRestrictionsService) -> Void) -> Self {
+        context.onDidPresentInterstitial = { contractRestrictionService  in
             callback(contractRestrictionService)
         }
         return self

@@ -362,7 +362,7 @@ public class ServerSideAdService: AdService {
                     policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                     self.source.contractRestrictionsService.contractRestrictionsPolicy = policy
                     
-                    self.context.onServerSideAdStarted(self.source.contractRestrictionsService, false, nil)
+                    self.context.onWillPresentInterstitial(self.source.contractRestrictionsService, false, nil)
                     
                     self.adTracking(adTrackingUrls: clip.impressionUrlTemplates ?? [] )
                     
@@ -393,7 +393,7 @@ public class ServerSideAdService: AdService {
                             self.policy.rewindEnabled = self.source.entitlement.rwEnabled
                             self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                             self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
-                            self.context.onServerSideAdEnded(self.source.contractRestrictionsService)
+                            self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
                             
                             // Send complete tracking events
                             self.adTracking(adTrackingUrls: clip.trackingEvents?.complete ?? [] )
@@ -523,19 +523,13 @@ public class ServerSideAdService: AdService {
                             let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
                             
                             // If the first clip is an Ad, we directly Ad it
-                            #if TARGET_OS_TV
-                            self.addInterstitialTimeRanges(offset: 0, endOffSet: Int64(duration) )
-                            #endif
                             self.adMarkerPositions.append(markerPoint)
                             
                         } else if index != 0 && index != clips.count {
                             
                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
                             
-                            #if TARGET_OS_TV
-                            self.addInterstitialTimeRanges(offset: Int64(currentDuration), endOffSet: Int64(currentDuration + duration) )
-                            #endif
-                            
+                         
                             self.adMarkerPositions.append(markerPoint)
                             
                             // check if the just previous clip was an Ad, if so we will skip it
@@ -548,9 +542,6 @@ public class ServerSideAdService: AdService {
                         } else if index == clips.count {
                             // If the last clip is an Ad, we directly Ad it
                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
-                            #if TARGET_OS_TV
-                            self.addInterstitialTimeRanges(offset: Int64(currentDuration), endOffSet: Int64(totalDuration) )
-                            #endif
                             self.adMarkerPositions.append(markerPoint)
                         }
                         
@@ -573,21 +564,12 @@ public class ServerSideAdService: AdService {
                 }
             }
             
-            #if TARGET_OS_TV
-            tech.currentPlayerItem?.interstitialTimeRanges =  self.avInterstitialTimeRange
-            #endif
-            
             context.onPlaybackStartWithAds(vodDuration, totalDuration, adMarkerPositions )
         }
     }
     
     #if TARGET_OS_TV
-    private func addInterstitialTimeRanges(offset: Int64, endOffSet: Int64 ) {
-        
-        let timeRange = (CMTimeRange(start: CMTime(milliseconds: offset), end: CMTime(milliseconds:endOffSet)))
-        let avInterstitialTimeRange = AVInterstitialTimeRange(timeRange: timeRange)
-        self.avInterstitialTimeRange.append(avInterstitialTimeRange)
-    }
+    
     #endif
 }
 
