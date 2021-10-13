@@ -131,9 +131,9 @@ extension ExposureContext {
                     self.prepareProgramService(source: source, tech: tech)
                     
                     // Start Ad service if the ads.stitcher == "NOWTILUS"
-                    if let streamingInfo = source.streamingInfo, let ads = source.ads {
+                    if let streamingInfo = source.streamingInfo, let ads = source.ads, let clips = ads.clips {
                         if streamingInfo.live == false && streamingInfo.ssai == true && ads.stitcher == "NOWTILUS" {
-                            let serverSideAd = ServerSideAdService(ads: ads, context: self, source: source, durationInMs : source.durationInMs ?? 0, tech: tech)
+                            let serverSideAd = ServerSideAdService(ads: ads, clips: clips, context: self, source: source, durationInMs : source.durationInMs ?? 0, tech: tech)
                             serverSideAd.playerProxy = AdTechWrapper(tech: tech)
                             
                             source.adService = serverSideAd

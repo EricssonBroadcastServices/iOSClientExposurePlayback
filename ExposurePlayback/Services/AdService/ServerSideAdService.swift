@@ -11,19 +11,22 @@ import Exposure
 import Player
 import AVKit
 
+
 fileprivate struct TimelineContent:Equatable {
     let contentType: String?
     let contentTitle: String?
     let contentStartTime: Double
     let contentEndTime: Double
-    let isWatched: Bool
+    var isWatched: Bool
+    let timeRange: CMTimeRange
     
-    init(contentType: String? = nil, contentTitle: String? = nil , contentStartTime: Double, contentEndTime:Double, isWatched: Bool = false ) {
+    init(contentType: String? = nil, contentTitle: String? = nil , contentStartTime: Double, contentEndTime:Double, isWatched: Bool = false, timeRange: CMTimeRange) {
         self.contentType = contentType
         self.contentTitle = contentTitle
         self.contentStartTime = contentStartTime
         self.contentEndTime = contentEndTime
         self.isWatched = isWatched
+        self.timeRange = timeRange
     }
 }
 
@@ -31,6 +34,7 @@ fileprivate struct TimelineContent:Equatable {
 public class ServerSideAdService: AdService {
     
     let ads: Ads
+    let clips:[AdClips]
     let context: ExposureContext
     let source: ExposureSource
     let durationInMs: Double
@@ -40,7 +44,14 @@ public class ServerSideAdService: AdService {
     
     fileprivate var allTimelineContent : [TimelineContent] = []
     
+    
+    /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
+    
+    /// This will be used to store Ad marker positions temporary, when there are multiple `adMarkers` `tempAdMarkerPositions` will hold them until next clip is not an `ad` , then append the first item to the `adMarkerPositions` array.
+    ///
+    /// Note:- Reason for this is to show only the first adMarker in the timeline.
+    private var tempAdMarkerPositions: [MarkerPoint] = []
     
     private var timeInterval: Double = 0
     private var timer : Timer?
@@ -49,25 +60,34 @@ public class ServerSideAdService: AdService {
     #if TARGET_OS_TV
     private var avInterstitialTimeRange = [AVInterstitialTimeRange]()
     #endif
+    
     var shouldSkipAd: Bool = false
     
-    var scrubbedDestination: Int64 = 0
+    /// Use this as a temporary to store user's scrubed / seek destiantion. When there is an `ad` in between current location & scrubbed destination , sdk will first play the `ad` & then jump to this scrubbed destination
+    private var scrubbedDestination: Int64 = 0
     
     
-    public init(ads: Ads, context: ExposureContext, source: ExposureSource, durationInMs: Double, tech: HLSNative<ExposureContext>) {
+    /// Seek starting position
+    private var scrubbedFromPosition: Int64 = 0
+    
+    
+    /// This will hold the state of the seek : ex : If an `ad` should be skipped this will be `true` as SDK decided the seek. If the seek is initiated by the user this will `false`
+    private var isSDKInitatedSeek: Bool = false
+    
+    public init(ads: Ads, clips:[AdClips], context: ExposureContext, source: ExposureSource, durationInMs: Double, tech: HLSNative<ExposureContext>) {
         self.ads = ads
         self.context = context
         self.source = source
         self.durationInMs = durationInMs
         self.tech = tech
+        self.clips = clips
     }
     
     public func playbackReady() {
-        print(" Play back ready ")
+        // print(" Play back ready ")
     }
     
     public func playbackStarted() {
-        print(" PlayBack Started")
         self.prepareAdService()
         self.startAdService()
     }
@@ -82,9 +102,8 @@ public class ServerSideAdService: AdService {
     }
     
     public func playbackResumed() {
-        if let clips = ads.clips {
-            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, clips: clips, startTimeInterval: self.timeInterval)
-        }
+        self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval: self.timeInterval, clip: clips[self.clipIndexToPlayNow])
+        
     }
     
     public func playbackFailed(error: NSError) {
@@ -99,30 +118,28 @@ public class ServerSideAdService: AdService {
         // print(" playbackBufferingEnded")
     }
     
+    
+    /// Seek request intiated / scrubing started
+    /// - Parameter origin: fromPosition
     public func seekRequestInitiated(fromPosition origin: Int64) {
-        // print(" seekRequestInitiated " , origin)
+        self.scrubbedFromPosition = origin
     }
     
+    
+    
+    /// Seek request Triggered / scrub ended
+    /// - Parameter destination: withTargetPosition
     public func seekRequestTriggered(withTargetPosition destination: Int64) {
         // print(" seekRequestInitiated " , destination )
+        
+        
         self.timer?.invalidate()
         self.scrubbed(withTargetPosition: destination)
         
     }
     
     public func playbackTimedMetadata(metaData: Any?) {
-        
-        //        if let currentClip = allTimelineContent.filter( { $0.contentEndTime >= Double(self.timeInterval) && Double(self.timeInterval) >= $0.contentStartTime }).first {
-        //            if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == currentClip}).first {
-        //
-        //                self.timer?.invalidate()
-        //                print(" Time metadata changed  , restart the timer ")
-        //                self.clipIndexToPlayNow = index
-        //                if let clips = ads.clips {
-        //                    self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: self.timeInterval)
-        //                }
-        //            }
-        //        }
+        // print(" playbackTimedMetadata " , (metaData: Any?) )
     }
     
     public var playerProxy: AdPlayerProxy?
@@ -141,186 +158,123 @@ public class ServerSideAdService: AdService {
     
     public var contractRestrictionsService: ContractRestrictionsService?
     
-    private func getNextClip( index:Int,_ completion: @escaping (Int?) -> Void) {
-        
-        
-        
-    }
+    private func getNextClip( index:Int,_ completion: @escaping (Int?) -> Void) { }
+    
     
     
     /// Player intiated a seek to destination
     /// - Parameter destination: destination
     private func scrubbed(withTargetPosition destination: Int64) {
         
-        // Check if previously assigned scrubbedDestination is available , this value will be assigned if an ad needs to be played before seeking to the vod / live content
-        if (destination == self.scrubbedDestination ) {
-            
-            if let scrubbedContent = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedContent}).first {
-                    self.clipIndexToPlayNow = index
-                    self.timeInterval = Double(destination)
-                    self.scrubbedDestination = 0
-                    
-                    if let clips = ads.clips {
-                        self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: Double(destination))
-                    }
-                }
-            }
-        }
         
-        // Check if the player seeked to a future position
-        else if ( (destination >= Int64(self.timeInterval)) && self.scrubbedDestination == 0 ) {
+        // print(" Scrubbed  " , self.scrubbedDestination )
+        
+        if self.scrubbedDestination == 0  {
             
-            // Check if any Ads available in between orgin & scrubbed destination
-            if let scrubbedToAd = allTimelineContent.filter( { $0.contentEndTime <= Double(destination) && $0.contentType == "ad" }).last, let index = allTimelineContent.firstIndex(where:  { $0 == scrubbedToAd }) {
+            // Find the from / current seek position
+            //            print(" Destination " , destination )
+            //            print(" Current Player time " , self.tech.currentPlayerItem?.currentTime().milliseconds )
+            //            print(" Current Play head time  " , self.tech.playheadTime )
+            //            print(" Current Play headPosition " , self.tech.playheadPosition )
+            //            print(" Time interval " , self.timeInterval )
+            
+            let oldTime = self.scrubbedFromPosition != 0 ? self.scrubbedFromPosition : Int64(self.timeInterval)
+            
+            
+            let seekRange = CMTimeRange(start: CMTime(milliseconds: oldTime), end: CMTime(milliseconds: destination))
+            
+            // print(" seekRange " , seekRange )
+            
+            let matchingInterstitialRange = self.allTimelineContent.reversed().first { seekRange.containsTimeRange($0.timeRange) && $0.contentType == "ad" }
+            
+            let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0 == matchingInterstitialRange })
+            
+            // print(" Found matching Ad " , matchingInterstitialRange?.contentTitle )
+            
+            if matchingInterstitialRange != nil && matchingIndex != nil  {
                 
-                // if the Ad found in between origin & the seek destination was watched before, allow seek & start the timer with destination value
-                if scrubbedToAd.isWatched == true {
+                if let seekTimeInMiliseconds = matchingInterstitialRange?.timeRange.start.milliseconds, let index = matchingIndex {
                     
-                    if let scrubbedContent = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                        if let vodContentIndex = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedContent}).first {
-                            
-                            self.clipIndexToPlayNow = vodContentIndex
-                            self.timeInterval = Double(destination)
-                            if let clips = ads.clips {
-                                self.startAdPlaybackTimer(clipIndexToStart: vodContentIndex, clips: clips, startTimeInterval: Double(destination))
-                            }
-                        }
-                    }
                     
-                } else {
-                    
-                    // There is a Ad inbetween seek origin & destination & that Ad was not watched before. First player should seek to that Ad & start playing that.
-                    self.timer?.invalidate()
-                    self.clipIndexToPlayNow = index
-                    
-                    self.timeInterval = Double(destination)
-                    
-                    self.scrubbedDestination = destination
-                    self.context.onServerSideAdShouldSkip(scrubbedToAd.contentStartTime)
-                    
-                }
-            }
-            
-            else {
-                // Did not find any Ad that the user haven't watched in between scrubbed destination & current time. Scrubbed to the destination & keep playing content
-                if let scrubbedContent = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                    if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedContent}).first {
-                        self.timer?.invalidate()
+                    if matchingInterstitialRange?.isWatched == false {
+                        
+                        // print(" Found Ad was not watched before ")
+                        self.scrubbedDestination = destination
+                        
+                        
+                        
                         self.clipIndexToPlayNow = index
-                        self.timeInterval = Double(destination)
-                        if let clips = ads.clips {
-                            self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: Double(destination))
+                        self.timeInterval = Double(seekTimeInMiliseconds)
+                        self.context.onServerSideAdShouldSkip(Double(seekTimeInMiliseconds))
+                        
+                        
+                        // self.startAdPlaybackTimer(clipIndexToStart: index, clips: clips, startTimeInterval: Double(seekTimeInMiliseconds))
+                        // tech.seek(toPosition: seekTimeInMiliseconds)
+                        // self.startAdPlaybackTimer(clipIndexToStart: index, clips: clips, startTimeInterval: Double(seekTimeInMiliseconds))
+                        
+                    } else {
+                        // print(" This Ad has already watched , skip this Ad")
+                        
+                        if index != ( self.allTimelineContent.count - 1 )  {
+                            
+                            let nextClip = self.allTimelineContent[index + 1 ]
+                            
+                            self.clipIndexToPlayNow = index + 1
+                            
+                            self.scrubbedDestination = 0
+                            
+                            self.timeInterval = Double(nextClip.contentStartTime)
+                            
+                            context.onServerSideAdShouldSkip(nextClip.contentStartTime)
+                            
+                            // self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, clips: clips, startTimeInterval: nextClip.contentStartTime)
+                            
+                            
+                        } else {
+                            // print(" This is the last clip in the stream , do nothing ")
                         }
                     }
+                    
+                }
+            } else {
+                // print(" Scrub destination is 0 & matchingInterstitialRange is Nil, this should be not an Ad ")
+                
+                if let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
+                    
+                    // print(" Found matchingIndex " , matchingIndex )
+                    self.scrubbedDestination = 0
+                    self.clipIndexToPlayNow = matchingIndex
+                    
+                    self.timeInterval = Double(destination)
+                    
+                    
+                    self.startAdPlaybackTimer(clipIndexToStart: matchingIndex, startTimeInterval: Double(destination), clip: clips[matchingIndex])
+                    
                 }
             }
-        }
-        
-        // Player was seek to a past time
-        else if (destination < Int64(self.timeInterval)){
             
-            // Check if user has scrubbed to a Vod clip , if so do nothing, keep playing the content
-            if let scrubbedToVod = allTimelineContent.filter( { $0.contentStartTime == Double(destination) && $0.contentType == "vod" }).first , let index = allTimelineContent.firstIndex(where:  { $0 == scrubbedToVod }) {
-                
+        } else {
+            // print(" SCRUB DESTINATION IS NOT 0 , Means We Need TO SKIP TO THE USER'S SCRUB DESTINATION : \(destination)")
+            
+            if let index = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
                 self.timer?.invalidate()
                 self.clipIndexToPlayNow = index
                 self.timeInterval = Double(destination)
-                if let clips = ads.clips {
-                    self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: Double(destination))
-                }
-            }
-            
-            // Check if the player was seeked to an Ad
-            else if let scrubbedToAd = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime && $0.contentType == "ad" }).first,  let index = allTimelineContent.firstIndex(where:  { $0 == scrubbedToAd }) {
+                self.startAdPlaybackTimer(clipIndexToStart: index, startTimeInterval: Double(destination), clip: clips[index])
                 
-                // Player was seeked to an Ad which was watched before, player should skip that & find the next Vod clip & start play from that position
-                if scrubbedToAd.isWatched == true {
-                    
-                    for (index, clip) in allTimelineContent.enumerated().dropFirst(index) {
-                        if clip.contentType == "ad" && clip.isWatched == true {
-                            continue
-                        } else if(clip.contentType == "ad" && clip.isWatched == false ) {
-                            continue
-                        }
-                        else if (clip.contentType == "vod") {
-                            self.clipIndexToPlayNow = index
-                            self.timeInterval = clip.contentStartTime
-                            self.scrubbedDestination = Int64(clip.contentStartTime)
-                            self.context.onServerSideAdShouldSkip(clip.contentStartTime)
-                            break
-                        }
-                    }
-                }
-                
-                // Player was seek to an Ad which was not watched before, should play the Ad
-                else {
-                    self.timer?.invalidate()
-                    self.clipIndexToPlayNow = index
-                    
-                    self.timeInterval = scrubbedToAd.contentStartTime
-                    
-                    if let clips = ads.clips {
-                        self.startAdPlaybackTimer(clipIndexToStart: index, clips: clips, startTimeInterval: scrubbedToAd.contentStartTime)
-                    }
-                }
-            }
-            
-            // Player was seek to a past position , but scrubbedDestination is not 0. Which means player was forcely seek to an Ad
-            else if (destination < Int64(self.timeInterval) && self.scrubbedDestination != 0 ){
-                if let scrubbedAd = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                    
-                    if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedAd}).first {
-                        self.timer?.invalidate()
-                        self.timeInterval = scrubbedAd.contentStartTime
-                        self.clipIndexToPlayNow = index
-                        if let clips = ads.clips {
-                            self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: scrubbedAd.contentStartTime)
-                        }
-                    }
-                }
-            }
-            
-            // Fall back when both above conditions fails. Seek to the destination & keep playing the content
-            else {
-                if let scrubbedContent = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                    
-                    if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedContent}).first {
-                        self.timer?.invalidate()
-                        self.timeInterval = Double(destination)
-                        self.clipIndexToPlayNow = index
-                        if let clips = ads.clips {
-                            self.startAdPlaybackTimer(clipIndexToStart: (index), clips: clips, startTimeInterval: Double(destination))
-                        }
-                    }
-                }
-                
-            }
-            
-        }
-        // Player was seek not to a future position neither past position, should not happen. But keep the fall back
-        else {
-            if let scrubbedContent = allTimelineContent.filter( { $0.contentEndTime >= Double(destination) && Double(destination) >= $0.contentStartTime }).first {
-                
-                if let index = allTimelineContent.indices.filter({allTimelineContent[$0] == scrubbedContent}).first {
-                    self.timer?.invalidate()
-                    self.clipIndexToPlayNow = index
-                    self.timeInterval = Double(destination)
-                    if let clips = ads.clips {
-                        self.startAdPlaybackTimer(clipIndexToStart: index, clips: clips, startTimeInterval: Double(destination))
-                    }
-                }
             }
         }
-        
     }
     
     
     /// Start Ad service when play back starts
     private func startAdService() {
-        if let clips = ads.clips {
-            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, clips: clips, startTimeInterval: 0)
+        if let firstClip = clips.first {
+            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval: 0, clip: firstClip )
+        } else {
+            // print(" can not find first clip of AdClips ")
         }
+        
     }
     
     
@@ -329,20 +283,35 @@ public class ServerSideAdService: AdService {
     ///   - clipIndexToStart: index of the clip to start from : allTimelineContent
     ///   - clips: Ads.Clips
     ///   - startTimeInterval: time interval that Timer should start from
-    private func startAdPlaybackTimer( clipIndexToStart: Int = 0 , clips: [AdClips], startTimeInterval: Double = 0 ) {
+    private func startAdPlaybackTimer( clipIndexToStart: Int = 0 , startTimeInterval: Double = 0, clip: AdClips) {
         
         self.timer?.invalidate()
+        
         self.timeInterval = startTimeInterval
         
         self.clipIndexToPlayNow = clipIndexToStart
         
-        let clip = clips[clipIndexToStart]
+        // let clip = clips[clipIndexToStart]
+        
+        //        print(" Clip INdex to start " , self.clipIndexToPlayNow )
+        //
+        //        print(" allTimelineContent.count " , allTimelineContent.count )
+        //
+        //
         
         if clipIndexToStart < allTimelineContent.count {
+            
+            
             let content = allTimelineContent[clipIndexToStart]
             
             let clipStartTime = content.contentStartTime
             let clipEndTime = content.contentEndTime
+            
+            
+            //            print(" clipStartTime " , clipStartTime )
+            //            print(" clipEndTime " , clipEndTime )
+            //            print(" clipStartTime " , content.timeRange.start.milliseconds )
+            //            print(" clipEndTime " , content.timeRange.start.milliseconds )
             
             // New Clip Duration is , clip start time & the duration
             // let clipDuration = clipStartTime + Double(duration)
@@ -387,7 +356,10 @@ public class ServerSideAdService: AdService {
                             
                         } else if Int(self.timeInterval) == Int(clipEndTime)  {
                             
-                            self.allTimelineContent[clipIndexToStart] = TimelineContent(contentType: content.contentType, contentTitle: content.contentTitle, contentStartTime: content.contentStartTime, contentEndTime: content.contentEndTime, isWatched: true)
+                            
+                            let timeRange = CMTimeRange(start: CMTime(milliseconds: Int64(content.contentStartTime)), end: CMTime(milliseconds: Int64(content.contentEndTime)))
+                            
+                            self.allTimelineContent[clipIndexToStart] = TimelineContent(contentType: content.contentType, contentTitle: content.contentTitle, contentStartTime: content.contentStartTime, contentEndTime: content.contentEndTime, isWatched: true, timeRange: timeRange)
                             
                             self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
                             self.policy.rewindEnabled = self.source.entitlement.rwEnabled
@@ -401,7 +373,11 @@ public class ServerSideAdService: AdService {
                             // We have a predefined scrub destination , player should skipped to this position
                             if self.scrubbedDestination != 0 {
                                 self.timer?.invalidate()
-                                self.context.onServerSideAdShouldSkip(Double(self.scrubbedDestination))
+                                // print(" Ad was done, but previously assigned scrub destination is available , should skip to that position ")
+                                let destination = self.scrubbedDestination
+                                self.scrubbedDestination = 0
+                                self.context.onServerSideAdShouldSkip(Double(destination))
+                                
                                 
                             } else {
                                 
@@ -411,7 +387,7 @@ public class ServerSideAdService: AdService {
                                     
                                     self.timer?.invalidate()
                                     
-                                    self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , clips: clips, startTimeInterval: content.contentEndTime)
+                                    self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , startTimeInterval: content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow])
                                 } else {
                                     self.timer?.invalidate()
                                 }
@@ -423,24 +399,34 @@ public class ServerSideAdService: AdService {
                 // Clip is an Ad , but was watched before, so Find the next Vod / Live clip
                 else {
                     
+                    // print(" Clip is an Ad , but was watched before, so Find the next Vod / Live clip ")
+                    
+                    // Find the next available vod clip
                     for (index, clip) in allTimelineContent.enumerated().dropFirst(clipIndexToPlayNow) {
                         if clip.contentType == "ad" && clip.isWatched == true {
                             continue
                         } else if(clip.contentType == "ad" && clip.isWatched == false ) {
                             continue
                         }
-                        else if (clip.contentType == "vod") {
+                        else if (clip.contentType != "ad") {
                             self.clipIndexToPlayNow = index
                             self.timeInterval = clip.contentStartTime
                             self.scrubbedDestination = Int64(clip.contentStartTime)
                             self.context.onServerSideAdShouldSkip(clip.contentStartTime)
                             break
                         }
+                        else {
+                            // print(" All the clips are done , scrubbed to the end of the timeline ")
+                            self.clipIndexToPlayNow = index
+                            self.timeInterval = clip.contentStartTime
+                            self.scrubbedDestination = Int64(clip.contentEndTime)
+                            self.context.onServerSideAdShouldSkip(clip.contentEndTime)
+                        }
                     }
                 }
             }
-            // Clip is a Vod / live clip
-            else if content.contentType == "vod" {
+            // Clip is a not an Ad
+            else if content.contentType != "ad" {
                 
                 // Starting timer
                 self.timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { timer in
@@ -453,7 +439,7 @@ public class ServerSideAdService: AdService {
                         if self.clipIndexToPlayNow + 1 < self.allTimelineContent.count {
                             self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
                             self.timer?.invalidate()
-                            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , clips: clips, startTimeInterval:  content.contentEndTime )
+                            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow ,startTimeInterval:  content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow] )
                         } else {
                             self.timer?.invalidate()
                         }
@@ -479,7 +465,7 @@ public class ServerSideAdService: AdService {
                         if self.clipIndexToPlayNow + 1 < self.allTimelineContent.count {
                             self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
                             self.timer?.invalidate()
-                            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , clips: clips, startTimeInterval:  content.contentEndTime )
+                            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval:  content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow] )
                         } else {
                             self.timer?.invalidate()
                         }
@@ -491,65 +477,26 @@ public class ServerSideAdService: AdService {
         } else {
             // print(" All the clips were played")
         }
-        
     }
     
+    /// Prepare Ad service with initial clips & timeline content
     private func prepareAdService() {
         
         var vodDuration: Int64 = 0
         var totalDuration : Float = 0
+        
+        // Reset admarker arrays
+        self.adMarkerPositions.removeAll()
+        self.tempAdMarkerPositions.removeAll()
         
         if let clips = self.ads.clips {
             
             // Total Duration in miliseconds
             totalDuration = clips.compactMap { Float($0.duration ?? 0) }.reduce(0, +)
             
-            
             var currentDuration : Float = 0
             
             for (index,clip) in clips.enumerated() {
-                
-                // Clip is a Vod , add it to vodDuration
-                if clip.category == "vod" {
-                    if let duration = clip.duration {
-                        vodDuration = vodDuration + Int64(duration)
-                    }
-                }
-                
-                // Clips is an ad, should add an adMarker to the timeLine on ad starting point
-                else if clip.category == "ad" {
-                    if let duration = clip.duration   {
-                        if index == 0 {
-                            let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
-                            
-                            // If the first clip is an Ad, we directly Ad it
-                            self.adMarkerPositions.append(markerPoint)
-                            
-                        } else if index != 0 && index != clips.count {
-                            
-                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
-                            
-                         
-                            self.adMarkerPositions.append(markerPoint)
-                            
-                            // check if the just previous clip was an Ad, if so we will skip it
-                            /* let previousClip = clips[index - 1]
-                            if previousClip.category != "ad" {
-                                let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
-                                self.adMarkerPositions.append(markerPoint)
-                            } */
-                            
-                        } else if index == clips.count {
-                            // If the last clip is an Ad, we directly Ad it
-                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
-                            self.adMarkerPositions.append(markerPoint)
-                        }
-                        
-                    } else {
-                        // print(" Clip type is something else : Not a vod neither ad")
-                    }
-                }
-                
                 
                 // Add the clip duration to currentTotalDuration
                 if let duration = clip.duration   {
@@ -557,10 +504,62 @@ public class ServerSideAdService: AdService {
                     let clipStartTime = Double(currentDuration)
                     let clipEndTime = Double(currentDuration + duration )
                     
-                    let timelineContent = TimelineContent(contentType: clip.category, contentTitle: clip.title, contentStartTime: clipStartTime, contentEndTime: clipEndTime)
+                    let timeRange = CMTimeRange(start: CMTime(milliseconds: Int64(clipStartTime)), end: CMTime(milliseconds: Int64(clipEndTime)))
+                    
+                    let timelineContent = TimelineContent(contentType: clip.category, contentTitle: clip.title, contentStartTime: clipStartTime, contentEndTime: clipEndTime, timeRange: timeRange)
                     
                     allTimelineContent.append(timelineContent)
                     currentDuration = currentDuration + duration
+                    
+                    // Clip is not an ad , add it to vodDuration
+                    if clip.category != "ad" {
+                        vodDuration = vodDuration + Int64(duration)
+                        
+                        // get the first time from the tempAdMarkerPositions & add it to marker positions
+                        if let adMarkerClip = tempAdMarkerPositions.first {
+                            self.adMarkerPositions.append(adMarkerClip)
+                            tempAdMarkerPositions.removeAll()
+                        }
+                        
+                    }
+                    
+                    // Clips is an ad, should add an adMarker to the timeLine on ad starting point
+                    else if clip.category == "ad" {
+                        if index == 0 {
+                            let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
+                            
+                            // If the first clip is an Ad, we directly Ad it
+                            self.tempAdMarkerPositions.append(markerPoint)
+                            
+                        } else if index != 0 && index != clips.count {
+                            
+                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
+                            self.tempAdMarkerPositions.append(markerPoint)
+                            
+                            // check if the just previous clip was an Ad, if so we will skip it
+                            /* let previousClip = clips[index - 1]
+                             if previousClip.category != "ad" {
+                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
+                             self.adMarkerPositions.append(markerPoint)
+                             } */
+                            
+                        } else if index == clips.count {
+                            // If the last clip is an Ad, we directly Add to the `adMarkerPositions` array as there will not be any other clips, no need to store marker point in temp array
+                            
+                            // print("index == clips.count \( index) ")
+                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
+                            self.adMarkerPositions.append(markerPoint)
+                            self.tempAdMarkerPositions.removeAll()
+                        }
+                        else {
+                            // print(" Clip type is an Ad, but something is wrong with index & clip duration")
+                        }
+                    } else {
+                        // print(" Clip Category is not vos neither Ad , it is \(clip.category)")
+                    }
+                    
+                } else {
+                    // print(" Clip duration is not available : clip category \(clip.category) & clip title \(clip.title) & clip titleId \(clip.titleId)" )
                 }
             }
             
