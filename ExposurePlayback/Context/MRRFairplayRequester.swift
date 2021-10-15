@@ -11,6 +11,8 @@ import AVFoundation
 import Player
 import Exposure
 
+
+@available(*, deprecated, message: "Please use only EMUPFairPlayRequester")
 /// *MRR* specific implementation of the `FairplayRequester` protocol for streaming purposes.
 ///
 /// This class handles any *Exposure* related `DRM` validation with regards to *Fairplay*. It is designed to be *plug-and-play* and should require no configuration to use.
@@ -106,7 +108,7 @@ extension MRRFairplayRequester {
         
         
         
-        print(url, " - ",assetIDString)
+        print("MRRFairplayRequester url : \(url) - ,\(assetIDString)")
         
         fetchApplicationCertificate{ [weak self] certificate, certificateError in
             guard let `self` = self else { return }

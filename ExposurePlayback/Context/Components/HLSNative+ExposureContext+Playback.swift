@@ -103,7 +103,10 @@ extension ExposureContext {
             /// Assign language preferences
             switch playbackProperties.language {
             case .defaultBehaviour:
-                print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                // print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                tech.preferredTextLanguage = nil
+                tech.preferredAudioLanguage = nil 
+                break
             case .userLocale:
                 let locale = Locale.current.languageCode
                 tech.preferredTextLanguage = locale
