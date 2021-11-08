@@ -162,11 +162,22 @@ public class ProgramService {
         
         
         func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
+            
+            print(" Func VaLIDATE ")
+            
             Entitlement(environment: environment, sessionToken: sessionToken)
                 .validate(assetId: assetId)
                 .request()
                 .validate()
-                .response{ callback($0.value, $0.error) }
+                .response{
+                    
+                    print(" VALIDATE CALL BACK " , $0.request?.url )
+                    print(" VALIDATE CALL URL " , $0.request?.allHTTPHeaderFields )
+                    print(" VALIDATE CALL URL " , $0.value )
+                    print(" VALIDATE CALL URL " , $0.error )
+                    callback($0.value, $0.error)
+                    
+                }
         }
     }
 }
@@ -255,6 +266,9 @@ extension ProgramService {
     
     fileprivate func validate(program: Program, callback: @escaping (ExposureContext.Warning.ProgramService?, String?) -> Void) {
         self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken) { [weak self] validation, error in
+            
+            print(" Provider validae ")
+            
             guard let `self` = self else { return }
             guard let expirationReason = validation?.status else {
                 // We are permissive on validation errors, allow playback to continue.
