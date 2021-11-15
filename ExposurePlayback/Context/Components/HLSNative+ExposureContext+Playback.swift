@@ -302,7 +302,7 @@ extension ExposureContext {
         
         service.onNotEntitled = { [weak tech, weak source] message in
             guard let tech = tech, let source = source else { return }
-            let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message, actions: nil))
+            let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message))
             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             
             source.adService?.playbackEnded()
