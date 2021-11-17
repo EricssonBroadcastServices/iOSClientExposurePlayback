@@ -26,7 +26,8 @@ platform :ios do
         ensure_git_branch(branch: ENV["DEVELOPMENT_BRANCH"])
         ensure_git_status_clean
         
-        update_graph
+        sh "cd .. && carthage.sh update --use-submodules --platform iOS --use-xcframeworks"
+#        update_graph
         
         bump_build_number
         
