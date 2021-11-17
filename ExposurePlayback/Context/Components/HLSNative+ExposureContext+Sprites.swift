@@ -88,7 +88,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                     callback(nil, ExposureError.generalError(error: error))
                                 }
                             } else {
-                                print(" vtt stream download task failed with an error")
+                                // print(" vtt stream download task failed with an error")
                                 callback(nil, error)
                             }
                             

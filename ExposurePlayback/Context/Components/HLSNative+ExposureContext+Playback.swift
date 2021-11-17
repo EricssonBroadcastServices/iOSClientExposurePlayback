@@ -94,10 +94,6 @@ extension ExposureContext {
                 source.analyticsConnector.providers = providers
             }
             
-            
-            /// Ask if an optional AdService is available
-            onAdServiceRequested(source)
-            
             /// Make sure StartTime is configured if specified by user
             tech.startTime(byDelegate: self)
             
@@ -107,7 +103,10 @@ extension ExposureContext {
             /// Assign language preferences
             switch playbackProperties.language {
             case .defaultBehaviour:
-                print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                // print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                tech.preferredTextLanguage = nil
+                tech.preferredAudioLanguage = nil 
+                break
             case .userLocale:
                 let locale = Locale.current.languageCode
                 tech.preferredTextLanguage = locale
@@ -133,6 +132,26 @@ extension ExposureContext {
                     guard let `self` = self, let tech = tech, let source = source else { return }
                     /// Start ProgramService
                     self.prepareProgramService(source: source, tech: tech)
+                    
+                    // Start Ad service if the ads.stitcher == "NOWTILUS"
+                    if let streamingInfo = source.streamingInfo, let ads = source.ads, let clips = ads.clips {
+                        if streamingInfo.live == false && streamingInfo.ssai == true && ads.stitcher == "NOWTILUS" {
+                            let serverSideAd = ServerSideAdService(ads: ads, clips: clips, context: self, source: source, durationInMs : source.durationInMs ?? 0, tech: tech)
+                            serverSideAd.playerProxy = AdTechWrapper(tech: tech)
+                            
+                            source.adService = serverSideAd
+                            
+                            let eventProvider = AdServiceEventProvider(adService: serverSideAd)
+                            source.analyticsConnector.providers.append(eventProvider)
+                            self.onServerSideAd(source, ads)
+                        } else {
+                            self.onServerSideAd(source, nil)
+                            self.onPlaybackStartWithAds(Int64(source.durationInMs ?? 0), Float(source.durationInMs ?? 0), [])
+                        }
+                    } else {
+                        self.onServerSideAd(source, nil)
+                        self.onPlaybackStartWithAds(Int64(source.durationInMs ?? 0), Float(source.durationInMs ?? 0), [])
+                    }
                 }
             }
             
@@ -187,6 +206,7 @@ extension ExposureContext {
                         switch (reason.httpCode, reason.message) {
                         case (401, "INVALID_SESSION_TOKEN"):
                             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: ExposureError.exposureResponse(reason: reason)))
+                            source.adService?.playbackEnded()
                             tech.eventDispatcher.onError(tech, source, contextError)
                             source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
                             tech.stop()
@@ -232,7 +252,7 @@ extension ExposureContext {
                     $0.onError(tech: tech, source: nilSource, error: contextError)
                 }
             }
-            
+            source?.adService?.playbackEnded()
             tech.stop()
             tech.eventDispatcher.onError(tech, nilSource, contextError)
         }
@@ -272,6 +292,7 @@ extension ExposureContext {
             // If the program is a live event & if there is EPG Gap player should stop playing : If the program has a gap, programId should be nil
             if source.streamingInfo?.event == true && program?.programId == nil {
                 // Player should stop
+                source.adService?.playbackEnded()
                 tech.stop()
             } else {
                 // Do nothing: Allow continue playback
@@ -284,6 +305,7 @@ extension ExposureContext {
             let error = ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 403, message: message))
             let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: error))
             
+            source.adService?.playbackEnded()
             tech.eventDispatcher.onError(tech, source, contextError)
             source.analyticsConnector.onError(tech: tech, source: source, error: contextError)
             tech.stop()

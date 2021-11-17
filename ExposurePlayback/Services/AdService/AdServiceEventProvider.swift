@@ -18,11 +18,9 @@ internal class AdServiceEventProvider: AnalyticsProvider, TimedMetadataProvider,
     }
     
     func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
     }
     
     func onPrepared<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
     }
     
     func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
@@ -68,11 +66,11 @@ internal class AdServiceEventProvider: AnalyticsProvider, TimedMetadataProvider,
     }
     
     func onScrubbedTo<Tech, Source>(tech: Tech, source: Source, offset: Int64) where Tech : PlaybackTech, Source : MediaSource {
-        
+        // adService.seekRequestTriggered(withTargetPosition: offset)
     }
     
     func onDurationChanged<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
-        
+
     }
     
     func onWarning<Tech, Source, Context>(tech: Tech, source: Source?, warning: PlayerWarning<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {

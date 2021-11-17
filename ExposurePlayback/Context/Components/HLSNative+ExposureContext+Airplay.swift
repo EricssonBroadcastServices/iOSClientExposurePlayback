@@ -42,6 +42,7 @@ extension ExposureContext: AirplayHandler {
         let position = tech.playheadPosition
         let playFrom = active ? PlaybackProperties.PlayFrom.customPosition(position: position) : .bookmark
         let properties = PlaybackProperties(old: playbackProperties, playFrom: playFrom)
+        
         tech.stop()
         
         if let source = source as? AssetSource {

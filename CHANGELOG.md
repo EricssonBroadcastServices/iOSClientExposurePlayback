@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.4.00` Release - [2.4.00](#2400)
 * `2.2.60` Release - [2.2.60](#2260)
 * `2.2.51` Release - [2.2.51](#2251)
 * `2.2.50` Release - [2.2.50](#2250)
@@ -25,6 +26,9 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 2.4.00
+#### Features
+* `EMP-16373` SSAI Vod implementation in SDK
 
 ## 2.2.600
 #### Features
