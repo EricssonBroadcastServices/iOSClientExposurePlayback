@@ -29,11 +29,11 @@ platform :ios do
         sh "cd .. && carthage.sh update --use-submodules --platform iOS --use-xcframeworks"
 #        update_graph
         
-        bump_build_number
-        
         run_unit_tests
         
-        clean_build_artifacts
+        bump_build_number
+        
+#        clean_build_artifacts
         
         push_to_git_remote
         
