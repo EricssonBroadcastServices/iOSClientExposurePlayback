@@ -26,7 +26,7 @@ platform :ios do
         ensure_git_branch(branch: ENV["DEVELOPMENT_BRANCH"])
         ensure_git_status_clean
         
-        sh "cd .. && carthage.sh update --use-submodules --use-xcframeworks"
+        sh "cd #{cartfile} carthage.sh update --use-submodules --no-use-binaries --cache-builds --use-xcframeworks"
 #        update_graph
         
         run_unit_tests
