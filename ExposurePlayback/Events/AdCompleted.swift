@@ -1,9 +1,9 @@
 //
-//  BitrateChanged.swift
-//  Analytics
+//  AdCompleted.swift
+//  ExposurePlayback
 //
-//  Created by Fredrik Sjöberg on 2017-07-17.
-//  Copyright © 2017 emp. All rights reserved.
+//  Created by Udaya Sri Senarathne on 2021-11-24.
+//  Copyright © 2021 emp. All rights reserved.
 //
 
 import Foundation
@@ -11,32 +11,31 @@ import Exposure
 
 extension Playback {
     /// Playback switched to a different bitrate.
-    internal struct BitrateChanged {
+    internal struct AdCompleted {
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback switched to a different bitrate
         internal let offsetTime: Int64?
         
-        /// New bitrate, in kilobit/s
-        internal let bitrate: Int64
+        internal let adMediaId: String
         
         internal var cdnInfo: CDNInfoFromEntitlement?
         
         internal var analyticsInfo: AnalyticsFromEntitlement?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, bitrate: Int64, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+        internal init(timestamp: Int64, offsetTime: Int64?, adMediaId: String, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
-            self.bitrate = bitrate
+            self.adMediaId = adMediaId
             self.cdnInfo = cdnInfo
             self.analyticsInfo = analyticsInfo
         }
     }
 }
 
-extension Playback.BitrateChanged: AnalyticsEvent {
+extension Playback.AdCompleted: AnalyticsEvent {
     var eventType: String {
-        return "Playback.BitrateChanged"
+        return "Playback.AdCompleted"
     }
     
     var bufferLimit: Int64 {
@@ -47,7 +46,7 @@ extension Playback.BitrateChanged: AnalyticsEvent {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.bitrate.rawValue: bitrate
+            JSONKeys.adMediaId.rawValue: adMediaId
         ]
         
         if let value = offsetTime {
@@ -66,6 +65,14 @@ extension Playback.BitrateChanged: AnalyticsEvent {
         
         json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
         
+        json[JSONKeys.technology.rawValue] = "HLS"
+        json[JSONKeys.techVersion.rawValue] = ""
+        json[JSONKeys.userAgent.rawValue] = ""
+        
+        let device: Device = Device()
+        json[JSONKeys.height.rawValue] = device.height
+        json[JSONKeys.width.rawValue] = device.width
+        
         return json
     }
     
@@ -73,7 +80,7 @@ extension Playback.BitrateChanged: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
-        case bitrate = "Bitrate"
+        case adMediaId = "AdMediaId"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -84,5 +91,12 @@ extension Playback.BitrateChanged: AnalyticsEvent {
         case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
+        
+        case technology = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        case height = "Height"
+        case width = "Width"
     }
 }
