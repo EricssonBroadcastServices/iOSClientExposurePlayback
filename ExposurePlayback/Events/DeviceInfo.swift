@@ -120,6 +120,14 @@ extension DeviceInfo: AnalyticsEvent {
         
         params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
         
+        params[JSONKeys.technology.rawValue] = "HLS"
+        params[JSONKeys.techVersion.rawValue] = ""
+        params[JSONKeys.userAgent.rawValue] = ""
+        
+        let device: Device = Device()
+        params[JSONKeys.height.rawValue] = device.height
+        params[JSONKeys.width.rawValue] = device.width
+        
         return params
     }
     
@@ -134,6 +142,13 @@ extension DeviceInfo: AnalyticsEvent {
         case manufacturer = "Manufacturer"
         case type = "Type"
         case connection = "Connection"
+        
+        case technology = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"

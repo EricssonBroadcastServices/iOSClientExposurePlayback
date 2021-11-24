@@ -74,6 +74,14 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         
         params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
         
+        params[JSONKeys.technology.rawValue] = "HLS"
+        params[JSONKeys.techVersion.rawValue] = ""
+        params[JSONKeys.userAgent.rawValue] = ""
+        
+        let device: Device = Device()
+        params[JSONKeys.height.rawValue] = device.height
+        params[JSONKeys.width.rawValue] = device.width
+        
         return params
     }
     
@@ -83,6 +91,7 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
+       
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -93,6 +102,13 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
+        
+        case technology = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        case height = "Height"
+        case width = "Width"
     }
 }
 

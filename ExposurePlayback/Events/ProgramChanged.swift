@@ -75,6 +75,14 @@ extension Playback.ProgramChanged: AnalyticsEvent {
         
         json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
         
+        json[JSONKeys.technology.rawValue] = "HLS"
+        json[JSONKeys.techVersion.rawValue] = ""
+        json[JSONKeys.userAgent.rawValue] = ""
+        
+        let device: Device = Device()
+        json[JSONKeys.height.rawValue] = device.height
+        json[JSONKeys.width.rawValue] = device.width
+        
         return json
     }
     
@@ -94,6 +102,13 @@ extension Playback.ProgramChanged: AnalyticsEvent {
         case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
+        
+        case technology = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        case height = "Height"
+        case width = "Width"
     }
 }
 
