@@ -517,7 +517,11 @@ extension ExposureAnalytics: AnalyticsProvider {
         let offset = offsetTime(for: source, using: tech)
         
         let structure = buildErrorStructure(hierarchy: [], nextError: error)
-
+        
+        var techBundle = ""
+        if let technology = tech {
+            techBundle = ((technology is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: technology)).bundleIdentifier) ?? ""
+        }
         
         guard let rootError = structure.0.last else {
             return Playback.Error(timestamp: timestamp,
@@ -526,6 +530,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                   code: error.code,
                                   info: nil,
                                   details: error.info,
+                                  tech: String(describing: type(of: tech)),
+                                  techVersion: version(for: techBundle),
                                   cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
         }
         
@@ -537,6 +543,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                               code: rootError.0,
                               info: hierarchy,
                               details: error.info,
+                              tech: String(describing: type(of: tech)),
+                              techVersion: version(for: techBundle),
                               cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
     }
     

@@ -30,17 +30,26 @@ extension Playback {
         /// Error Details, such as stack trace or expanded error info
         internal let details: String?
         
+        /// Playback technology used
+        internal let tech: String?
+        
+        /// Version of the tech
+        internal let techVersion: String?
+        
         internal var cdnInfo: CDNInfoFromEntitlement?
         
         internal var analyticsInfo: AnalyticsFromEntitlement?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, info: String? = nil, details: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+        internal init(timestamp: Int64, offsetTime: Int64?, message: String, code: Int, info: String? = nil, details: String? = nil, tech: String? = nil , techVersion: String? = nil ,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.message = message
             self.code = code
             self.info = info
             self.details = details
+            
+            self.tech = tech
+            self.techVersion = techVersion
             
             self.cdnInfo = cdnInfo
             self.analyticsInfo = analyticsInfo
@@ -49,6 +58,8 @@ extension Playback {
 }
 
 extension Playback.Error: AnalyticsEvent {
+    
+    
     var eventType: String {
         return "Playback.Error"
     }
@@ -57,12 +68,69 @@ extension Playback.Error: AnalyticsEvent {
         return 3000
     }
     
+    /// String identifier to recognize the device. This should be the same Id as was sent during the login request to the exposure API.
+    ///
+    /// NOTE: Implementation details for "identifierForVendor" states this:
+    /// "If the value is nil, wait and get the value again later. This happens, for example, after the device has been restarted but before the user has unlocked the device."
+    ///
+    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround. "UNKNOWN_DEVICE_ID" will be sent in the event this occurs.
+    internal var deviceId: String {
+        return UIDevice.current.identifierForVendor?.uuidString ?? "UNKNOWN_DEVICE_ID"
+    }
+    
+    /// Model of the device
+    /// Example: iPhone8,1
+    internal var deviceModel: String {
+        var size = 0
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](repeating: 0,  count: Int(size))
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        return String(cString: machine)
+    }
+    
+    /// String identifying the CPU of the device playing the media    armeabi-v7a
+    internal var cpuType: String? {
+        return nil
+    }
+    
+    /// Operating system of the device.
+    /// Example: iOS, tvOS
+    internal var os: String {
+        return UIDevice.mergedSystemName
+    }
+    
+    /// Version number of the operating system
+    /// Example: 8.1
+    internal var osVersion: String {
+        return UIDevice.current.systemVersion
+    }
+    
+    /// Company that built/created/marketed the device
+    internal var manufacturer: String {
+        return "Apple"
+    }
+    
+    /// Id string of the player/sdk.
+    /// Example: EMP.tvOS2, EMP.iOS2
+    internal var player: String {
+        return "EMP.iOS2"
+    }
+    
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.message.rawValue: message,
-            JSONKeys.code.rawValue: code
+            JSONKeys.code.rawValue: code,
+            JSONKeys.deviceId.rawValue: deviceId,
+            JSONKeys.deviceModel.rawValue: deviceModel,
+            JSONKeys.os.rawValue: os,
+            JSONKeys.appType.rawValue: os,
+            JSONKeys.osVersion.rawValue: osVersion,
+            JSONKeys.manufacturer.rawValue: manufacturer,
+            JSONKeys.player.rawValue: player,
+            JSONKeys.tech.rawValue: tech,
+            JSONKeys.techVersion.rawValue: techVersion
         ]
         
         if let offset = offsetTime {
@@ -88,9 +156,6 @@ extension Playback.Error: AnalyticsEvent {
         }
         
         json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
-        
-        json[JSONKeys.technology.rawValue] = "HLS"
-        json[JSONKeys.techVersion.rawValue] = ""
         json[JSONKeys.userAgent.rawValue] = ""
         
         let device: Device = Device()
@@ -109,6 +174,15 @@ extension Playback.Error: AnalyticsEvent {
         case info = "Info"
         case details = "Details"
         
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case player = "Player"
+        
         // CDN
         case CDNVendor = "CDNVendor"
         
@@ -119,7 +193,7 @@ extension Playback.Error: AnalyticsEvent {
         
         case StreamingTechnology = "StreamingTechnology"
         
-        case technology = "Technology"
+        case tech = "Technology"
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
         
