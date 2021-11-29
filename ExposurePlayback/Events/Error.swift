@@ -113,7 +113,7 @@ extension Playback.Error: AnalyticsEvent {
     /// Id string of the player/sdk.
     /// Example: EMP.tvOS2, EMP.iOS2
     internal var player: String {
-        return "EMP.iOS2"
+        return "EMP." + UIDevice.mergedSystemName + "2"
     }
     
     internal var jsonPayload: [String : Any] {

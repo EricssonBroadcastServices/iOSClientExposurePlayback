@@ -46,7 +46,7 @@ class ErrorSpec: QuickSpec {
                 expect(json["Code"] as? Int).to(equal(code))
                 expect(json["Info"] as? String).to(equal(info))
                 expect(json["Details"] as? String).to(equal(details))
-                expect(json.count).to(equal(8))
+                expect(json.count).to(equal(20))
             }
         }
     }

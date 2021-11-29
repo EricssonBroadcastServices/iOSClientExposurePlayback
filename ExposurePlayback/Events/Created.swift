@@ -17,7 +17,7 @@ extension Playback {
         /// Id string of the player/sdk.
         /// Example: EMP.tvOS2, EMP.iOS2
         internal var player: String {
-            return "EMP.iOS2"
+            return "EMP." + UIDevice.mergedSystemName + "2"
         }
         
         /// Release version and build revision of ExposurePlayback

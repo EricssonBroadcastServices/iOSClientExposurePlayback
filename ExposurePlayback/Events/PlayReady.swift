@@ -78,8 +78,6 @@ extension Playback.PlayReady: AnalyticsEvent {
         }
         
         json[JSONKeys.StreamingTechnology.rawValue] = "HLS"
-        
-        json[JSONKeys.techVersion.rawValue] = ""
         json[JSONKeys.userAgent.rawValue] = ""
         
         let device: Device = Device()

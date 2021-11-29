@@ -35,7 +35,7 @@ class PausedSpec: QuickSpec {
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(9))
             }
         }
     }
