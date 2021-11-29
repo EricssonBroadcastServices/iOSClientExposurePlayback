@@ -27,6 +27,7 @@ platform :ios do
         ensure_git_status_clean
         
         sh "cd .. && carthage.sh update --use-submodules --use-xcframeworks"
+        
 #        update_graph
         
         run_unit_tests
@@ -51,7 +52,7 @@ platform :ios do
             Action.sh("git branch '#{version}'")
             Action.sh("git checkout '#{version}'")
             
-            fix_dependencies
+#            fix_dependencies
             
             if !Action.sh("git diff --name-only").empty?
                 Action.sh("git add -A")
