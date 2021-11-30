@@ -339,8 +339,10 @@ extension ExposureAnalytics: AnalyticsProvider {
 
     public func onPrepared<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// InitCompleted
-        let event = Playback.InitCompleted(timestamp: Date().millisecondsSince1970, cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
-        dispatcher?.enqueue(event: event)
+        
+        /// EMP-16272 : Remove player analytics init call
+        /* let event = Playback.InitCompleted(timestamp: Date().millisecondsSince1970, cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
+        dispatcher?.enqueue(event: event) */
     }
     
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
