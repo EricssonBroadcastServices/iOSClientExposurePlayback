@@ -13,6 +13,12 @@ import Exposure
 internal struct DeviceInfo {
     internal let timestamp: Int64
     
+    /// Id string of the player/sdk.
+    /// Example: EMP.tvOS2, EMP.iOS2
+    internal var player: String {
+        return "EMP." + UIDevice.mergedSystemName + "2"
+    }
+    
     /// Optional string indicating the nature of playback from this device
     ///
     /// Can be used to indicate this is an `Airplay` session
@@ -21,14 +27,23 @@ internal struct DeviceInfo {
     /// Indicates the connection type
     internal let connection: String
     
+    /// Playback technology used
+    internal let tech: String
+    
+    /// Version of the tech
+    internal let techVersion: String
+    
     internal var cdnInfo: CDNInfoFromEntitlement?
     
     internal var analyticsInfo: AnalyticsFromEntitlement?
     
-    internal init(timestamp: Int64, connection: String, type: String? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+    internal init(timestamp: Int64, connection: String, type: String? = nil, tech: String, techVersion: String,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
         self.timestamp = timestamp
         self.connection = connection
         self.type = type
+        
+        self.tech = tech
+        self.techVersion = techVersion
         
         self.cdnInfo = cdnInfo
         self.analyticsInfo = analyticsInfo
@@ -95,9 +110,13 @@ extension DeviceInfo: AnalyticsEvent {
             JSONKeys.deviceId.rawValue: deviceId,
             JSONKeys.deviceModel.rawValue: deviceModel,
             JSONKeys.os.rawValue: os,
+            JSONKeys.appType.rawValue: os,
             JSONKeys.osVersion.rawValue: osVersion,
             JSONKeys.manufacturer.rawValue: manufacturer,
-            JSONKeys.connection.rawValue: connection
+            JSONKeys.connection.rawValue: connection,
+            JSONKeys.tech.rawValue: tech,
+            JSONKeys.techVersion.rawValue: techVersion,
+            JSONKeys.player.rawValue: player,
         ]
         
         if let cpuType = cpuType {
@@ -119,6 +138,11 @@ extension DeviceInfo: AnalyticsEvent {
         }
         
         params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
+        params[JSONKeys.userAgent.rawValue] = ""
+        
+        let device: Device = Device()
+        params[JSONKeys.height.rawValue] = device.height
+        params[JSONKeys.width.rawValue] = device.width
         
         return params
     }
@@ -129,11 +153,20 @@ extension DeviceInfo: AnalyticsEvent {
         case deviceId = "DeviceId"
         case deviceModel = "DeviceModel"
         case cpuType = "CPUType"
+        case appType = "AppType"
         case os = "OS"
         case osVersion = "OSVersion"
         case manufacturer = "Manufacturer"
         case type = "Type"
         case connection = "Connection"
+        case player = "Player"
+        
+        case tech = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"

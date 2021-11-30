@@ -104,6 +104,55 @@ public class ExposureAnalytics {
     public func startedAirplay() {
         externalPlayback = .endedByActivatingAirplay
     }
+    
+    
+    
+    /// Exposure Analytics related `Server Side Ads`
+    /// - Parameters:
+    ///   - tech: tech
+    ///   - source: source
+    ///   - adMediaId: adMediaId
+    public func onAdStarted<Tech, Source>(tech: Tech, source: Source, adMediaId: String) where Tech : PlaybackTech, Source : MediaSource {
+        if let source = source as? ExposureSource {
+            let event = Playback.AdStarted(timestamp: Date().millisecondsSince1970,
+                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
+                                         cdnInfo: source.entitlement.cdn,
+                                         analyticsInfo: source.entitlement.analytics)
+            dispatcher?.enqueue(event: event)
+        } else {
+            let event = Playback.AdStarted(timestamp: Date().millisecondsSince1970,
+                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
+            dispatcher?.enqueue(event: event)
+        }
+    }
+    
+    public func onAdCompleted<Tech, Source>(tech: Tech, source: Source, adMediaId: String) where Tech : PlaybackTech, Source : MediaSource {
+        if let source = source as? ExposureSource {
+            let event = Playback.AdCompleted(timestamp: Date().millisecondsSince1970,
+                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
+                                         cdnInfo: source.entitlement.cdn,
+                                         analyticsInfo: source.entitlement.analytics)
+            dispatcher?.enqueue(event: event)
+        } else {
+            let event = Playback.AdCompleted(timestamp: Date().millisecondsSince1970,
+                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
+            dispatcher?.enqueue(event: event)
+        }
+    }
+    
+    public func onAdFailed<Tech, Source>(tech: Tech, source: Source, adMediaId: String) where Tech : PlaybackTech, Source : MediaSource {
+        if let source = source as? ExposureSource {
+            let event = Playback.AdFailed(timestamp: Date().millisecondsSince1970,
+                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
+                                         cdnInfo: source.entitlement.cdn,
+                                         analyticsInfo: source.entitlement.analytics)
+            dispatcher?.enqueue(event: event)
+        } else {
+            let event = Playback.AdFailed(timestamp: Date().millisecondsSince1970,
+                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
+            dispatcher?.enqueue(event: event)
+        }
+    }
 }
 
 fileprivate func version(for identifier: String?) -> String {
@@ -154,12 +203,20 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                        assetData: PlaybackIdentifier.from(playable: playable),
                                        autoPlay: autoplay(tech: tech))
         
+        
+        /// BUGFIX: EMP-11313
+        /// `Bundle(for: aClass)`
+        ///
+        /// The NSBundle object that dynamically loaded aClass (a loadable bundle), the NSBundle object for the framework in which aClass is defined, or the main bundle object if aClass was not dynamically loaded or is not defined in a framework.
+        ///
+        /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
+        let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
     
         
         /// 2. DeviceInfo
         let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
         /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession)
+        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle))
         
         /// 3. Store startup events
         var current = startupEvents
@@ -439,8 +496,6 @@ extension ExposureAnalytics: AnalyticsProvider {
             dispatcher = nil
             (tech as? HLSNative<ExposureContext>)?.stop()
         }
-        
-        
     }
     
     public func onError<Tech, Source, Context>(tech: Tech?, source: Source?, error: PlayerError<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
@@ -462,7 +517,11 @@ extension ExposureAnalytics: AnalyticsProvider {
         let offset = offsetTime(for: source, using: tech)
         
         let structure = buildErrorStructure(hierarchy: [], nextError: error)
-
+        
+        var techBundle = ""
+        if let technology = tech {
+            techBundle = ((technology is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: technology)).bundleIdentifier) ?? ""
+        }
         
         guard let rootError = structure.0.last else {
             return Playback.Error(timestamp: timestamp,
@@ -471,6 +530,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                   code: error.code,
                                   info: nil,
                                   details: error.info,
+                                  tech: String(describing: type(of: tech)),
+                                  techVersion: version(for: techBundle),
                                   cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
         }
         
@@ -482,6 +543,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                               code: rootError.0,
                               info: hierarchy,
                               details: error.info,
+                              tech: String(describing: type(of: tech)),
+                              techVersion: version(for: techBundle),
                               cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
     }
     

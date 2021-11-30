@@ -26,7 +26,9 @@ class DeviceInfoSpec: QuickSpec {
             let simulatorModel = "x86_64"
             let os = deviceName()
             let manufacturer = "Apple"
-            let event = DeviceInfo(timestamp: timeStamp, connection: Reachability.Connection.wifi.description, type: "Airplay")
+            let tech = "Tech"
+            let techVersion = "1.0.0"
+            let event = DeviceInfo(timestamp: timeStamp, connection: Reachability.Connection.wifi.description, type: "Airplay", tech: tech, techVersion: techVersion)
             
             it("Should init with correct data") {
                 expect(event.timestamp).to(equal(timeStamp))
@@ -54,7 +56,7 @@ class DeviceInfoSpec: QuickSpec {
                 expect(json["Manufacturer"] as? String).to(equal(manufacturer))
                 expect(json["Connection"] as? String).to(equal("WiFi"))
                 expect(json["Type"] as? String).to(equal("Airplay"))
-                expect(json.count).to(equal(10))
+                expect(json.count).to(equal(17))
             }
             
         }

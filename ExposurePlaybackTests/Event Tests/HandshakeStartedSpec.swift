@@ -76,7 +76,7 @@ class HandshakeStartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("vodAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(9))
             }
             
             it("Should produce correct Live jsonPayload") {
@@ -87,7 +87,7 @@ class HandshakeStartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(beNil())
                 expect(json["ChannelId"] as? String).to(equal("liveAsset"))
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(9))
             }
             
             it("Should produce correct Program jsonPayload") {
@@ -98,7 +98,7 @@ class HandshakeStartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(beNil())
                 expect(json["ChannelId"] as? String).to(equal("liveAsset"))
                 expect(json["ProgramId"] as? String).to(equal("programAsset"))
-                expect(json.count).to(equal(5))
+                expect(json.count).to(equal(10))
             }
             
             it("Should produce correct Offline jsonPayload") {
@@ -109,7 +109,7 @@ class HandshakeStartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("offlineAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(9))
             }
             
             it("Should produce correct Download jsonPayload") {
@@ -120,7 +120,7 @@ class HandshakeStartedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("downloadAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json.count).to(equal(4))
+                expect(json.count).to(equal(9))
             }
         }
     }

@@ -308,6 +308,12 @@
 		78B670BB25B9809100786C49 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670B925B9809100786C49 /* Scanner.swift */; };
 		78B670E125BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */; };
 		78B670E225BAFD7800786C49 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */; };
+		78C9AB1A274E6D5E00506E48 /* AdStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB19274E6D5E00506E48 /* AdStarted.swift */; };
+		78C9AB1B274E6D5E00506E48 /* AdStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB19274E6D5E00506E48 /* AdStarted.swift */; };
+		78C9AB21274E70EE00506E48 /* AdCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB20274E70EE00506E48 /* AdCompleted.swift */; };
+		78C9AB22274E70EE00506E48 /* AdCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB20274E70EE00506E48 /* AdCompleted.swift */; };
+		78C9AB28274E710700506E48 /* AdFailed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB27274E710700506E48 /* AdFailed.swift */; };
+		78C9AB29274E710700506E48 /* AdFailed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9AB27274E710700506E48 /* AdFailed.swift */; };
 		78DF4A0B225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */; };
 		78DF4A1B225F239800B8348A /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
 		78EEDA79229D4EDB00C2FEE5 /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */; };
@@ -515,6 +521,9 @@
 		78B670AB25B9806400786C49 /* WebVTTParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVTTParser.swift; sourceTree = "<group>"; };
 		78B670B925B9809100786C49 /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		78B670E025BAFD7800786C49 /* SpriteImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteImageDownloader.swift; sourceTree = "<group>"; };
+		78C9AB19274E6D5E00506E48 /* AdStarted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdStarted.swift; sourceTree = "<group>"; };
+		78C9AB20274E70EE00506E48 /* AdCompleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCompleted.swift; sourceTree = "<group>"; };
+		78C9AB27274E710700506E48 /* AdFailed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdFailed.swift; sourceTree = "<group>"; };
 		78DF4A0A225CD66300B8348A /* PlaybackEntitlementV2+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlementV2+Extension.swift"; sourceTree = "<group>"; };
 		78DF4A1A225F239800B8348A /* EnigmaPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaPlayable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -891,6 +900,9 @@
 				76A89D722020F41F00C23579 /* DeviceInfo.swift */,
 				76A89D6C2020F41F00C23579 /* AssetIdentifier.swift */,
 				76EBF036215E30E000503146 /* ConnectionChanged.swift */,
+				78C9AB19274E6D5E00506E48 /* AdStarted.swift */,
+				78C9AB20274E70EE00506E48 /* AdCompleted.swift */,
+				78C9AB27274E710700506E48 /* AdFailed.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1168,6 +1180,7 @@
 				760801EB2069306E007F59D5 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				780761D026A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */,
 				760801EC2069306E007F59D5 /* HLSNative+ExposureContext+Program.swift in Sources */,
+				78C9AB1B274E6D5E00506E48 /* AdStarted.swift in Sources */,
 				760801ED2069306E007F59D5 /* PlayReady.swift in Sources */,
 				760801EE2069306E007F59D5 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
 				76150E7D2187826F00AABE89 /* AdPlayerProxy.swift in Sources */,
@@ -1177,6 +1190,7 @@
 				760801F22069306E007F59D5 /* ServerTimeProvider.swift in Sources */,
 				760801F32069306E007F59D5 /* ExposureAnalytics.swift in Sources */,
 				760801F42069306E007F59D5 /* ExposureContext+Warning.swift in Sources */,
+				78C9AB29274E710700506E48 /* AdFailed.swift in Sources */,
 				7696508520B2E64000B76A14 /* Trace.swift in Sources */,
 				760801F52069306E007F59D5 /* InitCompleted.swift in Sources */,
 				760801F62069306E007F59D5 /* PlaybackProperties.swift in Sources */,
@@ -1193,6 +1207,7 @@
 				760801FC2069306E007F59D5 /* Created.swift in Sources */,
 				78B670AD25B9806400786C49 /* WebVTTParser.swift in Sources */,
 				760801FD2069306E007F59D5 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
+				78C9AB22274E70EE00506E48 /* AdCompleted.swift in Sources */,
 				760801FE2069306E007F59D5 /* UIDevice+Extensions.swift in Sources */,
 				760801FF2069306E007F59D5 /* HeartbeatsProvider.swift in Sources */,
 				760802002069306E007F59D5 /* Heartbeat.swift in Sources */,
@@ -1324,6 +1339,7 @@
 				766FE471203B0563003B9B90 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				780761CF26A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */,
 				7619B489216F258D00EE0DC8 /* AdServiceEventProvider.swift in Sources */,
+				78C9AB1A274E6D5E00506E48 /* AdStarted.swift in Sources */,
 				76A89C4820207AB200C23579 /* HLSNative+ExposureContext+Program.swift in Sources */,
 				7619B4AB21773F3D00EE0DC8 /* BasicContractRestrictions.swift in Sources */,
 				76A89D9C2020F41F00C23579 /* PlayReady.swift in Sources */,
@@ -1333,6 +1349,7 @@
 				76A89C4F20207AB200C23579 /* AssetPlayable.swift in Sources */,
 				76A89C5A20207AB200C23579 /* ServerTimeProvider.swift in Sources */,
 				76A89D682020F3CF00C23579 /* ExposureAnalytics.swift in Sources */,
+				78C9AB28274E710700506E48 /* AdFailed.swift in Sources */,
 				76A89DA52020F9E800C23579 /* ExposureContext+Warning.swift in Sources */,
 				7696508420B2E64000B76A14 /* Trace.swift in Sources */,
 				76A89D982020F41F00C23579 /* InitCompleted.swift in Sources */,
@@ -1349,6 +1366,7 @@
 				76150E7C2187826F00AABE89 /* AdPlayerProxy.swift in Sources */,
 				78B670AC25B9806400786C49 /* WebVTTParser.swift in Sources */,
 				76A89C4720207AB200C23579 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				78C9AB21274E70EE00506E48 /* AdCompleted.swift in Sources */,
 				76B7B13521482BCB003514F4 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				76A89D8D2020F41F00C23579 /* Created.swift in Sources */,
 				76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
@@ -1488,7 +1506,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.4.100;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1515,7 +1533,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.4.100;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1700,7 +1718,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.4.100;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1726,7 +1744,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.4.100;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

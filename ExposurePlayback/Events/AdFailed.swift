@@ -1,39 +1,41 @@
 //
-//  StopAirplay.swift
+//  AdFailed.swift
 //  ExposurePlayback
 //
-//  Created by Fredrik Sjöberg on 2018-08-16.
-//  Copyright © 2018 emp. All rights reserved.
+//  Created by Udaya Sri Senarathne on 2021-11-24.
+//  Copyright © 2021 emp. All rights reserved.
 //
 
 import Foundation
 import Exposure
 
 extension Playback {
-    /// Player started ChromeCasting.
-    internal struct StopAirplay {
+    /// Playback switched to a different bitrate.
+    internal struct AdFailed {
         internal let timestamp: Int64
         
-        /// Offset in the video sequence where the playback was started at in milliseconds.
+        /// Offset in the video sequence where the playback switched to a different bitrate
         internal let offsetTime: Int64?
+        
+        internal let adMediaId: String
         
         internal var cdnInfo: CDNInfoFromEntitlement?
         
         internal var analyticsInfo: AnalyticsFromEntitlement?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+        internal init(timestamp: Int64, offsetTime: Int64?, adMediaId: String, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
-            
+            self.adMediaId = adMediaId
             self.cdnInfo = cdnInfo
             self.analyticsInfo = analyticsInfo
         }
     }
 }
 
-extension Playback.StopAirplay: AnalyticsEvent {
+extension Playback.AdFailed: AnalyticsEvent {
     var eventType: String {
-        return "Playback.StopAirplay"
+        return "Playback.AdFailed"
     }
     
     var bufferLimit: Int64 {
@@ -43,7 +45,8 @@ extension Playback.StopAirplay: AnalyticsEvent {
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.timestamp.rawValue: timestamp,
+            JSONKeys.adMediaId.rawValue: adMediaId
         ]
         
         if let value = offsetTime {
@@ -77,6 +80,7 @@ extension Playback.StopAirplay: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
+        case adMediaId = "AdMediaId"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -96,4 +100,3 @@ extension Playback.StopAirplay: AnalyticsEvent {
         case width = "Width"
     }
 }
-

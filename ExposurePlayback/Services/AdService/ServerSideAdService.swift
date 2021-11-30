@@ -46,7 +46,7 @@ public class ServerSideAdService: AdService {
     
     /// This will store all the ads that are already played during the current session
     fileprivate var tempAdTimeLine: [TimelineContent] = []
-
+    
     
     /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
@@ -86,11 +86,11 @@ public class ServerSideAdService: AdService {
         self.durationInMs = durationInMs
         self.tech = tech
         self.clips = clips
-    
+        
     }
     
     public func playbackReady() {
-         // print(" Play back ready ")
+        // print(" Play back ready ")
     }
     
     public func playbackStarted() {
@@ -119,7 +119,7 @@ public class ServerSideAdService: AdService {
     }
     
     public func playbackBufferingStarted() {
-         // print(" playbackBufferingStarted")
+        // print(" playbackBufferingStarted")
     }
     
     public func playbackBufferingEnded() {
@@ -127,7 +127,7 @@ public class ServerSideAdService: AdService {
             self.timer?.invalidate()
             self.scrubbed(withTargetPosition: destination)
         }
-       
+        
     }
     
     /// Seek request intiated / scrubing started
@@ -135,7 +135,7 @@ public class ServerSideAdService: AdService {
     public func seekRequestInitiated(fromPosition origin: Int64) {
         self.scrubbedFromPosition = origin
     }
-
+    
     /// Seek request Triggered / scrub ended
     /// - Parameter destination: withTargetPosition
     public func seekRequestTriggered(withTargetPosition destination: Int64) {
@@ -143,7 +143,7 @@ public class ServerSideAdService: AdService {
     }
     
     public func playbackTimedMetadata(metaData: Any?) {
-         // print(" playbackTimedMetadata " , (metaData: Any?) )
+        // print(" playbackTimedMetadata " , (metaData: Any?) )
     }
     
     public var playerProxy: AdPlayerProxy?
@@ -169,78 +169,78 @@ public class ServerSideAdService: AdService {
     /// Player intiated a seek to destination
     /// - Parameter destination: destination
     private func scrubbed(withTargetPosition destination: Int64) {
-
-            self.timeInterval = Double(self.tech.playheadPosition)
         
-            let oldTime = self.scrubbedFromPosition != 0 ? self.scrubbedFromPosition : Int64(self.tech.playheadPosition)
+        self.timeInterval = Double(self.tech.playheadPosition)
+        
+        let oldTime = self.scrubbedFromPosition != 0 ? self.scrubbedFromPosition : Int64(self.tech.playheadPosition)
+        
+        
+        let seekRange = CMTimeRange(start: CMTime(milliseconds: oldTime), end: CMTime(milliseconds: destination))
+        
+        let matchingInterstitialRange = self.allTimelineContent.reversed().first { seekRange.containsTimeRange($0.timeRange) && $0.contentType == "ad" }
+        
+        let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0 == matchingInterstitialRange })
+        
+        if matchingInterstitialRange != nil && matchingIndex != nil  {
             
-            
-            let seekRange = CMTimeRange(start: CMTime(milliseconds: oldTime), end: CMTime(milliseconds: destination))
-
-            let matchingInterstitialRange = self.allTimelineContent.reversed().first { seekRange.containsTimeRange($0.timeRange) && $0.contentType == "ad" }
-            
-            let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0 == matchingInterstitialRange })
-
-            if matchingInterstitialRange != nil && matchingIndex != nil  {
+            if let seekTimeInMiliseconds = matchingInterstitialRange?.timeRange.start.milliseconds, let index = matchingIndex {
                 
-                if let seekTimeInMiliseconds = matchingInterstitialRange?.timeRange.start.milliseconds, let index = matchingIndex {
+                if self.scrubbedDestination == 0  {
                     
-                    if self.scrubbedDestination == 0  {
-                        
-                        
-                        let adClip = self.allTimelineContent[index]
-                        if !(self.tempAdTimeLine.contains(adClip)) {
+                    
+                    let adClip = self.allTimelineContent[index]
+                    if !(self.tempAdTimeLine.contains(adClip)) {
                         //if matchingInterstitialRange?.isWatched == false {
-
-                            self.scrubbedDestination = destination
-                            
-                            self.clipIndexToPlayNow = index
-                            self.timeInterval = Double(seekTimeInMiliseconds)
-                            self.context.onServerSideAdShouldSkip(Double(seekTimeInMiliseconds))
-                            
-                        } else {
-                            skipAlreadyPlayedAd()
-                        }
-                    } else {
+                        
+                        self.scrubbedDestination = destination
+                        
+                        self.clipIndexToPlayNow = index
+                        self.timeInterval = Double(seekTimeInMiliseconds)
                         self.context.onServerSideAdShouldSkip(Double(seekTimeInMiliseconds))
                         
-                        if let index = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
-                            self.timer?.invalidate()
-                            self.clipIndexToPlayNow = index
-                            self.timeInterval = Double(destination)
-                            self.startAdPlaybackTimer(clipIndexToStart: index, startTimeInterval: Double(destination), clip: clips[index])
-                            
-                        }
+                    } else {
+                        skipAlreadyPlayedAd()
                     }
-
+                } else {
+                    self.context.onServerSideAdShouldSkip(Double(seekTimeInMiliseconds))
                     
+                    if let index = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
+                        self.timer?.invalidate()
+                        self.clipIndexToPlayNow = index
+                        self.timeInterval = Double(destination)
+                        self.startAdPlaybackTimer(clipIndexToStart: index, startTimeInterval: Double(destination), clip: clips[index])
+                        
+                    }
                 }
                 
+                
+            }
+            
+            self.scrubbedFromPosition = 0
+            
+        } else {
+            
+            if let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
+                
+                self.scrubbedDestination = 0
                 self.scrubbedFromPosition = 0
                 
-            } else {
-
-                if let matchingIndex = self.allTimelineContent.firstIndex(where:  { $0.timeRange.containsTime(CMTime(milliseconds: destination)) }) {
-
-                    self.scrubbedDestination = 0
-                    self.scrubbedFromPosition = 0
-                    
-                    self.clipIndexToPlayNow = matchingIndex
-
-                    self.timeInterval = Double(destination)
-
-
-                    self.startAdPlaybackTimer(clipIndexToStart: matchingIndex, startTimeInterval: Double(destination), clip: clips[matchingIndex])
-
-                }
+                self.clipIndexToPlayNow = matchingIndex
+                
+                self.timeInterval = Double(destination)
+                
+                
+                self.startAdPlaybackTimer(clipIndexToStart: matchingIndex, startTimeInterval: Double(destination), clip: clips[matchingIndex])
+                
             }
-
+        }
+        
     }
     
     
     /// Start Ad service when play back starts
     private func startAdService() {
-
+        
         if let firstClip = clips.first {
             self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval: 0, clip: firstClip )
         } else {
@@ -248,10 +248,10 @@ public class ServerSideAdService: AdService {
         }
         
     }
-
+    
     
     fileprivate func skipAlreadyPlayedAd() {
- 
+        
         // Find the next available vod clip
         for (index, clip) in allTimelineContent.enumerated().dropFirst(clipIndexToPlayNow) {
             if clip.contentType == "ad" && clip.isWatched == true {
@@ -287,7 +287,7 @@ public class ServerSideAdService: AdService {
         self.timeInterval = startTimeInterval
         
         self.clipIndexToPlayNow = clipIndexToStart
-
+        
         if clipIndexToStart < allTimelineContent.count {
             
             
@@ -295,7 +295,7 @@ public class ServerSideAdService: AdService {
             
             let clipStartTime = content.contentStartTime
             let clipEndTime = content.contentEndTime
-
+            
             // New Clip Duration is , clip start time & the duration
             // let clipDuration = clipStartTime + Double(duration)
             let duration = clipEndTime - clipStartTime
@@ -309,7 +309,7 @@ public class ServerSideAdService: AdService {
                 
                 if !(self.tempAdTimeLine.contains(content)) {
                     
-                // if content.isWatched == false {
+                    // if content.isWatched == false {
                     
                     handleAdClipPlay(clip, clipFirstQuartile, clipMidpoint, clipThirdQuartile, clipEndTime, content, clipIndexToStart)
                 }
@@ -355,27 +355,27 @@ public class ServerSideAdService: AdService {
             else {
                 self.timeInterval = content.contentStartTime
                 
-  
-                    // Starting timer
-                    self.timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { timer in
-                        self.timeInterval += 1
+                
+                // Starting timer
+                self.timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { timer in
+                    self.timeInterval += 1
+                    
+                    self.context.onClipStarted(Int64(self.timeInterval), Int64(content.contentEndTime))
+                    
+                    // print(" Now running a vod clip => " , Int(self.timeInterval) )
+                    if  Int(self.timeInterval) == Int(clipEndTime) {
                         
-                        self.context.onClipStarted(Int64(self.timeInterval), Int64(content.contentEndTime))
-                        
-                        // print(" Now running a vod clip => " , Int(self.timeInterval) )
-                        if  Int(self.timeInterval) == Int(clipEndTime) {
-                            
-                            if self.clipIndexToPlayNow + 1 < self.allTimelineContent.count {
-                                self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
-                                self.timer?.invalidate()
-                                self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval:  content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow] )
-                            } else {
-                                self.timer?.invalidate()
-                            }
-                            
-                            self.context.onClipEnded(Int64(content.contentStartTime), Int64(content.contentEndTime))
+                        if self.clipIndexToPlayNow + 1 < self.allTimelineContent.count {
+                            self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
+                            self.timer?.invalidate()
+                            self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow, startTimeInterval:  content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow] )
+                        } else {
+                            self.timer?.invalidate()
                         }
+                        
+                        self.context.onClipEnded(Int64(content.contentStartTime), Int64(content.contentEndTime))
                     }
+                }
                 
                 if let timer = self.timer {
                     // prevent creating the timer on `defaultRunLoopMode`.
@@ -401,67 +401,76 @@ public class ServerSideAdService: AdService {
         
         self.adTracking(adTrackingUrls: clip.impressionUrlTemplates ?? [] )
         
-
-          
-
-             // Starting timer
-             self.timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { timer in
-                 self.timeInterval += 1
-                 
-                 if Int(self.timeInterval) == Int(clipFirstQuartile)  {
-                     // Send firstQuartile tracking events
-                     self.adTracking(adTrackingUrls: clip.trackingEvents?.firstQuartile ?? [] )
-                     
-                 } else if Int(self.timeInterval) == Int(clipMidpoint)  {
-                     // Send clipMidpoint tracking events
-                     self.adTracking(adTrackingUrls: clip.trackingEvents?.midpoint ?? [] )
-                     
-                 } else if Int(self.timeInterval) == Int(clipThirdQuartile)  {
-                     // Send thirdQuartile tracking events
-                     self.adTracking(adTrackingUrls: clip.trackingEvents?.thirdQuartile ?? [] )
-                     
-                 } else if Int(self.timeInterval) == Int(clipEndTime)  {
-                     let timeRange = CMTimeRange(start: CMTime(milliseconds: Int64(content.contentStartTime)), end: CMTime(milliseconds: Int64(content.contentEndTime)))
-                     
-                     self.allTimelineContent[clipIndexToStart] = TimelineContent(contentType: content.contentType, contentTitle: content.contentTitle, contentStartTime: content.contentStartTime, contentEndTime: content.contentEndTime, isWatched: true, timeRange: timeRange)
-                     
-                     self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
-                     self.policy.rewindEnabled = self.source.entitlement.rwEnabled
-                     self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
-                     self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
-                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
-                     
-                     // Send complete tracking events
-                     self.adTracking(adTrackingUrls: clip.trackingEvents?.complete ?? [] )
-                     
-                     // add this clip as already played ad
-                     self.tempAdTimeLine.append(self.allTimelineContent[clipIndexToStart])
-                     
-                     // We have a predefined scrub destination , player should skipped to this position
-                     if self.scrubbedDestination != 0 {
-                         self.timer?.invalidate()
-                         // print(" Ad was done, but previously assigned scrub destination is available , should skip to that position ")
-                         let destination = self.scrubbedDestination
-                         self.scrubbedDestination = 0
-                         self.context.onServerSideAdShouldSkip(Double(destination))
-                         
-                         
-                     } else {
-                         
-                         // If we don't have a predefined scrub destination, find the next clip & start the timer for that clip
-                         if (self.clipIndexToPlayNow + 1) < self.allTimelineContent.count {
-                             self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
-                             
-                             self.timer?.invalidate()
-                             
-                             self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , startTimeInterval: content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow])
-                         } else {
-                             self.timer?.invalidate()
-                         }
-                     }
-                 }
-             }
+        if let adMediaId = clip.titleId {
+            tech.currentSource?.analyticsConnector.providers
+                .compactMap{ $0 as? ExposureAnalytics }
+                .forEach{ $0.onAdStarted(tech: tech, source: source, adMediaId: adMediaId) }
+        }
+        
+        // Starting timer
+        self.timer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { timer in
+            self.timeInterval += 1
             
+            if Int(self.timeInterval) == Int(clipFirstQuartile)  {
+                // Send firstQuartile tracking events
+                self.adTracking(adTrackingUrls: clip.trackingEvents?.firstQuartile ?? [] )
+                
+            } else if Int(self.timeInterval) == Int(clipMidpoint)  {
+                // Send clipMidpoint tracking events
+                self.adTracking(adTrackingUrls: clip.trackingEvents?.midpoint ?? [] )
+                
+            } else if Int(self.timeInterval) == Int(clipThirdQuartile)  {
+                // Send thirdQuartile tracking events
+                self.adTracking(adTrackingUrls: clip.trackingEvents?.thirdQuartile ?? [] )
+                
+            } else if Int(self.timeInterval) == Int(clipEndTime)  {
+                let timeRange = CMTimeRange(start: CMTime(milliseconds: Int64(content.contentStartTime)), end: CMTime(milliseconds: Int64(content.contentEndTime)))
+                
+                self.allTimelineContent[clipIndexToStart] = TimelineContent(contentType: content.contentType, contentTitle: content.contentTitle, contentStartTime: content.contentStartTime, contentEndTime: content.contentEndTime, isWatched: true, timeRange: timeRange)
+                
+                self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
+                self.policy.rewindEnabled = self.source.entitlement.rwEnabled
+                self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
+                self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
+                self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
+                
+                // Send complete tracking events
+                self.adTracking(adTrackingUrls: clip.trackingEvents?.complete ?? [] )
+                
+                if let adMediaId = clip.titleId {
+                    self.tech.currentSource?.analyticsConnector.providers
+                        .compactMap{ $0 as? ExposureAnalytics }
+                        .forEach{ $0.onAdCompleted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
+                }
+                
+                // add this clip as already played ad
+                self.tempAdTimeLine.append(self.allTimelineContent[clipIndexToStart])
+                
+                // We have a predefined scrub destination , player should skipped to this position
+                if self.scrubbedDestination != 0 {
+                    self.timer?.invalidate()
+                    // print(" Ad was done, but previously assigned scrub destination is available , should skip to that position ")
+                    let destination = self.scrubbedDestination
+                    self.scrubbedDestination = 0
+                    self.context.onServerSideAdShouldSkip(Double(destination))
+                    
+                    
+                } else {
+                    
+                    // If we don't have a predefined scrub destination, find the next clip & start the timer for that clip
+                    if (self.clipIndexToPlayNow + 1) < self.allTimelineContent.count {
+                        self.clipIndexToPlayNow = self.clipIndexToPlayNow + 1
+                        
+                        self.timer?.invalidate()
+                        
+                        self.startAdPlaybackTimer(clipIndexToStart: self.clipIndexToPlayNow , startTimeInterval: content.contentEndTime, clip: self.clips[self.clipIndexToPlayNow])
+                    } else {
+                        self.timer?.invalidate()
+                    }
+                }
+            }
+        }
+        
         if let timer = self.timer {
             // prevent creating the timer on `defaultRunLoopMode`.
             RunLoop.current.add(timer, forMode: .common)

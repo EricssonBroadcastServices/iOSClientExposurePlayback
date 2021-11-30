@@ -40,7 +40,7 @@ class PlayReadySpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["Technology"] as? String).to(equal(tech))
                 expect(json["TechVersion"] as? String).to(equal(techVersion))
-                expect(json.count).to(equal(6))
+                expect(json.count).to(equal(9))
             }
         }
     }
