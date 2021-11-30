@@ -121,8 +121,6 @@
 		7608026220693193007F59D5 /* ChannelSourceSpec+StartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89D0720209E7400C23579 /* ChannelSourceSpec+StartTime.swift */; };
 		7608026320693193007F59D5 /* BitrateChangedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DCC2021CCC000C23579 /* BitrateChangedSpec.swift */; };
 		7608026420693193007F59D5 /* CreatedSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89DD02021CCC000C23579 /* CreatedSpec.swift */; };
-		7608026820693193007F59D5 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D00202098CA00C23579 /* Nimble.framework */; };
-		7608026A20693193007F59D5 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89D02202098CA00C23579 /* Quick.framework */; };
 		76080276206933EA007F59D5 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080278206933EA007F59D5 /* Exposure.framework */; };
 		76080277206933EA007F59D5 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76080279206933EA007F59D5 /* Player.framework */; };
 		7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7608022C2069306E007F59D5 /* ExposurePlayback.framework */; };
@@ -273,6 +271,8 @@
 		76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA63BD203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
 		780761CF26A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */; };
 		780761D026A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */; };
+		7823752E27565A9600A96849 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752D27565A9600A96849 /* Quick.framework */; };
+		7823753027565AA100A96849 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752F27565AA100A96849 /* Nimble.framework */; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		78455DC1261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		78455DC2261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
@@ -504,6 +504,8 @@
 		780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSideAdService.swift; sourceTree = "<group>"; };
 		781F439A246039A900610321 /* Download.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Download.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		781F439C24603A2300610321 /* ExposureDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ExposureDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7823752D27565A9600A96849 /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7823752F27565AA100A96849 /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
 		78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
 		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
@@ -546,11 +548,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7823753027565AA100A96849 /* Nimble.framework in Frameworks */,
+				7823752E27565A9600A96849 /* Quick.framework in Frameworks */,
 				7608027A206933EA007F59D5 /* ExposurePlayback.framework in Frameworks */,
 				76080276206933EA007F59D5 /* Exposure.framework in Frameworks */,
 				76080277206933EA007F59D5 /* Player.framework in Frameworks */,
-				7608026820693193007F59D5 /* Nimble.framework in Frameworks */,
-				7608026A20693193007F59D5 /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +835,8 @@
 		76A89C8E2020808900C23579 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7823752F27565AA100A96849 /* Nimble.framework */,
+				7823752D27565A9600A96849 /* Quick.framework */,
 				786E8C77275656FE0050AE37 /* Player.framework */,
 				786E8C73275656F80050AE37 /* Exposure.framework */,
 				786E8C652756567A0050AE37 /* Player.framework */,
