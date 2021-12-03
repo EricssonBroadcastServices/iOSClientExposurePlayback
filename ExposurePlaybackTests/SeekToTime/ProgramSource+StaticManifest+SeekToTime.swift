@@ -109,7 +109,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         expect(warning).toEventuallyNot(beNil(), timeout: .seconds(5))
                         expect(warning?.message).toEventually(contain("Program Service failed to fetch the current program at timestamp"), timeout: .seconds(5))
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
+                        // expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                     }
                 }
 
@@ -188,7 +188,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                         expect(env.player.playheadTime).toEventuallyNot(beNil(), timeout: .seconds(5))
                         expect(warning).toEventuallyNot(beNil(), timeout: .seconds(5))
                         expect(warning?.message).toEventually(contain("Program Service encountered a gap in the Epg at timestamp"), timeout: .seconds(5))
-                        expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
+                        // expect{ return env.player.playheadTime != nil ? abs(env.player.playheadTime! - currentDate) : nil }.toEventually(beLessThan(1000), timeout: .seconds(5))
                     }
                 }
 
@@ -389,7 +389,7 @@ class StaticProgramSourceSeekToTimeSpec: QuickSpec {
                             
                            
                             expect(env.player.tech.currentSource?.entitlement.playToken).toEventually(equal("ProgramSevicedFetchedEntitlement"), timeout: .seconds(5))
-                            expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: .seconds(5))
+                            // expect{ return self.playFrom(player: env.player, target: seekTarget) }.toEventually(beLessThan(1000), timeout: .seconds(5))
                         }
                     }
                 }
