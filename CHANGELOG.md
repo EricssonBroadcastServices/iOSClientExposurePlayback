@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.5.20` Release - [2.5.20](#2520)
 * `2.5.00` Release - [2.5.00](#2500)
 * `2.4.10` Release - [2.4.10](#2410)
 * `2.4.00` Release - [2.4.00](#2400)
@@ -28,6 +29,10 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+
+## 2.5.20
+#### Bug Fixes
+* Bug Fix : wrong no of ad marker values &  wrong values in ad marker offset / enddOffset values
 
 ## 2.5.00
 #### Features

@@ -510,60 +510,67 @@ public class ServerSideAdService: AdService {
                     let timelineContent = TimelineContent(contentType: clip.category, contentTitle: clip.title, contentStartTime: clipStartTime, contentEndTime: clipEndTime, timeRange: timeRange)
                     
                     allTimelineContent.append(timelineContent)
-                    currentDuration = currentDuration + duration
-                    
-                    // Clip is not an ad , add it to vodDuration
-                    if clip.category != "ad" {
-                        vodDuration = vodDuration + Int64(duration)
-                        
-                        // get the first time from the tempAdMarkerPositions & add it to marker positions
-                        if let adMarkerClip = tempAdMarkerPositions.first {
-                            self.adMarkerPositions.append(adMarkerClip)
-                            tempAdMarkerPositions.removeAll()
-                        }
-                        
-                    }
                     
                     // Clips is an ad, should add an adMarker to the timeLine on ad starting point
-                    else if clip.category == "ad" {
+                    if clip.category == "ad" {
                         if index == 0 {
+                            
+                            // Keep the ad marker in the tempAdMarkerPositions
                             let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
-                            
-                            // If the first clip is an Ad, we directly Ad it
                             self.tempAdMarkerPositions.append(markerPoint)
+                            currentDuration = currentDuration + duration
                             
-                        } else if index != 0 && index != clips.count {
+                        } else if index != 0 && index != ( clips.count - 1 )  {
                             
+                            // Keep the ad marker in the tempAdMarkerPositions
                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
+                            currentDuration = currentDuration + duration
                             self.tempAdMarkerPositions.append(markerPoint)
                             
-                            // check if the just previous clip was an Ad, if so we will skip it
-                            /* let previousClip = clips[index - 1]
-                             if previousClip.category != "ad" {
-                             let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
-                             self.adMarkerPositions.append(markerPoint)
-                             } */
                             
-                        } else if index == clips.count {
-                            // If the last clip is an Ad, we directly Add to the `adMarkerPositions` array as there will not be any other clips, no need to store marker point in temp array
-                            
-                            // print("index == clips.count \( index) ")
-                            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
-                            self.adMarkerPositions.append(markerPoint)
-                            self.tempAdMarkerPositions.removeAll()
+                        } else if index == ( clips.count - 1 ) {
+                            // If the last clip is an Ad, we check the tempAdMarkerPositions to find if there are any elements / ads before the last ad clip. If so, get the offSet value from the first element & use the totalDuration value as the endOffset
+                            if let offset = tempAdMarkerPositions.first?.offset {
+                                let markerPoint = MarkerPoint(type: "Ad", offset: offset, endOffset: Int(totalDuration) )
+                                self.adMarkerPositions.append(markerPoint)
+                                
+                                // Clear tempAdMarkerPositions array
+                                tempAdMarkerPositions.removeAll()
+                            } else {
+                                let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
+                                self.adMarkerPositions.append(markerPoint)
+                                
+                                // Clear tempAdMarkerPositions array
+                                tempAdMarkerPositions.removeAll()
+                            }
                         }
                         else {
                             // print(" Clip type is an Ad, but something is wrong with index & clip duration")
                         }
                     } else {
-                        // print(" Clip Category is not vos neither Ad , it is \(clip.category)")
+                        
+                        // Clip is not an ad , add it to vodDuration
+                        vodDuration = vodDuration + Int64(duration)
+                        currentDuration = currentDuration + duration
+                        
+                        // Clip is not an AD : Create a new ad marker if the tempAdMarkerPositions is not empty
+                        
+                        // Check if there are any values in tempAdMarkerPositions.
+                        // If so create a new adMarker with offet value of the first element & endoffset value from the last element
+                        if let offset = tempAdMarkerPositions.first?.offset, let endOffset = tempAdMarkerPositions.last?.endOffset {
+                            let markerPoint = MarkerPoint(type: "Ad", offset: offset, endOffset: endOffset )
+                            self.adMarkerPositions.append(markerPoint)
+                            
+                            // Clear tempAdMarkerPositions array
+                            tempAdMarkerPositions.removeAll()
+                        }
                     }
                     
                 } else {
+                    // print(" Should not happen ")
                     // print(" Clip duration is not available : clip category \(clip.category) & clip title \(clip.title) & clip titleId \(clip.titleId)" )
                 }
             }
-            
             context.onPlaybackStartWithAds(vodDuration, totalDuration, adMarkerPositions )
         }
     }
