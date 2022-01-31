@@ -32,7 +32,7 @@ public struct EnigmaPlayable {
         
         let fairplay = FairplayConfiguration(secondaryMediaLocator: nil, certificateUrl: certificateUrl, licenseAcquisitionUrl: licenseServerUrl, licenseServerUrl: licenseServerUrl)
         
-        let playbackEntitlement = PlaybackEntitlement(
+        let playbackEntitlement = PlaybackEntitlement( assetId: entitlementV2.assetId, accountId: entitlementV2.accountId, audioOnly: entitlementV2.audioOnly,
             playTokenExpiration: String(entitlementV2.playTokenExpiration),
             mediaLocator: (format.mediaLocator),
             playSessionId: entitlementV2.playSessionId,
@@ -54,7 +54,10 @@ public struct EnigmaPlayable {
             lastViewedTime: entitlementV2.bookmarks?.lastViewedTime ?? nil,
             liveTime: entitlementV2.bookmarks?.liveTime ?? nil ,
             productId: entitlementV2.productId,
-            adMediaLocator: nil, cdn: entitlementV2.cdn , analytics: entitlementV2.analytics)
+            adMediaLocator: nil,
+            cdn: entitlementV2.cdn ,
+            analytics: entitlementV2.analytics,
+            liveDelay: format.liveDelay)
         
         return (playbackEntitlement, nil)
     }

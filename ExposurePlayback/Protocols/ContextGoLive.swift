@@ -16,6 +16,8 @@ internal protocol ContextGoLive {
 extension ContextGoLive {
     internal func goToLiveDynamicManifest(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         let ranges = player.seekableTimeRanges
+        
+
         guard !ranges.isEmpty, let last = ranges.last?.end.milliseconds else {
             let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekableRangesEmpty)
             player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
@@ -33,29 +35,53 @@ extension ContextGoLive {
             }
         }
         
-        if let serverTime = player.serverTime, last > serverTime {
-            /// It is impossible to search beyond the actual live point
-            let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: last, livePoint: serverTime))
-            player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
-            player.tech.currentSource?.analyticsConnector.onWarning(tech: player.tech, source: player.tech.currentSource, warning: warning)
-            return
-        }
-        
-        if let programService = player.context.programService {
-            programService.isEntitled(toPlay: last) { program in
-                // NOTE: If `callback` is NOT fired:
-                //      * Playback is not entitled
-                //      * `onError` will be dispatched with message
-                //      * playback will be stopped and unloaded
-                player.tech.seek(toTime: last) { [weak programService] success in
-                    // We should not send programChanged event until we have actually arrived at the target timestamp
-                    if success { programService?.handleProgramChanged(program: program, isExtendedProgram: false) }
+        // Check if we have any live delay value from the entitlement request
+        if  let liveDelay = player.tech.currentSource?.entitlement.liveDelay {
+            let liveTime = last - liveDelay
+            if let programService = player.context.programService {
+                programService.isEntitled(toPlay: liveTime) { program in
+                    // NOTE: If `callback` is NOT fired:
+                    //      * Playback is not entitled
+                    //      * `onError` will be dispatched with message
+                    //      * playback will be stopped and unloaded
+                    player.tech.seek(toTime: liveTime) { [weak programService] success in
+                        // We should not send programChanged event until we have actually arrived at the target timestamp
+                        if success { programService?.handleProgramChanged(program: program, isExtendedProgram: false) }
+                    }
                 }
             }
+            else {
+                player.tech.seek(toTime: last)
+            }
+        } else {
+            
+            // No liveDelay value was found
+            if let serverTime = player.serverTime, last > serverTime {
+                /// It is impossible to search beyond the actual live point
+                let warning = PlayerWarning<HLSNative<ExposureContext>, ExposureContext>.tech(warning: .seekTimeBeyondLivePoint(timestamp: last, livePoint: serverTime))
+                player.tech.eventDispatcher.onWarning(player.tech, player.tech.currentSource, warning)
+                player.tech.currentSource?.analyticsConnector.onWarning(tech: player.tech, source: player.tech.currentSource, warning: warning)
+                return
+            }
+            
+            if let programService = player.context.programService {
+                programService.isEntitled(toPlay: last) { program in
+                    // NOTE: If `callback` is NOT fired:
+                    //      * Playback is not entitled
+                    //      * `onError` will be dispatched with message
+                    //      * playback will be stopped and unloaded
+                    player.tech.seek(toTime: last) { [weak programService] success in
+                        // We should not send programChanged event until we have actually arrived at the target timestamp
+                        if success { programService?.handleProgramChanged(program: program, isExtendedProgram: false) }
+                    }
+                }
+            }
+            else {
+                player.tech.seek(toTime: last)
+            }
         }
-        else {
-            player.tech.seek(toTime: last)
-        }
+        
+
     }
     
     internal func goToLiveStaticManifest(player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {

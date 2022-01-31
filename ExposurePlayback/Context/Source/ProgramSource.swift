@@ -77,6 +77,8 @@ extension ProgramSource: ContextTimeSeekable {
     ///     - context: The playback context
     fileprivate func handleSeekBeyondLivePoint(lastOffset: Int64, targetTime: Int64, timeInterval: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
         // TODO: Check fragility of checking for `playbackType`
+        
+
         if context.isDynamicManifest(player.tech, self) {
             // ProgreamSource is considered to be live which means seeking beyond the last seekable range would be impossible.
             //
