@@ -47,9 +47,11 @@ public class ExposureContext: MediaContext {
     /// Tracks the internal entitlementResponse callback
     internal var onEntitlementResponse: (PlaybackEntitlement, Source) -> Void = { _,_ in }
     
+    /// Tracks the media Type of the asset : audio / video
+    internal var onMediaType: (MediaType) -> Void = { _ in }
+    
     /// Tracks the internal adService callback
     internal var onAdServiceRequested: (Source) -> Void = { _ in }
-    
     
     /// Tracks the internal adService callback
     internal var onServerSideAd: (Source, Ads?) -> Void = { _,_  in }

@@ -274,6 +274,10 @@
 		7823752E27565A9600A96849 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752D27565A9600A96849 /* Quick.framework */; };
 		7823753027565AA100A96849 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752F27565AA100A96849 /* Nimble.framework */; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
+		7838DCE027A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */; };
+		7838DCE127A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */; };
+		7838DCE327A7D8DC0052848A /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCE227A7D8DC0052848A /* MediaType.swift */; };
+		7838DCE427A7D8DC0052848A /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCE227A7D8DC0052848A /* MediaType.swift */; };
 		78455DC1261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		78455DC2261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
@@ -507,6 +511,8 @@
 		7823752D27565A9600A96849 /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7823752F27565AA100A96849 /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
+		7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+MediaType.swift"; sourceTree = "<group>"; };
+		7838DCE227A7D8DC0052848A /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
 		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
 		784D1E7724DC3169000F5C34 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
@@ -749,6 +755,7 @@
 				76A89C3B20207AB100C23579 /* PlaybackProperties.swift */,
 				76A89DA22020F9A300C23579 /* ExposureContext+Error.swift */,
 				76A89DA42020F9E800C23579 /* ExposureContext+Warning.swift */,
+				7838DCE227A7D8DC0052848A /* MediaType.swift */,
 				76A89C2D20207AB100C23579 /* Components */,
 				76A89C3C20207AB100C23579 /* Source */,
 				76A89C3720207AB100C23579 /* Playable */,
@@ -772,6 +779,7 @@
 				767EFCE9216369AE00F6CC74 /* HLSNative+ExposureContext+AdService.swift */,
 				767EFCEE21637AAD00F6CC74 /* HLSNative+ExposureContext+TimedMetadata.swift */,
 				787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */,
+				7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1181,6 +1189,7 @@
 				760801E32069306E007F59D5 /* ContextStartTime.swift in Sources */,
 				760801E42069306E007F59D5 /* ExposureContext.swift in Sources */,
 				760801E52069306E007F59D5 /* CMTime+Extensions.swift in Sources */,
+				7838DCE427A7D8DC0052848A /* MediaType.swift in Sources */,
 				760801E62069306E007F59D5 /* ScrubbedTo.swift in Sources */,
 				760801E72069306E007F59D5 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				78B670BB25B9809100786C49 /* Scanner.swift in Sources */,
@@ -1264,6 +1273,7 @@
 				760802192069306E007F59D5 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7608021A2069306E007F59D5 /* Playable.swift in Sources */,
 				7619B49F21764FEB00EE0DC8 /* HLSNative+ExposureContext+AdService.swift in Sources */,
+				7838DCE127A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */,
 				7619B49D21764FE300EE0DC8 /* AdServiceEventProvider.swift in Sources */,
 				7608021B2069306E007F59D5 /* EMUPFairPlayRequester.swift in Sources */,
 				7608021C2069306E007F59D5 /* Error.swift in Sources */,
@@ -1340,6 +1350,7 @@
 				76A89C4D20207AB200C23579 /* ExposureContext.swift in Sources */,
 				7635AEC5202ADFDE001512BF /* CMTime+Extensions.swift in Sources */,
 				76A89D9F2020F41F00C23579 /* ScrubbedTo.swift in Sources */,
+				7838DCE327A7D8DC0052848A /* MediaType.swift in Sources */,
 				76FA63BE203CD177000209B7 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
 				7635AEC9202AE0A2001512BF /* ContextTimeSeekable.swift in Sources */,
 				78B670BA25B9809100786C49 /* Scanner.swift in Sources */,
@@ -1423,6 +1434,7 @@
 				76A89DA02020F41F00C23579 /* StartCasting.swift in Sources */,
 				7635AECB202AE0B2001512BF /* ContextPositionSeekable.swift in Sources */,
 				7635AEC3202ADF6E001512BF /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
+				7838DCE027A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */,
 				76A89C6520207B2400C23579 /* Playable.swift in Sources */,
 				760200FA2034A56F00EF495D /* EMUPFairPlayRequester.swift in Sources */,
 				76A89D952020F41F00C23579 /* Error.swift in Sources */,
@@ -1508,7 +1520,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1520,7 +1532,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.5.2;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1537,7 +1549,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1549,7 +1561,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.5.2;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SDKROOT = appletvos;
@@ -1726,7 +1738,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1738,7 +1750,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.5.2;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;
@@ -1754,7 +1766,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JCUPRVKEC5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1766,7 +1778,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 2.5.2;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = ExposurePlayback;
 				SKIP_INSTALL = YES;

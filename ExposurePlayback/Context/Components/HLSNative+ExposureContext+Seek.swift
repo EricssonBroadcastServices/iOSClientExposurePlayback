@@ -14,16 +14,22 @@ import AVFoundation
 extension Player where Tech == HLSNative<ExposureContext> {
     // MARK: Seeking
     
-    /// Indicates the drift from the actual live point as defined by the `ServerTime Wallclock` (milliseconds).
+    /// Indicates the drift from the actual live point as defined by the `Entitlement` otherwise check  `ServerTime Wallclock` (milliseconds).
     ///
-    /// May be `nil` if no server time has been synched or if the seekable ranges are empty.
+    /// May be `nil` if no `liveDelay` value is defined in the `Entitlement` response or  server time has been synched or if the seekable ranges are empty.
     public var liveDelay: Int64? {
+
         let isDynamicManifest = context.isDynamicManifest(tech, tech.currentSource)
         guard isDynamicManifest else { return nil }
-        if let last = seekableTimeRanges.last?.end.milliseconds, let serverTime = serverTime {
-            return serverTime-last
+        
+        if let liveDelayFromEntitlement = tech.currentSource?.entitlement.liveDelay {
+            return liveDelayFromEntitlement
+        } else {
+            if let last = seekableTimeRanges.last?.end.milliseconds, let serverTime = serverTime {
+                return serverTime-last
+            }
+            return nil
         }
-        return nil
     }
     
     

@@ -11,7 +11,7 @@ import Foundation
 import Quick
 import Nimble
 import Exposure
-import AVFoundation
+//import AVFoundation
 
 @testable import Player
 @testable import ExposurePlayback

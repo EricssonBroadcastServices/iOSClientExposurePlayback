@@ -1,4 +1,7 @@
-## Integrating a Simple Exposure Based Player
+## Implementation guide
+
+You can find a sample implementation on how to use the sdk in the Sample App [`SDKSampleApp`](https://github.com/EricssonBroadcastServices/iOSClientSDKSampleApp) git hub repository.
+
 
 #### Authentication
 Accessing most functionality on the *EMP Platform* requires a valid `SessionToken`.
@@ -148,6 +151,19 @@ If application developers want to disable the analytics for the playback they ca
 ```Swift
 player.startPlayback(playable: assetPlayable, properties: properties, enableAnalytics: false)
 ```
+
+#### Audio only Playback 
+
+SDK provides an out of box implementation for the audio only playback. You can create & start the playback using the `AssetPlayable`.  If the stream is an audio only stream, SDK will return the `mediaType` as `audio`. This event will be fired when a new new entitlement is received, such as after attempting a new playback request.
+
+```Swift
+player.onMediaType { [weak self] mediaType  in 
+    // mediaType : audio / video
+}
+            
+```
+
+You will find an example implementation of audio only playback with sticky player, background audio handling, iOS control center integration, audio interuption handling & AirPlay / Chromecast in the [`SDKSampleApp`](https://github.com/EricssonBroadcastServices/iOSClientSDKSampleApp).
 
 
 #### Playback Progress
