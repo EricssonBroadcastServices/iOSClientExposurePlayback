@@ -9,6 +9,7 @@
 import Foundation
 import Exposure
 import Player
+import AVFoundation
 
 extension Player where Tech == HLSNative<ExposureContext> {
     // MARK: Audio Track Selection
@@ -92,6 +93,15 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter language: The RFC 4646 language tag identifying the track
     public func selectText(language: String?) {
         tech.selectText(language: language)
+    }
+    
+    
+    // MARK: variants
+    
+    @available(iOS 15.0,tvOS 15.0, *)
+    /// Returns all the available `AVAssetVariant`
+    public var variants: [AVAssetVariant]? {
+        return tech.variants
     }
 }
 
