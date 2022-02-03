@@ -96,8 +96,15 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     
-    // MARK: variants
+    // MARK: BitRate selection
+    /// Set PeakBitRate in the current player item
+    /// - Parameter selectedBitRate: selectedBitRate
+    public func setBitRate(selectedBitRate: Double ) {
+        tech.setBitRate(selectedBitRate: selectedBitRate)
+    }
     
+    
+    // MARK: variants
     @available(iOS 15.0,tvOS 15.0, *)
     /// Returns all the available `AVAssetVariant`
     public var variants: [AVAssetVariant]? {
