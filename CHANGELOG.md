@@ -1,6 +1,7 @@
 # CHANGELOG
 
 
+* `2.6.30` Release - [2.6.30](#2630)
 * `2.6.20` Release - [2.6.20](#2620)
 * `2.6.10` Release - [2.6.10](#2610)
 * `2.6.00` Release - [2.6.00](#2600)
@@ -32,6 +33,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+
+## 2.6.30
+#### Bug Fixes
+* `EMP-17738` Clean `.tmp` cache files in tmp folder 
 
 ## 2.6.20
 #### Features

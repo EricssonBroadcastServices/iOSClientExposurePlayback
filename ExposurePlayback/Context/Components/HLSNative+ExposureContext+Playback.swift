@@ -87,7 +87,9 @@ extension ExposureContext {
     
     fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider]? = nil , tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?) {
         if let source = source {
-
+            
+            onEntitlementResponse(source.entitlement, source)
+            
             // Pass media type 
             let _ = source.entitlement.audioOnly == true ? onMediaType(MediaType.audio) : onMediaType(MediaType.video)
             

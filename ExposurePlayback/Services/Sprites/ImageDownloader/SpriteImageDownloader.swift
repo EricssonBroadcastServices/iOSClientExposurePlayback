@@ -24,17 +24,20 @@ internal class SpriteImageDownloader {
         
         //  queue.maxConcurrentOperationCount = 4
         
+        // clean tmp cache if available
+        let _ = self.cleanTmpCache()
+        
         let _ = ImageFileManager(assetId: assetId).createDirectory()
         
         let urls = urlStrings.compactMap { URL(string: $0) }
-
+        
         let completion = BlockOperation {
-                // print(" All images are downloaded ")
-            }
+            // print(" All images are downloaded ")
+        }
         for url in urls {
             queue.addOperation(DownloadOperation(session: downloadSession, url: url, assetId: assetId, qulaity: quality))
         }
-
+        
         OperationQueue.main.addOperation(completion)
     }
     
@@ -67,17 +70,33 @@ internal class SpriteImageDownloader {
                 try FileManager.default.removeItem(at: file)
             }
         } catch {
-            print("Error on removing the folder " , error)
+            // print("Error in removeDownloadedSprites " , error)
         }
     }
-
+    
+    
+    
+    /// Remove all the .tmp files created inside the tmp folder when doing URLRequests
+    internal func cleanTmpCache() {
+        do {
+            let tmpDirURL = FileManager.default.temporaryDirectory
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(atPath: tmpDirURL.path)
+            try tmpDirectory.forEach { file in
+                let fileUrl = tmpDirURL.appendingPathComponent(file)
+                try FileManager.default.removeItem(atPath: fileUrl.path)
+            }
+        } catch {
+            // print(" Error in cleanTmpCache " , error )
+        }
+    }
+    
     
     /// Cancel all downloads
     internal func cancelAllDownloads() {
         for operation in queue.operations {
             operation.cancel()
         }
-
+        
         downloadSession.getAllTasks { tasks in
             for task in tasks {
                 task.cancel()
