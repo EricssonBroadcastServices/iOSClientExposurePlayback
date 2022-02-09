@@ -64,7 +64,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                                 }
                                             }
                                             
-                                            
                                             let imageDownloader = SpriteImageDownloader(assetId: assetId)
                                             imageDownloader.downloadImagesInQue(urlStrings: imageUrls, quality: quality)
                                             
@@ -76,8 +75,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                         } catch {
                                             callback(nil, ExposureError.generalError(error: error))
                                         }
-                                        
-                                        
                                         
                                     } else {
                                         let error = NSError(domain: "VTT stream content is missing", code: 51, userInfo: nil)
@@ -159,8 +156,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - Parameter assetId: assetId
     public func listenToPlayBackAbort(_ assetId: String) {
         self.onPlaybackAborted(callback: {_,_ in
-             let imageDownloader = SpriteImageDownloader(assetId: assetId)
+            let imageDownloader = SpriteImageDownloader(assetId: assetId)
             imageDownloader.removeDownloadedSprites()
+            imageDownloader.cleanTmpCache()
             imageDownloader.cancelAllDownloads()
         })
     }
