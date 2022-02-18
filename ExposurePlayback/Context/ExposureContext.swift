@@ -57,16 +57,16 @@ public class ExposureContext: MediaContext {
     internal var onServerSideAd: (Source, Ads?) -> Void = { _,_  in }
     
     /// Tracks the internal adService ad end
-    internal var onPlaybackStartWithAds: (Int64, Float, [MarkerPoint]) -> Void = { _, _, _ in }
+    internal var onPlaybackStartWithAds: (Float, Float,  Float, [MarkerPoint]) -> Void = { _, _, _, _ in }
     
-    /// Tracks the internal adService ad start
-    internal var onWillPresentInterstitial: (ContractRestrictionsService, Bool, Double?) -> Void = { _, _, _ in }
+    /// Tracks the internal adService ad start 
+    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, Int64 ) -> Void = { _, _, _ in }
     
     /// Tracks the internal adService ad end
     internal var onDidPresentInterstitial: (ContractRestrictionsService) -> Void = { _ in }
     
     /// Tracks the internal adService ad start
-    internal var onServerSideAdShouldSkip: (Double) -> Void = { _ in }
+    internal var onServerSideAdShouldSkip: (Int64) -> Void = { _ in }
     
     
     /// Tracks the clip start event
@@ -140,4 +140,3 @@ extension ExposureContext: StartTimeDelegate {
         return .defaultStartTime
     }
 }
-

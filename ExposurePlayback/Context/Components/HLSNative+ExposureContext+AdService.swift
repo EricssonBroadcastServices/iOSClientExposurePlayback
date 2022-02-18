@@ -56,14 +56,22 @@ extension Player where Tech == HLSNative<ExposureContext> {
 }
 
 extension Player where Tech == HLSNative<ExposureContext> {
+    
+    /// Notify the player that an `Ad` will start playing
+    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc) & clickThroughUrl if available
+    /// - Returns: self
     @discardableResult
-    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, Bool, Double?) -> Void) -> Self {
-        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, isWatched, skipTime  in
-            callback(contractRestrictionService, isWatched, skipTime)
+    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, String?, Int64 ) -> Void) -> Self {
+        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, clickThroughUrl, adClipDuration  in
+            callback(contractRestrictionService, clickThroughUrl, adClipDuration)
         }
         return self
     }
     
+    
+    /// Notify the player that an `Ad` did finish playing
+    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc)
+    /// - Returns: self
     @discardableResult
     public func onDidPresentInterstitial(callback: @escaping (ContractRestrictionsService) -> Void) -> Self {
         context.onDidPresentInterstitial = { contractRestrictionService  in
@@ -73,7 +81,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     @discardableResult
-    public func onServerSideAdShouldSkip(callback: @escaping (Double) -> Void) -> Self {
+    public func onServerSideAdShouldSkip(callback: @escaping (Int64) -> Void) -> Self {
         context.onServerSideAdShouldSkip = { skipTime  in
             callback(skipTime)
         }
@@ -97,10 +105,15 @@ extension Player where Tech == HLSNative<ExposureContext> {
         return self
     }
     
+    
+    
     @discardableResult
-    public func onPlaybackStartWithAds(callback: @escaping (Int64, Float, [MarkerPoint]) -> Void) -> Self {
-        context.onPlaybackStartWithAds = { vodDuration, totalDurationInMs, adMarkerPoints  in
-            callback(vodDuration, totalDurationInMs, adMarkerPoints)
+    /// Player will start playing with / without Ads
+    /// - Parameter callback: vodDuration, adDuration,  totalDurationInMs, adMarkerPoints
+    /// - Returns: self
+    public func onPlaybackStartWithAds(callback: @escaping (Float, Float, Float, [MarkerPoint]) -> Void) -> Self {
+        context.onPlaybackStartWithAds = { vodDuration, adDuration,  totalDurationInMs, adMarkerPoints  in
+            callback(vodDuration, adDuration, totalDurationInMs, adMarkerPoints)
         }
         
         return self
@@ -110,12 +123,41 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 extension Player where Tech == HLSNative<ExposureContext> {
     
+    
     @discardableResult
+    /// Notify the player that there will be server side enabled for the current playing asset
+    /// - Parameter callback: Source & Ads
+    /// - Returns: self
     public func onServerSideAd(callback: @escaping (ExposureContext.Source,Ads?) -> Void) -> Self {
         context.onServerSideAd = { [weak self] source, ads in
             callback(source, ads)
-
         }
         return self
+    }
+}
+
+
+extension Player where Tech == HLSNative<ExposureContext> {
+    public func trackClickedAd( adTrackingUrls: [String]) {
+        let group = DispatchGroup()
+        
+        for url in adTrackingUrls {
+            group.enter()
+            if let adTrackingUrl = URL(string: url) {
+                let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
+                    if let _ = response as? HTTPURLResponse {
+                        print(" Ad tracking was success" )
+                    }
+                    group.leave()
+                }
+                task.resume()
+            } else {
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // print(" All the ad tracking beacons were sent to backend")
+        }
     }
 }

@@ -150,11 +150,11 @@ extension ExposureContext {
                             self.onServerSideAd(source, ads)
                         } else {
                             self.onServerSideAd(source, nil)
-                            self.onPlaybackStartWithAds(Int64(source.durationInMs ?? 0), Float(source.durationInMs ?? 0), [])
+                            self.onPlaybackStartWithAds(Float(source.durationInMs ?? 0), 0 , Float(source.durationInMs ?? 0), [])
                         }
                     } else {
                         self.onServerSideAd(source, nil)
-                        self.onPlaybackStartWithAds(Int64(source.durationInMs ?? 0), Float(source.durationInMs ?? 0), [])
+                        self.onPlaybackStartWithAds(Float(source.durationInMs ?? 0), 0 , Float(source.durationInMs ?? 0), [])
                     }
                 }
             }
