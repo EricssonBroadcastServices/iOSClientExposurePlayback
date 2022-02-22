@@ -58,12 +58,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
 extension Player where Tech == HLSNative<ExposureContext> {
     
     /// Notify the player that an `Ad` will start playing
-    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc) & clickThroughUrl if available
+    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc) & clickThroughUrl , adTrackingUrls if available , ad clip duration
     /// - Returns: self
     @discardableResult
-    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, String?, Int64 ) -> Void) -> Self {
-        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, clickThroughUrl, adClipDuration  in
-            callback(contractRestrictionService, clickThroughUrl, adClipDuration)
+    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, String?, [String]?, Int64 ) -> Void) -> Self {
+        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, clickThroughUrl, adTrackingUrls, adClipDuration  in
+            callback(contractRestrictionService, clickThroughUrl, adTrackingUrls , adClipDuration)
         }
         return self
     }
