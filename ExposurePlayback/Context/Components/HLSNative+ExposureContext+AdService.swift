@@ -106,12 +106,11 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     
-    
-    @discardableResult
     /// Player will start playing with / without Ads
     /// - Parameter callback: vodDuration, adDuration,  totalDurationInMs, adMarkerPoints
     /// - Returns: self
-    public func onPlaybackStartWithAds(callback: @escaping (Float, Float, Float, [MarkerPoint]) -> Void) -> Self {
+    @discardableResult
+    public func onPlaybackStartWithAds(callback: @escaping (Int64, Int64, Int64, [MarkerPoint]) -> Void) -> Self {
         context.onPlaybackStartWithAds = { vodDuration, adDuration,  totalDurationInMs, adMarkerPoints  in
             callback(vodDuration, adDuration, totalDurationInMs, adMarkerPoints)
         }
