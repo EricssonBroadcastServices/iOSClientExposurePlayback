@@ -137,26 +137,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 
 extension Player where Tech == HLSNative<ExposureContext> {
+
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls
     public func trackClickedAd( adTrackingUrls: [String]) {
-        let group = DispatchGroup()
-        
-        for url in adTrackingUrls {
-            group.enter()
-            if let adTrackingUrl = URL(string: url) {
-                let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
-                    if let _ = response as? HTTPURLResponse {
-                        print(" Ad tracking was success" )
-                    }
-                    group.leave()
-                }
-                task.resume()
-            } else {
-                group.leave()
-            }
-        }
-        
-        group.notify(queue: .main) {
-            // print(" All the ad tracking beacons were sent to backend")
-        }
+        context.trackAds(adTrackingUrls: adTrackingUrls)
     }
 }

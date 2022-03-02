@@ -68,13 +68,17 @@ public class ExposureContext: MediaContext {
     /// Tracks the internal adService ad start
     internal var onServerSideAdShouldSkip: (Int64) -> Void = { _ in }
     
-    
     /// Tracks the clip start event
     internal var onClipStarted: (Int64, Int64) -> Void = { _, _ in }
     
     /// Tracks the clip end event
     internal var onClipEnded: (Int64, Int64) -> Void = { _, _ in }
     
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls descriptionadTrackingUrls
+    internal func trackAds( adTrackingUrls: [String]) {
+        trackPlayedAds(adTrackingUrls: adTrackingUrls)
+    }
     
     /// Specifies playback related behaviour
     internal(set) public var playbackProperties: PlaybackProperties = PlaybackProperties()
@@ -138,5 +142,36 @@ extension ExposureContext: StartTimeDelegate {
             return startTimeSource.handleStartTime(for: hls, in: self)
         }
         return .defaultStartTime
+    }
+}
+
+
+extension ExposureContext {
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls
+    public func trackPlayedAds( adTrackingUrls: [String]) {
+        let queue = DispatchQueue.global(qos: .background)
+        let group = DispatchGroup()
+        
+        for url in adTrackingUrls {
+            group.enter()
+            queue.async {
+                if let adTrackingUrl = URL(string: url) {
+                    let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
+                        if let _ = response as? HTTPURLResponse {
+                            // success
+                        }
+                        group.leave()
+                    }
+                    task.resume()
+                } else {
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // print(" All the ad tracking beacons were sent to backend")
+        }
     }
 }
