@@ -50,7 +50,7 @@ public class ServerSideAdService: AdService {
     
     fileprivate var alreadyStartedAd: [TimelineContent] = []
     
-    /// Whenver content type is not an `ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
+    /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
     
     /// This will be used to store Ad marker positions temporary, when there are multiple `adMarkers` `tempAdMarkerPositions` will hold them until next clip is not an `ad` , then append the first item to the `adMarkerPositions` array.
@@ -87,12 +87,10 @@ public class ServerSideAdService: AdService {
     
     public func playbackReady() {
         // print(" Play back ready ")
-        
     }
     
     public func playbackStarted() {
         deallocAll()
-
         self.prepareAdService()
         self.startAdService()
     }
@@ -103,7 +101,6 @@ public class ServerSideAdService: AdService {
     
     public func playbackEnded() {
         deallocAll()
-        
     }
     
     public func playbackPaused() {
@@ -111,7 +108,7 @@ public class ServerSideAdService: AdService {
     }
     
     public func playbackResumed() {
-        // print("playbackResumed")
+        // playbackResumed
     }
     
     /// Clear & de allocate
@@ -209,11 +206,10 @@ extension ServerSideAdService {
     ///   - currentPlayheadPosition: current playhead position : This will be `zero` if the content started from beginning. Not `zero` if the content started from a bookmark
     private func startPlayback(_ startTime:Int64 , _ currentPlayheadPosition: Int64 ) {
         
-
         // temporary store values
         var rangeStart = startTime
         var rangeEnd = currentPlayheadPosition
-
+        
         // Add preiodoci time oberver for the player
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
             
@@ -221,12 +217,12 @@ extension ServerSideAdService {
             
             // Find if there are any ads in between playhead start position & start time
             // This is needed when a player starts from a bookmark to check if there any available ads before the bookmark
-            if (rangeEnd / 10 * 10) != 0 && self.oldScrubbedDestination == 0  {
-  
+            if ((rangeEnd / 10 * 10) != 0 && self.oldScrubbedDestination == 0) || (rangeEnd == 0 && rangeStart != 0)  {
+                
                 let range = CMTimeRange(start: CMTime(milliseconds: rangeStart), end: CMTime(milliseconds: rangeEnd))
-
-                // Find if there is an Ad Breaks ( AdBreak : one or multiple Ad clips )
-                // If so get the closet Ad Break to the target position
+                
+                // print(" Range " , range)
+                
                 if let adBreakIndex = self.adMarkerPositions.lastIndex(where: {
                     if let startOffset = $0.offset , let endOffset = $0.endOffset {
                         let adRange = CMTimeRange(start: CMTime(milliseconds: Int64(startOffset)), end: CMTime(milliseconds:  Int64(endOffset)))
@@ -234,8 +230,7 @@ extension ServerSideAdService {
                     }
                     return false
                 }) {
-
-                    // Get the offset of the Ad Break
+                    
                     if let offset = self.adMarkerPositions[adBreakIndex].offset {
                         
                         if let adClipIndex = self.allTimelineContent.firstIndex(where: {
@@ -245,7 +240,7 @@ extension ServerSideAdService {
                                 return false
                             }
                         }) {
-                            // Find the first ad clip in the AdBreak
+                            
                             let adClip = self.allTimelineContent[adClipIndex]
                             
                             // Check if the Ad is already played or not
@@ -262,7 +257,7 @@ extension ServerSideAdService {
                                 // reset temporary stored values
                                 rangeStart = 0
                                 rangeEnd = 0
-                                
+                              
                                 // Make it as sdk initiated seek.
                                 self.userInitiatedSeek = false
                                 self.context.onServerSideAdShouldSkip( Int64(adClip.contentStartTime + 100) )
@@ -289,6 +284,7 @@ extension ServerSideAdService {
                                     
                                     // Inform the player that , it should seek to this position
                                     self.context.onServerSideAdShouldSkip(tempDestination)
+                                    
                                 } else {
                                     
                                     // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
@@ -302,8 +298,11 @@ extension ServerSideAdService {
                                         rangeStart = 0
                                         rangeEnd = 0
                                         
-                                        self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 100) )
+                                        self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
                                     } else {
+                                        rangeStart = 0
+                                        rangeEnd = 0
+                                       
                                         self.userInitiatedSeek = true
                                     }
                                 }
@@ -315,14 +314,15 @@ extension ServerSideAdService {
                             rangeStart = 0
                             rangeEnd = 0
                         }
+                        
+                        
                     } else {
-                        // o ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
+                        // No ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
                         self.userInitiatedSeek = true
                         rangeStart = 0
                         rangeEnd = 0
                     }
                 } else {
-                    
                     // No `AdBreak` was found, keep playing the content
                     self.userInitiatedSeek = true
                     rangeStart = 0
@@ -334,7 +334,7 @@ extension ServerSideAdService {
                 rangeStart = 0
                 rangeEnd = 0
                 
-                let _ = self.allTimelineContent.compactMap { content in
+                let _ = self.allTimelineContent.enumerated().compactMap { index, content in
                     if let start = content.timeRange.start.milliseconds , let end = content.timeRange.end.milliseconds, let timeInMil = time.milliseconds {
                         
                         if (start / 10 * 10) <= timeInMil && (end / 10 * 10) >= timeInMil && content.contentType == "ad" && !(self.tempAdTimeLine.contains(content)) {
@@ -415,6 +415,7 @@ extension ServerSideAdService {
                                     self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                                     self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
                                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
+                                   
                                 }
                                 
                             }
@@ -425,20 +426,25 @@ extension ServerSideAdService {
 
                             // Check if we have a previously assigned destination
                             if self.oldScrubbedDestination != 0 {
+  
+                                // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
+                                if ( index != (self.allTimelineContent.count - 1) && self.allTimelineContent[index+1].contentType != "ad" ) {
 
-                                // Make it as a user intiated seek
-                                self.userInitiatedSeek = true
-                                
-                                let tempDestination = self.oldScrubbedDestination
-                                
-                                // Reset oldScrubbedDestination value
-                                self.oldScrubbedDestination = 0
-                                
-                                // Inform the player that , it should seek to this position
-                                self.context.onServerSideAdShouldSkip(tempDestination)
+                                    // Make it as a user intiated seek
+                                    self.userInitiatedSeek = true
+                                    
+                                    let tempDestination = self.oldScrubbedDestination
+                                    
+                                    // Reset oldScrubbedDestination value
+                                    self.oldScrubbedDestination = 0
+                                    
+                                    // Inform the player that , it should seek to this position
+                                    self.context.onServerSideAdShouldSkip(tempDestination)
+                                } else {
+                                    // print(" Still timeline is playing an Ad")
+                                }
                                 
                             } else {
-
                                 // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
                                 if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }) {
                                     
@@ -447,13 +453,13 @@ extension ServerSideAdService {
                                     // Make it as a SDK intiated seek
                                     self.userInitiatedSeek = false
                                     
-                                    self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 100) )
-                                    return
+                                    self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
                                 } else {
                                     self.userInitiatedSeek = true
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             return
                         }
                     }
@@ -572,31 +578,31 @@ extension ServerSideAdService {
     }
 }
 
-//extension ServerSideAdService {
-//
-//    /// Call ad tracking urls
-//    /// - Parameter adTrackingUrls: ad tracking urls
-//    fileprivate func adTracking(adTrackingUrls: [String]) {
-//        let group = DispatchGroup()
-//
-//        for url in adTrackingUrls {
-//            group.enter()
-//            if let adTrackingUrl = URL(string: url) {
-//                let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
-//                    if let _ = response as? HTTPURLResponse {
-//                        // print(" Ad tracking was success" )
-//                    }
-//                    group.leave()
-//                }
-//                task.resume()
-//            } else {
-//                group.leave()
-//            }
-//        }
-//
-//        group.notify(queue: .main) {
-//            // print(" All the ad tracking beacons were sent to backend")
-//        }
-//    }
-//
-//}
+extension ServerSideAdService {
+    
+    /// Call ad tracking urls
+    /// - Parameter adTrackingUrls: ad tracking urls
+    fileprivate func adTracking(adTrackingUrls: [String]) {
+        let group = DispatchGroup()
+        
+        for url in adTrackingUrls {
+            group.enter()
+            if let adTrackingUrl = URL(string: url) {
+                let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
+                    if let _ = response as? HTTPURLResponse {
+                        // print(" Ad tracking was success" )
+                    }
+                    group.leave()
+                }
+                task.resume()
+            } else {
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // print(" All the ad tracking beacons were sent to backend")
+        }
+    }
+    
+}
