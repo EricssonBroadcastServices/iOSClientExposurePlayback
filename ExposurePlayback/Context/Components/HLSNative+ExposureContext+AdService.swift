@@ -56,14 +56,22 @@ extension Player where Tech == HLSNative<ExposureContext> {
 }
 
 extension Player where Tech == HLSNative<ExposureContext> {
+    
+    /// Notify the player that an `Ad` will start playing
+    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc) & clickThroughUrl , adTrackingUrls if available , ad clip duration
+    /// - Returns: self
     @discardableResult
-    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, Bool, Double?) -> Void) -> Self {
-        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, isWatched, skipTime  in
-            callback(contractRestrictionService, isWatched, skipTime)
+    public func onWillPresentInterstitial(callback: @escaping (ContractRestrictionsService, String?, [String]?, Int64 ) -> Void) -> Self {
+        context.onWillPresentInterstitial = { [weak self] contractRestrictionService, clickThroughUrl, adTrackingUrls, adClipDuration  in
+            callback(contractRestrictionService, clickThroughUrl, adTrackingUrls , adClipDuration)
         }
         return self
     }
     
+    
+    /// Notify the player that an `Ad` did finish playing
+    /// - Parameter callback: ContractRestriction ( FF / RW enabled etc)
+    /// - Returns: self
     @discardableResult
     public func onDidPresentInterstitial(callback: @escaping (ContractRestrictionsService) -> Void) -> Self {
         context.onDidPresentInterstitial = { contractRestrictionService  in
@@ -73,7 +81,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     @discardableResult
-    public func onServerSideAdShouldSkip(callback: @escaping (Double) -> Void) -> Self {
+    public func onServerSideAdShouldSkip(callback: @escaping (Int64) -> Void) -> Self {
         context.onServerSideAdShouldSkip = { skipTime  in
             callback(skipTime)
         }
@@ -97,10 +105,14 @@ extension Player where Tech == HLSNative<ExposureContext> {
         return self
     }
     
+    
+    /// Player will start playing with / without Ads
+    /// - Parameter callback: vodDuration, adDuration,  totalDurationInMs, adMarkerPoints
+    /// - Returns: self
     @discardableResult
-    public func onPlaybackStartWithAds(callback: @escaping (Int64, Float, [MarkerPoint]) -> Void) -> Self {
-        context.onPlaybackStartWithAds = { vodDuration, totalDurationInMs, adMarkerPoints  in
-            callback(vodDuration, totalDurationInMs, adMarkerPoints)
+    public func onPlaybackStartWithAds(callback: @escaping (Int64, Int64, Int64, [MarkerPoint]) -> Void) -> Self {
+        context.onPlaybackStartWithAds = { vodDuration, adDuration,  totalDurationInMs, adMarkerPoints  in
+            callback(vodDuration, adDuration, totalDurationInMs, adMarkerPoints)
         }
         
         return self
@@ -110,12 +122,25 @@ extension Player where Tech == HLSNative<ExposureContext> {
 
 extension Player where Tech == HLSNative<ExposureContext> {
     
+    
     @discardableResult
+    /// Notify the player that there will be server side enabled for the current playing asset
+    /// - Parameter callback: Source & Ads
+    /// - Returns: self
     public func onServerSideAd(callback: @escaping (ExposureContext.Source,Ads?) -> Void) -> Self {
         context.onServerSideAd = { [weak self] source, ads in
             callback(source, ads)
-
         }
         return self
+    }
+}
+
+
+extension Player where Tech == HLSNative<ExposureContext> {
+
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls
+    public func trackClickedAd( adTrackingUrls: [String]) {
+        context.trackAds(adTrackingUrls: adTrackingUrls)
     }
 }

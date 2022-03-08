@@ -18,6 +18,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter callback: callback to fire once the event is fired.
     /// - returns: `Self`
+    @discardableResult
     public func onAirplayStatusChanged(callback: @escaping (Player<HLSNative<ExposureContext>>, ExposureSource?, Bool) -> Void) -> Self {
         tech.onAirplayStatusChanged = { [weak self] tech, source, airplaying in
             guard let `self` = self else { return }

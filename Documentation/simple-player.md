@@ -188,16 +188,5 @@ let thirtyMinutesAgo = Date().millisecondsSince1970 - thirtyMinutes
 player.seek(toTime: thirtyMinutesAgo)
 ```
 
-#### Server-Side Ad Insertion (SSAI)
-
-if you are planning to use server side ads insertion with the player you can set `AdsOptions` to pass client / device specific information that can be used for ad targeting when starting the playback.
-
-
-```Swift
-let adsOptions = AdsOptions(latitude: 18.000, longitude: 18.000, mute: true, consent: "consent", deviceMake: "deviceMake", ifa: "ifa", gdprOptin: true)
-player.startPlayback(playable: assetPlayable, properties: properties, adsOptions: adsOptions)
-```
-
-
 
 

@@ -57,17 +57,16 @@ public class ExposureContext: MediaContext {
     internal var onServerSideAd: (Source, Ads?) -> Void = { _,_  in }
     
     /// Tracks the internal adService ad end
-    internal var onPlaybackStartWithAds: (Int64, Float, [MarkerPoint]) -> Void = { _, _, _ in }
+    internal var onPlaybackStartWithAds: (Int64, Int64,  Int64, [MarkerPoint]) -> Void = { _, _, _, _ in }
     
-    /// Tracks the internal adService ad start
-    internal var onWillPresentInterstitial: (ContractRestrictionsService, Bool, Double?) -> Void = { _, _, _ in }
+    /// Tracks the internal adService ad start 
+    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, [String]?, Int64 ) -> Void = { _, _, _, _ in }
     
     /// Tracks the internal adService ad end
     internal var onDidPresentInterstitial: (ContractRestrictionsService) -> Void = { _ in }
     
     /// Tracks the internal adService ad start
-    internal var onServerSideAdShouldSkip: (Double) -> Void = { _ in }
-    
+    internal var onServerSideAdShouldSkip: (Int64) -> Void = { _ in }
     
     /// Tracks the clip start event
     internal var onClipStarted: (Int64, Int64) -> Void = { _, _ in }
@@ -75,6 +74,11 @@ public class ExposureContext: MediaContext {
     /// Tracks the clip end event
     internal var onClipEnded: (Int64, Int64) -> Void = { _, _ in }
     
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls descriptionadTrackingUrls
+    internal func trackAds( adTrackingUrls: [String]) {
+        trackPlayedAds(adTrackingUrls: adTrackingUrls)
+    }
     
     /// Specifies playback related behaviour
     internal(set) public var playbackProperties: PlaybackProperties = PlaybackProperties()
@@ -141,3 +145,33 @@ extension ExposureContext: StartTimeDelegate {
     }
 }
 
+
+extension ExposureContext {
+    /// Send back the played / clicked Ads's tracking urls back to the ad server
+    /// - Parameter adTrackingUrls: adTrackingUrls
+    public func trackPlayedAds( adTrackingUrls: [String]) {
+        let queue = DispatchQueue.global(qos: .background)
+        let group = DispatchGroup()
+        
+        for url in adTrackingUrls {
+            group.enter()
+            queue.async {
+                if let adTrackingUrl = URL(string: url) {
+                    let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
+                        if let _ = response as? HTTPURLResponse {
+                            // success
+                        }
+                        group.leave()
+                    }
+                    task.resume()
+                } else {
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // print(" All the ad tracking beacons were sent to backend")
+        }
+    }
+}
