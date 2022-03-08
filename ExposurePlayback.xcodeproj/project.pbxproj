@@ -278,6 +278,8 @@
 		7838DCE127A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */; };
 		7838DCE327A7D8DC0052848A /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCE227A7D8DC0052848A /* MediaType.swift */; };
 		7838DCE427A7D8DC0052848A /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCE227A7D8DC0052848A /* MediaType.swift */; };
+		78391E2F27D790E9001313C3 /* server-side-ad-insertion.md in Resources */ = {isa = PBXBuildFile; fileRef = 78391E2E27D790E9001313C3 /* server-side-ad-insertion.md */; };
+		78391E3027D790E9001313C3 /* server-side-ad-insertion.md in Resources */ = {isa = PBXBuildFile; fileRef = 78391E2E27D790E9001313C3 /* server-side-ad-insertion.md */; };
 		78455DC1261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		78455DC2261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */ = {isa = PBXBuildFile; fileRef = 78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */; };
 		784D1E6D24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
@@ -513,6 +515,7 @@
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
 		7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+MediaType.swift"; sourceTree = "<group>"; };
 		7838DCE227A7D8DC0052848A /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
+		78391E2E27D790E9001313C3 /* server-side-ad-insertion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "server-side-ad-insertion.md"; sourceTree = "<group>"; };
 		78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
 		784D1E6C24D2F6CE000F5C34 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
 		784D1E7724DC3169000F5C34 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
@@ -742,6 +745,7 @@
 				784D1E7724DC3169000F5C34 /* download.md */,
 				78B66E6E25CA8DF600280701 /* sprites.md */,
 				78455DC0261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md */,
+				78391E2E27D790E9001313C3 /* server-side-ad-insertion.md */,
 			);
 			path = Documentation;
 			sourceTree = SOURCE_ROOT;
@@ -1144,6 +1148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7924DC3169000F5C34 /* download.md in Resources */,
+				78391E3027D790E9001313C3 /* server-side-ad-insertion.md in Resources */,
 				78B66E7025CA8DF600280701 /* sprites.md in Resources */,
 				78455DC2261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */,
 			);
@@ -1161,6 +1166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				784D1E7824DC3169000F5C34 /* download.md in Resources */,
+				78391E2F27D790E9001313C3 /* server-side-ad-insertion.md in Resources */,
 				78B66E6F25CA8DF600280701 /* sprites.md in Resources */,
 				78455DC1261C9D9C00D8D927 /* AdobePrimetimeMediaToken.md in Resources */,
 			);
