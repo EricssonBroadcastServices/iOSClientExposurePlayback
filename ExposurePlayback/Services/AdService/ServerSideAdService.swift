@@ -230,7 +230,6 @@ extension ServerSideAdService {
                     }
                     return false
                 }) {
-                    
                     if let offset = self.adMarkerPositions[adBreakIndex].offset {
                         
                         if let adClipIndex = self.allTimelineContent.firstIndex(where: {
@@ -240,7 +239,6 @@ extension ServerSideAdService {
                                 return false
                             }
                         }) {
-                            
                             let adClip = self.allTimelineContent[adClipIndex]
                             
                             // Check if the Ad is already played or not
@@ -266,7 +264,6 @@ extension ServerSideAdService {
                             
                             // Ad was played before. Should skipped to the next clip
                             else {
-                                
                                 // Check if we have a previously assigned destination
                                 if self.oldScrubbedDestination != 0 {
                                     
@@ -489,7 +486,7 @@ extension ServerSideAdService {
         if let clips = self.ads.clips {
             
             // Total Duration in miliseconds
-            var totalclipDuration = clips.compactMap { ($0.duration ?? 0) }.reduce(0, +)
+            let totalclipDuration = clips.compactMap { ($0.duration ?? 0) }.reduce(0, +)
             
             totalDuration =  Int64(totalclipDuration)
             
@@ -576,33 +573,4 @@ extension ServerSideAdService {
             context.onPlaybackStartWithAds(vodDuration,totalAdDuration, totalDuration, adMarkerPositions )
         }
     }
-}
-
-extension ServerSideAdService {
-    
-    /// Call ad tracking urls
-    /// - Parameter adTrackingUrls: ad tracking urls
-    fileprivate func adTracking(adTrackingUrls: [String]) {
-        let group = DispatchGroup()
-        
-        for url in adTrackingUrls {
-            group.enter()
-            if let adTrackingUrl = URL(string: url) {
-                let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
-                    if let _ = response as? HTTPURLResponse {
-                        // print(" Ad tracking was success" )
-                    }
-                    group.leave()
-                }
-                task.resume()
-            } else {
-                group.leave()
-            }
-        }
-        
-        group.notify(queue: .main) {
-            // print(" All the ad tracking beacons were sent to backend")
-        }
-    }
-    
 }
