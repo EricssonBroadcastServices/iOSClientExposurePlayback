@@ -54,6 +54,20 @@ extension Player where Tech == HLSNative<ExposureContext> {
     }
     
     
+    /// Should select the specified audio language matching the unique id if available or, if `allowsEmptyAudioSelection` == true, select no audio track
+    /// - Parameter mediaTrackId: unique Id
+    public func selectAudio(mediaTrackId: Int) {
+        tech.selectAudio(mediaTrackId: mediaTrackId)
+    }
+    
+    
+    /// Should select the specified audio language matching the title if available or, if `allowsEmptyAudioSelection` == true, select no audio track
+    /// - Parameter title: title of the track
+    public func selectAudio(title: String?) {
+        tech.selectAudio(title: title)
+    }
+    
+
     // MARK: Text Track Selection
     
     /// Returns the text related `MediaGroup`
@@ -76,6 +90,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
         return tech.selectedTextTrack
     }
     
+    
     /// Should indicate if it is possible to select no text track
     public var allowsEmptyTextSelection: Bool {
         return tech.allowsEmptyTextSelection
@@ -94,6 +109,22 @@ extension Player where Tech == HLSNative<ExposureContext> {
     public func selectText(language: String?) {
         tech.selectText(language: language)
     }
+    
+    /// Should select the specified text language if available or, if `allowsEmptyTextSelection` == true, select no text track
+    ///
+    /// - parameter mediaTrackId: id of  the track
+    public func selectText(mediaTrackId: Int) {
+        tech.selectText(mediaTrackId: mediaTrackId)
+    }
+    
+    
+    /// Should select the specified text language if available or, if `allowsEmptyTextSelection` == true, select no text track
+    ///
+    /// - parameter title: title of the track
+    public func selectText(title: String?) {
+        tech.selectText(title: title)
+    }
+      
     
     
     // MARK: BitRate selection
