@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.6.60` Release - [2.6.60](#2660)
 * `2.6.50` Release - [2.6.50](#2650)
 * `2.6.40` Release - [2.6.40](#2640)
 * `2.6.30` Release - [2.6.30](#2630)
@@ -34,6 +35,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.6.60
+#### Bug Fixes
+* `EMP-17850` Allow client developers to pass optional `mediaTrackId` when selecting audio / subtitles. 
 
 ## 2.6.50
 #### Bug Fixes
