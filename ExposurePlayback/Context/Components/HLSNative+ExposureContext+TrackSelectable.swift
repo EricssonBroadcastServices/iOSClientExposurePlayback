@@ -56,7 +56,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     
     /// Should select the specified audio language matching the unique id if available or, if `allowsEmptyAudioSelection` == true, select no audio track
     /// - Parameter mediaTrackId: unique Id
-    public func selectAudio(mediaTrackId: Int) {
+    public func selectAudio(mediaTrackId: Int?) {
         tech.selectAudio(mediaTrackId: mediaTrackId)
     }
     
@@ -113,7 +113,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// Should select the specified text language if available or, if `allowsEmptyTextSelection` == true, select no text track
     ///
     /// - parameter mediaTrackId: id of  the track
-    public func selectText(mediaTrackId: Int) {
+    public func selectText(mediaTrackId: Int?) {
         tech.selectText(mediaTrackId: mediaTrackId)
     }
     
