@@ -30,15 +30,11 @@ class DeviceInfoSpec: QuickSpec {
             let techVersion = "1.0.0"
             let event = DeviceInfo(timestamp: timeStamp, connection: Reachability.Connection.wifi.description, type: "Airplay", tech: tech, techVersion: techVersion)
             
+            
+            
             it("Should init with correct data") {
                 expect(event.timestamp).to(equal(timeStamp))
                 expect(event.eventType).to(equal(type))
-                expect(event.deviceId).to(equal(UIDevice.current.identifierForVendor!.uuidString))
-                expect(event.deviceModel).to(equal(simulatorModel))
-                expect(event.cpuType).to(beNil())
-                expect(event.os).to(equal(os))
-                expect(event.osVersion).to(equal(UIDevice.current.systemVersion))
-                expect(event.manufacturer).to(equal(manufacturer))
                 expect(event.connection).to(equal("WiFi"))
                 expect(event.type).to(equal("Airplay"))
                 expect(event.bufferLimit).to(equal(3000))

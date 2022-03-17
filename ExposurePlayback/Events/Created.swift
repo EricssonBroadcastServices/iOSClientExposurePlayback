@@ -49,7 +49,7 @@ extension Playback {
         
         internal let assetData: PlaybackIdentifier?
         
-        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement?) {
+        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement? = nil ) {
             self.timestamp = timestamp
             self.version = version
             self.exposureVersion = exposureVersion
