@@ -32,6 +32,8 @@ public class ExposureContext: MediaContext {
     /// Token identifying the active session.
     public let sessionToken: SessionToken
     
+    public let analyticsBaseUrl: String?
+    
     /// Service that handles synchronization of local device time with server time
     public let monotonicTimeService: MonotonicTimeService
     
@@ -107,9 +109,10 @@ public class ExposureContext: MediaContext {
     ///
     /// - parameter environment: Exposure `Environment` to use
     /// - parameter sessionToken: Exposure `SessionToken` to use
-    public init(environment: Environment, sessionToken: SessionToken) {
+    public init(environment: Environment, sessionToken: SessionToken, analyticsBaseUrl: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
+        self.analyticsBaseUrl = analyticsBaseUrl
         self.monotonicTimeService = MonotonicTimeService(environment: environment)
         
         reachability = Reachability()

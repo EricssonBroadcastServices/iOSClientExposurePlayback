@@ -33,6 +33,8 @@ extension Playback {
         /// `X-Request-Id` header specified in the ExposureResponse delivered when requesting an entitlement.
         internal var requestId: String?
         
+        internal let analyticsInfo: AnalyticsFromEntitlement?
+        
         /// One of the following: vod, live, offline
         internal var playMode: String? {
             guard let data = assetData else { return nil }
@@ -47,12 +49,13 @@ extension Playback {
         
         internal let assetData: PlaybackIdentifier?
         
-        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil) {
+        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement?) {
             self.timestamp = timestamp
             self.version = version
             self.exposureVersion = exposureVersion
             self.assetData = assetData
             self.autoPlay = autoPlay
+            self.analyticsInfo = analyticsInfo
         }
     }
 }
@@ -69,11 +72,24 @@ extension Playback.Created: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.player.rawValue: player,
-            JSONKeys.version.rawValue: version
+            JSONKeys.version.rawValue: version,
+            
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
+            JSONKeys.height.rawValue: device.height,
+            JSONKeys.width.rawValue: device.width
+            
         ]
         
         if let exposureVersion = exposureVersion {
@@ -104,6 +120,12 @@ extension Playback.Created: AnalyticsEvent {
             params[JSONKeys.requestId.rawValue] = value
         }
         
+        if let analyticsInfo = analyticsInfo {
+            params[JSONKeys.bucket.rawValue] = analyticsInfo.bucket
+            params[JSONKeys.postInterval.rawValue] = analyticsInfo.postInterval
+            params[JSONKeys.tag.rawValue] = analyticsInfo.tag
+        }
+        
         return params
     }
     
@@ -119,6 +141,29 @@ extension Playback.Created: AnalyticsEvent {
         case channelId = "ChannelId"
         case programId = "ProgramId"
         case requestId = "RequestId"
+        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
+        
+        case connection = "Connection"
+        
+        case tech = "Technology"
+        case techVersion = "TechVersion"
+        case userAgent = "UserAgent"
+        
+        
+        case bucket = "AnalyticsBucket"
+        case postInterval = "AnalyticsPostInterval"
+        case tag = "AnalyticsTag"
     }
 }
 

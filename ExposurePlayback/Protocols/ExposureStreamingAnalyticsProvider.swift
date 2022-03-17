@@ -12,7 +12,7 @@ import Exposure
 
 /// Extends the `Player` built in protocol defining analytics events with *Exposure* specific analytics
 public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
-    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement? )
+    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? )
     
     /// Exposure environment used for the active session.
     ///
@@ -24,11 +24,14 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     /// - Important: should match the `environment` used to authenticate the user.
     var sessionToken: SessionToken { get }
     
+    
+    var analyticsBaseUrl: String? { get }
+    
     /// Sent when the player is about to make an entitlement request
     ///
     /// - parameter tech: `PlaybackTech` to be used for playback
     /// - parameter request: *EMP* playable
-    func onEntitlementRequested<Tech>(tech: Tech, playable: Playable) where Tech: PlaybackTech
+    func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source,playable: Playable) where Tech: PlaybackTech, Source : MediaSource 
     
     /// Sent when the entitlement has been granted, right after loading of media sources has been initiated.
     ///

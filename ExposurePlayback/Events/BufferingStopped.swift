@@ -13,6 +13,13 @@ import Exposure
 extension Playback {
     /// Playback resumed after the player has enough data buffered.
     internal struct BufferingStopped {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback resumed after a buffering event.
@@ -41,9 +48,21 @@ extension Playback.BufferingStopped: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
+        let device: Device = Device()
+        
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.timestamp.rawValue: timestamp,
+            JSONKeys.player.rawValue: player,
+            
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
+            JSONKeys.height.rawValue: device.height,
+            JSONKeys.width.rawValue: device.width
         ]
         
         if let value = offsetTime {
@@ -66,9 +85,7 @@ extension Playback.BufferingStopped: AnalyticsEvent {
         json[JSONKeys.techVersion.rawValue] = ""
         json[JSONKeys.userAgent.rawValue] = ""
         
-        let device: Device = Device()
-        json[JSONKeys.height.rawValue] = device.height
-        json[JSONKeys.width.rawValue] = device.width
+       
         
         return json
     }
@@ -77,6 +94,19 @@ extension Playback.BufferingStopped: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
+        case player = "Player"
+        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -92,8 +122,7 @@ extension Playback.BufferingStopped: AnalyticsEvent {
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
         
-        case height = "Height"
-        case width = "Width"
+      
     }
 }
 

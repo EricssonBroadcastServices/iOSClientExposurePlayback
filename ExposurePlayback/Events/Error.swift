@@ -12,6 +12,13 @@ import Exposure
 extension Playback {
     /// Playback stopped because of an error.
     internal struct Error {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback was aborted.
@@ -110,11 +117,6 @@ extension Playback.Error: AnalyticsEvent {
         return "Apple"
     }
     
-    /// Id string of the player/sdk.
-    /// Example: EMP.tvOS2, EMP.iOS2
-    internal var player: String {
-        return "EMP." + UIDevice.mergedSystemName + "2"
-    }
     
     internal var jsonPayload: [String : Any] {
         var json: [String: Any] = [
@@ -173,6 +175,7 @@ extension Playback.Error: AnalyticsEvent {
         case code = "Code"
         case info = "Info"
         case details = "Details"
+        
         
         case deviceId = "DeviceId"
         case deviceModel = "DeviceModel"

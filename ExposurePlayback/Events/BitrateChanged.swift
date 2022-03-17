@@ -12,6 +12,13 @@ import Exposure
 extension Playback {
     /// Playback switched to a different bitrate.
     internal struct BitrateChanged {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the playback switched to a different bitrate
@@ -44,10 +51,23 @@ extension Playback.BitrateChanged: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.bitrate.rawValue: bitrate
+            JSONKeys.bitrate.rawValue: bitrate,
+            JSONKeys.player.rawValue: player,
+            
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
+            JSONKeys.height.rawValue: device.height,
+            JSONKeys.width.rawValue: device.width
         ]
         
         if let value = offsetTime {
@@ -74,6 +94,19 @@ extension Playback.BitrateChanged: AnalyticsEvent {
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
         case bitrate = "Bitrate"
+        case player = "Player"
+        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"

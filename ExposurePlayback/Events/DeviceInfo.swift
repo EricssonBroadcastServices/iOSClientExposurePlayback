@@ -11,6 +11,7 @@ import Exposure
 
 /// The device info object should be sent once per playback session, preferably at the start of the session.
 internal struct DeviceInfo {
+    
     internal let timestamp: Int64
     
     /// Id string of the player/sdk.
@@ -50,50 +51,6 @@ internal struct DeviceInfo {
     }
 }
 
-extension DeviceInfo {
-    /// String identifier to recognize the device. This should be the same Id as was sent during the login request to the exposure API.
-    ///
-    /// NOTE: Implementation details for "identifierForVendor" states this:
-    /// "If the value is nil, wait and get the value again later. This happens, for example, after the device has been restarted but before the user has unlocked the device."
-    ///
-    /// This implementation ignores the above scenario with the expressed reasoning such a rare event is not worth the complexity of a possible workaround. "UNKNOWN_DEVICE_ID" will be sent in the event this occurs.
-    internal var deviceId: String {
-        return UIDevice.current.identifierForVendor?.uuidString ?? "UNKNOWN_DEVICE_ID"
-    }
-    
-    /// Model of the device
-    /// Example: iPhone8,1
-    internal var deviceModel: String {
-        var size = 0
-        sysctlbyname("hw.machine", nil, &size, nil, 0)
-        var machine = [CChar](repeating: 0,  count: Int(size))
-        sysctlbyname("hw.machine", &machine, &size, nil, 0)
-        return String(cString: machine)
-    }
-    
-    /// String identifying the CPU of the device playing the media    armeabi-v7a
-    internal var cpuType: String? {
-        return nil
-    }
-    
-    /// Operating system of the device.
-    /// Example: iOS, tvOS
-    internal var os: String {
-        return UIDevice.mergedSystemName
-    }
-    
-    /// Version number of the operating system
-    /// Example: 8.1
-    internal var osVersion: String {
-        return UIDevice.current.systemVersion
-    }
-    
-    /// Company that built/created/marketed the device
-    internal var manufacturer: String {
-        return "Apple"
-    }
-}
-
 extension DeviceInfo: AnalyticsEvent {
     internal var eventType: String {
         return "Device.Info"
@@ -102,24 +59,29 @@ extension DeviceInfo: AnalyticsEvent {
     var bufferLimit: Int64 {
         return 3000
     }
+
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
-            JSONKeys.deviceId.rawValue: deviceId,
-            JSONKeys.deviceModel.rawValue: deviceModel,
-            JSONKeys.os.rawValue: os,
-            JSONKeys.appType.rawValue: os,
-            JSONKeys.osVersion.rawValue: osVersion,
-            JSONKeys.manufacturer.rawValue: manufacturer,
+            
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
             JSONKeys.connection.rawValue: connection,
             JSONKeys.tech.rawValue: tech,
             JSONKeys.techVersion.rawValue: techVersion,
             JSONKeys.player.rawValue: player,
         ]
         
-        if let cpuType = cpuType {
+        if let cpuType = device.cpuType {
             params[JSONKeys.cpuType.rawValue] = cpuType
         }
         
@@ -140,7 +102,7 @@ extension DeviceInfo: AnalyticsEvent {
         params[JSONKeys.StreamingTechnology.rawValue] = "HLS"
         params[JSONKeys.userAgent.rawValue] = ""
         
-        let device: Device = Device()
+       
         params[JSONKeys.height.rawValue] = device.height
         params[JSONKeys.width.rawValue] = device.width
         
@@ -177,5 +139,6 @@ extension DeviceInfo: AnalyticsEvent {
         case tag = "AnalyticsTag"
         
         case StreamingTechnology = "StreamingTechnology"
+        
     }
 }
