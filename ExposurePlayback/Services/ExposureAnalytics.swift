@@ -46,7 +46,6 @@ public class ExposureAnalytics {
         }
     }
     
-    
     /// Exposure environment used for the active session.
     ///
     /// - Important: should match the `environment` used to authenticate the user.
@@ -57,6 +56,9 @@ public class ExposureAnalytics {
     /// - Important: should match the `environment` used to authenticate the user.
     public let sessionToken: SessionToken
     
+    
+    public let analyticsBaseUrl: String?
+    
     /// `Dispatcher` takes care of delivering analytics payload.
     fileprivate(set) internal var dispatcher: Dispatcher?
     
@@ -64,11 +66,12 @@ public class ExposureAnalytics {
     
     public let analytics: AnalyticsFromEntitlement?
     
-    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil) {
+    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, analyticsBaseUrl: String? ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.cdn = cdn
         self.analytics = analytics
+        self.analyticsBaseUrl = analyticsBaseUrl
     }
     
     public var onExposureResponseMessage: (ExposureResponseMessage) -> Void = { _ in }
@@ -195,34 +198,66 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         return false
     }
     
-    public func onEntitlementRequested<Tech>(tech: Tech, playable: Playable) where Tech : PlaybackTech {
-        /// 1. Created
-        let created = Playback.Created(timestamp: Date().millisecondsSince1970,
-                                       version: version(for: "com.emp.ExposurePlayback"),
-                                       exposureVersion: version(for: "com.emp.Exposure"),
-                                       assetData: PlaybackIdentifier.from(playable: playable),
-                                       autoPlay: autoplay(tech: tech))
+    public func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source, playable: Playable) where Tech : PlaybackTech, Source : MediaSource {
         
+        if let source = source as? ExposureSource {
+            /// 1. Created
+            let created = Playback.Created(timestamp: Date().millisecondsSince1970,
+                                           version: version(for: "com.emp.ExposurePlayback"),
+                                           exposureVersion: version(for: "com.emp.Exposure"),
+                                           assetData: PlaybackIdentifier.from(playable: playable),
+                                           autoPlay: autoplay(tech: tech), analyticsInfo: source.entitlement.analytics)
+            
+            
+            /// BUGFIX: EMP-11313
+            /// `Bundle(for: aClass)`
+            ///
+            /// The NSBundle object that dynamically loaded aClass (a loadable bundle), the NSBundle object for the framework in which aClass is defined, or the main bundle object if aClass was not dynamically loaded or is not defined in a framework.
+            ///
+            /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
+            let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
         
-        /// BUGFIX: EMP-11313
-        /// `Bundle(for: aClass)`
-        ///
-        /// The NSBundle object that dynamically loaded aClass (a loadable bundle), the NSBundle object for the framework in which aClass is defined, or the main bundle object if aClass was not dynamically loaded or is not defined in a framework.
-        ///
-        /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
-        let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
-    
+            
+            /// 2. DeviceInfo
+            let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
+            /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), analyticsInfo: source.entitlement.analytics)
+            
+            /// 3. Store startup events
+            var current = startupEvents
+            current.append(created)
+            current.append(deviceInfo)
+            startup = .notStarted(events: current)
+        } else {
+            /// 1. Created
+            let created = Playback.Created(timestamp: Date().millisecondsSince1970,
+                                           version: version(for: "com.emp.ExposurePlayback"),
+                                           exposureVersion: version(for: "com.emp.Exposure"),
+                                           assetData: PlaybackIdentifier.from(playable: playable),
+                                           autoPlay: autoplay(tech: tech), analyticsInfo: nil)
+            
+            
+            /// BUGFIX: EMP-11313
+            /// `Bundle(for: aClass)`
+            ///
+            /// The NSBundle object that dynamically loaded aClass (a loadable bundle), the NSBundle object for the framework in which aClass is defined, or the main bundle object if aClass was not dynamically loaded or is not defined in a framework.
+            ///
+            /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
+            let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
         
-        /// 2. DeviceInfo
-        let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
-        /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-        let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle))
-        
-        /// 3. Store startup events
-        var current = startupEvents
-        current.append(created)
-        current.append(deviceInfo)
-        startup = .notStarted(events: current)
+            
+            /// 2. DeviceInfo
+            let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
+            /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), analyticsInfo: nil)
+            
+            /// 3. Store startup events
+            var current = startupEvents
+            current.append(created)
+            current.append(deviceInfo)
+            startup = .notStarted(events: current)
+        }
+
     }
     
     public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
@@ -258,7 +293,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
                                 sessionToken: sessionToken,
                                 playSessionId: playSessionId,
                                 startupEvents: events,
-                                heartbeatsProvider: heartbeatsProvider)
+                                heartbeatsProvider: heartbeatsProvider, analyticsBaseUrl: analyticsBaseUrl)
         dispatcher?.requestId = extractRequestId(source: source)
         dispatcher?.onExposureResponseMessage = { [weak self] message in
             self?.onExposureResponseMessage(message)
@@ -599,7 +634,8 @@ extension ExposureAnalytics: AnalyticsProvider {
                                 sessionToken: sessionToken,
                                 playSessionId: UUID().uuidString,
                                 startupEvents: events,
-                                heartbeatsProvider: { return nil })
+                                heartbeatsProvider: { return nil },
+                                analyticsBaseUrl: analyticsBaseUrl)
         dispatcher?.requestId = extractRequestId(source: source)
         
         dispatcher?.flushTrigger(enabled: false)

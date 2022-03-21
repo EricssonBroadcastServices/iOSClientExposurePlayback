@@ -12,6 +12,13 @@ import Exposure
 extension Playback {
     /// Player has resumed playing the asset that was paused.
     internal struct InitCompleted {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         internal let timestamp: Int64
         
         internal let cdnInfo: CDNInfoFromEntitlement?
@@ -39,7 +46,8 @@ extension Playback.InitCompleted: AnalyticsEvent {
         
         var json: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.timestamp.rawValue: timestamp,
+            JSONKeys.player.rawValue: player
         ]
         
         if let cdnInfo = cdnInfo {
@@ -60,6 +68,7 @@ extension Playback.InitCompleted: AnalyticsEvent {
     internal enum JSONKeys: String {
         case eventType = "EventType"
         case timestamp = "Timestamp"
+        case player = "Player"
         
         // CDN
         case CDNVendor = "CDNVendor"

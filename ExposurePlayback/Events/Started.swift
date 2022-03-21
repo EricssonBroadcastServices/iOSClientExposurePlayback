@@ -12,6 +12,13 @@ import Exposure
 extension Playback {
     /// Signals that the player has successfully started playback of the asset/channel.
     internal struct Started {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         let timestamp: Int64
         
         /// One of the following: vod, live, offline
@@ -78,11 +85,24 @@ extension Playback.Started: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var params: [String: Any] = [
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.playMode.rawValue: playMode,
-            JSONKeys.mediaLocator.rawValue: mediaLocator
+            JSONKeys.mediaLocator.rawValue: mediaLocator,
+            JSONKeys.player.rawValue: player,
+            
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
+            JSONKeys.height.rawValue: device.height,
+            JSONKeys.width.rawValue: device.width
         ]
         
         if let value = offsetTime {
@@ -133,14 +153,11 @@ extension Playback.Started: AnalyticsEvent {
         params[JSONKeys.techVersion.rawValue] = ""
         params[JSONKeys.userAgent.rawValue] = ""
         
-        let device: Device = Device()
-        params[JSONKeys.height.rawValue] = device.height
-        params[JSONKeys.width.rawValue] = device.width
-        
         return params
     }
     
     internal enum JSONKeys: String {
+        case player = "Player"
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case playMode = "PlayMode"
@@ -153,6 +170,18 @@ extension Playback.Started: AnalyticsEvent {
         case bitrate = "Bitrate"
         case referenceTime = "ReferenceTime"
         case segmentRequestId = "X-Playback-Session-Id"
+        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -168,8 +197,6 @@ extension Playback.Started: AnalyticsEvent {
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
         
-        case height = "Height"
-        case width = "Width"
     }
 }
 

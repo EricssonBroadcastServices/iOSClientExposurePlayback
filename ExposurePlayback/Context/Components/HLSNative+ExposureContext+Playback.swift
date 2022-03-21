@@ -67,28 +67,30 @@ extension ExposureContext {
         // Generate the analytics providers
         let providers = analyticsProviders(for: nil)
         
-        // Initial analytics
-        providers.forEach{
-            if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                exposureProvider.onEntitlementRequested(tech: tech, playable: playable)
-            }
-        }
-        
+       
         playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
             if enableAnalytics == true {
-                self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response)
+                self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response, playable: playable)
             } else {
-                self.handle(source: source, error: error, providers: nil, tech: tech, exposureResponse: response)
+                self.handle(source: source, error: error, providers: nil, tech: tech, exposureResponse: response, playable: playable)
             }
             
         }
     }
     
-    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider]? = nil , tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?) {
+    fileprivate func handle(source: ExposureSource?, error: ExposureError?, providers: [AnalyticsProvider]? = nil , tech: HLSNative<ExposureContext>, exposureResponse: HTTPURLResponse?, playable: Playable) {
         if let source = source {
             
             onEntitlementResponse(source.entitlement, source)
+            
+            // Initial analytics
+            providers?.forEach{
+                if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                    exposureProvider.onEntitlementRequested(tech: tech, source: source, playable: playable)
+                }
+            }
+            
             
             // Pass media type 
             let _ = source.entitlement.audioOnly == true ? onMediaType(MediaType.audio) : onMediaType(MediaType.video)

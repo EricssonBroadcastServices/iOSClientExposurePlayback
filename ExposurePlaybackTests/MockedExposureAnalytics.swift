@@ -16,16 +16,19 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
     
     
-    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?) {
+    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
+        self.analyticsBaseUrl = analyticsBaseUrl
     }
     
     let environment: Environment
     
     let sessionToken: SessionToken
     
-    func onEntitlementRequested<Tech>(tech: Tech, playable: Playable) where Tech : PlaybackTech {
+    let analyticsBaseUrl: String?
+    
+    func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source,playable: Playable) where Tech: PlaybackTech, Source : MediaSource {
         
     }
     

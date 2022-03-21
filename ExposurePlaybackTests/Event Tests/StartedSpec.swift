@@ -87,7 +87,7 @@ class StartedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(14))
+                expect(json.count).to(equal(21))
             }
             
             it("Should produce correct Live jsonPayload") {
@@ -104,7 +104,7 @@ class StartedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(15))
+                expect(json.count).to(equal(22))
             }
             
             it("Should produce correct Program jsonPayload") {
@@ -121,7 +121,7 @@ class StartedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(16))
+                expect(json.count).to(equal(23))
             }
             
             it("Should produce correct Offline jsonPayload") {
@@ -137,7 +137,7 @@ class StartedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(14))
+                expect(json.count).to(equal(21))
             }
             
             it("Should produce correct Download jsonPayload") {
@@ -153,7 +153,7 @@ class StartedSpec: QuickSpec {
                 expect(json["OffsetTime"] as? Int64).to(equal(offset))
                 expect(json["VideoLength"] as? Int64).to(equal(videoLength))
                 expect(json["Bitrate"] as? Int64).to(equal(bitrate))
-                expect(json.count).to(equal(14))
+                expect(json.count).to(equal(21))
             }
         }
     }

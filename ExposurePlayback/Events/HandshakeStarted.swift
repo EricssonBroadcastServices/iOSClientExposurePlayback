@@ -39,15 +39,34 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         return "Playback.HandshakeStarted"
     }
     
+    /// Id string of the player/sdk.
+    /// Example: EMP.tvOS2, EMP.iOS2
+    internal var player: String {
+        return "EMP." + UIDevice.mergedSystemName + "2"
+    }
+    
     var bufferLimit: Int64 {
         return 3000
     }
     
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var params: [String: Any] = [
+            JSONKeys.player.rawValue: player,
             JSONKeys.eventType.rawValue: eventType,
-            JSONKeys.timestamp.rawValue: timestamp
+            JSONKeys.timestamp.rawValue: timestamp,
+            JSONKeys.deviceId.rawValue: device.deviceId,
+            JSONKeys.deviceModel.rawValue: device.model,
+            JSONKeys.os.rawValue: device.os,
+            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.osVersion.rawValue: device.osVersion,
+            JSONKeys.manufacturer.rawValue: device.manufacturer,
+            JSONKeys.height.rawValue: device.height,
+            JSONKeys.width.rawValue: device.width
+            
         ]
         
         if let assetId = assetId {
@@ -78,20 +97,28 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         params[JSONKeys.techVersion.rawValue] = ""
         params[JSONKeys.userAgent.rawValue] = ""
         
-        let device: Device = Device()
-        params[JSONKeys.height.rawValue] = device.height
-        params[JSONKeys.width.rawValue] = device.width
-        
         return params
     }
     
     internal enum JSONKeys: String {
+        case player = "Player"
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case assetId = "AssetId"
         case channelId = "ChannelId"
         case programId = "ProgramId"
        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -106,9 +133,6 @@ extension Playback.HandshakeStarted: AnalyticsEvent {
         case technology = "Technology"
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
-        
-        case height = "Height"
-        case width = "Width"
     }
 }
 

@@ -12,6 +12,13 @@ import Exposure
 extension Playback {
     /// Trace information data
     internal struct Trace {
+        
+        /// Id string of the player/sdk.
+        /// Example: EMP.tvOS2, EMP.iOS2
+        internal var player: String {
+            return "EMP." + UIDevice.mergedSystemName + "2"
+        }
+        
         internal let timestamp: Int64
         
         /// Offset in the video sequence where the trace was generated
@@ -46,10 +53,24 @@ extension Playback.Trace: AnalyticsEvent {
     }
     
     internal var jsonPayload: [String : Any] {
+        
+        let device: Device = Device()
+        
         var json: [String: Any] = data
         
         json[JSONKeys.eventType.rawValue] = eventType
         json[JSONKeys.timestamp.rawValue] = timestamp
+        json[JSONKeys.player.rawValue] = player
+ 
+        json[JSONKeys.deviceId.rawValue] = device.deviceId
+        json[JSONKeys.deviceModel.rawValue] = device.model
+        json[JSONKeys.os.rawValue] = device.os
+        json[JSONKeys.appType.rawValue] =  device.os
+        json[JSONKeys.osVersion.rawValue] = device.osVersion
+        json[JSONKeys.manufacturer.rawValue] = device.manufacturer
+        json[JSONKeys.height.rawValue] = device.height
+        json[JSONKeys.width.rawValue] = device.width
+        
         
         if let offset = offsetTime {
             json[JSONKeys.offsetTime.rawValue] = offset
@@ -71,10 +92,6 @@ extension Playback.Trace: AnalyticsEvent {
         json[JSONKeys.techVersion.rawValue] = ""
         json[JSONKeys.userAgent.rawValue] = ""
         
-        let device: Device = Device()
-        json[JSONKeys.height.rawValue] = device.height
-        json[JSONKeys.width.rawValue] = device.width
-        
         return json
     }
     
@@ -82,6 +99,19 @@ extension Playback.Trace: AnalyticsEvent {
         case eventType = "EventType"
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
+        case player = "Player"
+        
+        // Device Info
+        case deviceId = "DeviceId"
+        case deviceModel = "DeviceModel"
+        case cpuType = "CPUType"
+        case appType = "AppType"
+        case os = "OS"
+        case osVersion = "OSVersion"
+        case manufacturer = "Manufacturer"
+        case type = "Type"
+        case height = "Height"
+        case width = "Width"
         
         // CDN
         case CDNVendor = "CDNVendor"
@@ -97,7 +127,5 @@ extension Playback.Trace: AnalyticsEvent {
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
         
-        case height = "Height"
-        case width = "Width"
     }
 }

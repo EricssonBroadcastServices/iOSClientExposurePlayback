@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `2.7.00` Release - [2.7.00](#2700)
 * `2.6.60` Release - [2.6.60](#2660)
 * `2.6.50` Release - [2.6.50](#2650)
 * `2.6.40` Release - [2.6.40](#2640)
@@ -35,6 +36,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 2.7.00
+#### Bug Fixes
+* `EMP-17699` Support to receive analyticsBaseUrl as sdk configuration.
 
 ## 2.6.60
 #### Bug Fixes
