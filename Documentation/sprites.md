@@ -38,8 +38,10 @@ let sliderPosition = Int64(sender.value * Float(duration))
 let currentTime = timeFormat(time: sliderPosition)
 
 if let assetId = self?.playable?.assetId {
-       let _ = self?.player.getSprite(time: currentTime, assetId: assetId,callback: { image in
+       let _ = self?.player.getSprite(time: currentTime, assetId: assetId,callback: { image, startTime, endTime in
        // assign the image in to the UIImage 
+       // startTime : Sprites offset ( startTime )
+       // endTime : Sprites end offset (endTime )
    })
 }
 ```

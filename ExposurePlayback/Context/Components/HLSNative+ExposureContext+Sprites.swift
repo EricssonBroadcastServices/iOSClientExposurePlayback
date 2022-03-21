@@ -114,13 +114,13 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - assetId: assetId
     ///   - callback: completion : sprite image
     /// - Returns: self
-        public func getSprite(time: String, assetId: String, callback: @escaping (UIImage?) -> Void) -> Self  {
+        public func getSprite(time: String, assetId: String, callback: @escaping (UIImage?, TimeInterval? , TimeInterval? ) -> Void) -> Self  {
             
             let timelineTime = time.convertToTimeInterval()
 
             // get the cached sprites from the userdefaults
             guard let data = UserDefaults.standard.value(forKey:"spritesData") as? Data else {
-                callback(nil)
+                callback(nil, nil, nil )
                 return self
             }
                 
@@ -129,7 +129,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let matchedSprite = sprites?.first(where: { $0.startTime <= timelineTime && timelineTime <= $0.endTime })
             
             guard let x = matchedSprite?.frame.x , let y = matchedSprite?.frame.y , let width = matchedSprite?.frame.width, let height = matchedSprite?.frame.height, let imageUrl = matchedSprite?.spriteImage else {
-                callback(nil)
+                callback(nil, nil, nil )
                 return self
             }
             
@@ -139,13 +139,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
                         guard let newCGImage = image.cgImage?.cropping(to: CGRect(x: x, y: y, width: width, height: height)) else { return }
                         
                         let newImage = UIImage.init(cgImage: newCGImage)
-                        callback(newImage)
+                        callback(newImage, matchedSprite?.startTime, matchedSprite?.endTime )
                    
                 } else {
-                    callback(nil)
+                    callback(nil, nil, nil )
                 }
             })
-            callback(nil)
         return self
     }
 }
