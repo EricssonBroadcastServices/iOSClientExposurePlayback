@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// Playback has temporarily stopped, but the playback session is still active. It is assumed that the video was paused due to user intervention. If the pausing was caused by a buffer underrun, the Playback.BufferingStarted event should be used instead.

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 internal enum PlaybackIdentifier {
     case vod(assetId: String)

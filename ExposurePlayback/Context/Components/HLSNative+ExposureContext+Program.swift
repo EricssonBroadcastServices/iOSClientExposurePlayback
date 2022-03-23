@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 extension Player where Tech == HLSNative<ExposureContext> {
     // MARK: Program Information

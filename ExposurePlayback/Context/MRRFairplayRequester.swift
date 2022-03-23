@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 import Player
-import Exposure
+import iOSClientExposure
 
 
 @available(*, deprecated, message: "Please use only EMUPFairPlayRequester")

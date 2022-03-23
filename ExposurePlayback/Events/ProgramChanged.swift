@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     internal struct ProgramChanged {

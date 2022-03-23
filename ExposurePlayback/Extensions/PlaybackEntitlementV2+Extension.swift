@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension PlayBackEntitlementV2 {
     /// Checks if the manifest comes from the *Unified Packager*

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension PlaybackEntitlement {
     static var validJson: [String: Any] {

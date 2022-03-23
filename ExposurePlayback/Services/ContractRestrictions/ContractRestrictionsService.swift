@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 @objc public protocol ContractRestrictionsService {
     /// The receiver should return if the seeking is allowed

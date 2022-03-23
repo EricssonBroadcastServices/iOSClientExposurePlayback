@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 extension ExposureContext {
     /// `ExposureContext` specific errors
@@ -208,7 +208,7 @@ extension ExposureContext.Error.FairplayError {
     
     private func condensedInfo(error: Error?) -> String? {
         guard let error = error else { return nil }
-        if let networkingError = error as? Exposure.Request.Networking {
+        if let networkingError = error as? iOSClientExposure.Request.Networking {
             var message = "[\(networkingError.code):\(networkingError.domain)] \n "
             message += "[\(networkingError.message)] \n "
             return message

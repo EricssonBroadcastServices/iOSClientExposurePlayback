@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// AV player is ready to play the asset

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension EntitlementValidation {
     static func validJson(status: String) -> [String: Any] {

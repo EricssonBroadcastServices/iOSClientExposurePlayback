@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Program {
     static func validJson(programId: String, channelId: String, assetId: String) -> [String: Any] {

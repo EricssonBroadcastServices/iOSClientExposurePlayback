@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 import AVKit
 
 ///// Playable that can be use to play downloaded assets

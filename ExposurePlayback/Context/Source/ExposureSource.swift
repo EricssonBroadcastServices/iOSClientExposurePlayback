@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
 open class ExposureSource: MediaSource {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 public struct EnigmaPlayable {
     /// Convert EntitlementPlay V2 response to EntitlementPlayV1

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 internal protocol AssetEntitlementProvider {
     func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment,  include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)

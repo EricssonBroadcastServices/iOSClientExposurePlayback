@@ -8,7 +8,7 @@
 
 import Foundation
 import AVFoundation
-import Exposure
+import iOSClientExposure
 
 internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     var keyValidationError: Error?

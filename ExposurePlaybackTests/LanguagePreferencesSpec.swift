@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 import AVFoundation
-import Exposure
+import iOSClientExposure
 
 @testable import Player
 @testable import ExposurePlayback

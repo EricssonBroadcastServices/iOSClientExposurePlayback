@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 import Player
-import Exposure
+import iOSClientExposure
 
 internal protocol ExposureFairplayRequester: class, FairplayRequester {
     /// Entitlement related to this specific *Fairplay* request.

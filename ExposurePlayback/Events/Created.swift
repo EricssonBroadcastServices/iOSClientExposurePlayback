@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// This event is sent when the player is instantiated, or invoked for the first time during the playback session.

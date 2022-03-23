@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 /// Extends the `Player` built in protocol defining analytics events with *Exposure* specific analytics
 public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {

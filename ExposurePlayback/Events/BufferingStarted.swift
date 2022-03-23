@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// Playback paused temporarily as the player ran out of data to show.

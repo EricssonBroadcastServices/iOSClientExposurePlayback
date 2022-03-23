@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import Exposure
+import iOSClientExposure
 import Foundation
 
 @testable import ExposurePlayback

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 public enum WebVTTError: Error {
     case invalidSignature

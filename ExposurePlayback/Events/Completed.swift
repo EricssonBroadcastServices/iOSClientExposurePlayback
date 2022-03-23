@@ -8,7 +8,7 @@
 
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// Playback stopped because it reached the end of the asset. If playback stopped due to user intervention or errors, a Playback.Aborted or Playback.Error should be sent instead.

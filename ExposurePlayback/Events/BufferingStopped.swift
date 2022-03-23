@@ -8,7 +8,7 @@
 
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension Playback {
     /// Playback resumed after the player has enough data buffered.

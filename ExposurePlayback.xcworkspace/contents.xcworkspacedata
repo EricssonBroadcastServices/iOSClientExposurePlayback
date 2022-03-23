@@ -5,7 +5,7 @@
       location = "group:ExposurePlayback.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Carthage/Checkouts/iOSClientExposure/Exposure.xcodeproj">
+      location = "group:Carthage/Checkouts/iOSClientExposure/iOSClientExposure.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Carthage/Checkouts/iOSClientPlayer/Player.xcodeproj">

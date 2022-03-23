@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 /// Specialized `MediaSource` used for playback of *Vod* assets
 ///

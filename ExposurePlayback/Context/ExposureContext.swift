@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 /// Defines the `MediaContext` to be used when contacting *Exposure*.
 ///

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 /// Service that syncs local device clock with server time
 public class MonotonicTimeService {

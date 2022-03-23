@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 extension ServerTime {
     static func validJson(date: Date) -> [String: Any] {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Exposure
+import iOSClientExposure
 
 /// Internal protocol defining a provider supplying `ServerTime`.
 internal protocol ServerTimeProvider {

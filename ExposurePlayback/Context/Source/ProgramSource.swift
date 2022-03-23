@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 /// Specialized `MediaSource` used for starting playback of a specific program on a channel
 ///

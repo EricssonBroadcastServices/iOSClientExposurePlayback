@@ -8,7 +8,7 @@
     
     import Foundation
     import Player
-    import Exposure
+    import iOSClientExposure
     import AVFoundation
     
     extension Player where Tech == HLSNative<ExposureContext> {

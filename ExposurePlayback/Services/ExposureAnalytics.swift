@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 #if os(iOS)
 import CoreTelephony
@@ -601,7 +601,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             }
             return (result, expanded.message)
         }
-        else if let expanded = error as? Exposure.Request.Networking {
+        else if let expanded = error as? iOSClientExposure.Request.Networking {
             result.append((expanded.code, expanded.domain))
             return (result, expanded.message)
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 import Player
-import Exposure
+import iOSClientExposure
 
 extension ExposureContext {
     public enum Warning: WarningMessage {

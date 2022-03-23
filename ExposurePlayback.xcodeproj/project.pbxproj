@@ -195,7 +195,6 @@
 		76A89C6220207B2400C23579 /* ExposureFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5D20207B2400C23579 /* ExposureFairplayRequester.swift */; };
 		76A89C6320207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C5E20207B2400C23579 /* ExposureStreamingAnalyticsProvider.swift */; };
 		76A89C6520207B2400C23579 /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89C6020207B2400C23579 /* Playable.swift */; };
-		76A89C902020808900C23579 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C932020808900C23579 /* Exposure.framework */; };
 		76A89C912020808900C23579 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A89C942020808900C23579 /* Player.framework */; };
 		76A89CF62020958000C23579 /* MonotonicTimeServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89CF32020958000C23579 /* MonotonicTimeServiceSpec.swift */; };
 		76A89CF72020958000C23579 /* ProgramServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A89CF42020958000C23579 /* ProgramServiceSpec.swift */; };
@@ -273,6 +272,9 @@
 		780761D026A6EEC800A1ABE7 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780761CE26A6EEC800A1ABE7 /* ServerSideAdService.swift */; };
 		7823752E27565A9600A96849 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752D27565A9600A96849 /* Quick.framework */; };
 		7823753027565AA100A96849 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7823752F27565AA100A96849 /* Nimble.framework */; };
+		78310E3827EB50D4009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78310E3727EB50D4009B3114 /* iOSClientExposure.framework */; };
+		78310E3C27EB50E4009B3114 /* iOSClientExposure_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78310E3B27EB50E4009B3114 /* iOSClientExposure_tvOS.framework */; };
+		78310E3D27EB50E4009B3114 /* iOSClientExposure_tvOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78310E3B27EB50E4009B3114 /* iOSClientExposure_tvOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7831FACB2264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */; };
 		7838DCE027A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */; };
 		7838DCE127A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */; };
@@ -288,7 +290,6 @@
 		784D1E7924DC3169000F5C34 /* download.md in Resources */ = {isa = PBXBuildFile; fileRef = 784D1E7724DC3169000F5C34 /* download.md */; };
 		7867DFA82475102200379519 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7867DFA72475102200379519 /* OfflineMediaPlayable.swift */; };
 		7867DFA92475102200379519 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7867DFA72475102200379519 /* OfflineMediaPlayable.swift */; };
-		786E8C74275656F80050AE37 /* Exposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786E8C73275656F80050AE37 /* Exposure.framework */; };
 		786E8C78275656FE0050AE37 /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786E8C77275656FE0050AE37 /* Player.framework */; };
 		787BFB0C25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */; };
 		787BFB0D25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787BFB0B25C43D59008EF464 /* HLSNative+ExposureContext+Sprites.swift */; };
@@ -343,6 +344,20 @@
 			remoteInfo = ExposurePlayback;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		78310E3E27EB50E4009B3114 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				78310E3D27EB50E4009B3114 /* iOSClientExposure_tvOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		76010C862125B364008DB688 /* StopAirplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopAirplay.swift; sourceTree = "<group>"; };
@@ -512,6 +527,8 @@
 		781F439C24603A2300610321 /* ExposureDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ExposureDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7823752D27565A9600A96849 /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7823752F27565AA100A96849 /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78310E3727EB50D4009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78310E3B27EB50E4009B3114 /* iOSClientExposure_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7831FAC92264AEF700743D07 /* PlayBackEntitlementV2+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayBackEntitlementV2+Extensions.swift"; sourceTree = "<group>"; };
 		7838DCDF27A7D7520052848A /* HLSNative+ExposureContext+MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+MediaType.swift"; sourceTree = "<group>"; };
 		7838DCE227A7D8DC0052848A /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
@@ -548,7 +565,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				786E8C74275656F80050AE37 /* Exposure.framework in Frameworks */,
+				78310E3C27EB50E4009B3114 /* iOSClientExposure_tvOS.framework in Frameworks */,
 				786E8C78275656FE0050AE37 /* Player.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,7 +586,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76A89C902020808900C23579 /* Exposure.framework in Frameworks */,
+				78310E3827EB50D4009B3114 /* iOSClientExposure.framework in Frameworks */,
 				76A89C912020808900C23579 /* Player.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -847,6 +864,8 @@
 		76A89C8E2020808900C23579 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78310E3B27EB50E4009B3114 /* iOSClientExposure_tvOS.framework */,
+				78310E3727EB50D4009B3114 /* iOSClientExposure.framework */,
 				7823752F27565AA100A96849 /* Nimble.framework */,
 				7823752D27565A9600A96849 /* Quick.framework */,
 				786E8C77275656FE0050AE37 /* Player.framework */,
@@ -1029,6 +1048,7 @@
 				7608021F2069306E007F59D5 /* Frameworks */,
 				760802222069306E007F59D5 /* Headers */,
 				760802242069306E007F59D5 /* Resources */,
+				78310E3E27EB50E4009B3114 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
