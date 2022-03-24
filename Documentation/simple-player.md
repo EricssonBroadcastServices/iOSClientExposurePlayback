@@ -32,8 +32,8 @@ This will configure the `Player` for playback using *EMP* functionality.
 If you want to use a pass the analytics events to a custom end point, you can pass your `analyticsBaseUrl` when creating the player. 
 
 ```Swift
-import Player
-import Exposure
+import iOSClientPlayer
+import iOSClientExposure
 
 class SimplePlayerViewController: UIViewController {
     var environment: Environment!

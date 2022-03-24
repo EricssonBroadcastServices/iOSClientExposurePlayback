@@ -1,5 +1,11 @@
 # Upgrade Guide
 
+## 3.0.00
+- Project is now distributed via Swift package manager , Cocoapods & Carthage.
+- Unit tests have been moved to SPM tests & dependencies will be used as packages.
+- Module name has been renamed from `ExposurePlayback` to `iOSClientExposurePlayback`.
+- Importing dependecies will be changed from `import Exposure` & `import Player` to `import iOSClientExposure` & `import iOSClientPlayer`
+
 ## 2.1.00
 Project is updated to use Swift version 4.2 
 

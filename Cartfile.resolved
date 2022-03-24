@@ -1,4 +1,2 @@
 github "EricssonBroadcastServices/iOSClientExposure" "v3.0.000"
 github "EricssonBroadcastServices/iOSClientPlayer" "v3.0.000"
-github "Quick/Nimble" "v9.2.1"
-github "Quick/Quick" "v4.0.0"
