@@ -26,11 +26,13 @@ platform :ios do
         ensure_git_branch(branch: ENV["DEVELOPMENT_BRANCH"])
         ensure_git_status_clean
         
-        sh "cd .. && carthage.sh update --use-submodules --use-xcframeworks --platform ios,tvos"
+        #sh "cd .. && carthage.sh update --use-submodules --use-xcframeworks --platform ios,tvos"
         
-#        update_graph
+#        #update_graph
+
+	build_spm
         
-        run_unit_tests
+        #run_unit_tests
         
         bump_build_number
         
@@ -84,6 +86,19 @@ platform :ios do
     end
     
     # Private lanes
+desc "Build project using spm"
+    lane :build_spm do
+
+        sh 'swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"'
+        UI.success("== iOS Project Build Success ==")
+
+        sh 'swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk appletvsimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-tvos13.0-simulator"'
+        UI.success("== tvOS Project Build Success ==")
+
+
+    end
+
+
     desc "Runs all the tests"
     lane :run_unit_tests do
         
