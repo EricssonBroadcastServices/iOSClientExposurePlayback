@@ -1,5 +1,7 @@
 # CHANGELOG
 
+* `3.0.10` Release - [3.0.10](#3010)
+* `3.0.00` Release - [3.0.00](#3000)
 * `2.7.00` Release - [2.7.00](#2700)
 * `2.6.60` Release - [2.6.60](#2660)
 * `2.6.50` Release - [2.6.50](#2650)
@@ -36,6 +38,14 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.0.100
+#### Bug Fixes
+* Fix broken Xcode project file
+
+## 3.0.000
+#### Features
+* `EMP-17893` Add support to SPM & Cocoapods
 
 ## 2.7.00
 #### Bug Fixes

@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
 spec.name         = "iOSClientExposurePlayback"
-spec.version      = "3.0.000"
+spec.version      = "3.0.100"
 spec.summary      = "RedBeeMedia iOS SDK ExposurePlayback Module which combines both Exposure & Player"
 spec.homepage     = "https://github.com/EricssonBroadcastServices"
 spec.license      = { :type => "Apache", :file => "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/LICENSE" }
 spec.author             = { "EMP" => "jenkinsredbee@gmail.com" }
-spec.documentation_url = "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/tree/master/Documentation"
+spec.documentation_url = "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/README.md"
 spec.platforms = { :ios => "11.0", :tvos => "12.0" }
 spec.source       = { :git => "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback.git", :tag => "v#{spec.version}" }
 spec.source_files  = "Sources/iOSClientExposurePlayback/**/*.swift"
