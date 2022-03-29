@@ -1,0 +1,1253 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		767FB4B2217FC7B400BC087A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		783110F427EC70C2009B3114 /* ProgramSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108327EC70C2009B3114 /* ProgramSource.swift */; };
+		783110F527EC70C2009B3114 /* ProgramSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108327EC70C2009B3114 /* ProgramSource.swift */; };
+		783110F627EC70C2009B3114 /* ExposureSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108427EC70C2009B3114 /* ExposureSource.swift */; };
+		783110F727EC70C2009B3114 /* ExposureSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108427EC70C2009B3114 /* ExposureSource.swift */; };
+		783110F827EC70C2009B3114 /* ChannelSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108527EC70C2009B3114 /* ChannelSource.swift */; };
+		783110F927EC70C2009B3114 /* ChannelSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108527EC70C2009B3114 /* ChannelSource.swift */; };
+		783110FA27EC70C2009B3114 /* AssetSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108627EC70C2009B3114 /* AssetSource.swift */; };
+		783110FB27EC70C2009B3114 /* AssetSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108627EC70C2009B3114 /* AssetSource.swift */; };
+		783110FC27EC70C2009B3114 /* EMUPFairPlayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108727EC70C2009B3114 /* EMUPFairPlayRequester.swift */; };
+		783110FD27EC70C2009B3114 /* EMUPFairPlayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108727EC70C2009B3114 /* EMUPFairPlayRequester.swift */; };
+		783110FE27EC70C2009B3114 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108827EC70C2009B3114 /* MediaType.swift */; };
+		783110FF27EC70C2009B3114 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108827EC70C2009B3114 /* MediaType.swift */; };
+		7831110027EC70C2009B3114 /* ExposureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108927EC70C2009B3114 /* ExposureContext.swift */; };
+		7831110127EC70C2009B3114 /* ExposureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108927EC70C2009B3114 /* ExposureContext.swift */; };
+		7831110227EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108B27EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift */; };
+		7831110327EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108B27EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift */; };
+		7831110427EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108C27EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift */; };
+		7831110527EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108C27EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift */; };
+		7831110627EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108D27EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift */; };
+		7831110727EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108D27EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift */; };
+		7831110827EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108E27EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift */; };
+		7831110927EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108E27EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift */; };
+		7831110A27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108F27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift */; };
+		7831110B27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108F27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift */; };
+		7831110C27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109027EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift */; };
+		7831110D27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109027EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift */; };
+		7831110E27EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109127EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift */; };
+		7831110F27EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109127EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift */; };
+		7831111027EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109227EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift */; };
+		7831111127EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109227EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift */; };
+		7831111227EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift */; };
+		7831111327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift */; };
+		7831111427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift */; };
+		7831111527EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift */; };
+		7831111627EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109527EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift */; };
+		7831111727EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109527EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift */; };
+		7831111827EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109627EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
+		7831111927EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109627EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift */; };
+		7831111A27EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109727EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
+		7831111B27EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109727EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift */; };
+		7831111C27EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109827EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift */; };
+		7831111D27EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109827EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift */; };
+		7831111E27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109927EC70C2009B3114 /* ExposureContext+Warning.swift */; };
+		7831111F27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109927EC70C2009B3114 /* ExposureContext+Warning.swift */; };
+		7831112027EC70C2009B3114 /* ProgramPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109B27EC70C2009B3114 /* ProgramPlayable.swift */; };
+		7831112127EC70C2009B3114 /* ProgramPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109B27EC70C2009B3114 /* ProgramPlayable.swift */; };
+		7831112227EC70C2009B3114 /* AssetPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109C27EC70C2009B3114 /* AssetPlayable.swift */; };
+		7831112327EC70C2009B3114 /* AssetPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109C27EC70C2009B3114 /* AssetPlayable.swift */; };
+		7831112427EC70C2009B3114 /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109D27EC70C2009B3114 /* EnigmaPlayable.swift */; };
+		7831112527EC70C2009B3114 /* EnigmaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109D27EC70C2009B3114 /* EnigmaPlayable.swift */; };
+		7831112627EC70C2009B3114 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109E27EC70C2009B3114 /* OfflineMediaPlayable.swift */; };
+		7831112727EC70C2009B3114 /* OfflineMediaPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109E27EC70C2009B3114 /* OfflineMediaPlayable.swift */; };
+		7831112827EC70C2009B3114 /* ChannelPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109F27EC70C2009B3114 /* ChannelPlayable.swift */; };
+		7831112927EC70C2009B3114 /* ChannelPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831109F27EC70C2009B3114 /* ChannelPlayable.swift */; };
+		7831112A27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A027EC70C2009B3114 /* ExposureContext+Error.swift */; };
+		7831112B27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A027EC70C2009B3114 /* ExposureContext+Error.swift */; };
+		7831112C27EC70C2009B3114 /* PlaybackProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A127EC70C2009B3114 /* PlaybackProperties.swift */; };
+		7831112D27EC70C2009B3114 /* PlaybackProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A127EC70C2009B3114 /* PlaybackProperties.swift */; };
+		7831112E27EC70C2009B3114 /* MRRFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A227EC70C2009B3114 /* MRRFairplayRequester.swift */; };
+		7831112F27EC70C2009B3114 /* MRRFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A227EC70C2009B3114 /* MRRFairplayRequester.swift */; };
+		7831113027EC70C2009B3114 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A527EC70C2009B3114 /* SWXMLHash.swift */; };
+		7831113127EC70C2009B3114 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A527EC70C2009B3114 /* SWXMLHash.swift */; };
+		7831113227EC70C2009B3114 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A627EC70C2009B3114 /* SWXMLHash+TypeConversion.swift */; };
+		7831113327EC70C2009B3114 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A627EC70C2009B3114 /* SWXMLHash+TypeConversion.swift */; };
+		7831113427EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A827EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift */; };
+		7831113527EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A827EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift */; };
+		7831113627EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A927EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift */; };
+		7831113727EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110A927EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift */; };
+		7831113827EC70C2009B3114 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AA27EC70C2009B3114 /* String+Extensions.swift */; };
+		7831113927EC70C2009B3114 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AA27EC70C2009B3114 /* String+Extensions.swift */; };
+		7831113A27EC70C2009B3114 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AB27EC70C2009B3114 /* UIImage+Extension.swift */; };
+		7831113B27EC70C2009B3114 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AB27EC70C2009B3114 /* UIImage+Extension.swift */; };
+		7831113C27EC70C2009B3114 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AC27EC70C2009B3114 /* UIDevice+Extensions.swift */; };
+		7831113D27EC70C2009B3114 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AC27EC70C2009B3114 /* UIDevice+Extensions.swift */; };
+		7831113E27EC70C2009B3114 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AD27EC70C2009B3114 /* CMTime+Extensions.swift */; };
+		7831113F27EC70C2009B3114 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AD27EC70C2009B3114 /* CMTime+Extensions.swift */; };
+		7831114027EC70C2009B3114 /* Paused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AF27EC70C2009B3114 /* Paused.swift */; };
+		7831114127EC70C2009B3114 /* Paused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110AF27EC70C2009B3114 /* Paused.swift */; };
+		7831114227EC70C2009B3114 /* StopAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B027EC70C2009B3114 /* StopAirplay.swift */; };
+		7831114327EC70C2009B3114 /* StopAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B027EC70C2009B3114 /* StopAirplay.swift */; };
+		7831114427EC70C2009B3114 /* Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B127EC70C2009B3114 /* Playback.swift */; };
+		7831114527EC70C2009B3114 /* Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B127EC70C2009B3114 /* Playback.swift */; };
+		7831114627EC70C2009B3114 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B227EC70C2009B3114 /* Heartbeat.swift */; };
+		7831114727EC70C2009B3114 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B227EC70C2009B3114 /* Heartbeat.swift */; };
+		7831114827EC70C2009B3114 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B327EC70C2009B3114 /* Error.swift */; };
+		7831114927EC70C2009B3114 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B327EC70C2009B3114 /* Error.swift */; };
+		7831114A27EC70C2009B3114 /* ProgramChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B427EC70C2009B3114 /* ProgramChanged.swift */; };
+		7831114B27EC70C2009B3114 /* ProgramChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B427EC70C2009B3114 /* ProgramChanged.swift */; };
+		7831114C27EC70C2009B3114 /* AdFailed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B527EC70C2009B3114 /* AdFailed.swift */; };
+		7831114D27EC70C2009B3114 /* AdFailed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B527EC70C2009B3114 /* AdFailed.swift */; };
+		7831114E27EC70C2009B3114 /* BufferingStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B627EC70C2009B3114 /* BufferingStarted.swift */; };
+		7831114F27EC70C2009B3114 /* BufferingStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B627EC70C2009B3114 /* BufferingStarted.swift */; };
+		7831115027EC70C2009B3114 /* BitrateChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B727EC70C2009B3114 /* BitrateChanged.swift */; };
+		7831115127EC70C2009B3114 /* BitrateChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B727EC70C2009B3114 /* BitrateChanged.swift */; };
+		7831115227EC70C2009B3114 /* DrmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B827EC70C2009B3114 /* DrmEvent.swift */; };
+		7831115327EC70C2009B3114 /* DrmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B827EC70C2009B3114 /* DrmEvent.swift */; };
+		7831115427EC70C2009B3114 /* StartAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B927EC70C2009B3114 /* StartAirplay.swift */; };
+		7831115527EC70C2009B3114 /* StartAirplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110B927EC70C2009B3114 /* StartAirplay.swift */; };
+		7831115627EC70C2009B3114 /* ScrubbedTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BA27EC70C2009B3114 /* ScrubbedTo.swift */; };
+		7831115727EC70C2009B3114 /* ScrubbedTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BA27EC70C2009B3114 /* ScrubbedTo.swift */; };
+		7831115827EC70C2009B3114 /* Started.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BB27EC70C2009B3114 /* Started.swift */; };
+		7831115927EC70C2009B3114 /* Started.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BB27EC70C2009B3114 /* Started.swift */; };
+		7831115A27EC70C2009B3114 /* Resumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BC27EC70C2009B3114 /* Resumed.swift */; };
+		7831115B27EC70C2009B3114 /* Resumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BC27EC70C2009B3114 /* Resumed.swift */; };
+		7831115C27EC70C2009B3114 /* AssetIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BD27EC70C2009B3114 /* AssetIdentifier.swift */; };
+		7831115D27EC70C2009B3114 /* AssetIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BD27EC70C2009B3114 /* AssetIdentifier.swift */; };
+		7831115E27EC70C2009B3114 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BE27EC70C2009B3114 /* Trace.swift */; };
+		7831115F27EC70C2009B3114 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BE27EC70C2009B3114 /* Trace.swift */; };
+		7831116027EC70C2009B3114 /* ConnectionChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BF27EC70C2009B3114 /* ConnectionChanged.swift */; };
+		7831116127EC70C2009B3114 /* ConnectionChanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110BF27EC70C2009B3114 /* ConnectionChanged.swift */; };
+		7831116227EC70C2009B3114 /* AdStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C027EC70C2009B3114 /* AdStarted.swift */; };
+		7831116327EC70C2009B3114 /* AdStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C027EC70C2009B3114 /* AdStarted.swift */; };
+		7831116427EC70C2009B3114 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C127EC70C2009B3114 /* DeviceInfo.swift */; };
+		7831116527EC70C2009B3114 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C127EC70C2009B3114 /* DeviceInfo.swift */; };
+		7831116627EC70C2009B3114 /* BufferingStopped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C227EC70C2009B3114 /* BufferingStopped.swift */; };
+		7831116727EC70C2009B3114 /* BufferingStopped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C227EC70C2009B3114 /* BufferingStopped.swift */; };
+		7831116827EC70C2009B3114 /* PlayReady.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C327EC70C2009B3114 /* PlayReady.swift */; };
+		7831116927EC70C2009B3114 /* PlayReady.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C327EC70C2009B3114 /* PlayReady.swift */; };
+		7831116A27EC70C2009B3114 /* StartCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C427EC70C2009B3114 /* StartCasting.swift */; };
+		7831116B27EC70C2009B3114 /* StartCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C427EC70C2009B3114 /* StartCasting.swift */; };
+		7831116C27EC70C2009B3114 /* HandshakeStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C527EC70C2009B3114 /* HandshakeStarted.swift */; };
+		7831116D27EC70C2009B3114 /* HandshakeStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C527EC70C2009B3114 /* HandshakeStarted.swift */; };
+		7831116E27EC70C2009B3114 /* Created.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C627EC70C2009B3114 /* Created.swift */; };
+		7831116F27EC70C2009B3114 /* Created.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C627EC70C2009B3114 /* Created.swift */; };
+		7831117027EC70C2009B3114 /* Aborted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C727EC70C2009B3114 /* Aborted.swift */; };
+		7831117127EC70C2009B3114 /* Aborted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C727EC70C2009B3114 /* Aborted.swift */; };
+		7831117227EC70C2009B3114 /* InitCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C827EC70C2009B3114 /* InitCompleted.swift */; };
+		7831117327EC70C2009B3114 /* InitCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C827EC70C2009B3114 /* InitCompleted.swift */; };
+		7831117427EC70C2009B3114 /* AdCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C927EC70C2009B3114 /* AdCompleted.swift */; };
+		7831117527EC70C2009B3114 /* AdCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110C927EC70C2009B3114 /* AdCompleted.swift */; };
+		7831117627EC70C2009B3114 /* Completed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CA27EC70C2009B3114 /* Completed.swift */; };
+		7831117727EC70C2009B3114 /* Completed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CA27EC70C2009B3114 /* Completed.swift */; };
+		7831117827EC70C2009B3114 /* ContextPositionSeekable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CC27EC70C2009B3114 /* ContextPositionSeekable.swift */; };
+		7831117927EC70C2009B3114 /* ContextPositionSeekable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CC27EC70C2009B3114 /* ContextPositionSeekable.swift */; };
+		7831117A27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CD27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift */; };
+		7831117B27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CD27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift */; };
+		7831117C27EC70C2009B3114 /* ContextStartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CE27EC70C2009B3114 /* ContextStartTime.swift */; };
+		7831117D27EC70C2009B3114 /* ContextStartTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CE27EC70C2009B3114 /* ContextStartTime.swift */; };
+		7831117E27EC70C2009B3114 /* ExposureFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CF27EC70C2009B3114 /* ExposureFairplayRequester.swift */; };
+		7831117F27EC70C2009B3114 /* ExposureFairplayRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110CF27EC70C2009B3114 /* ExposureFairplayRequester.swift */; };
+		7831118027EC70C2009B3114 /* ContextGoLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D027EC70C2009B3114 /* ContextGoLive.swift */; };
+		7831118127EC70C2009B3114 /* ContextGoLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D027EC70C2009B3114 /* ContextGoLive.swift */; };
+		7831118227EC70C2009B3114 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D127EC70C2009B3114 /* HeartbeatsProvider.swift */; };
+		7831118327EC70C2009B3114 /* HeartbeatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D127EC70C2009B3114 /* HeartbeatsProvider.swift */; };
+		7831118427EC70C2009B3114 /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D227EC70C2009B3114 /* Playable.swift */; };
+		7831118527EC70C2009B3114 /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D227EC70C2009B3114 /* Playable.swift */; };
+		7831118627EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D327EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift */; };
+		7831118727EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D327EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift */; };
+		7831118827EC70C2009B3114 /* DrmAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D427EC70C2009B3114 /* DrmAnalyticsProvider.swift */; };
+		7831118927EC70C2009B3114 /* DrmAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D427EC70C2009B3114 /* DrmAnalyticsProvider.swift */; };
+		7831118A27EC70C2009B3114 /* ContextTimeSeekable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D527EC70C2009B3114 /* ContextTimeSeekable.swift */; };
+		7831118B27EC70C2009B3114 /* ContextTimeSeekable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D527EC70C2009B3114 /* ContextTimeSeekable.swift */; };
+		7831118E27EC70C3009B3114 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D927EC70C2009B3114 /* ServerSideAdService.swift */; };
+		7831118F27EC70C3009B3114 /* ServerSideAdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110D927EC70C2009B3114 /* ServerSideAdService.swift */; };
+		7831119027EC70C3009B3114 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DA27EC70C2009B3114 /* AdService.swift */; };
+		7831119127EC70C3009B3114 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DA27EC70C2009B3114 /* AdService.swift */; };
+		7831119227EC70C3009B3114 /* AdServiceContractRestrictionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DB27EC70C2009B3114 /* AdServiceContractRestrictionsProvider.swift */; };
+		7831119327EC70C3009B3114 /* AdServiceContractRestrictionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DB27EC70C2009B3114 /* AdServiceContractRestrictionsProvider.swift */; };
+		7831119427EC70C3009B3114 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DC27EC70C2009B3114 /* AdPlayerProxy.swift */; };
+		7831119527EC70C3009B3114 /* AdPlayerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DC27EC70C2009B3114 /* AdPlayerProxy.swift */; };
+		7831119627EC70C3009B3114 /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DD27EC70C2009B3114 /* AdServiceEventProvider.swift */; };
+		7831119727EC70C3009B3114 /* AdServiceEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DD27EC70C2009B3114 /* AdServiceEventProvider.swift */; };
+		7831119827EC70C3009B3114 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DE27EC70C2009B3114 /* AdTechWrapper.swift */; };
+		7831119927EC70C3009B3114 /* AdTechWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DE27EC70C2009B3114 /* AdTechWrapper.swift */; };
+		7831119A27EC70C3009B3114 /* ExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DF27EC70C2009B3114 /* ExposureAnalytics.swift */; };
+		7831119B27EC70C3009B3114 /* ExposureAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110DF27EC70C2009B3114 /* ExposureAnalytics.swift */; };
+		7831119C27EC70C3009B3114 /* FairplayCertificateCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E027EC70C2009B3114 /* FairplayCertificateCache.swift */; };
+		7831119D27EC70C3009B3114 /* FairplayCertificateCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E027EC70C2009B3114 /* FairplayCertificateCache.swift */; };
+		7831119E27EC70C3009B3114 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E127EC70C2009B3114 /* Reachability.swift */; };
+		7831119F27EC70C3009B3114 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E127EC70C2009B3114 /* Reachability.swift */; };
+		783111A027EC70C3009B3114 /* MonotonicTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E227EC70C2009B3114 /* MonotonicTimeService.swift */; };
+		783111A127EC70C3009B3114 /* MonotonicTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E227EC70C2009B3114 /* MonotonicTimeService.swift */; };
+		783111A227EC70C3009B3114 /* HTMLCharacterReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E427EC70C2009B3114 /* HTMLCharacterReferences.swift */; };
+		783111A327EC70C3009B3114 /* HTMLCharacterReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E427EC70C2009B3114 /* HTMLCharacterReferences.swift */; };
+		783111A427EC70C3009B3114 /* SpriteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E527EC70C2009B3114 /* SpriteData.swift */; };
+		783111A527EC70C3009B3114 /* SpriteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E527EC70C2009B3114 /* SpriteData.swift */; };
+		783111A627EC70C3009B3114 /* WebVTTParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E627EC70C2009B3114 /* WebVTTParser.swift */; };
+		783111A727EC70C3009B3114 /* WebVTTParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E627EC70C2009B3114 /* WebVTTParser.swift */; };
+		783111A827EC70C3009B3114 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E727EC70C2009B3114 /* Scanner.swift */; };
+		783111A927EC70C3009B3114 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E727EC70C2009B3114 /* Scanner.swift */; };
+		783111AA27EC70C3009B3114 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E927EC70C2009B3114 /* DownloadOperation.swift */; };
+		783111AB27EC70C3009B3114 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110E927EC70C2009B3114 /* DownloadOperation.swift */; };
+		783111AC27EC70C3009B3114 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EA27EC70C2009B3114 /* ImageFileManager.swift */; };
+		783111AD27EC70C3009B3114 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EA27EC70C2009B3114 /* ImageFileManager.swift */; };
+		783111AE27EC70C3009B3114 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EB27EC70C2009B3114 /* AsynchronousOperation.swift */; };
+		783111AF27EC70C3009B3114 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EB27EC70C2009B3114 /* AsynchronousOperation.swift */; };
+		783111B027EC70C3009B3114 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EC27EC70C2009B3114 /* SpriteImageDownloader.swift */; };
+		783111B127EC70C3009B3114 /* SpriteImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EC27EC70C2009B3114 /* SpriteImageDownloader.swift */; };
+		783111B227EC70C3009B3114 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110ED27EC70C2009B3114 /* WebVTT.swift */; };
+		783111B327EC70C3009B3114 /* WebVTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110ED27EC70C2009B3114 /* WebVTT.swift */; };
+		783111B427EC70C3009B3114 /* ContractRestrictionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EF27EC70C2009B3114 /* ContractRestrictionsService.swift */; };
+		783111B527EC70C3009B3114 /* ContractRestrictionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110EF27EC70C2009B3114 /* ContractRestrictionsService.swift */; };
+		783111B627EC70C3009B3114 /* BasicContractRestrictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F027EC70C2009B3114 /* BasicContractRestrictions.swift */; };
+		783111B727EC70C3009B3114 /* BasicContractRestrictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F027EC70C2009B3114 /* BasicContractRestrictions.swift */; };
+		783111B827EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */; };
+		783111B927EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */; };
+		783111BA27EC70C3009B3114 /* ProgramService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F227EC70C2009B3114 /* ProgramService.swift */; };
+		783111BB27EC70C3009B3114 /* ProgramService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F227EC70C2009B3114 /* ProgramService.swift */; };
+		783111BC27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F327EC70C2009B3114 /* ServerTimeProvider.swift */; };
+		783111BD27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F327EC70C2009B3114 /* ServerTimeProvider.swift */; };
+		783111C027EC70CB009B3114 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 783111BF27EC70CB009B3114 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		783111C127EC70CB009B3114 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 783111BF27EC70CB009B3114 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		783111D127EC8307009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111D027EC8307009B3114 /* iOSClientExposure.framework */; };
+		783111EC27EC8AEA009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */; };
+		783111F327EC8B21009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111F227EC8B21009B3114 /* iOSClientPlayer.framework */; };
+		783111FD27EC8EB9009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7831108327EC70C2009B3114 /* ProgramSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramSource.swift; sourceTree = "<group>"; };
+		7831108427EC70C2009B3114 /* ExposureSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureSource.swift; sourceTree = "<group>"; };
+		7831108527EC70C2009B3114 /* ChannelSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSource.swift; sourceTree = "<group>"; };
+		7831108627EC70C2009B3114 /* AssetSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetSource.swift; sourceTree = "<group>"; };
+		7831108727EC70C2009B3114 /* EMUPFairPlayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EMUPFairPlayRequester.swift; sourceTree = "<group>"; };
+		7831108827EC70C2009B3114 /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
+		7831108927EC70C2009B3114 /* ExposureContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureContext.swift; sourceTree = "<group>"; };
+		7831108B27EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Program.swift"; sourceTree = "<group>"; };
+		7831108C27EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Entitlements.swift"; sourceTree = "<group>"; };
+		7831108D27EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TimedMetadata.swift"; sourceTree = "<group>"; };
+		7831108E27EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Airplay.swift"; sourceTree = "<group>"; };
+		7831108F27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Creation.swift"; sourceTree = "<group>"; };
+		7831109027EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Timeshift.swift"; sourceTree = "<group>"; };
+		7831109127EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Sprites.swift"; sourceTree = "<group>"; };
+		7831109227EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Seek.swift"; sourceTree = "<group>"; };
+		7831109327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+ServerTime.swift"; sourceTree = "<group>"; };
+		7831109427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+MediaType.swift"; sourceTree = "<group>"; };
+		7831109527EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+Playback.swift"; sourceTree = "<group>"; };
+		7831109627EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+TrackSelectable.swift"; sourceTree = "<group>"; };
+		7831109727EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+OfflinePlayback.swift"; sourceTree = "<group>"; };
+		7831109827EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HLSNative+ExposureContext+AdService.swift"; sourceTree = "<group>"; };
+		7831109927EC70C2009B3114 /* ExposureContext+Warning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ExposureContext+Warning.swift"; sourceTree = "<group>"; };
+		7831109B27EC70C2009B3114 /* ProgramPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramPlayable.swift; sourceTree = "<group>"; };
+		7831109C27EC70C2009B3114 /* AssetPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetPlayable.swift; sourceTree = "<group>"; };
+		7831109D27EC70C2009B3114 /* EnigmaPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnigmaPlayable.swift; sourceTree = "<group>"; };
+		7831109E27EC70C2009B3114 /* OfflineMediaPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineMediaPlayable.swift; sourceTree = "<group>"; };
+		7831109F27EC70C2009B3114 /* ChannelPlayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelPlayable.swift; sourceTree = "<group>"; };
+		783110A027EC70C2009B3114 /* ExposureContext+Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ExposureContext+Error.swift"; sourceTree = "<group>"; };
+		783110A127EC70C2009B3114 /* PlaybackProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackProperties.swift; sourceTree = "<group>"; };
+		783110A227EC70C2009B3114 /* MRRFairplayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRRFairplayRequester.swift; sourceTree = "<group>"; };
+		783110A527EC70C2009B3114 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
+		783110A627EC70C2009B3114 /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
+		783110A827EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlementV2+Extension.swift"; sourceTree = "<group>"; };
+		783110A927EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaybackEntitlement+Extensions.swift"; sourceTree = "<group>"; };
+		783110AA27EC70C2009B3114 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		783110AB27EC70C2009B3114 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		783110AC27EC70C2009B3114 /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
+		783110AD27EC70C2009B3114 /* CMTime+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
+		783110AF27EC70C2009B3114 /* Paused.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paused.swift; sourceTree = "<group>"; };
+		783110B027EC70C2009B3114 /* StopAirplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopAirplay.swift; sourceTree = "<group>"; };
+		783110B127EC70C2009B3114 /* Playback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playback.swift; sourceTree = "<group>"; };
+		783110B227EC70C2009B3114 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
+		783110B327EC70C2009B3114 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		783110B427EC70C2009B3114 /* ProgramChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramChanged.swift; sourceTree = "<group>"; };
+		783110B527EC70C2009B3114 /* AdFailed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdFailed.swift; sourceTree = "<group>"; };
+		783110B627EC70C2009B3114 /* BufferingStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStarted.swift; sourceTree = "<group>"; };
+		783110B727EC70C2009B3114 /* BitrateChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitrateChanged.swift; sourceTree = "<group>"; };
+		783110B827EC70C2009B3114 /* DrmEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrmEvent.swift; sourceTree = "<group>"; };
+		783110B927EC70C2009B3114 /* StartAirplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartAirplay.swift; sourceTree = "<group>"; };
+		783110BA27EC70C2009B3114 /* ScrubbedTo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrubbedTo.swift; sourceTree = "<group>"; };
+		783110BB27EC70C2009B3114 /* Started.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Started.swift; sourceTree = "<group>"; };
+		783110BC27EC70C2009B3114 /* Resumed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resumed.swift; sourceTree = "<group>"; };
+		783110BD27EC70C2009B3114 /* AssetIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetIdentifier.swift; sourceTree = "<group>"; };
+		783110BE27EC70C2009B3114 /* Trace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trace.swift; sourceTree = "<group>"; };
+		783110BF27EC70C2009B3114 /* ConnectionChanged.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionChanged.swift; sourceTree = "<group>"; };
+		783110C027EC70C2009B3114 /* AdStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdStarted.swift; sourceTree = "<group>"; };
+		783110C127EC70C2009B3114 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		783110C227EC70C2009B3114 /* BufferingStopped.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingStopped.swift; sourceTree = "<group>"; };
+		783110C327EC70C2009B3114 /* PlayReady.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayReady.swift; sourceTree = "<group>"; };
+		783110C427EC70C2009B3114 /* StartCasting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCasting.swift; sourceTree = "<group>"; };
+		783110C527EC70C2009B3114 /* HandshakeStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandshakeStarted.swift; sourceTree = "<group>"; };
+		783110C627EC70C2009B3114 /* Created.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Created.swift; sourceTree = "<group>"; };
+		783110C727EC70C2009B3114 /* Aborted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aborted.swift; sourceTree = "<group>"; };
+		783110C827EC70C2009B3114 /* InitCompleted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitCompleted.swift; sourceTree = "<group>"; };
+		783110C927EC70C2009B3114 /* AdCompleted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdCompleted.swift; sourceTree = "<group>"; };
+		783110CA27EC70C2009B3114 /* Completed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Completed.swift; sourceTree = "<group>"; };
+		783110CC27EC70C2009B3114 /* ContextPositionSeekable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextPositionSeekable.swift; sourceTree = "<group>"; };
+		783110CD27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureStreamingAnalyticsProvider.swift; sourceTree = "<group>"; };
+		783110CE27EC70C2009B3114 /* ContextStartTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextStartTime.swift; sourceTree = "<group>"; };
+		783110CF27EC70C2009B3114 /* ExposureFairplayRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureFairplayRequester.swift; sourceTree = "<group>"; };
+		783110D027EC70C2009B3114 /* ContextGoLive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextGoLive.swift; sourceTree = "<group>"; };
+		783110D127EC70C2009B3114 /* HeartbeatsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatsProvider.swift; sourceTree = "<group>"; };
+		783110D227EC70C2009B3114 /* Playable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playable.swift; sourceTree = "<group>"; };
+		783110D327EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntitlementSourceResponseHeaders.swift; sourceTree = "<group>"; };
+		783110D427EC70C2009B3114 /* DrmAnalyticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrmAnalyticsProvider.swift; sourceTree = "<group>"; };
+		783110D527EC70C2009B3114 /* ContextTimeSeekable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextTimeSeekable.swift; sourceTree = "<group>"; };
+		783110D627EC70C2009B3114 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		783110D927EC70C2009B3114 /* ServerSideAdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerSideAdService.swift; sourceTree = "<group>"; };
+		783110DA27EC70C2009B3114 /* AdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
+		783110DB27EC70C2009B3114 /* AdServiceContractRestrictionsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdServiceContractRestrictionsProvider.swift; sourceTree = "<group>"; };
+		783110DC27EC70C2009B3114 /* AdPlayerProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdPlayerProxy.swift; sourceTree = "<group>"; };
+		783110DD27EC70C2009B3114 /* AdServiceEventProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdServiceEventProvider.swift; sourceTree = "<group>"; };
+		783110DE27EC70C2009B3114 /* AdTechWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdTechWrapper.swift; sourceTree = "<group>"; };
+		783110DF27EC70C2009B3114 /* ExposureAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureAnalytics.swift; sourceTree = "<group>"; };
+		783110E027EC70C2009B3114 /* FairplayCertificateCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FairplayCertificateCache.swift; sourceTree = "<group>"; };
+		783110E127EC70C2009B3114 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		783110E227EC70C2009B3114 /* MonotonicTimeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonotonicTimeService.swift; sourceTree = "<group>"; };
+		783110E427EC70C2009B3114 /* HTMLCharacterReferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLCharacterReferences.swift; sourceTree = "<group>"; };
+		783110E527EC70C2009B3114 /* SpriteData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteData.swift; sourceTree = "<group>"; };
+		783110E627EC70C2009B3114 /* WebVTTParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebVTTParser.swift; sourceTree = "<group>"; };
+		783110E727EC70C2009B3114 /* Scanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
+		783110E927EC70C2009B3114 /* DownloadOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
+		783110EA27EC70C2009B3114 /* ImageFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
+		783110EB27EC70C2009B3114 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
+		783110EC27EC70C2009B3114 /* SpriteImageDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteImageDownloader.swift; sourceTree = "<group>"; };
+		783110ED27EC70C2009B3114 /* WebVTT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebVTT.swift; sourceTree = "<group>"; };
+		783110EF27EC70C2009B3114 /* ContractRestrictionsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContractRestrictionsService.swift; sourceTree = "<group>"; };
+		783110F027EC70C2009B3114 /* BasicContractRestrictions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicContractRestrictions.swift; sourceTree = "<group>"; };
+		783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContractRestrictionsPolicy.swift; sourceTree = "<group>"; };
+		783110F227EC70C2009B3114 /* ProgramService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramService.swift; sourceTree = "<group>"; };
+		783110F327EC70C2009B3114 /* ServerTimeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTimeProvider.swift; sourceTree = "<group>"; };
+		783111BF27EC70CB009B3114 /* ExposurePlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExposurePlayback.h; sourceTree = "<group>"; };
+		783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KNOWN_LIMITATIONS.md; sourceTree = "<group>"; };
+		783111C427EC710E009B3114 /* live-and-catchup-playback.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "live-and-catchup-playback.md"; sourceTree = "<group>"; };
+		783111C527EC710E009B3114 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
+		783111C627EC710E009B3114 /* server-side-ad-insertion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "server-side-ad-insertion.md"; sourceTree = "<group>"; };
+		783111C727EC710E009B3114 /* sprites.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sprites.md; sourceTree = "<group>"; };
+		783111C827EC710E009B3114 /* simple-player.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "simple-player.md"; sourceTree = "<group>"; };
+		783111C927EC710E009B3114 /* migrating-from-mrr.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "migrating-from-mrr.md"; sourceTree = "<group>"; };
+		783111CA27EC710E009B3114 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
+		783111CB27EC710E009B3114 /* error-handling-and-warning-messages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "error-handling-and-warning-messages.md"; sourceTree = "<group>"; };
+		783111CC27EC7118009B3114 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		783111CD27EC711F009B3114 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		783111CE27EC712B009B3114 /* UPGRADE_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UPGRADE_GUIDE.md; sourceTree = "<group>"; };
+		783111D027EC8307009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111D427EC830B009B3114 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111D727EC8343009B3114 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111EF27EC8B18009B3114 /* iOSClientExposure_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111F227EC8B21009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111F527EC8B73009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7608021F2069306E007F59D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				783111FD27EC8EB9009B3114 /* iOSClientExposure.framework in Frameworks */,
+				783111F327EC8B21009B3114 /* iOSClientPlayer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A89BF7202072D100C23579 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				783111EC27EC8AEA009B3114 /* iOSClientPlayer.framework in Frameworks */,
+				783111D127EC8307009B3114 /* iOSClientExposure.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		76A89BF1202072D100C23579 = {
+			isa = PBXGroup;
+			children = (
+				783111CE27EC712B009B3114 /* UPGRADE_GUIDE.md */,
+				783111CD27EC711F009B3114 /* README.md */,
+				783111CC27EC7118009B3114 /* CHANGELOG.md */,
+				783111C327EC710E009B3114 /* Documentation */,
+				783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */,
+				7831108027EC70C2009B3114 /* iOSClientExposurePlayback */,
+				783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */,
+				783111CF27EC8307009B3114 /* Frameworks */,
+				783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */,
+				783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */,
+			);
+			sourceTree = "<group>";
+		};
+		7831108027EC70C2009B3114 /* iOSClientExposurePlayback */ = {
+			isa = PBXGroup;
+			children = (
+				7831108127EC70C2009B3114 /* Context */,
+				783110A327EC70C2009B3114 /* Dependencies */,
+				783110A727EC70C2009B3114 /* Extensions */,
+				783110AE27EC70C2009B3114 /* Events */,
+				783110CB27EC70C2009B3114 /* Protocols */,
+				783110D627EC70C2009B3114 /* Info.plist */,
+				783110D727EC70C2009B3114 /* Services */,
+			);
+			name = iOSClientExposurePlayback;
+			path = Sources/iOSClientExposurePlayback;
+			sourceTree = "<group>";
+		};
+		7831108127EC70C2009B3114 /* Context */ = {
+			isa = PBXGroup;
+			children = (
+				7831108227EC70C2009B3114 /* Source */,
+				7831108727EC70C2009B3114 /* EMUPFairPlayRequester.swift */,
+				7831108827EC70C2009B3114 /* MediaType.swift */,
+				7831108927EC70C2009B3114 /* ExposureContext.swift */,
+				7831108A27EC70C2009B3114 /* Components */,
+				7831109927EC70C2009B3114 /* ExposureContext+Warning.swift */,
+				7831109A27EC70C2009B3114 /* Playable */,
+				783110A027EC70C2009B3114 /* ExposureContext+Error.swift */,
+				783110A127EC70C2009B3114 /* PlaybackProperties.swift */,
+				783110A227EC70C2009B3114 /* MRRFairplayRequester.swift */,
+			);
+			path = Context;
+			sourceTree = "<group>";
+		};
+		7831108227EC70C2009B3114 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7831108327EC70C2009B3114 /* ProgramSource.swift */,
+				7831108427EC70C2009B3114 /* ExposureSource.swift */,
+				7831108527EC70C2009B3114 /* ChannelSource.swift */,
+				7831108627EC70C2009B3114 /* AssetSource.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		7831108A27EC70C2009B3114 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7831108B27EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift */,
+				7831108C27EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift */,
+				7831108D27EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift */,
+				7831108E27EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift */,
+				7831108F27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift */,
+				7831109027EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift */,
+				7831109127EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift */,
+				7831109227EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift */,
+				7831109327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift */,
+				7831109427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift */,
+				7831109527EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift */,
+				7831109627EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift */,
+				7831109727EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift */,
+				7831109827EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		7831109A27EC70C2009B3114 /* Playable */ = {
+			isa = PBXGroup;
+			children = (
+				7831109B27EC70C2009B3114 /* ProgramPlayable.swift */,
+				7831109C27EC70C2009B3114 /* AssetPlayable.swift */,
+				7831109D27EC70C2009B3114 /* EnigmaPlayable.swift */,
+				7831109E27EC70C2009B3114 /* OfflineMediaPlayable.swift */,
+				7831109F27EC70C2009B3114 /* ChannelPlayable.swift */,
+			);
+			path = Playable;
+			sourceTree = "<group>";
+		};
+		783110A327EC70C2009B3114 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				783110A427EC70C2009B3114 /* SWXMLHash */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		783110A427EC70C2009B3114 /* SWXMLHash */ = {
+			isa = PBXGroup;
+			children = (
+				783110A527EC70C2009B3114 /* SWXMLHash.swift */,
+				783110A627EC70C2009B3114 /* SWXMLHash+TypeConversion.swift */,
+			);
+			path = SWXMLHash;
+			sourceTree = "<group>";
+		};
+		783110A727EC70C2009B3114 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				783110A827EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift */,
+				783110A927EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift */,
+				783110AA27EC70C2009B3114 /* String+Extensions.swift */,
+				783110AB27EC70C2009B3114 /* UIImage+Extension.swift */,
+				783110AC27EC70C2009B3114 /* UIDevice+Extensions.swift */,
+				783110AD27EC70C2009B3114 /* CMTime+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		783110AE27EC70C2009B3114 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				783110AF27EC70C2009B3114 /* Paused.swift */,
+				783110B027EC70C2009B3114 /* StopAirplay.swift */,
+				783110B127EC70C2009B3114 /* Playback.swift */,
+				783110B227EC70C2009B3114 /* Heartbeat.swift */,
+				783110B327EC70C2009B3114 /* Error.swift */,
+				783110B427EC70C2009B3114 /* ProgramChanged.swift */,
+				783110B527EC70C2009B3114 /* AdFailed.swift */,
+				783110B627EC70C2009B3114 /* BufferingStarted.swift */,
+				783110B727EC70C2009B3114 /* BitrateChanged.swift */,
+				783110B827EC70C2009B3114 /* DrmEvent.swift */,
+				783110B927EC70C2009B3114 /* StartAirplay.swift */,
+				783110BA27EC70C2009B3114 /* ScrubbedTo.swift */,
+				783110BB27EC70C2009B3114 /* Started.swift */,
+				783110BC27EC70C2009B3114 /* Resumed.swift */,
+				783110BD27EC70C2009B3114 /* AssetIdentifier.swift */,
+				783110BE27EC70C2009B3114 /* Trace.swift */,
+				783110BF27EC70C2009B3114 /* ConnectionChanged.swift */,
+				783110C027EC70C2009B3114 /* AdStarted.swift */,
+				783110C127EC70C2009B3114 /* DeviceInfo.swift */,
+				783110C227EC70C2009B3114 /* BufferingStopped.swift */,
+				783110C327EC70C2009B3114 /* PlayReady.swift */,
+				783110C427EC70C2009B3114 /* StartCasting.swift */,
+				783110C527EC70C2009B3114 /* HandshakeStarted.swift */,
+				783110C627EC70C2009B3114 /* Created.swift */,
+				783110C727EC70C2009B3114 /* Aborted.swift */,
+				783110C827EC70C2009B3114 /* InitCompleted.swift */,
+				783110C927EC70C2009B3114 /* AdCompleted.swift */,
+				783110CA27EC70C2009B3114 /* Completed.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		783110CB27EC70C2009B3114 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				783110CC27EC70C2009B3114 /* ContextPositionSeekable.swift */,
+				783110CD27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift */,
+				783110CE27EC70C2009B3114 /* ContextStartTime.swift */,
+				783110CF27EC70C2009B3114 /* ExposureFairplayRequester.swift */,
+				783110D027EC70C2009B3114 /* ContextGoLive.swift */,
+				783110D127EC70C2009B3114 /* HeartbeatsProvider.swift */,
+				783110D227EC70C2009B3114 /* Playable.swift */,
+				783110D327EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift */,
+				783110D427EC70C2009B3114 /* DrmAnalyticsProvider.swift */,
+				783110D527EC70C2009B3114 /* ContextTimeSeekable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		783110D727EC70C2009B3114 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				783110D827EC70C2009B3114 /* AdService */,
+				783110DF27EC70C2009B3114 /* ExposureAnalytics.swift */,
+				783110E027EC70C2009B3114 /* FairplayCertificateCache.swift */,
+				783110E127EC70C2009B3114 /* Reachability.swift */,
+				783110E227EC70C2009B3114 /* MonotonicTimeService.swift */,
+				783110E327EC70C2009B3114 /* Sprites */,
+				783110EE27EC70C2009B3114 /* ContractRestrictions */,
+				783110F227EC70C2009B3114 /* ProgramService.swift */,
+				783110F327EC70C2009B3114 /* ServerTimeProvider.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		783110D827EC70C2009B3114 /* AdService */ = {
+			isa = PBXGroup;
+			children = (
+				783110D927EC70C2009B3114 /* ServerSideAdService.swift */,
+				783110DA27EC70C2009B3114 /* AdService.swift */,
+				783110DB27EC70C2009B3114 /* AdServiceContractRestrictionsProvider.swift */,
+				783110DC27EC70C2009B3114 /* AdPlayerProxy.swift */,
+				783110DD27EC70C2009B3114 /* AdServiceEventProvider.swift */,
+				783110DE27EC70C2009B3114 /* AdTechWrapper.swift */,
+			);
+			path = AdService;
+			sourceTree = "<group>";
+		};
+		783110E327EC70C2009B3114 /* Sprites */ = {
+			isa = PBXGroup;
+			children = (
+				783110E427EC70C2009B3114 /* HTMLCharacterReferences.swift */,
+				783110E527EC70C2009B3114 /* SpriteData.swift */,
+				783110E627EC70C2009B3114 /* WebVTTParser.swift */,
+				783110E727EC70C2009B3114 /* Scanner.swift */,
+				783110E827EC70C2009B3114 /* ImageDownloader */,
+				783110ED27EC70C2009B3114 /* WebVTT.swift */,
+			);
+			path = Sprites;
+			sourceTree = "<group>";
+		};
+		783110E827EC70C2009B3114 /* ImageDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				783110E927EC70C2009B3114 /* DownloadOperation.swift */,
+				783110EA27EC70C2009B3114 /* ImageFileManager.swift */,
+				783110EB27EC70C2009B3114 /* AsynchronousOperation.swift */,
+				783110EC27EC70C2009B3114 /* SpriteImageDownloader.swift */,
+			);
+			path = ImageDownloader;
+			sourceTree = "<group>";
+		};
+		783110EE27EC70C2009B3114 /* ContractRestrictions */ = {
+			isa = PBXGroup;
+			children = (
+				783110EF27EC70C2009B3114 /* ContractRestrictionsService.swift */,
+				783110F027EC70C2009B3114 /* BasicContractRestrictions.swift */,
+				783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */,
+			);
+			path = ContractRestrictions;
+			sourceTree = "<group>";
+		};
+		783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */ = {
+			isa = PBXGroup;
+			children = (
+				783111BF27EC70CB009B3114 /* ExposurePlayback.h */,
+			);
+			name = iOSClientExposurePlaybackObjc;
+			path = Sources/iOSClientExposurePlaybackObjc;
+			sourceTree = "<group>";
+		};
+		783111C327EC710E009B3114 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				783111C427EC710E009B3114 /* live-and-catchup-playback.md */,
+				783111C527EC710E009B3114 /* AdobePrimetimeMediaToken.md */,
+				783111C627EC710E009B3114 /* server-side-ad-insertion.md */,
+				783111C727EC710E009B3114 /* sprites.md */,
+				783111C827EC710E009B3114 /* simple-player.md */,
+				783111C927EC710E009B3114 /* migrating-from-mrr.md */,
+				783111CA27EC710E009B3114 /* download.md */,
+				783111CB27EC710E009B3114 /* error-handling-and-warning-messages.md */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
+		783111CF27EC8307009B3114 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */,
+				783111F527EC8B73009B3114 /* iOSClientExposure.framework */,
+				783111F227EC8B21009B3114 /* iOSClientPlayer.framework */,
+				783111EF27EC8B18009B3114 /* iOSClientExposure_tvOS.framework */,
+				783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */,
+				783111D727EC8343009B3114 /* Player.framework */,
+				783111D427EC830B009B3114 /* Player.framework */,
+				783111D027EC8307009B3114 /* iOSClientExposure.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		760802222069306E007F59D5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				783111C127EC70CB009B3114 /* ExposurePlayback.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A89BF8202072D100C23579 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				783111C027EC70CB009B3114 /* ExposurePlayback.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		760801DE2069306E007F59D5 /* ExposurePlayback-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 760802292069306E007F59D5 /* Build configuration list for PBXNativeTarget "ExposurePlayback-tvOS" */;
+			buildPhases = (
+				760801DF2069306E007F59D5 /* Sources */,
+				7608021F2069306E007F59D5 /* Frameworks */,
+				760802222069306E007F59D5 /* Headers */,
+				760802242069306E007F59D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ExposurePlayback-tvOS";
+			productName = ExposurePlayback;
+			productReference = 783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		76A89BFA202072D100C23579 /* ExposurePlayback-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76A89C0F202072D100C23579 /* Build configuration list for PBXNativeTarget "ExposurePlayback-iOS" */;
+			buildPhases = (
+				76A89BF6202072D100C23579 /* Sources */,
+				76A89BF7202072D100C23579 /* Frameworks */,
+				76A89BF8202072D100C23579 /* Headers */,
+				76A89BF9202072D100C23579 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ExposurePlayback-iOS";
+			productName = ExposurePlayback;
+			productReference = 783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76A89BF2202072D100C23579 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1230;
+				ORGANIZATIONNAME = emp;
+				TargetAttributes = {
+					760801DE2069306E007F59D5 = {
+						ProvisioningStyle = Manual;
+					};
+					76A89BFA202072D100C23579 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 76A89BF5202072D100C23579 /* Build configuration list for PBXProject "iOSClientExposurePlayback" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 76A89BF1202072D100C23579;
+			productRefGroup = 76A89BF1202072D100C23579;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				76A89BFA202072D100C23579 /* ExposurePlayback-iOS */,
+				760801DE2069306E007F59D5 /* ExposurePlayback-tvOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		760802242069306E007F59D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A89BF9202072D100C23579 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		760801DF2069306E007F59D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7831111D27EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift in Sources */,
+				7831113327EC70C2009B3114 /* SWXMLHash+TypeConversion.swift in Sources */,
+				7831111527EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift in Sources */,
+				783111B327EC70C3009B3114 /* WebVTT.swift in Sources */,
+				7831117D27EC70C2009B3114 /* ContextStartTime.swift in Sources */,
+				7831119F27EC70C3009B3114 /* Reachability.swift in Sources */,
+				7831119527EC70C3009B3114 /* AdPlayerProxy.swift in Sources */,
+				7831114B27EC70C2009B3114 /* ProgramChanged.swift in Sources */,
+				7831117527EC70C2009B3114 /* AdCompleted.swift in Sources */,
+				783111A527EC70C3009B3114 /* SpriteData.swift in Sources */,
+				7831116B27EC70C2009B3114 /* StartCasting.swift in Sources */,
+				7831115727EC70C2009B3114 /* ScrubbedTo.swift in Sources */,
+				7831110927EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
+				783111B527EC70C3009B3114 /* ContractRestrictionsService.swift in Sources */,
+				7831113927EC70C2009B3114 /* String+Extensions.swift in Sources */,
+				783111BD27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */,
+				7831111327EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
+				7831114727EC70C2009B3114 /* Heartbeat.swift in Sources */,
+				783111B127EC70C3009B3114 /* SpriteImageDownloader.swift in Sources */,
+				7831110327EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift in Sources */,
+				7831118527EC70C2009B3114 /* Playable.swift in Sources */,
+				7831119327EC70C3009B3114 /* AdServiceContractRestrictionsProvider.swift in Sources */,
+				7831111727EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				783111A927EC70C3009B3114 /* Scanner.swift in Sources */,
+				7831112F27EC70C2009B3114 /* MRRFairplayRequester.swift in Sources */,
+				7831117927EC70C2009B3114 /* ContextPositionSeekable.swift in Sources */,
+				7831110127EC70C2009B3114 /* ExposureContext.swift in Sources */,
+				783110F927EC70C2009B3114 /* ChannelSource.swift in Sources */,
+				7831119B27EC70C3009B3114 /* ExposureAnalytics.swift in Sources */,
+				7831113127EC70C2009B3114 /* SWXMLHash.swift in Sources */,
+				7831110B27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift in Sources */,
+				7831112727EC70C2009B3114 /* OfflineMediaPlayable.swift in Sources */,
+				767FB4B2217FC7B400BC087A /* (null) in Sources */,
+				783110FB27EC70C2009B3114 /* AssetSource.swift in Sources */,
+				783111A327EC70C3009B3114 /* HTMLCharacterReferences.swift in Sources */,
+				7831112B27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */,
+				7831118327EC70C2009B3114 /* HeartbeatsProvider.swift in Sources */,
+				7831116327EC70C2009B3114 /* AdStarted.swift in Sources */,
+				7831114127EC70C2009B3114 /* Paused.swift in Sources */,
+				7831110F27EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
+				783111B927EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */,
+				7831115527EC70C2009B3114 /* StartAirplay.swift in Sources */,
+				7831118F27EC70C3009B3114 /* ServerSideAdService.swift in Sources */,
+				7831115D27EC70C2009B3114 /* AssetIdentifier.swift in Sources */,
+				7831117727EC70C2009B3114 /* Completed.swift in Sources */,
+				7831117327EC70C2009B3114 /* InitCompleted.swift in Sources */,
+				783111AF27EC70C3009B3114 /* AsynchronousOperation.swift in Sources */,
+				7831111927EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
+				7831119127EC70C3009B3114 /* AdService.swift in Sources */,
+				783111BB27EC70C3009B3114 /* ProgramService.swift in Sources */,
+				7831113527EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */,
+				7831118127EC70C2009B3114 /* ContextGoLive.swift in Sources */,
+				783110FD27EC70C2009B3114 /* EMUPFairPlayRequester.swift in Sources */,
+				7831114527EC70C2009B3114 /* Playback.swift in Sources */,
+				7831116127EC70C2009B3114 /* ConnectionChanged.swift in Sources */,
+				7831114D27EC70C2009B3114 /* AdFailed.swift in Sources */,
+				7831112327EC70C2009B3114 /* AssetPlayable.swift in Sources */,
+				7831110727EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
+				783111A127EC70C3009B3114 /* MonotonicTimeService.swift in Sources */,
+				783111AD27EC70C3009B3114 /* ImageFileManager.swift in Sources */,
+				783110F527EC70C2009B3114 /* ProgramSource.swift in Sources */,
+				7831113727EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */,
+				7831111127EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift in Sources */,
+				7831114F27EC70C2009B3114 /* BufferingStarted.swift in Sources */,
+				783110F727EC70C2009B3114 /* ExposureSource.swift in Sources */,
+				7831118927EC70C2009B3114 /* DrmAnalyticsProvider.swift in Sources */,
+				7831113D27EC70C2009B3114 /* UIDevice+Extensions.swift in Sources */,
+				7831119927EC70C3009B3114 /* AdTechWrapper.swift in Sources */,
+				7831112D27EC70C2009B3114 /* PlaybackProperties.swift in Sources */,
+				7831119D27EC70C3009B3114 /* FairplayCertificateCache.swift in Sources */,
+				7831117127EC70C2009B3114 /* Aborted.swift in Sources */,
+				7831114327EC70C2009B3114 /* StopAirplay.swift in Sources */,
+				7831115127EC70C2009B3114 /* BitrateChanged.swift in Sources */,
+				7831112127EC70C2009B3114 /* ProgramPlayable.swift in Sources */,
+				7831118B27EC70C2009B3114 /* ContextTimeSeekable.swift in Sources */,
+				7831113F27EC70C2009B3114 /* CMTime+Extensions.swift in Sources */,
+				7831118727EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */,
+				7831116727EC70C2009B3114 /* BufferingStopped.swift in Sources */,
+				7831116F27EC70C2009B3114 /* Created.swift in Sources */,
+				7831116927EC70C2009B3114 /* PlayReady.swift in Sources */,
+				7831119727EC70C3009B3114 /* AdServiceEventProvider.swift in Sources */,
+				7831115327EC70C2009B3114 /* DrmEvent.swift in Sources */,
+				7831111B27EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
+				7831114927EC70C2009B3114 /* Error.swift in Sources */,
+				783110FF27EC70C2009B3114 /* MediaType.swift in Sources */,
+				7831113B27EC70C2009B3114 /* UIImage+Extension.swift in Sources */,
+				7831117F27EC70C2009B3114 /* ExposureFairplayRequester.swift in Sources */,
+				7831116527EC70C2009B3114 /* DeviceInfo.swift in Sources */,
+				7831112527EC70C2009B3114 /* EnigmaPlayable.swift in Sources */,
+				783111A727EC70C3009B3114 /* WebVTTParser.swift in Sources */,
+				7831115927EC70C2009B3114 /* Started.swift in Sources */,
+				783111AB27EC70C3009B3114 /* DownloadOperation.swift in Sources */,
+				7831110527EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
+				7831115F27EC70C2009B3114 /* Trace.swift in Sources */,
+				7831111F27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */,
+				7831115B27EC70C2009B3114 /* Resumed.swift in Sources */,
+				7831117B27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
+				7831110D27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
+				7831112927EC70C2009B3114 /* ChannelPlayable.swift in Sources */,
+				7831116D27EC70C2009B3114 /* HandshakeStarted.swift in Sources */,
+				783111B727EC70C3009B3114 /* BasicContractRestrictions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A89BF6202072D100C23579 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				783111B827EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */,
+				7831112027EC70C2009B3114 /* ProgramPlayable.swift in Sources */,
+				7831111427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift in Sources */,
+				7831113E27EC70C2009B3114 /* CMTime+Extensions.swift in Sources */,
+				7831110A27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift in Sources */,
+				7831117C27EC70C2009B3114 /* ContextStartTime.swift in Sources */,
+				7831115427EC70C2009B3114 /* StartAirplay.swift in Sources */,
+				7831115E27EC70C2009B3114 /* Trace.swift in Sources */,
+				7831113A27EC70C2009B3114 /* UIImage+Extension.swift in Sources */,
+				783111B227EC70C3009B3114 /* WebVTT.swift in Sources */,
+				7831118E27EC70C3009B3114 /* ServerSideAdService.swift in Sources */,
+				7831117A27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
+				7831118227EC70C2009B3114 /* HeartbeatsProvider.swift in Sources */,
+				783110FE27EC70C2009B3114 /* MediaType.swift in Sources */,
+				7831114E27EC70C2009B3114 /* BufferingStarted.swift in Sources */,
+				7831111C27EC70C2009B3114 /* HLSNative+ExposureContext+AdService.swift in Sources */,
+				7831110E27EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
+				7831119627EC70C3009B3114 /* AdServiceEventProvider.swift in Sources */,
+				7831115C27EC70C2009B3114 /* AssetIdentifier.swift in Sources */,
+				7831112827EC70C2009B3114 /* ChannelPlayable.swift in Sources */,
+				7831114827EC70C2009B3114 /* Error.swift in Sources */,
+				7831119427EC70C3009B3114 /* AdPlayerProxy.swift in Sources */,
+				783111A427EC70C3009B3114 /* SpriteData.swift in Sources */,
+				7831113027EC70C2009B3114 /* SWXMLHash.swift in Sources */,
+				783110F427EC70C2009B3114 /* ProgramSource.swift in Sources */,
+				7831110627EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
+				7831119E27EC70C3009B3114 /* Reachability.swift in Sources */,
+				7831111627EC70C2009B3114 /* HLSNative+ExposureContext+Playback.swift in Sources */,
+				7831119027EC70C3009B3114 /* AdService.swift in Sources */,
+				783111A627EC70C3009B3114 /* WebVTTParser.swift in Sources */,
+				7831113227EC70C2009B3114 /* SWXMLHash+TypeConversion.swift in Sources */,
+				7831115A27EC70C2009B3114 /* Resumed.swift in Sources */,
+				7831114627EC70C2009B3114 /* Heartbeat.swift in Sources */,
+				7831110027EC70C2009B3114 /* ExposureContext.swift in Sources */,
+				7831116227EC70C2009B3114 /* AdStarted.swift in Sources */,
+				783110FA27EC70C2009B3114 /* AssetSource.swift in Sources */,
+				7831115627EC70C2009B3114 /* ScrubbedTo.swift in Sources */,
+				783111AC27EC70C3009B3114 /* ImageFileManager.swift in Sources */,
+				783111BA27EC70C3009B3114 /* ProgramService.swift in Sources */,
+				7831116C27EC70C2009B3114 /* HandshakeStarted.swift in Sources */,
+				7831113627EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */,
+				7831115827EC70C2009B3114 /* Started.swift in Sources */,
+				7831113827EC70C2009B3114 /* String+Extensions.swift in Sources */,
+				783110FC27EC70C2009B3114 /* EMUPFairPlayRequester.swift in Sources */,
+				7831117427EC70C2009B3114 /* AdCompleted.swift in Sources */,
+				7831112627EC70C2009B3114 /* OfflineMediaPlayable.swift in Sources */,
+				7831117227EC70C2009B3114 /* InitCompleted.swift in Sources */,
+				7831119827EC70C3009B3114 /* AdTechWrapper.swift in Sources */,
+				7831116627EC70C2009B3114 /* BufferingStopped.swift in Sources */,
+				7831116027EC70C2009B3114 /* ConnectionChanged.swift in Sources */,
+				783111AE27EC70C3009B3114 /* AsynchronousOperation.swift in Sources */,
+				7831114427EC70C2009B3114 /* Playback.swift in Sources */,
+				7831116827EC70C2009B3114 /* PlayReady.swift in Sources */,
+				7831118A27EC70C2009B3114 /* ContextTimeSeekable.swift in Sources */,
+				783110F827EC70C2009B3114 /* ChannelSource.swift in Sources */,
+				7831116E27EC70C2009B3114 /* Created.swift in Sources */,
+				7831110227EC70C2009B3114 /* HLSNative+ExposureContext+Program.swift in Sources */,
+				7831112E27EC70C2009B3114 /* MRRFairplayRequester.swift in Sources */,
+				7831119A27EC70C3009B3114 /* ExposureAnalytics.swift in Sources */,
+				7831118827EC70C2009B3114 /* DrmAnalyticsProvider.swift in Sources */,
+				783111B027EC70C3009B3114 /* SpriteImageDownloader.swift in Sources */,
+				7831115027EC70C2009B3114 /* BitrateChanged.swift in Sources */,
+				783111B427EC70C3009B3114 /* ContractRestrictionsService.swift in Sources */,
+				7831117027EC70C2009B3114 /* Aborted.swift in Sources */,
+				783111A027EC70C3009B3114 /* MonotonicTimeService.swift in Sources */,
+				783111A827EC70C3009B3114 /* Scanner.swift in Sources */,
+				7831114027EC70C2009B3114 /* Paused.swift in Sources */,
+				783111B627EC70C3009B3114 /* BasicContractRestrictions.swift in Sources */,
+				7831111A27EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
+				7831119227EC70C3009B3114 /* AdServiceContractRestrictionsProvider.swift in Sources */,
+				7831115227EC70C2009B3114 /* DrmEvent.swift in Sources */,
+				7831114C27EC70C2009B3114 /* AdFailed.swift in Sources */,
+				783111BC27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */,
+				7831112427EC70C2009B3114 /* EnigmaPlayable.swift in Sources */,
+				7831114A27EC70C2009B3114 /* ProgramChanged.swift in Sources */,
+				7831116A27EC70C2009B3114 /* StartCasting.swift in Sources */,
+				7831110827EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
+				7831112A27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */,
+				7831119C27EC70C3009B3114 /* FairplayCertificateCache.swift in Sources */,
+				7831112227EC70C2009B3114 /* AssetPlayable.swift in Sources */,
+				7831111E27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */,
+				7831116427EC70C2009B3114 /* DeviceInfo.swift in Sources */,
+				7831118427EC70C2009B3114 /* Playable.swift in Sources */,
+				7831113C27EC70C2009B3114 /* UIDevice+Extensions.swift in Sources */,
+				7831111027EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift in Sources */,
+				783110F627EC70C2009B3114 /* ExposureSource.swift in Sources */,
+				7831117827EC70C2009B3114 /* ContextPositionSeekable.swift in Sources */,
+				7831110C27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
+				783111AA27EC70C3009B3114 /* DownloadOperation.swift in Sources */,
+				7831118627EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */,
+				7831110427EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
+				7831113427EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */,
+				7831114227EC70C2009B3114 /* StopAirplay.swift in Sources */,
+				7831117E27EC70C2009B3114 /* ExposureFairplayRequester.swift in Sources */,
+				7831111827EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
+				7831118027EC70C2009B3114 /* ContextGoLive.swift in Sources */,
+				783111A227EC70C3009B3114 /* HTMLCharacterReferences.swift in Sources */,
+				7831117627EC70C2009B3114 /* Completed.swift in Sources */,
+				7831112C27EC70C2009B3114 /* PlaybackProperties.swift in Sources */,
+				7831111227EC70C2009B3114 /* HLSNative+ExposureContext+ServerTime.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7608022A2069306E007F59D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 3.0.100;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
+				PRODUCT_NAME = iOSClientExposurePlayback;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
+			};
+			name = Debug;
+		};
+		7608022B2069306E007F59D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 3.0.100;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
+				PRODUCT_NAME = iOSClientExposurePlayback;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
+			};
+			name = Release;
+		};
+		76A89C0D202072D100C23579 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		76A89C0E202072D100C23579 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		76A89C10202072D100C23579 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 3.0.100;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
+				PRODUCT_NAME = iOSClientExposurePlayback;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
+			};
+			name = Debug;
+		};
+		76A89C11202072D100C23579 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 3.0.100;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
+				PRODUCT_NAME = iOSClientExposurePlayback;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		760802292069306E007F59D5 /* Build configuration list for PBXNativeTarget "ExposurePlayback-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7608022A2069306E007F59D5 /* Debug */,
+				7608022B2069306E007F59D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76A89BF5202072D100C23579 /* Build configuration list for PBXProject "iOSClientExposurePlayback" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76A89C0D202072D100C23579 /* Debug */,
+				76A89C0E202072D100C23579 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76A89C0F202072D100C23579 /* Build configuration list for PBXNativeTarget "ExposurePlayback-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76A89C10202072D100C23579 /* Debug */,
+				76A89C11202072D100C23579 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 76A89BF2202072D100C23579 /* Project object */;
+}
