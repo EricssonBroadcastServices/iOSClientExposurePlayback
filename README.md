@@ -46,11 +46,11 @@
 The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
 Once you have your Swift package set up, adding `iOSClientExposurePlayback` as a dependency is as easy as adding it to the dependencies value of your Package.swift.
 
+```sh
 dependencies: [
-    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientPlayer", from: "3.0.0"),
-    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.0.0"),
-    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback", from: "3.0.0")
+    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback", from: "3.0.2")
 ]
+```
 
 ### Carthage
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependency graph without interfering with your `Xcode` project setup. `CI` integration through [fastlane](https://github.com/fastlane/fastlane) is also available.
@@ -75,8 +75,9 @@ Finally, make sure you add the `.framework`s to your targets *General -> Embedde
 ### CocoaPods
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate `iOSClientExposurePlayback` into your Xcode project using CocoaPods, specify it in your Podfile:
 
-pod 'iOSClientExposurePlayback', '~>  3.0.0'
-
+```sh
+pod 'iOSClientExposurePlayback', '~>  3.0.2'
+```
 
 ## Release Notes
 Release specific changes can be found in the [CHANGELOG](https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback/blob/master/CHANGELOG.md).
@@ -88,3 +89,4 @@ Major changes between releases will be documented with special [Upgrade Guides](
 
 ### Carthage
 Updating your dependencies is done by running  `carthage update` with the relevant *options*, such as `--use-submodules`, depending on your project setup. For more information regarding dependency management with `Carthage` please consult their [documentation](https://github.com/Carthage/Carthage/blob/master/README.md) or run `carthage help`.
+
