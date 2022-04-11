@@ -50,6 +50,9 @@ public class ServerSideAdService: AdService {
     
     fileprivate var alreadyStartedAd: [TimelineContent] = []
     
+    /// Temporary store all adTracking urls of an Ad to prevent sending multiple trackings events to the backend
+    fileprivate var alreadySentadTrackingUrls: [[String]] = []
+    
     /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
     
@@ -115,6 +118,7 @@ public class ServerSideAdService: AdService {
     private func deallocAll() {
         self.tempAdTimeLine.removeAll()
         self.alreadyStartedAd.removeAll()
+        self.alreadySentadTrackingUrls.removeAll()
         self.allTimelineContent.removeAll()
         self.adMarkerPositions.removeAll()
         self.oldScrubbedDestination = 0
@@ -381,22 +385,42 @@ extension ServerSideAdService {
                                 else if (timeInMil / 10 * 10) == (clipFirstQuartile / 10 * 10)  {
                                     // Send firstQuartile tracking events
                                     
-                                    self.context.trackAds(adTrackingUrls: clip.trackingEvents?.firstQuartile ?? [] )
-                                    
+                                    if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
+                                        if !self.alreadySentadTrackingUrls.contains(firstQuartileUrls) {
+                                            self.context.trackAds(adTrackingUrls: firstQuartileUrls)
+                                            self.alreadySentadTrackingUrls.append( firstQuartileUrls )
+                                        }
+                                    }
+    
                                 } else if (timeInMil / 10 * 10) == (clipMidpoint / 10 * 10) {
                                     // Send clipMidpoint tracking events
                                     
-                                    self.context.trackAds(adTrackingUrls: clip.trackingEvents?.midpoint ?? [] )
+                                    if let midpointUrls = clip.trackingEvents?.midpoint {
+                                        if !self.alreadySentadTrackingUrls.contains(midpointUrls) {
+                                            self.context.trackAds(adTrackingUrls: midpointUrls)
+                                            self.alreadySentadTrackingUrls.append( midpointUrls )
+                                        }
+                                    }
                                     
                                 } else if (timeInMil / 10 * 10) == (clipThirdQuartile / 10 * 10)  {
                                     // Send thirdQuartile tracking events
                                     
-                                    self.context.trackAds(adTrackingUrls: clip.trackingEvents?.thirdQuartile ?? [] )
+                                    if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
+                                        if !self.alreadySentadTrackingUrls.contains(thirdQuartileUrls) {
+                                            self.context.trackAds(adTrackingUrls: thirdQuartileUrls)
+                                            self.alreadySentadTrackingUrls.append( thirdQuartileUrls )
+                                        }
+                                    }
                                     
                                 } else if (timeInMil / 10 * 10) == (end / 10 * 10)  {
                                     
                                     // Send complete tracking events
-                                    self.context.trackAds(adTrackingUrls: clip.trackingEvents?.complete ?? [] )
+                                    if let completeUrls = clip.trackingEvents?.complete {
+                                        if !self.alreadySentadTrackingUrls.contains(completeUrls) {
+                                            self.context.trackAds(adTrackingUrls: completeUrls)
+                                            self.alreadySentadTrackingUrls.append( completeUrls )
+                                        }
+                                    }
                                     
                                     // Send EMP anlytics
                                     if let adMediaId = clip.titleId {
@@ -413,6 +437,8 @@ extension ServerSideAdService {
                                     self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
                                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
                                    
+                                    // remove the temporary stored adTracking urls
+                                    self.alreadySentadTrackingUrls.removeAll()
                                 }
                                 
                             }
