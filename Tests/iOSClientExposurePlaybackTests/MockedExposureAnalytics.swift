@@ -14,8 +14,6 @@ import iOSClientPlayer
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
-    
-    
     required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? = nil, appName: String? = nil  ) {
         self.environment = environment
         self.sessionToken = sessionToken
