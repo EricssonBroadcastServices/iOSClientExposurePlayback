@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.0.40` Release - [3.0.3400](#30400)
 * `3.0.30` Release - [3.0.300](#30300)
 * `3.0.20` Release - [3.0.200](#30200)
 * `3.0.10` Release - [3.0.100](#30100)
@@ -41,6 +42,10 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+
+## 3.0.400
+#### Bug Fixes
+* `EMP-18019` Bug Fix :  SDK does not fire `onWillPresentInterstitial` event on pre roll ads
 
 ## 3.0.300
 #### Bug Fixes
