@@ -353,7 +353,6 @@ extension ServerSideAdService {
                                     // Send firstQuartile tracking events
                                     if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
                                         if !self.alreadySentadTrackingUrls.contains(firstQuartileUrls) {
-                                            print("firstQuartile")
                                             self.context.trackAds(adTrackingUrls: firstQuartileUrls)
                                             self.alreadySentadTrackingUrls.append( firstQuartileUrls )
                                         }
@@ -363,7 +362,6 @@ extension ServerSideAdService {
                                     // Send clipMidpoint tracking events
                                     if let midpointUrls = clip.trackingEvents?.midpoint {
                                         if !self.alreadySentadTrackingUrls.contains(midpointUrls) {
-                                            print("midpoint")
                                             self.context.trackAds(adTrackingUrls: midpointUrls)
                                             self.alreadySentadTrackingUrls.append( midpointUrls )
                                         }
@@ -373,7 +371,6 @@ extension ServerSideAdService {
                                     // Send thirdQuartile tracking events
                                     if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
                                         if !self.alreadySentadTrackingUrls.contains(thirdQuartileUrls) {
-                                            print("thirdQuartile")
                                             self.context.trackAds(adTrackingUrls: thirdQuartileUrls)
                                             self.alreadySentadTrackingUrls.append( thirdQuartileUrls )
                                         }
@@ -383,7 +380,6 @@ extension ServerSideAdService {
                                     // Send complete tracking events
                                     if let completeUrls = clip.trackingEvents?.complete {
                                         if !self.alreadySentadTrackingUrls.contains(completeUrls) {
-                                            print("complete")
                                             self.context.trackAds(adTrackingUrls: completeUrls)
                                             self.alreadySentadTrackingUrls.append( completeUrls )
                                         }
@@ -437,8 +433,6 @@ extension ServerSideAdService {
                                             
                                             // Keep track of already started ads
                                             self.alreadyStartedAd.append(content)
-                                            
-                                            print(" onWillPresentInterstitial ")
                                             self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0))
                                         }
                                     }
