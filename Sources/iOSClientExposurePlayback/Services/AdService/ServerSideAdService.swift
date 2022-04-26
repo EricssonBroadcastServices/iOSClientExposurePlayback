@@ -146,8 +146,16 @@ public class ServerSideAdService: AdService {
     /// Seek request intiated / scrubing started
     /// - Parameter origin: fromPosition
     public func seekRequestInitiated(fromPosition origin: Int64) {
-        self.scrubbedFromPosition = 0
-        self.scrubbedFromPosition = origin
+        
+        // Note : Player sends multiple seek events when scrubbing through the tvOS timeilne. This cause the bug that prevent player seek to midroll ads, if a user seek beyond already unwatched ad.
+        // To fix this issue, assume that `scrubbedFromPosition` is always zero when seeking in tvOS.
+        #if TARGET_OS_TV
+            self.scrubbedFromPosition = 0
+        #else
+            self.scrubbedFromPosition = 0
+            self.scrubbedFromPosition = origin
+        #endif
+            
     }
     
     /// Seek request Triggered / scrub ended
@@ -194,7 +202,6 @@ public class ServerSideAdService: AdService {
             self.tech.removePeriodicTimeObserverToPlayer()
             self.startPlayback(self.scrubbedFromPosition, self.scrubbedToPosition)
         } else {
-            
             self.userInitiatedSeek = true
         }
     }
@@ -270,23 +277,29 @@ extension ServerSideAdService {
                             else {
                                 // Check if we have a previously assigned destination
                                 if self.oldScrubbedDestination != 0 {
-                                    
+
                                     // Make it as a user intiated seek
                                     self.userInitiatedSeek = true
                                     
                                     let tempDestination = self.oldScrubbedDestination
-                                    
+
                                     // Reset oldScrubbedDestination value
                                     self.oldScrubbedDestination = 0
                                     
                                     // reset temporary stored values
                                     rangeStart = 0
                                     rangeEnd = 0
-                                    
+                                
                                     // Inform the player that , it should seek to this position
                                     self.context.onServerSideAdShouldSkip(tempDestination)
                                     
                                 } else {
+                                    #if TARGET_OS_TV
+                                        self.userInitiatedSeek = true
+                                        rangeStart = 0
+                                        rangeEnd = 0
+                                        
+                                    #else
                                     
                                     // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
                                     if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
@@ -306,6 +319,7 @@ extension ServerSideAdService {
                                        
                                         self.userInitiatedSeek = true
                                     }
+                                    #endif
                                 }
                             }
                             
@@ -447,7 +461,6 @@ extension ServerSideAdService {
 
                             // Check if we have a previously assigned destination
                             if self.oldScrubbedDestination != 0 {
-  
                                 // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
                                 if ( index != (self.allTimelineContent.count - 1) && self.allTimelineContent[index+1].contentType != "ad" ) {
 
