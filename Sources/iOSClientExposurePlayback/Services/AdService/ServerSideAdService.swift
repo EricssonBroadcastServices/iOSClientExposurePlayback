@@ -217,11 +217,13 @@ extension ServerSideAdService {
     ///   - currentPlayheadPosition: current playhead position : This will be `zero` if the content started from beginning. Not `zero` if the content started from a bookmark
     private func startPlayback(_ startTime:Int64 , _ currentPlayheadPosition: Int64 ) {
         
+        // Note:This should be refactored at some point
+        
         // temporary store values
         var rangeStart = startTime
         var rangeEnd = currentPlayheadPosition
         
-        // Add preiodoci time oberver for the player
+        // Add preiodic time oberver for the player
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
             
             guard let `self` = self else { return }
@@ -231,9 +233,7 @@ extension ServerSideAdService {
             if ((rangeEnd / 10 * 10) != 0 && self.oldScrubbedDestination == 0) || (rangeEnd == 0 && rangeStart != 0)  {
                 
                 let range = CMTimeRange(start: CMTime(milliseconds: rangeStart), end: CMTime(milliseconds: rangeEnd))
-                
-                // print(" Range " , range)
-                
+  
                 if let adBreakIndex = self.adMarkerPositions.lastIndex(where: {
                     if let startOffset = $0.offset , let endOffset = $0.endOffset {
                         let adRange = CMTimeRange(start: CMTime(milliseconds: Int64(startOffset)), end: CMTime(milliseconds:  Int64(endOffset)))
@@ -294,6 +294,8 @@ extension ServerSideAdService {
                                     self.context.onServerSideAdShouldSkip(tempDestination)
                                     
                                 } else {
+                                    
+                                    // This will prevent from always start from the beginning of next vodclip after an Ad break
                                     #if TARGET_OS_TV
                                         self.userInitiatedSeek = true
                                         rangeStart = 0
@@ -329,8 +331,6 @@ extension ServerSideAdService {
                             rangeStart = 0
                             rangeEnd = 0
                         }
-                        
-                        
                     } else {
                         // No ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
                         self.userInitiatedSeek = true
@@ -450,13 +450,11 @@ extension ServerSideAdService {
                                             self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0))
                                         }
                                     }
-                                    
                                 }
-                                
                             }
                         }
                         
-                        // Ad is aready watched
+                        // Ad is already watched
                         else if (start / 10 * 10) <= (timeInMil / 10 * 10) && (end / 10 * 10) >= (timeInMil / 10 * 10) && content.contentType == "ad" && (self.tempAdTimeLine.contains(content)) {
 
                             // Check if we have a previously assigned destination
