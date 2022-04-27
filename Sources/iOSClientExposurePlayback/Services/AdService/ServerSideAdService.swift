@@ -146,8 +146,16 @@ public class ServerSideAdService: AdService {
     /// Seek request intiated / scrubing started
     /// - Parameter origin: fromPosition
     public func seekRequestInitiated(fromPosition origin: Int64) {
-        self.scrubbedFromPosition = 0
-        self.scrubbedFromPosition = origin
+        
+        // Note : Player sends multiple seek events when scrubbing through the tvOS timeilne. This cause the bug that prevent player seek to midroll ads, if a user seek beyond already unwatched ad.
+        // To fix this issue, assume that `scrubbedFromPosition` is always zero when seeking in tvOS.
+        #if TARGET_OS_TV
+            self.scrubbedFromPosition = 0
+        #else
+            self.scrubbedFromPosition = 0
+            self.scrubbedFromPosition = origin
+        #endif
+            
     }
     
     /// Seek request Triggered / scrub ended
@@ -194,7 +202,6 @@ public class ServerSideAdService: AdService {
             self.tech.removePeriodicTimeObserverToPlayer()
             self.startPlayback(self.scrubbedFromPosition, self.scrubbedToPosition)
         } else {
-            
             self.userInitiatedSeek = true
         }
     }
@@ -210,11 +217,13 @@ extension ServerSideAdService {
     ///   - currentPlayheadPosition: current playhead position : This will be `zero` if the content started from beginning. Not `zero` if the content started from a bookmark
     private func startPlayback(_ startTime:Int64 , _ currentPlayheadPosition: Int64 ) {
         
+        // Note:This should be refactored at some point
+        
         // temporary store values
         var rangeStart = startTime
         var rangeEnd = currentPlayheadPosition
         
-        // Add preiodoci time oberver for the player
+        // Add preiodic time oberver for the player
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
             
             guard let `self` = self else { return }
@@ -224,9 +233,7 @@ extension ServerSideAdService {
             if ((rangeEnd / 10 * 10) != 0 && self.oldScrubbedDestination == 0) || (rangeEnd == 0 && rangeStart != 0)  {
                 
                 let range = CMTimeRange(start: CMTime(milliseconds: rangeStart), end: CMTime(milliseconds: rangeEnd))
-                
-                // print(" Range " , range)
-                
+  
                 if let adBreakIndex = self.adMarkerPositions.lastIndex(where: {
                     if let startOffset = $0.offset , let endOffset = $0.endOffset {
                         let adRange = CMTimeRange(start: CMTime(milliseconds: Int64(startOffset)), end: CMTime(milliseconds:  Int64(endOffset)))
@@ -270,23 +277,31 @@ extension ServerSideAdService {
                             else {
                                 // Check if we have a previously assigned destination
                                 if self.oldScrubbedDestination != 0 {
-                                    
+
                                     // Make it as a user intiated seek
                                     self.userInitiatedSeek = true
                                     
                                     let tempDestination = self.oldScrubbedDestination
-                                    
+
                                     // Reset oldScrubbedDestination value
                                     self.oldScrubbedDestination = 0
                                     
                                     // reset temporary stored values
                                     rangeStart = 0
                                     rangeEnd = 0
-                                    
+                                
                                     // Inform the player that , it should seek to this position
                                     self.context.onServerSideAdShouldSkip(tempDestination)
                                     
                                 } else {
+                                    
+                                    // This will prevent from always start from the beginning of next vodclip after an Ad break
+                                    #if TARGET_OS_TV
+                                        self.userInitiatedSeek = true
+                                        rangeStart = 0
+                                        rangeEnd = 0
+                                        
+                                    #else
                                     
                                     // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
                                     if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
@@ -306,6 +321,7 @@ extension ServerSideAdService {
                                        
                                         self.userInitiatedSeek = true
                                     }
+                                    #endif
                                 }
                             }
                             
@@ -315,8 +331,6 @@ extension ServerSideAdService {
                             rangeStart = 0
                             rangeEnd = 0
                         }
-                        
-                        
                     } else {
                         // No ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
                         self.userInitiatedSeek = true
@@ -436,18 +450,15 @@ extension ServerSideAdService {
                                             self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0))
                                         }
                                     }
-                                    
                                 }
-                                
                             }
                         }
                         
-                        // Ad is aready watched
+                        // Ad is already watched
                         else if (start / 10 * 10) <= (timeInMil / 10 * 10) && (end / 10 * 10) >= (timeInMil / 10 * 10) && content.contentType == "ad" && (self.tempAdTimeLine.contains(content)) {
 
                             // Check if we have a previously assigned destination
                             if self.oldScrubbedDestination != 0 {
-  
                                 // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
                                 if ( index != (self.allTimelineContent.count - 1) && self.allTimelineContent[index+1].contentType != "ad" ) {
 

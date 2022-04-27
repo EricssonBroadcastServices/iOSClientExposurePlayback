@@ -49,6 +49,22 @@ Player will publish `onServerSideAdShouldSkip` event as it requires the player t
 }
 ```
 
+**Implementing for tvOS**
+
+When implementing the SSAI on tvOS player, you need to implement the following method to
+
+```
+class PlayerViewController: UIViewController, AVPlayerViewControllerDelegate {
+        func playerViewController(_ playerViewController: AVPlayerViewController,
+        willResumePlaybackAfterUserNavigatedFrom oldTime: CMTime,
+                                  to targetTime: CMTime) {
+            if let targetTime = targetTime.milliseconds {
+                self.player.seek(toPosition: targetTime)
+            }
+        }
+}
+```
+
 **Tracking Ad's clickThroughUrl**
 
 Optionally app developers can use `clickThroughUrl` to navigate the users to the Ad´s external link if the ad contains that url. This can be done adding a button / link in the player skin. 

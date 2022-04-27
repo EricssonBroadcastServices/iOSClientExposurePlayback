@@ -48,7 +48,7 @@ Once you have your Swift package set up, adding `iOSClientExposurePlayback` as a
 
 ```sh
 dependencies: [
-    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback", from: "3.0.4")
+    .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback", from: "3.0.5")
 ]
 ```
 
@@ -76,7 +76,7 @@ Finally, make sure you add the `.framework`s to your targets *General -> Embedde
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate `iOSClientExposurePlayback` into your Xcode project using CocoaPods, specify it in your Podfile:
 
 ```sh
-pod 'iOSClientExposurePlayback', '~>  3.0.4'
+pod 'iOSClientExposurePlayback', '~>  3.0.5'
 ```
 
 ## Release Notes
