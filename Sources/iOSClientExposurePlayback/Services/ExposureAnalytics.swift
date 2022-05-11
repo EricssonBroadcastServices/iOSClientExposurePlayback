@@ -86,6 +86,7 @@ public class ExposureAnalytics {
     internal enum ExternalPlayback {
         case none
         case chromecast
+        case endedCasting
         case endedByActivatingAirplay
         case startedAsAirplay
     }
@@ -101,6 +102,10 @@ public class ExposureAnalytics {
     /// Instruct the analytics engine that the player is transitioning from local playback to `ChromeCasting`
     public func startedCasting() {
         externalPlayback = .chromecast
+    }
+    
+    public func StopCasting() {
+        externalPlayback = .endedCasting
     }
     
     /// Instruct the analytics engine that the player is transitioning from local playback to `Airplay`
@@ -500,7 +505,16 @@ extension ExposureAnalytics: AnalyticsProvider {
                                                   offsetTime: offsetTime(for: source, using: tech))
                 dispatcher?.enqueue(event: event)
             }
-            
+        case .endedCasting:
+            if let source = source as? ExposureSource {
+                let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+                dispatcher?.enqueue(event: event)
+            } else {
+                let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech))
+                dispatcher?.enqueue(event: event)
+            }
         case .none:
             if let source = source as? ExposureSource {
                 let event = Playback.Aborted(timestamp: Date().millisecondsSince1970,
@@ -512,6 +526,7 @@ extension ExposureAnalytics: AnalyticsProvider {
                 dispatcher?.enqueue(event: event)
             }
             
+        
         }
     }
     

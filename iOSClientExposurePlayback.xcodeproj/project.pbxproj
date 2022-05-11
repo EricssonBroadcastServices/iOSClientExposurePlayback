@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		767FB4B2217FC7B400BC087A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		782538A1282BDC3F00A60966 /* StopCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782538A0282BDC3F00A60966 /* StopCasting.swift */; };
+		782538A2282BDC3F00A60966 /* StopCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782538A0282BDC3F00A60966 /* StopCasting.swift */; };
 		783110F427EC70C2009B3114 /* ProgramSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108327EC70C2009B3114 /* ProgramSource.swift */; };
 		783110F527EC70C2009B3114 /* ProgramSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108327EC70C2009B3114 /* ProgramSource.swift */; };
 		783110F627EC70C2009B3114 /* ExposureSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7831108427EC70C2009B3114 /* ExposureSource.swift */; };
@@ -217,6 +219,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		782538A0282BDC3F00A60966 /* StopCasting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopCasting.swift; sourceTree = "<group>"; };
 		7831108327EC70C2009B3114 /* ProgramSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramSource.swift; sourceTree = "<group>"; };
 		7831108427EC70C2009B3114 /* ExposureSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureSource.swift; sourceTree = "<group>"; };
 		7831108527EC70C2009B3114 /* ChannelSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSource.swift; sourceTree = "<group>"; };
@@ -512,6 +515,7 @@
 				783110C227EC70C2009B3114 /* BufferingStopped.swift */,
 				783110C327EC70C2009B3114 /* PlayReady.swift */,
 				783110C427EC70C2009B3114 /* StartCasting.swift */,
+				782538A0282BDC3F00A60966 /* StopCasting.swift */,
 				783110C527EC70C2009B3114 /* HandshakeStarted.swift */,
 				783110C627EC70C2009B3114 /* Created.swift */,
 				783110C727EC70C2009B3114 /* Aborted.swift */,
@@ -859,6 +863,7 @@
 				7831117B27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				7831110D27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				7831112927EC70C2009B3114 /* ChannelPlayable.swift in Sources */,
+				782538A2282BDC3F00A60966 /* StopCasting.swift in Sources */,
 				7831116D27EC70C2009B3114 /* HandshakeStarted.swift in Sources */,
 				783111B727EC70C3009B3114 /* BasicContractRestrictions.swift in Sources */,
 			);
@@ -904,6 +909,7 @@
 				7831110027EC70C2009B3114 /* ExposureContext.swift in Sources */,
 				7831116227EC70C2009B3114 /* AdStarted.swift in Sources */,
 				783110FA27EC70C2009B3114 /* AssetSource.swift in Sources */,
+				782538A1282BDC3F00A60966 /* StopCasting.swift in Sources */,
 				7831115627EC70C2009B3114 /* ScrubbedTo.swift in Sources */,
 				783111AC27EC70C3009B3114 /* ImageFileManager.swift in Sources */,
 				783111BA27EC70C3009B3114 /* ProgramService.swift in Sources */,
