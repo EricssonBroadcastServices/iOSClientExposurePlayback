@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.1.00` Release - [3.1.000](#31000)
 * `3.0.40` Release - [3.0.3400](#30400)
 * `3.0.30` Release - [3.0.300](#30300)
 * `3.0.20` Release - [3.0.200](#30200)
@@ -43,10 +44,14 @@
 * `0.77.x` Releases - [0.77.0](#0770)
 
 
+## 3.1.000
+#### Feature
+* `EMP-17957` Allow app developers to pass `appName` to analytics
+
 ## 3.0.400
 #### Bug Fixes
 * `EMP-18019` Bug Fix :  SDK does not fire `onWillPresentInterstitial` event on pre roll ads
-
+* 
 ## 3.0.300
 #### Bug Fixes
 * `EMP-17986` Bug Fix :  Quartiles (ad Tracking Events) are sent twice from SDK

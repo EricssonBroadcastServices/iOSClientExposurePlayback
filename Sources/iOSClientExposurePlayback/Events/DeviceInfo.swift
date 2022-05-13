@@ -35,11 +35,13 @@ internal struct DeviceInfo {
     /// Version of the tech
     internal let techVersion: String
     
+    internal let appName: String?
+    
     internal var cdnInfo: CDNInfoFromEntitlement?
     
     internal var analyticsInfo: AnalyticsFromEntitlement?
     
-    internal init(timestamp: Int64, connection: String, type: String? = nil, tech: String, techVersion: String,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+    internal init(timestamp: Int64, connection: String, type: String? = nil, tech: String, techVersion: String,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil, appName: String? = nil ) {
         self.timestamp = timestamp
         self.connection = connection
         self.type = type
@@ -49,6 +51,7 @@ internal struct DeviceInfo {
         
         self.cdnInfo = cdnInfo
         self.analyticsInfo = analyticsInfo
+        self.appName = appName
     }
 }
 
@@ -81,6 +84,10 @@ extension DeviceInfo: AnalyticsEvent {
             JSONKeys.techVersion.rawValue: techVersion,
             JSONKeys.player.rawValue: player,
         ]
+        
+        if let appName = appName {
+            params[JSONKeys.appName.rawValue] = appName
+        }
         
         if let cpuType = device.cpuType {
             params[JSONKeys.cpuType.rawValue] = cpuType
@@ -116,8 +123,15 @@ extension DeviceInfo: AnalyticsEvent {
         case deviceId = "DeviceId"
         case deviceModel = "DeviceModel"
         case cpuType = "CPUType"
+        
+        // ios/tvos/android/android_tv/samsung_tv/lg_tv/browser
         case appType = "AppType"
+        
+        // the official name of the app
+        case appName = "AppName"
+        
         case os = "OS"
+        
         case osVersion = "OSVersion"
         case manufacturer = "Manufacturer"
         case type = "Type"
@@ -127,6 +141,8 @@ extension DeviceInfo: AnalyticsEvent {
         case tech = "Technology"
         case techVersion = "TechVersion"
         case userAgent = "UserAgent"
+        
+        
         
         case height = "Height"
         case width = "Width"

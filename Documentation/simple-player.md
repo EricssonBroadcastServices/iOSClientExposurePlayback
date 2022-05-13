@@ -29,7 +29,9 @@ public convenience init(environment: Environment, sessionToken: SessionToken)
 
 This will configure the `Player` for playback using *EMP* functionality.
 
-If you want to use a pass the analytics events to a custom end point, you can pass your `analyticsBaseUrl` when creating the player. 
+* If you want to send the analytics events to a custom end point, you can optionally pass your `analyticsBaseUrl` when creating the player. 
+
+* If you want to send the the `app name` to the analytics, you can optionally pass your `appName` when creating the player. 
 
 ```Swift
 import iOSClientPlayer
@@ -51,6 +53,9 @@ class SimplePlayerViewController: UIViewController {
         
         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends analytics events to a custom endpoint
         player = Player(environment: environment, sessionToken: sessionToken, analyticsBaseUrl: "analyticsBaseUrl")
+        
+         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends appName to the analytics
+        player = Player(environment: environment, sessionToken: sessionToken, appName: "App Name")
         
         player.configure(playerView: playerView)
     }

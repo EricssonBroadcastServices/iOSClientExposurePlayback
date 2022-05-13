@@ -27,7 +27,7 @@ class TestEnv {
     init(environment: Environment, sessionToken: SessionToken) {
         self.environment = environment
         self.sessionToken = sessionToken
-        self.player = Player<HLSNative<ExposureContext>>(environment: environment, sessionToken: sessionToken, analytics: MockedExposureAnalytics.self, analyticsBaseUrl: "analyticsBaseURL")
+        self.player = Player<HLSNative<ExposureContext>>(environment: environment, sessionToken: sessionToken, analytics: MockedExposureAnalytics.self, analyticsBaseUrl: "analyticsBaseURL", appName: "Test App Name")
         
         // Mock the AVPlayer
         let mockedPlayer = MockedAVPlayer()
