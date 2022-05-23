@@ -76,6 +76,12 @@ public class ServerSideAdService: AdService {
     /// Check if the playback is started initialy . Either playback has started from beginning or from a bookmark.
     private var initialPlayback = false
     
+    // Variables use for calculating AdCounter values
+    private var previousVodClipIndex : Array<TimelineContent>.Index = 0
+    private var nextVodClipIndex : Array<TimelineContent>.Index = 0
+    private var noOfAdsInAdBreak: Int = 0
+    private var adIndexInAdBreak: Int = 0
+    
     public init(ads: Ads, clips:[AdClips], context: ExposureContext, source: ExposureSource, durationInMs: Double, tech: HLSNative<ExposureContext>) {
         self.ads = ads
         self.context = context
@@ -126,6 +132,10 @@ public class ServerSideAdService: AdService {
         self.scrubbedToPosition = 0
         self.tech.removePeriodicTimeObserverToPlayer()
         self.userInitiatedSeek = true
+        self.previousVodClipIndex = 0
+        self.nextVodClipIndex = 0
+        self.noOfAdsInAdBreak = 0
+        self.adIndexInAdBreak = 0
     }
     
     
@@ -210,6 +220,7 @@ public class ServerSideAdService: AdService {
 
 // MARK: Playback
 extension ServerSideAdService {
+
     
     /// Started plyabck with Ads
     /// - Parameters:
@@ -413,6 +424,18 @@ extension ServerSideAdService {
                                     self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                                     self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
                                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
+                                    
+                                    
+                                    // Check if all the ads are played , if so reset the temporary stored values for AdCounter
+                                    if ( self.noOfAdsInAdBreak - self.adIndexInAdBreak )  == 0 {
+                                        self.nextVodClipIndex = 0
+                                        self.previousVodClipIndex = 0
+                                        self.noOfAdsInAdBreak = 0
+                                        self.adIndexInAdBreak = 0
+                                        
+                                    } else {
+                                        // Do nothing
+                                    }
                                    
                                     // remove the temporary stored adTracking urls
                                     self.alreadySentadTrackingUrls.removeAll()
@@ -447,7 +470,10 @@ extension ServerSideAdService {
                                             
                                             // Keep track of already started ads
                                             self.alreadyStartedAd.append(content)
-                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0))
+
+                                            
+                                            self.calculateAdCounterValues(adClipIndex, end, start)
+                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, self.adIndexInAdBreak)
                                         }
                                     }
                                 }
@@ -498,6 +524,123 @@ extension ServerSideAdService {
                 }
             }
             
+        }
+    }
+}
+
+extension ServerSideAdService {
+    
+    
+    /// Calculate the ad counter values : No of Ads in a ad break & ad index of currently playing ad
+    /// - Parameters:
+    ///   - adClipIndex: adClipIndex
+    ///   - end: end
+    ///   - start: start
+    fileprivate func calculateAdCounterValues(_ adClipIndex: Array<TimelineContent>.Index, _ end: Int64, _ start: Int64) {
+        // Store current playing clip Index ( Add + 1 as indexing start from 0 )
+        // ( Index from all the allTimelineContent array )
+        let clipIndex = adClipIndex + 1
+        
+        // adClipIndex == 0 : => Playing a preroll ad
+        if adClipIndex == 0 {
+            
+            // Make the previousVodClipIndex to 0 , as there are no any VodClips before the preroll Ad
+            // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+            if previousVodClipIndex == 0 {
+                previousVodClipIndex = 0
+            }
+            
+            // Find the next vod clip index
+            if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
+                
+                // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                if nextVodClipIndex == 0 {
+                    nextVodClipIndex = next
+                }
+                
+                // Caculate the number of Ads in the ad break
+                noOfAdsInAdBreak = nextVodClipIndex - adClipIndex
+                
+                // Find the ad clip index inside the ad break
+                adIndexInAdBreak = clipIndex
+                
+            } else {
+                print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
+                self.nextVodClipIndex = 0
+                self.previousVodClipIndex = 0
+                self.noOfAdsInAdBreak = 0
+                self.adIndexInAdBreak = 0
+            }
+        } else {
+            
+            // adClipIndex is not `0` , This can  still be a pre roll ad break or mid roll ad break
+            if let previous = self.allTimelineContent.firstIndex(where:  { Int64($0.contentEndTime ) < ( start + 10 ) && $0.contentType != "ad" }) {
+
+                // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                // use adClipIndex as previousVodClipIndex as it should be the same as previous VodClip (or clipIndex - 1 )
+                if previousVodClipIndex == 0 {
+                    previousVodClipIndex = adClipIndex
+                }
+
+                // Find the next vod clip index
+                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
+ 
+                    // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                    if nextVodClipIndex == 0 {
+                        nextVodClipIndex = next
+                    }
+                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    adIndexInAdBreak =  clipIndex - previousVodClipIndex
+                    
+                } else {
+                    
+                    // Couldn't find any Vod Clip as the nextVodClip
+                    // There was a previous vod clip but no next vod clip . Should be a post roll ad break
+                    // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                    if nextVodClipIndex == 0 {
+                        
+                        // Assume the previous clip index is the same as current playing first ad of the post roll ad break
+                        previousVodClipIndex = adClipIndex
+                        
+                        // Assign the last index as the nextVodClipIndex
+                        nextVodClipIndex = self.allTimelineContent.count
+                    }
+                    
+                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    adIndexInAdBreak =  clipIndex - previousVodClipIndex
+                    
+                }
+                
+                
+            } else {
+                
+                // Couldn't find any previous vod clips : So still a pre roll ad break
+                
+                // Make the previousVodClipIndex to 0 , as there are no any VodClips before the preroll Ad
+                // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                if previousVodClipIndex == 0 {
+                    previousVodClipIndex = 0
+                }
+                
+                // Find the next vod clip index
+                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime) > end && $0.contentType != "ad" }) {
+                    
+                    
+                    // Assign value to nextVodClipIndex only if nextVodClipIndex == 0 means, no value has been assigned or resetted after playing an full Ad Break
+                    if nextVodClipIndex == 0 {
+                        nextVodClipIndex = next
+                    }
+                    
+                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    adIndexInAdBreak = clipIndex
+                } else {
+                    print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
+                    self.nextVodClipIndex = 0
+                    self.previousVodClipIndex = 0
+                    self.noOfAdsInAdBreak = 0
+                    self.adIndexInAdBreak = 0
+                }
+            }
         }
     }
 }

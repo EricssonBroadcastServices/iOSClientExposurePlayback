@@ -28,12 +28,14 @@ You can replace your `.onPlaybackStarted` event with `.onPlaybackStartWithAds` w
 Player will publish `onWillPresentInterstitial` when an Ad starts playing & `onDidPresentInterstitial` when an Ad ends playing.
 
 ```Swift
-.onWillPresentInterstitial { [weak self] contractRestrictionService, clickThroughUrl, adTrackingUrls, adClipDuration in 
+.onWillPresentInterstitial { [weak self] contractRestrictionService, clickThroughUrl, adTrackingUrls, adClipDuration, noOfAds, adIndex  in 
 
     // contractRestrictionService : contractRestrictionsPolicy.fastForwardEnabled & contractRestrictionsPolicy.rewindEnabled
     // clickThroughUrl : External link to navigate to when the user clicked the ad. ( ex : Show / hide link button when ad is playing )
     // adTrackingUrls : If user clicked the ad `clickThroughUrl` link / button, send these Urls back to the player to track the ad click. 
     // adClipDuration : Duration of the currently playing ad clip
+    // noOfAds : Number of ads in the ad break
+    // adIndex : Index of the current playing ad
 }
 
 .onDidPresentInterstitial { [weak self] contractRestrictionService  in

@@ -64,7 +64,7 @@ public class ExposureContext: MediaContext {
     internal var onPlaybackStartWithAds: (Int64, Int64,  Int64, [MarkerPoint]) -> Void = { _, _, _, _ in }
     
     /// Tracks the internal adService ad start 
-    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, [String]?, Int64 ) -> Void = { _, _, _, _ in }
+    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, [String]?, Int64, Int, Int ) -> Void = { _, _, _, _, _, _  in }
     
     /// Tracks the internal adService ad end
     internal var onDidPresentInterstitial: (ContractRestrictionsService) -> Void = { _ in }
