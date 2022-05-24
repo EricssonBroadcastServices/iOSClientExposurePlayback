@@ -20,8 +20,10 @@ public protocol Playable {
     ///   - sessionToken: `SessionToken` validating the user
     ///   - adsOptions: `Ads Options` server side ad insertion options
     ///   - adobePrimetimeMediaToken: `X-Adobe-Primetime-MediaToken` adobePrimetimeMediaToken
+    ///   - materialProfile: used to play a specific material variant.
+    ///   - customAdParams: Custom Ad params
     ///   - callback: Closure called on request completion
-    func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String? , callback: @escaping (ExposureSource?, ExposureError?) -> Void)
+    func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void)
     
     /// Helper method producing an `ExposureSoure` for playback using the supplied `environment` and `sessionToken`
     /// - Parameters:
@@ -29,8 +31,10 @@ public protocol Playable {
     ///   - sessionToken: `SessionToken` validating the user
     ///   - adsOptions: `Ads Options` server side ad insertion options
     ///   - adobePrimetimeMediaToken: `X-Adobe-Primetime-MediaToken` adobePrimetimeMediaToken
+    ///   - materialProfile: used to play a specific material variant.
+    ///   - customAdParams: Custom Ad params
     ///   - callback: Closure called on request completion
-    func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void)
+    func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
 extension Playable {
@@ -40,9 +44,11 @@ extension Playable {
     ///   - sessionToken: `SessionToken` validating the user
     ///   - adsOptions: `Ads Options` server side ad insertion options
     ///   - adobePrimetimeMediaToken: `X-Adobe-Primetime-MediaToken` adobePrimetimeMediaToken
+    ///   - materialProfile: used to play a specific material variant.
+    ///   - customAdParams: Custom Ad params
     ///   - callback: Closure called on request completion
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil , callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
-        prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken) { source, error in
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil , materialProfile: String? = nil, customAdParams: [String: Any]? = nil , callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+        prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { source, error in
             callback(source,error,nil)
         }
     }

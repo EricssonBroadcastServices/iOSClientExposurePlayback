@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.00` Release - [3.3.000](#33000)
 * `3.2.00` Release - [3.2.000](#32000)
 * `3.1.00` Release - [3.1.000](#31000)
 * `3.0.40` Release - [3.0.400](#30400)
@@ -44,6 +45,10 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+
+## 3.3.000
+#### Feature
+* `EMP-18156` `EMP-18124` Allow developers to pass `materialProfile` & `customAdParams` 
 
 ## 3.2.000
 #### Feature

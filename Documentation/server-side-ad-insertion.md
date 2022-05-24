@@ -9,6 +9,14 @@ let adsOptions = AdsOptions(latitude: 18.000, longitude: 18.000, mute: true, con
 player.startPlayback(playable: assetPlayable, properties: properties, adsOptions: adsOptions)
 ```
 
+application developers can pass custom key with its value as an array related to the server side ads. 
+
+```Swift
+let customAdParams: [String: Any] = ["TestKey": 1 , "TestKeyTwo": "test", "TestKeyThree": true]
+player.startPlayback(playable: assetPlayable, properties: properties, customAdParams: customAdParams)
+```
+
+
 **Events Related to SSAI** 
 
 If the stream has server side ads enabled player will publish several events related to the ads. 

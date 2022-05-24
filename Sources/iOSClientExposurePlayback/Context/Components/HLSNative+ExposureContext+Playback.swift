@@ -20,8 +20,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter AdsOptions: Client / device specific information that can be used for ad targeting
     /// - parameter adobePrimetimeMediaToken:  X-Adobe-Primetime-MediaToken
-    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true ) {
-        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics)
+    /// - parameter materialProfile:  used to play a specific material variant.
+    /// - parameter customAdParams:  Custom Ad Params
+    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true , materialProfile: String? = nil , customAdParams: [String: Any]? = nil ) {
+        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics, materialProfile:materialProfile, customAdParams: customAdParams)
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -31,9 +33,11 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - parameter assetId: EMP asset id for which to request playback.
     /// - parameter properties: Properties specifying additional configuration for the playback
     /// - parameter adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
-    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true) {
+    /// - parameter materialProfile:  used to play a specific material variant.
+    /// - parameter customAdParams:  Custom Ad Params
+    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil , customAdParams: [String: Any]? = nil ) {
         let playable = AssetPlayable(assetId: assetId)
-        startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics)
+        startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics, materialProfile: materialProfile, customAdParams: customAdParams )
     }
     
     
@@ -61,14 +65,16 @@ extension ExposureContext {
     ///   - tech: Tech to do the playback on
     ///   - adsOptions: Client / device specific information that can be used for ad targeting
     ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
-    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true ) {
+    ///  -   materialProfile:  used to play a specific material variant.
+    ///  -   customAdParams:  Custom Ad Params
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil, customAdParams: [String: Any]? = nil ) {
         playbackProperties = properties
         
         // Generate the analytics providers
         let providers = analyticsProviders(for: nil)
         
        
-        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken) { [weak self, weak tech] source, error, response in
+        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
             if enableAnalytics == true {
                 self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response, playable: playable)

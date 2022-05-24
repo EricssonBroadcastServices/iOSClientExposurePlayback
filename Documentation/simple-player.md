@@ -162,6 +162,14 @@ If application developers want to disable the analytics for the playback they ca
 player.startPlayback(playable: assetPlayable, properties: properties, enableAnalytics: false)
 ```
 
+If application developers want to play a specific material variant, they can pass `materialProfile` when starting the playback. 
+(eg. for a specific asset, the "default" material contains a full length movie, and a "TRAILER" material might contain only an extract: a virtual subclip generated using the VOD to VOD flow)
+
+```Swift
+player.startPlayback(playable: assetPlayable, properties: properties, materialProfile: "TRAILER")
+```
+*Check Server-Side Ad Insertion (SSAI) for Ad related params*
+
 #### Audio only Playback 
 
 SDK provides an out of box implementation for the audio only playback. You can create & start the playback using the `AssetPlayable`.  If the stream is an audio only stream, SDK will return the `mediaType` as `audio`. This event will be fired when a new new entitlement is received, such as after attempting a new playback request.
