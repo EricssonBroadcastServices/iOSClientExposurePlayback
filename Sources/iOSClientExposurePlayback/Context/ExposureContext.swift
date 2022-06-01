@@ -34,6 +34,8 @@ public class ExposureContext: MediaContext {
     
     public let analyticsBaseUrl: String?
     
+    public let appName: String?
+    
     /// Service that handles synchronization of local device time with server time
     public let monotonicTimeService: MonotonicTimeService
     
@@ -62,7 +64,7 @@ public class ExposureContext: MediaContext {
     internal var onPlaybackStartWithAds: (Int64, Int64,  Int64, [MarkerPoint]) -> Void = { _, _, _, _ in }
     
     /// Tracks the internal adService ad start 
-    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, [String]?, Int64 ) -> Void = { _, _, _, _ in }
+    internal var onWillPresentInterstitial: (ContractRestrictionsService, String?, [String]?, Int64, Int, Int ) -> Void = { _, _, _, _, _, _  in }
     
     /// Tracks the internal adService ad end
     internal var onDidPresentInterstitial: (ContractRestrictionsService) -> Void = { _ in }
@@ -109,11 +111,12 @@ public class ExposureContext: MediaContext {
     ///
     /// - parameter environment: Exposure `Environment` to use
     /// - parameter sessionToken: Exposure `SessionToken` to use
-    public init(environment: Environment, sessionToken: SessionToken, analyticsBaseUrl: String? = nil ) {
+    public init(environment: Environment, sessionToken: SessionToken, analyticsBaseUrl: String? = nil, appName: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.analyticsBaseUrl = analyticsBaseUrl
         self.monotonicTimeService = MonotonicTimeService(environment: environment)
+        self.appName = appName
         
         reachability = Reachability()
         do {

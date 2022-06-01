@@ -7,12 +7,12 @@
 		<key>iOSClientExposurePlayback-tvOS.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>7</integer>
+			<integer>14</integer>
 		</dict>
 		<key>iOSClientExposurePlayback.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>8</integer>
 		</dict>
 		<key>tvOSRefApp.xcscheme_^#shared#^_</key>
 		<dict>

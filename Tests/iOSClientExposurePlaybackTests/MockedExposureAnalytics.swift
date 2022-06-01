@@ -14,12 +14,11 @@ import iOSClientPlayer
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
-    
-    
-    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? = nil ) {
+    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? = nil, appName: String? = nil  ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.analyticsBaseUrl = analyticsBaseUrl
+        self.appName = appName
     }
     
     let environment: Environment
@@ -27,6 +26,8 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     let sessionToken: SessionToken
     
     let analyticsBaseUrl: String?
+    
+    let appName: String?
     
     func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source,playable: Playable) where Tech: PlaybackTech, Source : MediaSource {
         

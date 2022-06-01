@@ -12,7 +12,7 @@ import iOSClientExposure
 
 /// Extends the `Player` built in protocol defining analytics events with *Exposure* specific analytics
 public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
-    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? )
+    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String?, appName: String? )
     
     /// Exposure environment used for the active session.
     ///
@@ -26,6 +26,9 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     
     
     var analyticsBaseUrl: String? { get }
+    
+    // the official name of the app
+    var appName: String? { get }
     
     /// Sent when the player is about to make an entitlement request
     ///

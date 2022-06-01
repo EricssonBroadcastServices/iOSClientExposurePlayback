@@ -29,7 +29,9 @@ public convenience init(environment: Environment, sessionToken: SessionToken)
 
 This will configure the `Player` for playback using *EMP* functionality.
 
-If you want to use a pass the analytics events to a custom end point, you can pass your `analyticsBaseUrl` when creating the player. 
+* If you want to send the analytics events to a custom end point, you can optionally pass your `analyticsBaseUrl` when creating the player. 
+
+* If you want to send the the `app name` to the analytics, you can optionally pass your `appName` when creating the player. 
 
 ```Swift
 import iOSClientPlayer
@@ -51,6 +53,9 @@ class SimplePlayerViewController: UIViewController {
         
         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends analytics events to a custom endpoint
         player = Player(environment: environment, sessionToken: sessionToken, analyticsBaseUrl: "analyticsBaseUrl")
+        
+         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends appName to the analytics
+        player = Player(environment: environment, sessionToken: sessionToken, appName: "App Name")
         
         player.configure(playerView: playerView)
     }
@@ -156,6 +161,14 @@ If application developers want to disable the analytics for the playback they ca
 ```Swift
 player.startPlayback(playable: assetPlayable, properties: properties, enableAnalytics: false)
 ```
+
+If application developers want to play a specific material variant, they can pass `materialProfile` when starting the playback. 
+(eg. for a specific asset, the "default" material contains a full length movie, and a "TRAILER" material might contain only an extract: a virtual subclip generated using the VOD to VOD flow)
+
+```Swift
+player.startPlayback(playable: assetPlayable, properties: properties, materialProfile: "TRAILER")
+```
+*Check Server-Side Ad Insertion (SSAI) for Ad related params*
 
 #### Audio only Playback 
 

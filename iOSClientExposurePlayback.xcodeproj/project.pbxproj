@@ -335,8 +335,6 @@
 		783111CD27EC711F009B3114 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		783111CE27EC712B009B3114 /* UPGRADE_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UPGRADE_GUIDE.md; sourceTree = "<group>"; };
 		783111D027EC8307009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		783111D427EC830B009B3114 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		783111D727EC8343009B3114 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111EF27EC8B18009B3114 /* iOSClientExposure_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111F227EC8B21009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -638,8 +636,6 @@
 				783111F227EC8B21009B3114 /* iOSClientPlayer.framework */,
 				783111EF27EC8B18009B3114 /* iOSClientExposure_tvOS.framework */,
 				783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */,
-				783111D727EC8343009B3114 /* Player.framework */,
-				783111D427EC830B009B3114 /* Player.framework */,
 				783111D027EC8307009B3114 /* iOSClientExposure.framework */,
 			);
 			name = Frameworks;
@@ -998,7 +994,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.0.500;
+				MARKETING_VERSION = 3.3.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1028,7 +1024,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.0.500;
+				MARKETING_VERSION = 3.3.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1179,7 +1175,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.0.500;
+				MARKETING_VERSION = 3.3.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1210,7 +1206,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.0.500;
+				MARKETING_VERSION = 3.3.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
