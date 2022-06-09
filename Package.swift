@@ -17,7 +17,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/EricssonBroadcastServices/iOSClientPlayer", from: "3.0.1"),
-        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.0.2"),
+        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.1.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "4.0.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.1.0"),
     ],

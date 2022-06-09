@@ -163,7 +163,20 @@ public class ExposureAnalytics {
 
 fileprivate func version(for identifier: String?) -> String {
     guard let identifier = identifier else { return "MISSING_BUNDLE_IDENTIFIER" }
-    guard let bundleInfo = Bundle(identifier: identifier)?.infoDictionary else { return "BUNDLE_NOT_FOUND" }
+    guard let bundleInfo = Bundle(identifier: identifier)?.infoDictionary else {
+        
+        // Check if the project uses pods & try to find out the pods version
+        if let bundle = Bundle.allFrameworks.first(where: { $0.bundleIdentifier?.contains(identifier) ?? false } ) {
+            if let version = bundle.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String {
+                return version
+            } else {
+                return "BUNDLE_NOT_FOUND"
+            }
+            
+        } else {
+            return "BUNDLE_NOT_FOUND"
+        }
+    }
     let version = (bundleInfo["CFBundleShortVersionString"] as? String) ?? "UNKNOWN_VERSION"
     
     return version

@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.10` Release - [3.3.100](#33100)
 * `3.3.00` Release - [3.3.000](#33000)
 * `3.2.00` Release - [3.2.000](#32000)
 * `3.1.00` Release - [3.1.000](#31000)
@@ -45,6 +46,12 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+
+
+
+## 3.3.100
+#### Bug Fixes
+* `EMP-18213` Fix bug : tvOS player doesn't send player version to the analytics
 
 ## 3.3.000
 #### Feature
