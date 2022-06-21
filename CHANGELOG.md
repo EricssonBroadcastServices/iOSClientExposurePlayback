@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.20` Release - [3.3.200](#33200)
 * `3.3.10` Release - [3.3.100](#33100)
 * `3.3.00` Release - [3.3.000](#33000)
 * `3.2.00` Release - [3.2.000](#32000)
@@ -48,6 +49,10 @@
 
 
 
+
+## 3.3.200
+#### Bug Fixes
+* `EMP-18319` Bug Fix : Player freeze when seek on offline assets 
 
 ## 3.3.100
 #### Bug Fixes

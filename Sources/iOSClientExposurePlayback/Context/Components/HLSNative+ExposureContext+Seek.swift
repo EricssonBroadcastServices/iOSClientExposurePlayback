@@ -105,10 +105,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// - parameter position: target offset in milliseconds
     public func seek(toPosition position: Int64) {
+        
         guard let source = tech.currentSource else { return }
         let origin = playheadPosition
         let seekAllowed = source.contractRestrictionsService.canSeek(fromPosition: origin, toPosition: position)
         guard seekAllowed else {
+            
             // Seeking is disabled. Trigger warning and ignore the seek atempt
             let reason: ExposureContext.Warning.ContractRestrictions = playheadPosition < position ? .fastForwardDisabled : .rewindDisabled
             let warning = PlayerWarning<HLSNative<ExposureContext>,ExposureContext>.context(warning: ExposureContext.Warning.contractRestrictions(reason: reason))

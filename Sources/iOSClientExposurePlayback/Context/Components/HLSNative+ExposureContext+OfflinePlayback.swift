@@ -27,10 +27,12 @@
         ///   - properties: Properties specifying additional configuration for the playback
         ///   - tech: Tech to do the playback on
         internal func startOfflineMediaPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
-            
+
             playbackProperties = properties
             
-            let entitlementResponse = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: offlineMediaPlayable.entitlement)
+            let entitlementResponse = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: offlineMediaPlayable.entitlement, offlineMediaPlayable)
+
+            
             if let entitlement = entitlementResponse.0 {
                 
                 let source = ExposureSource(entitlement: entitlement, assetId: offlineMediaPlayable.assetId, response: nil, streamingInfo: offlineMediaPlayable.entitlement.streamInfo)
@@ -45,7 +47,7 @@
                 
                 /// Update tech autoplay settings from PlaybackProperties
                 tech.autoplay = playbackProperties.autoplay
-                
+
                 /// Assign language preferences
                 switch playbackProperties.language {
                 case .defaultBehaviour:
@@ -60,16 +62,15 @@
                 }
                 
                 /// Create HLS configuration
-                let configuration = HLSNativeConfiguration(drm: source.fairplayRequester ,
-                                                           preferredMaxBitrate: playbackProperties.maxBitrate)
+                let configuration = HLSNativeConfiguration(drm: source.fairplayRequester)
                 
                 source.prepareSourceUrl{ _ in
+
                     source.proxyUrl = offlineMediaPlayable.urlAsset.url
                     
                     /// Load tech
                     tech.loadOffline(source: source, configuration: configuration) { [weak self, weak source, weak tech] in
                         
-                        print("Tech Loaded without any issue ")
                         guard let `self` = self, let tech = tech, let source = source else {
                             return
                             
@@ -80,7 +81,6 @@
                 }
                 
                 
-
                 // TODO : Analytics
                      /* source.analyticsConnector.providers.forEach{
                          /// Analytics Session Invalidation Detection
@@ -123,5 +123,6 @@
                      } */
                 
             }
+            
         }
     }
