@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.30` Release - [3.3.300](#33300)
 * `3.3.20` Release - [3.3.200](#33200)
 * `3.3.10` Release - [3.3.100](#33100)
 * `3.3.00` Release - [3.3.000](#33000)
@@ -48,7 +49,9 @@
 * `0.77.x` Releases - [0.77.0](#0770)
 
 
-
+## 3.3.300
+#### Changes
+* Update dependencies to the latest
 
 ## 3.3.200
 #### Bug Fixes
