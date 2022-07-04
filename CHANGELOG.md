@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.40` Release - [3.3.400](#33400)
 * `3.3.30` Release - [3.3.300](#33300)
 * `3.3.20` Release - [3.3.200](#33200)
 * `3.3.10` Release - [3.3.100](#33100)
@@ -49,6 +50,10 @@
 * `0.77.x` Releases - [0.77.0](#0770)
 
 
+## 3.3.400
+#### Bug Fixes
+* `EMP-18393` Bug Fix : SSAI events do not get fired when playing catchups with pre roll Ads.
+
 ## 3.3.300
 #### Changes
 * Update dependencies to the latest
@@ -59,7 +64,7 @@
 
 ## 3.3.100
 #### Bug Fixes
-* `EMP-18213` Fix bug : tvOS player doesn't send player version to the analytics
+* `EMP-18213` Bug Fix : tvOS player doesn't send player version to the analytics
 
 ## 3.3.000
 #### Feature
