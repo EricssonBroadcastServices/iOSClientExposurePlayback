@@ -29,15 +29,20 @@ extension Player where Tech == HLSNative<ExposureContext> {
 }
 
 extension ExposureContext: AirplayHandler {
+    
+    public func sendAirplayAnalytics<Tech, Source>(active: Bool, tech: Tech, source: Source?) where Tech : PlaybackTech, Source : MediaSource {
+        source?.analyticsConnector.providers.forEach {
+            if let exposureProvider = $0 as? ExposureAnalytics {
+                exposureProvider.startedAirplay()
+            }
+        }
+    }
+    
     public func handleAirplayEvent<Tech, Source>(active: Bool, tech: Tech, source: Source?) where Tech : PlaybackTech, Source : MediaSource {
         guard let tech = tech as? HLSNative<ExposureContext> else { return }
         
         if active {
-            source?.analyticsConnector.providers.forEach {
-                if let exposureProvider = $0 as? ExposureAnalytics {
-                    exposureProvider.startedAirplay()
-                }
-            }
+            self.sendAirplayAnalytics(active: active, tech: tech, source: source)
         }
         
         let position = tech.playheadPosition
