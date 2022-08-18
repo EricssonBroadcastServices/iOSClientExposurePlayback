@@ -214,6 +214,8 @@
 		783111EC27EC8AEA009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */; };
 		783111F327EC8B21009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111F227EC8B21009B3114 /* iOSClientPlayer.framework */; };
 		783111FD27EC8EB9009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */; };
+		7850406328AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
+		7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -339,6 +341,7 @@
 		783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioSession+Airplay.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -481,6 +484,7 @@
 				783110AB27EC70C2009B3114 /* UIImage+Extension.swift */,
 				783110AC27EC70C2009B3114 /* UIDevice+Extensions.swift */,
 				783110AD27EC70C2009B3114 /* CMTime+Extensions.swift */,
+				7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -813,6 +817,7 @@
 				7831116127EC70C2009B3114 /* ConnectionChanged.swift in Sources */,
 				7831114D27EC70C2009B3114 /* AdFailed.swift in Sources */,
 				7831112327EC70C2009B3114 /* AssetPlayable.swift in Sources */,
+				7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */,
 				7831110727EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
 				783111A127EC70C3009B3114 /* MonotonicTimeService.swift in Sources */,
 				783111AD27EC70C3009B3114 /* ImageFileManager.swift in Sources */,
@@ -866,6 +871,7 @@
 			files = (
 				783111B827EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */,
 				7831112027EC70C2009B3114 /* ProgramPlayable.swift in Sources */,
+				7850406328AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */,
 				7831111427EC70C2009B3114 /* HLSNative+ExposureContext+MediaType.swift in Sources */,
 				7831113E27EC70C2009B3114 /* CMTime+Extensions.swift in Sources */,
 				7831110A27EC70C2009B3114 /* HLSNative+ExposureContext+Creation.swift in Sources */,
@@ -988,7 +994,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.600;
+				MARKETING_VERSION = 3.3.700;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1018,7 +1024,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.600;
+				MARKETING_VERSION = 3.3.700;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1169,7 +1175,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.600;
+				MARKETING_VERSION = 3.3.700;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1200,7 +1206,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.600;
+				MARKETING_VERSION = 3.3.700;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
