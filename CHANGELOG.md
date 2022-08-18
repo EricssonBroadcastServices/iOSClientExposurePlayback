@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.3.70` Release - [3.3.700](#33700)
 * `3.3.60` Release - [3.3.600](#33600)
 * `3.3.50` Release - [3.3.500](#33500)
 * `3.3.40` Release - [3.3.400](#33400)
@@ -51,6 +52,9 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 3.3.700
+#### Bug Fixes
+* `EMP-18543` Fix the bug that cause the app to crash when trying to airplay downloaded content
 
 ## 3.3.600
 #### Bug Fixes

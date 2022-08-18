@@ -32,11 +32,16 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     /// Streaming requests normally always contact the remote for license and certificates but if it's a downloaded asset we do not need to contact the remote server
     internal func shouldContactRemote(for resourceLoadingRequest: AVAssetResourceLoadingRequest) throws -> Bool {
 
-        // Check if we can handle the request with a previously persisted content key
-        if try !persistedContentKeyExists(for: assetId) {
+        // Check if we have an ActiveAirplayRoute , if so pass true to contact remote server
+        if AVAudioSession.sharedInstance().hasActiveAirplayRoute {
             return true
         } else {
-            return false
+            // Check if we can handle the request with a previously persisted content key
+            if try !persistedContentKeyExists(for: assetId) {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
@@ -46,6 +51,9 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     internal var onLicenseRequest: () -> Void = { }
     internal var onLicenseResponse: (ExposureContext.Error?) -> Void = { _ in }
 }
+
+
+
 
 // MARK: - AVAssetResourceLoaderDelegate
 extension EMUPFairPlayRequester {
