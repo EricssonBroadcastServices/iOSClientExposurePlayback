@@ -31,8 +31,8 @@ public struct EnigmaPlayable {
         let licenseServerUrl = format.fairplay.first?.licenseServerUrl
         
         let mediaLocator: URL = format.mediaLocator
-
         
+      
         let fairplay = FairplayConfiguration(secondaryMediaLocator: nil, certificateUrl: certificateUrl, licenseAcquisitionUrl: licenseServerUrl, licenseServerUrl: licenseServerUrl)
         
         let playbackEntitlement = PlaybackEntitlement( assetId: entitlementV2.assetId, accountId: entitlementV2.accountId, audioOnly: entitlementV2.audioOnly,

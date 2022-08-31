@@ -115,11 +115,11 @@ extension AssetPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, callback: callback)
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, metadataIdentifiers: [String]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers,  callback: callback)
     }
     
-    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String]? ,  callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         
         
         // Remove any sprites from UserDefaults if available
@@ -210,7 +210,7 @@ extension AssetPlayable {
 }
 
 extension AssetPlayable {
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String], activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
         
         // Remove any sprites from UserDefaults if available
         UserDefaults.standard.removeObject(forKey: "sprites")

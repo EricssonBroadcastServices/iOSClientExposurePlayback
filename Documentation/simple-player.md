@@ -129,6 +129,10 @@ player
     .onDurationChanged{ player, source in
         // Published when the active media received an update to its duration property
     }
+    
+    .onDateRangeMetadataChanged { metadataGroups in 
+        // fire once the current playback `DateRangeMetadata` : `#EXT-X-DATERANGE tag` changes.
+}
 ```
 
 
@@ -168,6 +172,13 @@ If application developers want to play a specific material variant, they can pas
 ```Swift
 player.startPlayback(playable: assetPlayable, properties: properties, materialProfile: "TRAILER")
 ```
+
+If application developers want to filter the output to a particular set of metadata identifiers. For instance, if the stream’s #EXT-X-DATERANGE tags define multiple metadata attributes, but you are only interested in the values for the the X-AD-ID and X-AD-URL attributes, you can pass the array of identifiers when starting the playback.
+
+```Swift
+player.startPlayback(playable: assetPlayable, properties: properties, metadataIdentifiers: ["X-AD-ID ", "X-AD-URL"])
+```
+
 *Check Server-Side Ad Insertion (SSAI) for Ad related params*
 
 #### Audio only Playback 
