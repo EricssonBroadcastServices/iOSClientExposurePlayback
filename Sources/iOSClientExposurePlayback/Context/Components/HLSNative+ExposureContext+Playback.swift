@@ -12,16 +12,20 @@ import iOSClientExposure
 import AVFoundation
 
 extension Player where Tech == HLSNative<ExposureContext> {
+    
     /// Initiates a playback session with the supplied `Playable`
     ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
     ///
-    /// - parameter assetId: EMP `Playable` for which to request playback.
-    /// - parameter properties: Properties specifying additional configuration for the playback
-    /// - parameter AdsOptions: Client / device specific information that can be used for ad targeting
-    /// - parameter adobePrimetimeMediaToken:  X-Adobe-Primetime-MediaToken
-    /// - parameter materialProfile:  used to play a specific material variant.
-    /// - parameter customAdParams:  Custom Ad Params
+    /// - Parameters:
+    ///   - playable: EMP `Playable` for which to request playback.
+    ///   - properties: Properties specifying additional configuration for the playback
+    ///   - adsOptions: Client / device specific information that can be used for ad targeting
+    ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
+    ///   - enableAnalytics: should enable Analytics / Not
+    ///   - materialProfile: used to play a specific material variant.
+    ///   - customAdParams: Custom Ad Params
+    ///   - metadataIdentifiers: metadataIdentifiers for filtering tags in `EXT-X-DATERANGE `
     public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true , materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil ) {
         context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics, materialProfile:materialProfile, customAdParams: customAdParams, metadataidentifiers: metadataIdentifiers)
     }
@@ -30,11 +34,14 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///
     /// Calling this method during an active playback session will terminate that session and dispatch the appropriate *Aborted* events.
     ///
-    /// - parameter assetId: EMP asset id for which to request playback.
-    /// - parameter properties: Properties specifying additional configuration for the playback
-    /// - parameter adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
-    /// - parameter materialProfile:  used to play a specific material variant.
-    /// - parameter customAdParams:  Custom Ad Params
+    /// - Parameters:
+    ///   - assetId: EMP asset id for which to request playback.
+    ///   - properties: Properties specifying additional configuration for the playback
+    ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
+    ///   - enableAnalytics: should enable Analytics / Not
+    ///   - materialProfile: used to play a specific material variant.
+    ///   - customAdParams: Custom Ad Params
+    ///   - metadataIdentifiers: metadataIdentifiers for filtering tags in `EXT-X-DATERANGE
     public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil  ) {
         let playable = AssetPlayable(assetId: assetId)
         startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers)
@@ -67,6 +74,7 @@ extension ExposureContext {
     ///   - adobePrimetimeMediaToken: X-Adobe-Primetime-MediaToken
     ///  -   materialProfile:  used to play a specific material variant.
     ///  -   customAdParams:  Custom Ad Params
+    ///  -  metadataidentifiers:  metadataIdentifiers for filtering tags in `EXT-X-DATERANGE
     internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil, customAdParams: [String: Any]? = nil, metadataidentifiers: [String]? = nil  ) {
         playbackProperties = properties
         
