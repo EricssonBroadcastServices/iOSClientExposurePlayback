@@ -52,6 +52,12 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 3.4.000
+#### Feature
+* `EMP-18532.` Allow developers get `DateRangeMetadataGroups` : `#EXT-X-DATERANGE tag` changes by listening to `onDateRangeMetadataChanges` event 
+* `EMP-18532.` Allow developers to pass date range metada identifier for filtering
+* Bump minimum support iOS version to iOS 12
+
 ## 3.3.700
 #### Bug Fixes
 * `EMP-18543` Fix the bug that cause the app to crash when trying to airplay downloaded content

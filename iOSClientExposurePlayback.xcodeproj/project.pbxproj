@@ -339,7 +339,7 @@
 		783111F227EC8B21009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111F527EC8B73009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = iOSClientExposurePlayback.framework; path = "/Users/udaya/EricssonBroadcastServices/iOSClientExposurePlayback/build/Debug-iphoneos/iOSClientExposurePlayback.framework"; sourceTree = "<absolute>"; };
 		783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioSession+Airplay.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -378,7 +378,6 @@
 				783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */,
 				783111CF27EC8307009B3114 /* Frameworks */,
 				783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */,
-				783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -992,9 +991,9 @@
 				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.700;
+				MARKETING_VERSION = 3.4.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1022,9 +1021,9 @@
 				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.700;
+				MARKETING_VERSION = 3.4.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1088,7 +1087,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1146,7 +1145,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1173,9 +1172,9 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.700;
+				MARKETING_VERSION = 3.4.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1204,9 +1203,9 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/iOSClientExposurePlayback/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.3.700;
+				MARKETING_VERSION = 3.4.000;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
