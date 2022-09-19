@@ -28,6 +28,9 @@ extension Playback {
         /// Exposure framework version information
         internal let exposureVersion: String?
         
+        /// Version of the tech
+        internal let techVersion: String
+        
         /// If true, the player will start playing as soon as possible. If false, player does not start playing, and will be initialized at a later time. If this field is missing, it is assumed to have the value "true".
         internal let autoPlay: Bool?
         
@@ -50,13 +53,14 @@ extension Playback {
         
         internal let assetData: PlaybackIdentifier?
         
-        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement? = nil ) {
+        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, techVersion: String, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement? = nil ) {
             self.timestamp = timestamp
             self.version = version
             self.exposureVersion = exposureVersion
             self.assetData = assetData
             self.autoPlay = autoPlay
             self.analyticsInfo = analyticsInfo
+            self.techVersion = techVersion
         }
     }
 }
@@ -81,6 +85,7 @@ extension Playback.Created: AnalyticsEvent {
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.player.rawValue: player,
             JSONKeys.version.rawValue: version,
+            JSONKeys.techVersion.rawValue: techVersion,
             
             JSONKeys.deviceId.rawValue: device.deviceId,
             JSONKeys.deviceModel.rawValue: device.model,

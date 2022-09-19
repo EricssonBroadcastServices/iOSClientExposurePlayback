@@ -15,6 +15,7 @@ import CoreTelephony
 #endif
 
 
+
 /// `ExposureAnalytics` delivers a complete analytics manager fully integrated with the *EMP* system. It is an extension of the `Player` defined `AnalyticsProvider` protocol customized to fit EMP specifications.
 ///
 /// Designed to work out of the box with `Player`, adopting and using `ExposureAnalytics` is very straight forward:
@@ -165,18 +166,19 @@ fileprivate func version(for identifier: String?) -> String {
     guard let identifier = identifier else { return "MISSING_BUNDLE_IDENTIFIER" }
     guard let bundleInfo = Bundle(identifier: identifier)?.infoDictionary else {
         
-        // Check if the project uses pods & try to find out the pods version
-        if let bundle = Bundle.allFrameworks.first(where: { $0.bundleIdentifier?.contains(identifier) ?? false } ) {
-            if let version = bundle.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String {
-                return version
-            } else {
-                return "BUNDLE_NOT_FOUND"
-            }
-            
+        // Check the identifier and fetch the framework `Version` else pass `BUNDLE_NOT_FOUND`
+        if identifier == "com.emp.Player" {
+            return iOSClientPlayer.PlayerVersion
+        } else if identifier == "com.emp.Exposure" {
+            return iOSClientExposure.ExposureVersion
+        } else if identifier == "com.emp.ExposurePlayback" {
+            return iOSClientExposurePlayback.ExposurePlaybackVersion
         } else {
             return "BUNDLE_NOT_FOUND"
         }
     }
+    
+    
     let version = (bundleInfo["CFBundleShortVersionString"] as? String) ?? "UNKNOWN_VERSION"
     
     return version
@@ -220,7 +222,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             /// 1. Created
             let created = Playback.Created(timestamp: Date().millisecondsSince1970,
                                            version: version(for: "com.emp.ExposurePlayback"),
-                                           exposureVersion: version(for: "com.emp.Exposure"),
+                                           exposureVersion: version(for: "com.emp.Exposure"), techVersion: version(for: "com.emp.Player"),
                                            assetData: PlaybackIdentifier.from(playable: playable),
                                            autoPlay: autoplay(tech: tech), analyticsInfo: source.entitlement.analytics)
             
@@ -248,7 +250,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             /// 1. Created
             let created = Playback.Created(timestamp: Date().millisecondsSince1970,
                                            version: version(for: "com.emp.ExposurePlayback"),
-                                           exposureVersion: version(for: "com.emp.Exposure"),
+                                           exposureVersion: version(for: "com.emp.Exposure"), techVersion: version(for: "com.emp.Player"),
                                            assetData: PlaybackIdentifier.from(playable: playable),
                                            autoPlay: autoplay(tech: tech), analyticsInfo: nil)
             
