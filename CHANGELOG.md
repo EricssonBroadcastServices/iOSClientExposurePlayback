@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.4.10` Release - [3.4.100](#34100)
 * `3.4.00` Release - [3.4.000](#34000)
 * `3.3.70` Release - [3.3.700](#33700)
 * `3.3.60` Release - [3.3.600](#33600)
@@ -52,6 +53,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.4.100
+#### Changes
+* `EMP-18541` Add a global variable to keep track of the framework version
 
 ## 3.4.000
 #### Feature
