@@ -36,14 +36,18 @@ This will configure the `Player` for playback using *EMP* functionality.
 ```Swift
 import iOSClientPlayer
 import iOSClientExposure
+import AVFoundation
 
-class SimplePlayerViewController: UIViewController {
+class SimplePlayerViewController: UIViewController, AVPictureInPictureControllerDelegate {
     var environment: Environment!
     var sessionToken: SessionToken!
 
     @IBOutlet weak var playerView: UIView!
     
     fileprivate(set) var player: Player<HLSNative<ExposureContext>>!
+    
+    // Optional :  pictureInPictureController
+    private var pictureInPictureController: AVPictureInPictureController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,10 +58,27 @@ class SimplePlayerViewController: UIViewController {
         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends analytics events to a custom endpoint
         player = Player(environment: environment, sessionToken: sessionToken, analyticsBaseUrl: "analyticsBaseUrl")
         
-         /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends appName to the analytics
+        /// This will configure the player with the `SessionToken` aquired in the specified `Environment` & sends appName to the analytics
         player = Player(environment: environment, sessionToken: sessionToken, appName: "App Name")
         
         player.configure(playerView: playerView)
+        
+        // Optional := 
+        // If you want to support `picture in picture` in the player or need to access `AVPlayerLayer` , you can configure the player with `AVPlayerLayer` 
+        
+        player = Player(environment: environment, sessionToken: sessionToken)
+        let avPlayerLayer = player.configure(playerView: playerView)
+        
+        
+        // Enable picture in picture mode in player 
+        pictureInPictureController = AVPictureInPictureController(playerLayer: avPlayerLayer)
+        pictureInPictureController?.delegate = self
+        
+        // 
+        // Note : 
+        // Client developers can access all the AVPictureInPictureController Lifecycle Events by implementing `AVPictureInPictureControllerDelegate` delgate in your playerViewController. Read more :  https://developer.apple.com/documentation/avkit/avpictureinpicturecontrollerdelegate
+        // 
+        // Check SDK sample app for example implementation : https://github.com/EricssonBroadcastServices/iOSClientSDKSampleApp
     }
 }
 ```
