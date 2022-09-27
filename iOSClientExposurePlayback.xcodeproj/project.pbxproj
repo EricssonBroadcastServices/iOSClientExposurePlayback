@@ -216,6 +216,8 @@
 		783111FD27EC8EB9009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */; };
 		7850406328AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
 		7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
+		78FD660628E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
+		78FD660728E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -339,9 +341,10 @@
 		783111F227EC8B21009B3114 /* iOSClientPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111F527EC8B73009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = iOSClientExposurePlayback.framework; path = "/Users/udaya/EricssonBroadcastServices/iOSClientExposurePlayback/build/Debug-iphoneos/iOSClientExposurePlayback.framework"; sourceTree = "<absolute>"; };
 		783111FC27EC8EB9009B3114 /* iOSClientExposure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSClientExposure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioSession+Airplay.swift"; sourceTree = "<group>"; };
+		78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78FD660528E2E72D0074B31E /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,6 +381,7 @@
 				783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */,
 				783111CF27EC8307009B3114 /* Frameworks */,
 				783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */,
+				78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -389,6 +393,7 @@
 				783110A727EC70C2009B3114 /* Extensions */,
 				783110AE27EC70C2009B3114 /* Events */,
 				783110CB27EC70C2009B3114 /* Protocols */,
+				78FD660528E2E72D0074B31E /* Version.swift */,
 				783110D627EC70C2009B3114 /* Info.plist */,
 				783110D727EC70C2009B3114 /* Services */,
 			);
@@ -695,7 +700,7 @@
 			);
 			name = "ExposurePlayback-iOS";
 			productName = ExposurePlayback;
-			productReference = 783111FB27EC8EA2009B3114 /* iOSClientExposurePlayback.framework */;
+			productReference = 78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -824,6 +829,7 @@
 				7831113727EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				7831111127EC70C2009B3114 /* HLSNative+ExposureContext+Seek.swift in Sources */,
 				7831114F27EC70C2009B3114 /* BufferingStarted.swift in Sources */,
+				78FD660728E2E72D0074B31E /* Version.swift in Sources */,
 				783110F727EC70C2009B3114 /* ExposureSource.swift in Sources */,
 				7831118927EC70C2009B3114 /* DrmAnalyticsProvider.swift in Sources */,
 				7831113D27EC70C2009B3114 /* UIDevice+Extensions.swift in Sources */,
@@ -944,6 +950,7 @@
 				783111BC27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */,
 				7831112427EC70C2009B3114 /* EnigmaPlayable.swift in Sources */,
 				7831114A27EC70C2009B3114 /* ProgramChanged.swift in Sources */,
+				78FD660628E2E72D0074B31E /* Version.swift in Sources */,
 				7831116A27EC70C2009B3114 /* StartCasting.swift in Sources */,
 				7831110827EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				7831112A27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */,
