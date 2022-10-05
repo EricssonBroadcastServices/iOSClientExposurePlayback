@@ -1,5 +1,15 @@
 # CHANGELOG
 
+* `3.4.20` Release - [3.4.200](#34200)
+* `3.4.10` Release - [3.4.100](#34100)
+* `3.4.00` Release - [3.4.000](#34000)
+* `3.3.70` Release - [3.3.700](#33700)
+* `3.3.60` Release - [3.3.600](#33600)
+* `3.3.50` Release - [3.3.500](#33500)
+* `3.3.40` Release - [3.3.400](#33400)
+* `3.3.30` Release - [3.3.300](#33300)
+* `3.3.20` Release - [3.3.200](#33200)
+* `3.3.10` Release - [3.3.100](#33100)
 * `3.3.00` Release - [3.3.000](#33000)
 * `3.2.00` Release - [3.2.000](#32000)
 * `3.1.00` Release - [3.1.000](#31000)
@@ -45,6 +55,47 @@
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
 
+## 3.4.200
+#### Changes
+* `EMP-18032` Add a missing `StopCasting` analytic event
+
+## 3.4.100
+#### Changes
+* `EMP-18541` Add a global variable to keep track of the framework version
+
+## 3.4.000
+#### Feature
+* `EMP-18532.` Allow developers get `DateRangeMetadataGroups` : `#EXT-X-DATERANGE tag` changes by listening to `onDateRangeMetadataChanges` event 
+* `EMP-18532.` Allow developers to pass date range metada identifier for filtering
+* Bump minimum support iOS version to iOS 12
+
+## 3.3.700
+#### Bug Fixes
+* `EMP-18543` Fix the bug that cause the app to crash when trying to airplay downloaded content
+
+## 3.3.600
+#### Bug Fixes
+* `EMP-18512` Add missing Airplay analytics events after fixing airplay smart tv issue
+
+## 3.3.500
+#### Changes
+* `EMP-18485` Update dependencies
+
+## 3.3.400
+#### Bug Fixes
+* `EMP-18393` Bug Fix : SSAI events do not get fired when playing catchups with pre roll Ads.
+
+## 3.3.300
+#### Changes
+* Update dependencies to the latest
+
+## 3.3.200
+#### Bug Fixes
+* `EMP-18319` Bug Fix : Player freeze when seek on offline assets 
+
+## 3.3.100
+#### Bug Fixes
+* `EMP-18213` Bug Fix : tvOS player doesn't send player version to the analytics
 
 ## 3.3.000
 #### Feature
