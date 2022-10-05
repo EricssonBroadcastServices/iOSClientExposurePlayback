@@ -32,11 +32,16 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     /// Streaming requests normally always contact the remote for license and certificates but if it's a downloaded asset we do not need to contact the remote server
     internal func shouldContactRemote(for resourceLoadingRequest: AVAssetResourceLoadingRequest) throws -> Bool {
 
-        // Check if we can handle the request with a previously persisted content key
-        if try !persistedContentKeyExists(for: assetId) {
+        // Check if we have an ActiveAirplayRoute , if so pass true to contact remote server
+        if AVAudioSession.sharedInstance().hasActiveAirplayRoute {
             return true
         } else {
-            return false
+            // Check if we can handle the request with a previously persisted content key
+            if try !persistedContentKeyExists(for: assetId) {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
@@ -46,6 +51,9 @@ internal class EMUPFairPlayRequester: NSObject, ExposureFairplayRequester {
     internal var onLicenseRequest: () -> Void = { }
     internal var onLicenseResponse: (ExposureContext.Error?) -> Void = { _ in }
 }
+
+
+
 
 // MARK: - AVAssetResourceLoaderDelegate
 extension EMUPFairPlayRequester {
@@ -67,6 +75,7 @@ extension EMUPFairPlayRequester {
     /// - parameter resourceLoadingRequest: loading request to handle
     /// - returns: ´true` if the requester can handle the request, `false` otherwise.
     internal func canHandle(resourceLoadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+
         guard let url = resourceLoadingRequest.request.url else {
             return false
         }
@@ -77,6 +86,7 @@ extension EMUPFairPlayRequester {
         }
         
         resourceLoadingRequestQueue.async { [weak self] in
+            
             guard let weakSelf = self else { return }
             do {
                 if try weakSelf.shouldContactRemote(for: resourceLoadingRequest) {
@@ -99,6 +109,7 @@ extension EMUPFairPlayRequester {
 extension EMUPFairPlayRequester {
     
     fileprivate func handleOffline(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
+        
         guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
             DispatchQueue.main.async { [weak self] in
                 guard let `self` = self else { return }
@@ -108,8 +119,6 @@ extension EMUPFairPlayRequester {
             }
             return
         }
-        
-       
         
         do {
             
@@ -122,7 +131,8 @@ extension EMUPFairPlayRequester {
             
             if let keyData = try persistedContentKey(for: assetId) {
                 resourceLoadingRequest.contentInformationRequest?.contentType = AVStreamingKeyDeliveryPersistentContentKeyType
-                
+                resourceLoadingRequest.contentInformationRequest?.isByteRangeAccessSupported = true
+                resourceLoadingRequest.contentInformationRequest?.contentLength = Int64(keyData.count)
                 let contentKey = try self.onSuccessfulRetrieval(of: keyData, for: resourceLoadingRequest)
                 
                 // Provide data to the loading request.
@@ -149,6 +159,7 @@ extension EMUPFairPlayRequester {
     ///
     /// For more information regarding *Fairplay* validation, please see Apple's documentation regarding *Fairplay Streaming*.
     fileprivate func handle(resourceLoadingRequest: AVAssetResourceLoadingRequest) {
+        
         guard let assetIDString = resourceLoadingRequest.request.url?.host, let contentIdentifier = assetIDString.data(using: String.Encoding.utf8) else {
             DispatchQueue.main.async { [weak self] in
                 guard let `self` = self else { return }

@@ -12,3 +12,4 @@ spec.source_files  = "Sources/iOSClientExposurePlayback/**/*.swift"
 spec.dependency 'iOSClientExposure', '~>  3.1.2'
 spec.dependency 'iOSClientPlayer', '~>  3.1.1'
 end
+

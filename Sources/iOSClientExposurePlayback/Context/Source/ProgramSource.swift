@@ -27,9 +27,9 @@ open class ProgramSource: ExposureSource {
     /// - parameter entitlement: `PlaybackEntitlement` used to play the program
     /// - parameter assetId: The id for the program
     /// - parameter channelId: The channel Id on which the program plays
-    public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil , durationInMs: Double? = nil ) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil , ads: Ads? = nil ,  durationInMs: Double? = nil ) {
         self.channelId = channelId
-        super.init(entitlement: entitlement, assetId: assetId, streamingInfo: streamingInfo, sprites: sprites, durationInMs: durationInMs)
+        super.init(entitlement: entitlement, assetId: assetId, streamingInfo: streamingInfo, sprites: sprites, ads: ads, durationInMs: durationInMs)
     }
     
     /// Creates a new `ProgramSource`
@@ -38,9 +38,9 @@ open class ProgramSource: ExposureSource {
     /// - parameter assetId: The id for the program
     /// - parameter channelId: The channel Id on which the program plays
     /// - parameter response: HTTP response received when requesting the entitlement
-    public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String, response: HTTPURLResponse? = nil, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil, durationInMs: Double? = nil) {
+    public init(entitlement: PlaybackEntitlement, assetId: String, channelId: String, response: HTTPURLResponse? = nil, streamingInfo: StreamInfo?, sprites: [Sprites]? = nil, ads: Ads? = nil ,  durationInMs: Double? = nil) {
         self.channelId = channelId
-        super.init(entitlement: entitlement, assetId: assetId, response: response, streamingInfo: streamingInfo, sprites: sprites, durationInMs: durationInMs)
+        super.init(entitlement: entitlement, assetId: assetId, response: response, streamingInfo: streamingInfo, sprites: sprites, ads: ads, durationInMs: durationInMs)
     }
     
     public override func prepareSourceUrl(callback: @escaping (URL?) -> Void) {

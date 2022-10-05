@@ -115,11 +115,11 @@ extension AssetPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, callback: callback)
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, metadataIdentifiers: [String]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers,  callback: callback)
     }
     
-    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String]? ,  callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         
         
         // Remove any sprites from UserDefaults if available
@@ -136,45 +136,43 @@ extension AssetPlayable {
                 
                 // Live event
                 if value.streamInfo?.event == true {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, durationInMs: value.durationInMs)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 // This is a live program
                 if value.streamInfo?.live == true && value.streamInfo?.staticProgram == false {
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, durationInMs: value.durationInMs)
+                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                     
                 }
                 
-                // Dynamic catchup as live
+                // Dynamic catchup as live : treated as an `AssetSource`
                 else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
-
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites,ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
                 
-                // Static catch up as live
+                // Static catch up as live : treated as an `AssetSource`
                 else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
-
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId,  streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads,  durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
                 
                 
-                // Catchup
+                // Catchup :  treated as an `AssetSource`
                 else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(value.sprites), forKey:"sprites")
-                    let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites, durationInMs: value.durationInMs)
+                    let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
                 }
@@ -212,7 +210,7 @@ extension AssetPlayable {
 }
 
 extension AssetPlayable {
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String], activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
         
         // Remove any sprites from UserDefaults if available
         UserDefaults.standard.removeObject(forKey: "sprites")

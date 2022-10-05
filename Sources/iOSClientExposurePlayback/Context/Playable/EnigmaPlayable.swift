@@ -14,7 +14,7 @@ public struct EnigmaPlayable {
     ///
     /// - Parameter entitlementV2: response from play V2
     /// - Returns: Entitlement & error
-    internal static func convertV2EntitlementToV1(entitlementV2: PlayBackEntitlementV2 ) -> (PlaybackEntitlement?, ExposureError? ) {
+    internal static func convertV2EntitlementToV1(entitlementV2: PlayBackEntitlementV2, _ offlineMedia: OfflineMediaPlayable? = nil ) -> (PlaybackEntitlement?, ExposureError? ) {
         
         guard let format = entitlementV2.formats?.first else {
             let noSupportedMediaFormatsError = NSError(domain: "Could not find a media format supported by the current player implementation.", code: 38, userInfo: nil)
@@ -30,11 +30,14 @@ public struct EnigmaPlayable {
         let certificateUrl = format.fairplay.first?.certificateUrl
         let licenseServerUrl = format.fairplay.first?.licenseServerUrl
         
+        let mediaLocator: URL = format.mediaLocator
+        
+      
         let fairplay = FairplayConfiguration(secondaryMediaLocator: nil, certificateUrl: certificateUrl, licenseAcquisitionUrl: licenseServerUrl, licenseServerUrl: licenseServerUrl)
         
         let playbackEntitlement = PlaybackEntitlement( assetId: entitlementV2.assetId, accountId: entitlementV2.accountId, audioOnly: entitlementV2.audioOnly,
             playTokenExpiration: String(entitlementV2.playTokenExpiration),
-            mediaLocator: (format.mediaLocator),
+            mediaLocator: mediaLocator,
             playSessionId: entitlementV2.playSessionId,
             live: entitlementV2.streamInfo?.live ?? false,
             ffEnabled: entitlementV2.contractRestrictions?.ffEnabled ?? true,
