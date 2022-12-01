@@ -375,6 +375,7 @@
 		76A89BF1202072D100C23579 = {
 			isa = PBXGroup;
 			children = (
+				78D8E8672938E57A00951897 /* Packages */,
 				783111CE27EC712B009B3114 /* UPGRADE_GUIDE.md */,
 				783111CD27EC711F009B3114 /* README.md */,
 				783111CC27EC7118009B3114 /* CHANGELOG.md */,
@@ -649,6 +650,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		78D8E8672938E57A00951897 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -703,6 +711,8 @@
 			dependencies = (
 			);
 			name = "ExposurePlayback-iOS";
+			packageProductDependencies = (
+			);
 			productName = ExposurePlayback;
 			productReference = 78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */;
 			productType = "com.apple.product-type.framework";
@@ -736,6 +746,8 @@
 				Base,
 			);
 			mainGroup = 76A89BF1202072D100C23579;
+			packageReferences = (
+			);
 			productRefGroup = 76A89BF1202072D100C23579;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1006,7 +1018,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.200;
+				MARKETING_VERSION = 3.4.300;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1036,7 +1048,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.200;
+				MARKETING_VERSION = 3.4.300;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1187,7 +1199,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.200;
+				MARKETING_VERSION = 3.4.300;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1218,7 +1230,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.200;
+				MARKETING_VERSION = 3.4.300;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
