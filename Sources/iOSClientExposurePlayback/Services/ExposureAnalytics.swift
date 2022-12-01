@@ -319,8 +319,8 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         dispatcher = Dispatcher(environment: environment,
                                 sessionToken: sessionToken,
                                 playSessionId: playSessionId,
-                                startupEvents: events,
-                                heartbeatsProvider: heartbeatsProvider, analytics: analytics)
+                                analytics: analytics, startupEvents: events,
+                                heartbeatsProvider: heartbeatsProvider)
         dispatcher?.requestId = extractRequestId(source: source)
         dispatcher?.onExposureResponseMessage = { [weak self] message in
             self?.onExposureResponseMessage(message)
@@ -721,9 +721,8 @@ extension ExposureAnalytics: AnalyticsProvider {
         dispatcher = Dispatcher(environment: environment,
                                 sessionToken: sessionToken,
                                 playSessionId: UUID().uuidString,
-                                startupEvents: events,
-                                heartbeatsProvider: { return nil },
-                                analytics: analytics)
+                                analytics: analytics, startupEvents: events,
+                                heartbeatsProvider: { return nil })
         dispatcher?.requestId = extractRequestId(source: source)
         
         dispatcher?.flushTrigger(enabled: false)
