@@ -239,8 +239,8 @@ extension ExposureContext {
                 
                 /// EMP related startup analytics
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                    exposureProvider.onHandshakeStarted(tech: tech, source: source)
-                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in
+                    exposureProvider.onHandshakeStarted(tech: tech, source: source, analytics: source.entitlement.analytics)
+                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId, analytics: source.entitlement.analytics) { [weak self, weak tech] in
                         guard let `self` = self, let tech = tech else { return nil }
                         
                         guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }
@@ -305,7 +305,7 @@ extension ExposureContext {
 
             source.analyticsConnector.providers.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                    exposureProvider.onProgramChanged(tech: tech, source: source, program: program)
+                    exposureProvider.onProgramChanged(tech: tech, source: source, program: program, analytics: source.entitlement.analytics)
                 }
             }
             

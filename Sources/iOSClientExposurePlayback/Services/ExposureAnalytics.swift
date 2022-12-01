@@ -57,8 +57,6 @@ public class ExposureAnalytics {
     /// - Important: should match the `environment` used to authenticate the user.
     public let sessionToken: SessionToken
     
-    public let analyticsBaseUrl: String?
-    
     // the official name of the app
     public let appName: String?
     
@@ -69,12 +67,11 @@ public class ExposureAnalytics {
     
     public let analytics: AnalyticsFromEntitlement?
     
-    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, analyticsBaseUrl: String?, appName: String? = nil ) {
+    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, appName: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.cdn = cdn
         self.analytics = analytics
-        self.analyticsBaseUrl = analyticsBaseUrl
         self.appName = appName
     }
     
@@ -128,12 +125,12 @@ public class ExposureAnalytics {
         if let source = source as? ExposureSource {
             let event = Playback.AdStarted(timestamp: Date().millisecondsSince1970,
                                            offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
-                                         cdnInfo: source.entitlement.cdn,
-                                         analyticsInfo: source.entitlement.analytics)
+                                           cdnInfo: source.entitlement.cdn,
+                                           analyticsInfo: source.entitlement.analytics)
             dispatcher?.enqueue(event: event)
         } else {
             let event = Playback.AdStarted(timestamp: Date().millisecondsSince1970,
-                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
+                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
             dispatcher?.enqueue(event: event)
         }
     }
@@ -141,13 +138,13 @@ public class ExposureAnalytics {
     public func onAdCompleted<Tech, Source>(tech: Tech, source: Source, adMediaId: String) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             let event = Playback.AdCompleted(timestamp: Date().millisecondsSince1970,
-                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
-                                         cdnInfo: source.entitlement.cdn,
-                                         analyticsInfo: source.entitlement.analytics)
+                                             offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
+                                             cdnInfo: source.entitlement.cdn,
+                                             analyticsInfo: source.entitlement.analytics)
             dispatcher?.enqueue(event: event)
         } else {
             let event = Playback.AdCompleted(timestamp: Date().millisecondsSince1970,
-                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
+                                             offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId)
             dispatcher?.enqueue(event: event)
         }
     }
@@ -155,9 +152,9 @@ public class ExposureAnalytics {
     public func onAdFailed<Tech, Source>(tech: Tech, source: Source, adMediaId: String) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             let event = Playback.AdFailed(timestamp: Date().millisecondsSince1970,
-                                           offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
-                                         cdnInfo: source.entitlement.cdn,
-                                         analyticsInfo: source.entitlement.analytics)
+                                          offsetTime: offsetTime(for: source, using: tech), adMediaId: adMediaId,
+                                          cdnInfo: source.entitlement.cdn,
+                                          analyticsInfo: source.entitlement.analytics)
             dispatcher?.enqueue(event: event)
         } else {
             let event = Playback.AdFailed(timestamp: Date().millisecondsSince1970,
@@ -239,7 +236,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             ///
             /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
             let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
-        
+            
             
             /// 2. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
@@ -267,7 +264,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             ///
             /// TODO: Introduce a `version` property on `PlaybackTech` for a more robust solution
             let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
-        
+            
             
             /// 2. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
@@ -280,10 +277,10 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             current.append(deviceInfo)
             startup = .notStarted(events: current)
         }
-
+        
     }
     
-    public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
+    public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
                                                   assetData: PlaybackIdentifier.from(source: source), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
@@ -304,7 +301,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     /// - parameter asset: *EMP* asset identifiers.
     /// - parameter entitlement: The entitlement this session concerns
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
-    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
+    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, analytics: AnalyticsFromEntitlement?, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         let events = extractAndPrepareStartupEvents(source: source)
         
         if let tech = tech as? HLSNative<ExposureContext>, tech.isExternalPlaybackActive {
@@ -312,11 +309,18 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             externalPlayback = .startedAsAirplay
         }
         
+        // Determine if the analytics should be send or not to the analytics server
+        if let percentage = analytics?.percentage {
+            self.shouldSendAnalytics(percentage: percentage )
+        } else {
+            self.shouldSendAnalytics(percentage: 100 )
+        }
+        
         dispatcher = Dispatcher(environment: environment,
                                 sessionToken: sessionToken,
                                 playSessionId: playSessionId,
                                 startupEvents: events,
-                                heartbeatsProvider: heartbeatsProvider, analyticsBaseUrl: analyticsBaseUrl)
+                                heartbeatsProvider: heartbeatsProvider, analytics: analytics)
         dispatcher?.requestId = extractRequestId(source: source)
         dispatcher?.onExposureResponseMessage = { [weak self] message in
             self?.onExposureResponseMessage(message)
@@ -325,7 +329,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     }
     
     
-    public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource {
+    public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource {
         if let programId = program?.programId, lastKnownProgramId != nil {
             
             if let source = source as? ExposureSource {
@@ -346,6 +350,50 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         lastKnownProgramId = program?.programId
     }
 }
+
+extension ExposureAnalytics {
+    
+    
+    /// Decide if the analytics should be send or not
+    /// - Parameter analytics: AnalyticsFromEntitlement
+    /// - Returns: true / false
+    private func shouldSendAnalytics(percentage: Int) {
+        
+        // Create a userDefault / Key , this will hold the value of should / should not send analytics to the backend for the playback session
+        let userdefaults = UserDefaults.standard
+        let key = "shouldSendAnalytics"
+        
+        let coinFlip: Bool = Bool.random()
+        let diceRoll = Int.random(in: 0 ... 100)
+        
+        // if percentage 0 , do not send analytics always
+        if percentage == 0 {
+            userdefaults.setValue(false, forKey: key)
+        }
+        
+        // if percentage = 100 , always send analytics
+        else if (percentage == 100 ) {
+            userdefaults.setValue(true, forKey: key)
+        }
+        
+        // if percentage = 50 , do a coin flip
+        else if(percentage == 50 ) {
+            userdefaults.setValue(coinFlip, forKey: key)
+        }
+        
+        // If percentage is something else, do a dice roll
+        else {
+            
+            // If the dice roll value is higher than the percentage , send analytics , otherwise do not send analytics
+            if diceRoll > percentage {
+                userdefaults.setValue(true, forKey: key)
+            } else {
+                userdefaults.setValue(false, forKey: key)
+            }
+        }
+    }
+}
+
 extension URL {
     func cleanQuery() -> String? {
         if var urlcomponents = URLComponents(url: self, resolvingAgainstBaseURL: false) {
@@ -394,13 +442,13 @@ extension ExposureAnalytics: AnalyticsProvider {
     public func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// Created/DeviceInfo/Handshake will be sent before entitlement request
     }
-
+    
     public func onPrepared<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// InitCompleted
         
         /// EMP-16272 : Remove player analytics init call
         /* let event = Playback.InitCompleted(timestamp: Date().millisecondsSince1970, cdnInfo: (source as? ExposureSource)?.entitlement.cdn, analyticsInfo: (source as? ExposureSource)?.entitlement.analytics)
-        dispatcher?.enqueue(event: event) */
+         dispatcher?.enqueue(event: event) */
     }
     
     public func onReady<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
@@ -442,13 +490,20 @@ extension ExposureAnalytics: AnalyticsProvider {
             /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
             let segmentRequestId = source.mediaSourceRequestHeaders["X-Playback-Session-Id"]
             
+            var bitrate: Int64? = nil
+            
+            // Check if tech has an assigned bit rate
+            if let currentBitrate =  tech.currentBitrate {
+                bitrate = Int64(currentBitrate/1000)
+            }
+            
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source),
                                          mediaLocator: source.entitlement.mediaLocator.absoluteString,
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
-                                         bitrate: tech.currentBitrate != nil ? Int64(tech.currentBitrate!/1000) : nil,
+                                         bitrate: tech.currentBitrate != nil ? bitrate : nil,
                                          referenceTime: referenceTime,
                                          segmentRequestId: segmentRequestId,
                                          cdnInfo: source.entitlement.cdn,
@@ -526,11 +581,11 @@ extension ExposureAnalytics: AnalyticsProvider {
         case .endedCasting:
             if let source = source as? ExposureSource {
                 let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
-                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+                                                 offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
                 dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
-                                                  offsetTime: offsetTime(for: source, using: tech))
+                                                 offsetTime: offsetTime(for: source, using: tech))
                 dispatcher?.enqueue(event: event)
             }
         case .none:
@@ -544,7 +599,7 @@ extension ExposureAnalytics: AnalyticsProvider {
                 dispatcher?.enqueue(event: event)
             }
             
-        
+            
         }
     }
     
@@ -668,7 +723,7 @@ extension ExposureAnalytics: AnalyticsProvider {
                                 playSessionId: UUID().uuidString,
                                 startupEvents: events,
                                 heartbeatsProvider: { return nil },
-                                analyticsBaseUrl: analyticsBaseUrl)
+                                analytics: analytics)
         dispatcher?.requestId = extractRequestId(source: source)
         
         dispatcher?.flushTrigger(enabled: false)
@@ -762,7 +817,7 @@ extension ExposureAnalytics: TraceProvider {
             dispatcher?.enqueue(event: event)
         }
         
-       
+        
     }
 }
 
@@ -789,7 +844,7 @@ extension ExposureAnalytics: TechDeallocationEventProvider {
             dispatcher?.flushTrigger(enabled: false)
             dispatcher = nil
         }
-       
+        
     }
 }
 
@@ -862,11 +917,11 @@ extension ExposureAnalytics {
     internal func networkTech(connection: Reachability.Connection) -> String {
         switch connection {
         case .cellular:
-            #if os(iOS)
+#if os(iOS)
             return CTTelephonyNetworkInfo().currentRadioAccessTechnology ?? connection.description
-            #elseif os(tvOS)
+#elseif os(tvOS)
             return connection.description
-            #endif
+#endif
         case .none: return connection.description
         case .unknown: return connection.description
         case .wifi: return connection.description
