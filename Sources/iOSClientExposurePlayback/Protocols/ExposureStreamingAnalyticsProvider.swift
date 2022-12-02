@@ -12,7 +12,7 @@ import iOSClientExposure
 
 /// Extends the `Player` built in protocol defining analytics events with *Exposure* specific analytics
 public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
-    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String?, appName: String? )
+    init(environment: Environment, sessionToken: SessionToken, cdn:CDNInfoFromEntitlement? , analytics: AnalyticsFromEntitlement?, appName: String? )
     
     /// Exposure environment used for the active session.
     ///
@@ -23,9 +23,6 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     ///
     /// - Important: should match the `environment` used to authenticate the user.
     var sessionToken: SessionToken { get }
-    
-    
-    var analyticsBaseUrl: String? { get }
     
     // the official name of the app
     var appName: String? { get }
@@ -40,7 +37,7 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     ///
     /// - parameter tech: `PlaybackTech` to be used for playback
     /// - parameter source: `MediaSource` used to load the request
-    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source) where Tech: PlaybackTech, Source: MediaSource
+    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource
     
     /// Should prepare and configure the remaining parts of the Analytics environment.
     /// This step is required because we are dependant on the response from Exposure with regards to the playSessionId.
@@ -51,7 +48,7 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     /// - parameter source: `MediaSource` used to load the request
     /// - parameter playSessionId: Unique identifier for the current playback session.
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
-    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech: PlaybackTech, Source: MediaSource
+    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, analytics: AnalyticsFromEntitlement?, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech: PlaybackTech, Source: MediaSource
     
     /// Sent if the current program changes during the session.
     ///
@@ -60,6 +57,6 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     /// - parameter tech: `PlaybackTech` to be used for playback
     /// - parameter source: `MediaSource` used to load the request
     /// - parameter playSessionId: Unique identifier for the current playback session.
-    func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech: PlaybackTech, Source: MediaSource
+    func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource
 }
 

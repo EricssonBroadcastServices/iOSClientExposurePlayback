@@ -14,18 +14,20 @@ import iOSClientPlayer
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
-    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, analyticsBaseUrl: String? = nil, appName: String? = nil  ) {
+    
+    
+    required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, appName: String? = nil  ) {
         self.environment = environment
         self.sessionToken = sessionToken
-        self.analyticsBaseUrl = analyticsBaseUrl
         self.appName = appName
+        self.analytics = analytics
     }
     
     let environment: Environment
     
     let sessionToken: SessionToken
     
-    let analyticsBaseUrl: String?
+    let analytics: AnalyticsFromEntitlement?
     
     let appName: String?
     
@@ -33,15 +35,15 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
+    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     
-    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
+    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, analytics: AnalyticsFromEntitlement?, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     
-    func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?) where Tech : PlaybackTech, Source : MediaSource {
+    func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     
