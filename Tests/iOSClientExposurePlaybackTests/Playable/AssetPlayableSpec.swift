@@ -69,7 +69,7 @@ class AssetPlayableSpec: QuickSpec {
                 let playable = AssetPlayable(assetId: "channelId", assetType: nil, entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: nil) { src, err in
                     source = src
                     error = err
                 }
@@ -86,7 +86,7 @@ class AssetPlayableSpec: QuickSpec {
                 let playable = AssetPlayable(assetId: "assetId", assetType: nil, entitlementProvider: provider)
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: nil) { src, err in
                     source = src
                     error = err
                 }

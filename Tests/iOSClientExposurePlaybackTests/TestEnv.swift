@@ -24,10 +24,15 @@ class TestEnv {
     let environment: Environment
     let sessionToken: SessionToken
     let player: Player<HLSNative<ExposureContext>>
+    
+    public var eventDispatcher: EventDispatcher<ExposureContext, HLSNative<ExposureContext>> = EventDispatcher()
+    
     init(environment: Environment, sessionToken: SessionToken) {
+        
+
         self.environment = environment
         self.sessionToken = sessionToken
-        self.player = Player<HLSNative<ExposureContext>>(environment: environment, sessionToken: sessionToken, analytics: MockedExposureAnalytics.self, analyticsBaseUrl: "analyticsBaseURL", appName: "Test App Name")
+        self.player = Player<HLSNative<ExposureContext>>(environment: environment, sessionToken: sessionToken, analytics: MockedExposureAnalytics.self, appName: "Test App Name")
         
         // Mock the AVPlayer
         let mockedPlayer = MockedAVPlayer()
@@ -46,12 +51,12 @@ class TestEnv {
         player.context.monotonicTimeService.serverTimeProvider = callback()
     }
     
-    func mockAsset(callback: @escaping (ExposureSource, HLSNativeConfiguration) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource>) {
+    func mockAsset(callback: @escaping (ExposureSource, HLSNativeConfiguration, EventDispatcher<ExposureContext, HLSNative<ExposureContext>>? , [String]? ) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource>) {
         player.tech.assetGenerator = callback
     }
     
-    func defaultAssetMock(currentDate: Int64, bufferDuration: Int64, callback: @escaping (MockedAVURLAsset, MockedAVPlayerItem) -> Void = { _,_ in }) -> (ExposureSource, HLSNativeConfiguration) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource> {
-        return { source, configuration in
+    func defaultAssetMock(currentDate: Int64, bufferDuration: Int64, callback: @escaping (MockedAVURLAsset, MockedAVPlayerItem) -> Void = { _,_ in }) -> (ExposureSource, HLSNativeConfiguration, EventDispatcher<ExposureContext, HLSNative<ExposureContext>>?, [String]?) -> HLSNative<ExposureContext>.MediaAsset<ExposureSource> {
+        return { source, configuration, eventDispatcher, metadataGroup in
             // MediaAsset
             let media = HLSNative<ExposureContext>.MediaAsset<ExposureSource>(source: source, configuration: configuration)
             
