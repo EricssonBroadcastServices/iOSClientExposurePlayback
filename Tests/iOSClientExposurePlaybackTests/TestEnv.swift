@@ -114,7 +114,7 @@ class TestEnv {
         player.context.channelPlayableGenerator = callback
     }
     
-    func mockProgramService(callback: @escaping (Environment, SessionToken, String) -> ProgramService) {
+    func mockProgramService(callback: @escaping (Environment, SessionToken, EPG?, String?) -> ProgramService) {
         player.context.programServiceGenerator = callback
     }
 }

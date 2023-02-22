@@ -283,7 +283,7 @@ extension ExposureContext {
             return
             
         }
-        let service = programServiceGenerator(environment, sessionToken, serviceEnabled.programServiceChannelId)
+        let service = programServiceGenerator(environment, sessionToken, source.entitlement.epg , serviceEnabled.programServiceChannelId)
         
         programService = service
         

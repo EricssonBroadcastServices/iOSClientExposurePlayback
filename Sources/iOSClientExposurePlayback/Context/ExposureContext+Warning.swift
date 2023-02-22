@@ -58,6 +58,7 @@ extension ExposureContext.Warning {
         case rewindDisabled
         case timeshiftDisabled
         case policyChangedTargetSeekOffset(requested: Int64, allowed: Int64)
+        case epgHasDisabled
     }
 }
 
@@ -69,6 +70,7 @@ extension ExposureContext.Warning.ContractRestrictions {
         case .rewindDisabled: return "Contract restrictions disabled rewinding"
         case .timeshiftDisabled: return "Contract restrictions disabled timeshifting"
         case .policyChangedTargetSeekOffset(requested: let request, allowed: let allowed): return "Contract restrictions changed target seek offset from \(request) to \(allowed)"
+        case .epgHasDisabled: return "EPG has disabled for the next program"
         }
     }
 }
