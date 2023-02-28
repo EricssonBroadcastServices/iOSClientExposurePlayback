@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.4.40` Release - [3.4.400](#34400)
 * `3.4.30` Release - [3.4.300](#34300)
 * `3.4.20` Release - [3.4.200](#34200)
 * `3.4.10` Release - [3.4.100](#34100)
@@ -55,6 +56,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.4.400
+#### Changes
+* `EMP-19370` Bug fix : Subtitles disappear when seeking on offline assets
 
 ## 3.4.300
 #### Changes
