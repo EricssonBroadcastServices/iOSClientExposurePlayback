@@ -14,7 +14,7 @@ internal protocol ProgramProvider {
     func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void)
     func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
     func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
-    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, programStartTime: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
+    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, entitlementDate: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
 }
 
 internal protocol ProgramServiceEnabled {
@@ -46,7 +46,8 @@ public class ProgramService {
     ///
     /// Values in milliseconds.
     ///
-    /// - note: A minimum value of `1200000`is enforced when doing an entitlement request for the next program , before ending the current program.
+    /// - note: A minimum value of `1000`is enforced when doing an entitlement request unless it's passed.
+    ///         ( ex : validating entitlements for epg will enforce minimum value  to be 120s : 120000 ms )
     public var fuzzyFactor: UInt32 {
         get {
             return fuzzyConfiguration.fuzzyFactor
@@ -164,10 +165,10 @@ public class ProgramService {
         }
         
         
-        func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken,  programStartTime: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
+        func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken,  entitlementDate: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
   
             Entitlement(environment: environment, sessionToken: sessionToken)
-                .validate(assetId: assetId, programStartTime: programStartTime )
+                .validate(assetId: assetId, entitlementDate: entitlementDate )
                 .request()
                 .validate()
                 .response{
@@ -260,21 +261,32 @@ extension ProgramService {
     }
     
     
+    /// Convert date/time value to utc string value
+    /// - Parameter timeToConvert: date/time value
+    /// - Returns: converted date/time string
+    fileprivate func getUTCTimeString( timeToConvert: Date ) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter.string(from: timeToConvert)
+    }
+    
     fileprivate func validate(program: Program, callback: @escaping (ExposureContext.Warning.ProgramService?, String?) -> Void) {
         
-        // Get next program start time & pass to the entitlement check 
+        // Get next program start time in date/time format
         let programStartTimeInDateFormat = program.startTime?.toDate()
-        var timeToPass = program.startTime
         
-        if let addingSecondToPRogramStartTime = programStartTimeInDateFormat?.addingTimeInterval(TimeInterval( 1 * 01 )) {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "en_GB")
-            formatter.timeZone = TimeZone(abbreviation: "UTC")
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            timeToPass =  formatter.string(from: addingSecondToPRogramStartTime)
+        var timeToPass = getUTCTimeString(timeToConvert: Date())
+        
+        // Check if next `ProgramStartTime + 1ms` is in past
+        // ( ex : user can pause the stream for a long time, then start playing again )
+        if let programStartTimeForEntitlement = programStartTimeInDateFormat?.addingTimeInterval(TimeInterval( 1 * 01 )) {
+            let passingValue = max( programStartTimeForEntitlement , Date() )
+            timeToPass =  getUTCTimeString(timeToConvert: passingValue )
         }
         
-        self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken, programStartTime: timeToPass ) { [weak self] validation, error in
+        self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken, entitlementDate: timeToPass ) { [weak self] validation, error in
             guard let `self` = self else { return }
             guard let expirationReason = validation?.status else {
                 // We are permissive on validation errors, allow playback to continue.
@@ -399,7 +411,6 @@ extension ProgramService {
                 return
             }
             self.handleProgramChanged(program: program, isExtendedProgram: false)
-            
             
             // This will check `epg` value in the play response & decide whether program service should fetch next program & do entitlement checks
             

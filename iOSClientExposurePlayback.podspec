@@ -10,6 +10,6 @@ spec.platforms = { :ios => "12.0", :tvos => "12.0" }
 spec.source       = { :git => "https://github.com/EricssonBroadcastServices/iOSClientExposurePlayback.git", :tag => "v#{spec.version}" }
 spec.source_files  = "Sources/iOSClientExposurePlayback/**/*.swift"
 spec.dependency 'iOSClientExposure', '~>  3.1.6'
-spec.dependency 'iOSClientPlayer', '~>  3.1.4'
+spec.dependency 'iOSClientPlayer', '~>  3.1.5'
 end
 

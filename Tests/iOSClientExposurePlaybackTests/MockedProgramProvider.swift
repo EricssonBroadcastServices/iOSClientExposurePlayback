@@ -20,7 +20,7 @@ class MockedProgramProvider: ProgramProvider {
     }
     
     var mockedValidate: (String, Environment, SessionToken, (EntitlementValidation?, ExposureError?) -> Void) -> Void = { _,_,_,_ in }
-    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, programStartTime: String?,callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
+    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, entitlementDate: String?,callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
         mockedValidate(assetId, environment, sessionToken, callback)
     }
     
