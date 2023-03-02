@@ -27,7 +27,7 @@ class SeekToLiveMock {
         })
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp > currentDate + hour/2 {
@@ -48,7 +48,7 @@ class SeekToLiveMock {
             provider.mockedValidate = { _,_,_, callback in
                 callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -80,7 +80,7 @@ class SeekToLiveMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -95,7 +95,7 @@ class SeekToLiveMock {
                 }
             }
             
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.provider = provider
             return service
         }
@@ -128,7 +128,7 @@ class SeekToLiveMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -149,7 +149,7 @@ class SeekToLiveMock {
             provider.mockedValidate = { _,_,_, callback in
                 callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 401, message: "SOME_ERROR")))
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.provider = provider
             return service
         }
@@ -184,7 +184,7 @@ class SeekToLiveMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -199,7 +199,7 @@ class SeekToLiveMock {
                     callback(nil,nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.provider = provider
             return service
         }
@@ -234,7 +234,7 @@ class SeekToLiveMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -260,7 +260,7 @@ class SeekToLiveMock {
                     callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.provider = provider
             return service
         }

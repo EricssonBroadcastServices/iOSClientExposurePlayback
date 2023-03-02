@@ -26,7 +26,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,_,_, callback in
                 let program = Program
@@ -35,7 +35,7 @@ class SeekToTimeMock {
                     .decodeWrap(Program.self)
                 callback(program,nil)
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -67,7 +67,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -88,7 +88,7 @@ class SeekToTimeMock {
             provider.mockedValidate = { programId, environment, sessionToken, callback in
                 callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -118,7 +118,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -133,7 +133,7 @@ class SeekToTimeMock {
                 }
             }
             
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -167,7 +167,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -188,7 +188,7 @@ class SeekToTimeMock {
             provider.mockedValidate = { _,_,_, callback in
                 callback(nil, ExposureError.exposureResponse(reason: ExposureResponseMessage(httpCode: 401, message: "SOME_ERROR")))
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -223,7 +223,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -238,7 +238,7 @@ class SeekToTimeMock {
                     callback(nil,nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -271,7 +271,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate + hour / 2 {
@@ -297,7 +297,7 @@ class SeekToTimeMock {
                     callback(EntitlementValidation.validJson(status: "SUCCESS").decode(EntitlementValidation.self),nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -343,7 +343,7 @@ class SeekToTimeMock {
         // ServerTime is required for LiveDelay to work properly
         env.player.serverTime(forceRefresh: true) { print("runAfterSeekableRangeBeyondLive",$0) }
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,_,_, callback in
                 let program = Program
@@ -352,7 +352,7 @@ class SeekToTimeMock {
                     .decodeWrap(Program.self)
                 callback(program,nil)
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -386,7 +386,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate {
@@ -401,7 +401,7 @@ class SeekToTimeMock {
                 }
             }
             
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -433,7 +433,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate {
@@ -448,7 +448,7 @@ class SeekToTimeMock {
                     callback(program,nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -480,7 +480,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate {
@@ -498,7 +498,7 @@ class SeekToTimeMock {
                     callback(program,nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
@@ -541,7 +541,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 if timestamp < currentDate {
@@ -559,7 +559,7 @@ class SeekToTimeMock {
                     callback(program,nil)
                 }
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
@@ -619,7 +619,7 @@ class SeekToTimeMock {
         env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
         
         // Mock the ProgramService
-        env.mockProgramService{ environment, sessionToken, channelId in
+        env.mockProgramService{ environment, sessionToken, epg, channelId in
             let provider = MockedProgramProvider()
             provider.mockedFetchProgram = { _,timestamp,_, callback in
                 let program = Program
@@ -628,7 +628,7 @@ class SeekToTimeMock {
                     .decodeWrap(Program.self)
                 callback(program,nil)
             }
-            let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+            let service = ProgramService(environment: environment, sessionToken: sessionToken, epg:epg, channelId: channelId!)
             service.fuzzyConfiguration.fuzzyFactor = 1000
             service.provider = provider
             return service
