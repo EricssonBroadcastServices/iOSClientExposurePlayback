@@ -51,14 +51,25 @@
                 /// Assign language preferences
                 switch playbackProperties.language {
                 case .defaultBehaviour:
-                    print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                   //  print("context.playbackProperties.language.defaultBehaviour", tech.preferredTextLanguage, tech.preferredAudioLanguage)
+                    break
                 case .userLocale:
                     let locale = Locale.current.languageCode
                     tech.preferredTextLanguage = locale
                     tech.preferredAudioLanguage = locale
+                    
+                    // Keep the selected subtitle in the userdefaults for downloaded assets
+                    // This is required for fast seeking as AVFoundation can loose the subtitle track sometimes.
+                    UserDefaults.standard.set(locale , forKey: "prefferedMediaSelection")
+                    
                 case let .custom(text: text, audio: audio):
-                    tech.preferredTextLanguage = text
                     tech.preferredAudioLanguage = audio
+                    tech.preferredTextLanguage = text
+                    
+                    // Keep the selected subtitle in the userdefaults for downloaded assets
+                    // This is required for fast seeking as AVFoundation can loose the subtitle track sometimes.
+                    UserDefaults.standard.set(text , forKey: "prefferedMediaSelection")
+                    
                 }
                 
                 /// Create HLS configuration
