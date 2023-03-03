@@ -14,7 +14,7 @@ internal protocol ProgramProvider {
     func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void)
     func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
     func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void)
-    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
+    func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, entitlementDate: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void)
 }
 
 internal protocol ProgramServiceEnabled {
@@ -27,6 +27,8 @@ public class ProgramService {
     fileprivate var environment: Environment
     
     fileprivate var sessionToken: SessionToken
+    
+    fileprivate var epg: EPG?
     
     /// The channel to monitor
     internal let channelId: String
@@ -44,7 +46,8 @@ public class ProgramService {
     ///
     /// Values in milliseconds.
     ///
-    /// - note: A minimum value of `30000` is enforced
+    /// - note: A minimum value of `1000`is enforced when doing an entitlement request unless it's passed.
+    ///         ( ex : validating entitlements for epg will enforce minimum value  to be 120s : 120000 ms )
     public var fuzzyFactor: UInt32 {
         get {
             return fuzzyConfiguration.fuzzyFactor
@@ -57,7 +60,7 @@ public class ProgramService {
     
     internal var fuzzyConfiguration: FuzzyFactor = FuzzyFactor()
     internal struct FuzzyFactor {
-        internal static let minimumFuzzyFactor: UInt32 = 30 * 1000
+        internal static let minimumFuzzyFactor: UInt32 = 1 * 1000
         
         internal var fuzzyFactor: UInt32 = ProgramService.FuzzyFactor.minimumFuzzyFactor
         
@@ -94,10 +97,11 @@ public class ProgramService {
     
     fileprivate var activeProgram: Program?
     fileprivate var started: Bool = false
-    internal init(environment: Environment, sessionToken: SessionToken, channelId: String) {
+    internal init(environment: Environment, sessionToken: SessionToken, epg: EPG? = nil  , channelId: String) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.channelId = channelId
+        self.epg = epg
         self.provider = ExposureProgramProvider()
         self.queue = DispatchQueue(label: "com.emp.exposure.programService",
                                    qos: DispatchQoS.background,
@@ -161,20 +165,13 @@ public class ProgramService {
         }
         
         
-        func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken, callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
-            
-            print(" Func VaLIDATE ")
-            
+        func validate(entitlementFor assetId: String, environment: Environment, sessionToken: SessionToken,  entitlementDate: String?,  callback: @escaping (EntitlementValidation?, ExposureError?) -> Void) {
+  
             Entitlement(environment: environment, sessionToken: sessionToken)
-                .validate(assetId: assetId)
+                .validate(assetId: assetId, entitlementDate: entitlementDate )
                 .request()
                 .validate()
                 .response{
-                    
-                    print(" VALIDATE CALL BACK " , $0.request?.url )
-                    print(" VALIDATE CALL URL " , $0.request?.allHTTPHeaderFields )
-                    print(" VALIDATE CALL URL " , $0.value )
-                    print(" VALIDATE CALL URL " , $0.error )
                     callback($0.value, $0.error)
                     
                 }
@@ -264,11 +261,32 @@ extension ProgramService {
     }
     
     
+    /// Convert date/time value to utc string value
+    /// - Parameter timeToConvert: date/time value
+    /// - Returns: converted date/time string
+    fileprivate func getUTCTimeString( timeToConvert: Date ) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter.string(from: timeToConvert)
+    }
+    
     fileprivate func validate(program: Program, callback: @escaping (ExposureContext.Warning.ProgramService?, String?) -> Void) {
-        self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken) { [weak self] validation, error in
-            
-            print(" Provider validae ")
-            
+        
+        // Get next program start time in date/time format
+        let programStartTimeInDateFormat = program.startTime?.toDate()
+        
+        var timeToPass = getUTCTimeString(timeToConvert: Date())
+        
+        // Check if next `ProgramStartTime + 1ms` is in past
+        // ( ex : user can pause the stream for a long time, then start playing again )
+        if let programStartTimeForEntitlement = programStartTimeInDateFormat?.addingTimeInterval(TimeInterval( 1 * 01 )) {
+            let passingValue = max( programStartTimeForEntitlement , Date() )
+            timeToPass =  getUTCTimeString(timeToConvert: passingValue )
+        }
+        
+        self.provider.validate(entitlementFor: program.assetId, environment: self.environment, sessionToken: self.sessionToken, entitlementDate: timeToPass ) { [weak self] validation, error in
             guard let `self` = self else { return }
             guard let expirationReason = validation?.status else {
                 // We are permissive on validation errors, allow playback to continue.
@@ -288,6 +306,7 @@ extension ProgramService {
     }
     
     internal func handleProgramChanged(program: Program?, isExtendedProgram: Bool) {
+      
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
             let current = self.activeProgram
@@ -323,9 +342,10 @@ extension ProgramService {
     }
     
     internal func isEntitled(toPlay timestamp: Int64, onSuccess: @escaping (Program?) -> Void) {
+        
         if let current = activeProgram, let start = current.startDate?.millisecondsSince1970, let end = current.endDate?.millisecondsSince1970 {
             if timestamp > start && timestamp < end {
-                startValidationTimer(onTimestamp: timestamp, for: current)
+                startValidationTimer(onTimestamp: timestamp, for: current, entitlementCheck: true, shouldValidateNow: true)
                 onSuccess(current)
                 return
             }
@@ -350,7 +370,7 @@ extension ProgramService {
                             self?.onNotEntitled(notEntitledMessage)
                         }
                         else {
-                            self?.startValidationTimer(onTimestamp: timestamp, for: program)
+                            self?.startValidationTimer(onTimestamp: timestamp, for: program, entitlementCheck: true, shouldValidateNow: true )
                             onSuccess(program)
                         }
                     }
@@ -391,19 +411,40 @@ extension ProgramService {
                 return
             }
             self.handleProgramChanged(program: program, isExtendedProgram: false)
-            self.startValidationTimer(onTimestamp: timestamp, for: program)
+            
+            // This will check `epg` value in the play response & decide whether program service should fetch next program & do entitlement checks
+            
+            // if the `epg` attribute in the play response is missing consider it is as `epg.enabled == false`
+            // This means, program service should not start & just keep playing as a normal asset
+            guard let epg = self.epg, let enabled = epg.enabled,  let entitlementCheck = epg.entitlementCheck  else {
+                return
+            }
+            
+            // If the `epg.enabled == false` : program service should not start & just keep playing as a normal asset
+            if enabled == false {
+                return
+            } else {
+                self.startValidationTimer(onTimestamp: timestamp, for: program, entitlementCheck: entitlementCheck, shouldValidateNow: false)
+            }
         }
     }
     
+
     
-    fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program) {
+    /// Start the program service clock
+    /// - Parameters:
+    ///   - timestamp: current timestamp
+    ///   - program: program
+    ///   - entitlementCheck: should do entitlementCheck : true / false
+    ///   - shouldValidateNow: should do entitlement check now or in between 120s : true / false
+    fileprivate func startValidationTimer(onTimestamp timestamp: Int64, for program: Program, entitlementCheck: Bool = false, shouldValidateNow: Bool = false) {
         guard isPlaying() else { return }
         
         guard let ending = program.endDate?.millisecondsSince1970 else {
             // TODO: Activate retry trigger
             return
         }
-        
+
         guard ending - timestamp > 0 else { return }
         
         let fuzzyOffset = fuzzyConfiguration.fuzzyOffset(for: timestamp, end: ending)
@@ -411,15 +452,21 @@ extension ProgramService {
         stopProgramChangeTimer()
         
         fetchTimer = DispatchSource.makeTimerSource(queue: queue)
-        fetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(1000))
+        
+        // If the entitlement check is for the nextProgram & when the current program ends ( no other intruptions ), make it 120s
+        let randomTimerValue = shouldValidateNow == true ? 1000 : 120000
+
+        fetchTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.0), leeway: .milliseconds(randomTimerValue))
         fetchTimer?.setEventHandler { [weak self] in
+
             guard let `self` = self else { return }
+ 
             self.fetchProgram(timestamp: ending) { [weak self] program, warning in
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else { return }
                     self.stopProgramChangeTimer()
                     self.programChangeTimer = DispatchSource.makeTimerSource(queue: self.queue)
-                    self.programChangeTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(1000))
+                    self.programChangeTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.1), leeway: .milliseconds(120000))
                     self.programChangeTimer?.setEventHandler { [weak self] in
                         DispatchQueue.main.async { [weak self] in
                             guard let `self` = self else { return }
@@ -439,26 +486,37 @@ extension ProgramService {
                                 self.validateTimer?.schedule(deadline: .now() + .milliseconds(fuzzyOffset.2), leeway: .milliseconds(1000))
                                 self.validateTimer?.setEventHandler { [weak self] in
                                     guard let `self` = self else { return }
-                                    self.validate(program: program) { [weak self] warning, notEntitledMessage in
-                                        DispatchQueue.main.async { [weak self] in
-                                            guard let `self` = self else { return }
-                                            /// NOTE: Validation data is ONLY relevant if the current playheadTime is still within program bounds
-                                            guard let currentTimeStamp = self.currentPlayheadTime() else { return }
-                                            guard let start = program.startDate?.millisecondsSince1970, let end = program.endDate?.millisecondsSince1970 else { return }
-                                            guard start <= currentTimeStamp && currentTimeStamp < end else { return }
-                                            
-                                            if let warning = warning {
-                                                /// Forward any warnings
-                                                self.onWarning(warning)
+                                    
+                                    // Check for epg.entitlementCheck value
+                                    // Check if the validation needed for the next program
+                                    guard let currentTimeStamp = self.currentPlayheadTime() else { return }
+                                    
+                                    // If  entitlementCheck == false means, user has rights to the next program , no need for a new validation. Skip validation
+                                    if entitlementCheck == false {
+                                        self.startValidationTimer(onTimestamp: currentTimeStamp, for: program, entitlementCheck: entitlementCheck )
+                                    } else {
+                                        // Should to entitlement validation check
+                                        self.validate(program: program) { [weak self] warning, notEntitledMessage in
+                                            DispatchQueue.main.async { [weak self] in
+                                                guard let `self` = self else { return }
+                                                /// NOTE: Validation data is ONLY relevant if the current playheadTime is still within program bounds
+                                                guard let currentTimeStamp = self.currentPlayheadTime() else { return }
+                                                guard let start = program.startDate?.millisecondsSince1970, let end = program.endDate?.millisecondsSince1970 else { return }
+                                                guard start <= currentTimeStamp && currentTimeStamp < end else { return }
+                                                
+                                                if let warning = warning {
+                                                    /// Forward any warnings
+                                                    self.onWarning(warning)
+                                                }
+                                                
+                                                if let notEntitledMessage = notEntitledMessage {
+                                                    self.onNotEntitled(notEntitledMessage)
+                                                }
+                                                else {
+                                                    self.startValidationTimer(onTimestamp: currentTimeStamp, for: program, entitlementCheck: entitlementCheck)
+                                                }
+                                                
                                             }
-                                            
-                                            if let notEntitledMessage = notEntitledMessage {
-                                                self.onNotEntitled(notEntitledMessage)
-                                            }
-                                            else {
-                                                self.startValidationTimer(onTimestamp: currentTimeStamp, for: program)
-                                            }
-                                            
                                         }
                                     }
                                 }

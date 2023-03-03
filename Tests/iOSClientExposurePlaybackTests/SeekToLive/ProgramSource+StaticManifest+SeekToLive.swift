@@ -42,7 +42,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour/2))
 
                     // Mock the ProgramService
-                    env.mockProgramService{ environment, sessionToken, channelId in
+                    env.mockProgramService{ environment, sessionToken, epg, channelId in
                         let provider = MockedProgramProvider()
                         provider.mockedFetchProgram = { _,_,_, callback in
                             let program = Program
@@ -51,7 +51,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                                 .decodeWrap(Program.self)
                             callback(program,nil)
                         }
-                        let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                        let service = ProgramService(environment: environment, sessionToken: sessionToken, epg: epg, channelId: channelId!)
                         service.provider = provider
                         return service
                     }
@@ -126,7 +126,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                     env.mockAsset(callback: env.defaultAssetMock(currentDate: currentDate, bufferDuration: hour))
 
                     // Mock the ProgramService
-                    env.mockProgramService{ environment, sessionToken, channelId in
+                    env.mockProgramService{ environment, sessionToken, epg, channelId in
                         let provider = MockedProgramProvider()
                         provider.mockedFetchProgram = { _,timestamp,_, callback in
                             if timestamp > currentDate + hour/2 {
@@ -144,7 +144,7 @@ class StaticProgramSourceSeekToLiveSpec: QuickSpec {
                                 callback(program,nil)
                             }
                         }
-                        let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                        let service = ProgramService(environment: environment, sessionToken: sessionToken, epg: epg, channelId: channelId!)
                         service.provider = provider
                         return service
                     }

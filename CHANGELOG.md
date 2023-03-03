@@ -60,6 +60,9 @@
 ## 3.4.400
 #### Changes
 * `EMP-19370` Bug fix : Subtitles disappear when seeking on offline assets
+* `EMP-19026` Pass `entitlementDate` when doing entitlement checks for the epg data.
+* `EMP-19026` Request EPG data only when it exists and distribute entitlement checks.
+
 
 ## 3.4.300
 #### Changes

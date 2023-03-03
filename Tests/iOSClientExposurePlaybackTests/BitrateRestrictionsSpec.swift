@@ -24,7 +24,7 @@ class BitrateRestrictionSpec: QuickSpec {
         
         let env = Environment(baseUrl: "http://www.example.com", customer: "customer", businessUnit: "businessUnit")
         let token = SessionToken(value: "token")
-        
+ 
         context("Bitrate Restrictions") {
             it("should apply PlaybackProperties preferredMaxBitrate") {
                 let env = TestEnv(environment: env, sessionToken: token)
@@ -34,7 +34,7 @@ class BitrateRestrictionSpec: QuickSpec {
                 
                 
                 // Mock the ProgramService
-                env.mockProgramService{ environment, sessionToken, channelId in
+                env.mockProgramService{ environment, sessionToken, epg , channelId in
                     let provider = MockedProgramProvider()
                     provider.mockedFetchProgram = { _,timestamp,_, callback in
                         if timestamp > currentDate + hour/2 {
@@ -52,9 +52,10 @@ class BitrateRestrictionSpec: QuickSpec {
                             callback(program,nil)
                         }
                     }
-                    let service = ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+                    let service = ProgramService(environment: environment, sessionToken: sessionToken, epg: epg,  channelId: channelId!)
                     service.provider = provider
                     return service
+                    
                 }
                 
                 // Configure the playable

@@ -96,8 +96,8 @@ public class ExposureContext: MediaContext {
     internal var channelPlayableGenerator: (String) -> ChannelPlayable = { return ChannelPlayable(assetId: $0) }
     
     /// Used to generate a fresh `ProgramService` for a channel-based source.
-    internal var programServiceGenerator: (Environment, SessionToken, String) -> ProgramService = { environment, sessionToken, channelId in
-        return ProgramService(environment: environment, sessionToken: sessionToken, channelId: channelId)
+    internal var programServiceGenerator: (Environment, SessionToken, EPG?, String) -> ProgramService = { environment, sessionToken, epg, channelId in
+        return ProgramService(environment: environment, sessionToken: sessionToken, epg: epg, channelId: channelId)
     }
     
     internal var isDynamicManifest: (HLSNative<ExposureContext>, ExposureSource?) -> Bool = { tech, source in
