@@ -26,8 +26,8 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - materialProfile: used to play a specific material variant.
     ///   - customAdParams: Custom Ad Params
     ///   - metadataIdentifiers: metadataIdentifiers for filtering tags in `EXT-X-DATERANGE `
-    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true , materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil ) {
-        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics, materialProfile:materialProfile, customAdParams: customAdParams, metadataidentifiers: metadataIdentifiers)
+    public func startPlayback(playable: Playable, properties: PlaybackProperties = PlaybackProperties(), adsOptions:AdsOptions? = nil, adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true , materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil, deviceMake:String? = nil, deviceModel: String? = nil ) {
+        context.startPlayback(playable: playable, properties: properties, tech: tech, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, enableAnalytics: enableAnalytics, materialProfile:materialProfile, customAdParams: customAdParams, metadataidentifiers: metadataIdentifiers, deviceMake: deviceMake, deviceModel: deviceModel)
     }
     
     /// Initiates a playback session by requesting a *vod* entitlement and preparing the player.
@@ -42,9 +42,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - materialProfile: used to play a specific material variant.
     ///   - customAdParams: Custom Ad Params
     ///   - metadataIdentifiers: metadataIdentifiers for filtering tags in `EXT-X-DATERANGE
-    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil  ) {
+    public func startPlayback(assetId: String, properties: PlaybackProperties = PlaybackProperties(), adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil , customAdParams: [String: Any]? = nil, metadataIdentifiers: [String]? = nil, deviceMake:String? = nil, deviceModel: String? = nil  ) {
         let playable = AssetPlayable(assetId: assetId)
-        startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers)
+        startPlayback(playable: playable, properties: properties, enableAnalytics : enableAnalytics, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers, deviceMake: deviceMake, deviceModel: deviceModel)
     }
     
     
@@ -75,14 +75,14 @@ extension ExposureContext {
     ///  -   materialProfile:  used to play a specific material variant.
     ///  -   customAdParams:  Custom Ad Params
     ///  -  metadataidentifiers:  metadataIdentifiers for filtering tags in `EXT-X-DATERANGE
-    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil, customAdParams: [String: Any]? = nil, metadataidentifiers: [String]? = nil  ) {
+    internal func startPlayback(playable: Playable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, adsOptions:AdsOptions? = nil,  adobePrimetimeMediaToken: String? = nil, enableAnalytics: Bool = true, materialProfile: String? = nil, customAdParams: [String: Any]? = nil, metadataidentifiers: [String]? = nil, deviceMake:String? = nil, deviceModel: String? = nil ) {
         playbackProperties = properties
         
         // Generate the analytics providers
         let providers = analyticsProviders(for: nil)
         
        
-        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataidentifiers ) { [weak self, weak tech] source, error, response in
+        playable.prepareSourceWithResponse(environment: environment, sessionToken: sessionToken, adsOptions: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataidentifiers, deviceMake: deviceMake, deviceModel: deviceModel ) { [weak self, weak tech] source, error, response in
             guard let `self` = self, let tech = tech else { return }
             if enableAnalytics == true {
                 self.handle(source: source, error: error, providers: providers, tech: tech, exposureResponse: response, playable: playable, metadataIdentifiers:metadataidentifiers)

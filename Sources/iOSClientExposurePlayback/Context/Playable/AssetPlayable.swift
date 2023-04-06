@@ -10,9 +10,9 @@ import Foundation
 import iOSClientExposure
 
 internal protocol AssetEntitlementProvider {
-    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment,  include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams:[String:Any]?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
+    func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment,  include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams:[String:Any]?, deviceMake:String?, deviceModel: String?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void)
     
-    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
+    func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, deviceMake:String?, deviceModel: String?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void)
 }
 
 /// Defines a `Playable` for the specific vod asset
@@ -25,9 +25,9 @@ public struct AssetPlayable: Playable {
     internal var entitlementProvider: AssetEntitlementProvider = ExposureEntitlementProvider()
     
     internal struct ExposureEntitlementProvider: AssetEntitlementProvider {
-        func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
+        func requestEntitlement(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, deviceMake:String?, deviceModel: String?, callback: @escaping (PlaybackEntitlement?, ExposureError?, HTTPURLResponse?) -> Void) {
             
-            self.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, callback: { entitlementV1, entitlementV2, error, response in
+            self.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel ,callback: { entitlementV1, entitlementV2, error, response in
                 
                 guard let entitlementV2 = entitlementV2 else { return
                     callback(nil, error, response)
@@ -54,13 +54,13 @@ public struct AssetPlayable: Playable {
         ///   - materialProfile:used to play a specific material variant.
         ///   - customAdParams: Custom Ad Params
         ///   - callback: callbacks
-        func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
+        func requestEntitlementV2(assetId: String, using sessionToken: SessionToken, in environment: Environment, include adsOptions: AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String: Any]?, deviceMake:String?, deviceModel: String?, callback: @escaping (PlaybackEntitlement?, PlayBackEntitlementV2?, ExposureError?, HTTPURLResponse?) -> Void) {
             
             // Check if whether the app developer has pass AdsOptions to target ads
             if let adsOptions = adsOptions {
                 Entitlement(environment: environment,
                             sessionToken: sessionToken)
-                    .enigmaAsset(assetId: assetId, includeAds: adsOptions, with: adobePrimetimeMediaToken, use: materialProfile, add: customAdParams)
+                    .enigmaAsset(assetId: assetId, includeAds: adsOptions, with: adobePrimetimeMediaToken, use: materialProfile, add: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel)
                     .request()
                     .validate()
                     .response{
@@ -79,7 +79,7 @@ public struct AssetPlayable: Playable {
             } else {
                 Entitlement(environment: environment,
                             sessionToken: sessionToken)
-                    .enigmaAsset(assetId: assetId, with: adobePrimetimeMediaToken, use: materialProfile)
+                    .enigmaAsset(assetId: assetId, with: adobePrimetimeMediaToken, use: materialProfile, deviceMake: deviceMake, deviceModel: deviceModel)
                     .request()
                     .validate()
                     .response{
@@ -115,18 +115,18 @@ extension AssetPlayable {
     /// - parameter environment: `Environment` to request the Source from
     /// - parameter sessionToken: `SessionToken` validating the user
     /// - parameter callback: Closure called on request completion
-    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, metadataIdentifiers: [String]?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers,  callback: callback)
+    public func prepareSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?,  customAdParams:[String:Any]?, metadataIdentifiers: [String]?, deviceMake:String?, deviceModel: String?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+        prepareAssetSource(environment: environment, sessionToken: sessionToken, adsOptions:adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, metadataIdentifiers: metadataIdentifiers, deviceMake: deviceMake,deviceModel: deviceModel,  callback: callback)
     }
     
-    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String]? ,  callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
+    internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String]?, deviceMake:String?, deviceModel: String?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
         
         
         // Remove any sprites from UserDefaults if available
         UserDefaults.standard.removeObject(forKey: "sprites")
         
         
-        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { entitlementV1, entitlementV2, error, response in
+        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel) { entitlementV1, entitlementV2, error, response in
  
             if let value = entitlementV2 {
                 guard let playbackEntitlement = entitlementV1 else {
@@ -210,12 +210,12 @@ extension AssetPlayable {
 }
 
 extension AssetPlayable {
-    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String], activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
+    public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, deviceMake:String?, deviceModel: String?, metadataIdentifiers: [String], activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
         
         // Remove any sprites from UserDefaults if available
         UserDefaults.standard.removeObject(forKey: "sprites")
         
-        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams) { entitlementV1, entitlementV2, error, response in
+        entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel) { entitlementV1, entitlementV2, error, response in
             
             if let value = entitlementV2 {
                 
