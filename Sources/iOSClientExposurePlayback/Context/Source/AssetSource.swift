@@ -29,25 +29,21 @@ open class AssetSource: ExposureSource {
             callback(nil)
         }
     }
-}
-
-
-
-extension AssetSource: ContextPositionSeekable {
-    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
-        player.tech.seek(toPosition: position)
-    }
-}
-
-extension AssetSource: ContextStartTime {
-    internal func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+    
+    public override func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+        
+        print(" Should handle start time " )
+        
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
+            print(" defaultBehaviour " )
             return defaultStartTime(for: tech, in: context)
         case .beginning:
             // Start from offset 0
+            print(" beginning " )
             return .startPosition(position: 0)
         case .bookmark:
+            print(" bookmark " )
             // Use *EMP* supplied bookmark, else default behaviour (ie nil bookmark)
             guard let offset = entitlement.lastViewedOffset else { return defaultStartTime(for: tech, in: context) }
             
@@ -63,6 +59,7 @@ extension AssetSource: ContextStartTime {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
+            print(" customPosition " )
             guard !tech.isExternalPlaybackActive else {
                 // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
                 return .startPosition(position: offset)
@@ -76,7 +73,10 @@ extension AssetSource: ContextStartTime {
                 triggerInvalidStartTime(offset: offset, ranges: tech.seekableRanges, source: self, tech: tech)
                 return defaultStartTime(for: tech, in: context)
             }
-        case .customTime(timestamp: _):
+        case .customTime(timestamp: let offset ):
+            
+            print(" customTime ", offset )
+            
             // Use the custom supplied offset
             return defaultStartTime(for: tech, in: context)
         }
@@ -87,6 +87,15 @@ extension AssetSource: ContextStartTime {
         return .defaultStartTime
     }
 }
+
+
+
+extension AssetSource: ContextPositionSeekable {
+    internal func handleSeek(toPosition position: Int64, for player: Player<HLSNative<ExposureContext>>, in context: ExposureContext) {
+        player.tech.seek(toPosition: position)
+    }
+}
+
 
 extension AssetSource: HeartbeatsProvider {
     internal func heartbeat(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> Playback.Heartbeat {

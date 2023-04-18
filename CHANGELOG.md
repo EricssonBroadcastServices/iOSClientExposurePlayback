@@ -1,5 +1,7 @@
 # CHANGELOG
 
+* `3.4.60` Release - [3.4.600](#34600)
+* `3.4.50` Release - [3.4.500](#34500)
 * `3.4.40` Release - [3.4.400](#34400)
 * `3.4.30` Release - [3.4.300](#34300)
 * `3.4.20` Release - [3.4.200](#34200)
@@ -56,6 +58,14 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.4.600
+#### Bug Fixes
+* `EMP-19828` Bug Fix : Play from custom position / custom time  does not work for downloaded assets.
+
+## 3.4.500
+#### Changes
+* `EMP-19630` Update SSAI parameters, including Device make and Model
 
 ## 3.4.400
 #### Changes

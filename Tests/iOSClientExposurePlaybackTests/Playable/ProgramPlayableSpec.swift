@@ -74,7 +74,7 @@ class ProgramPlayableSpec: QuickSpec {
                 
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: nil, materialProfile: nil, customAdParams: [:], metadataIdentifiers: nil) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: nil, materialProfile: nil, customAdParams: [:], metadataIdentifiers: nil,  deviceMake: nil, deviceModel: nil) { src, err in
                     
                     source = src
                     error = err
@@ -93,7 +93,7 @@ class ProgramPlayableSpec: QuickSpec {
                 
                 var source: ExposureSource? = nil
                 var error: ExposureError? = nil
-                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: nil, materialProfile: nil, customAdParams: [:], metadataIdentifiers: nil) { src, err in
+                playable.prepareSource(environment: environment, sessionToken: sessionToken, adsOptions: nil, adobePrimetimeMediaToken: nil, materialProfile: nil, customAdParams: [:], metadataIdentifiers: nil,  deviceMake: nil, deviceModel: nil) { src, err in
                     source = src
                     error = err
                 }

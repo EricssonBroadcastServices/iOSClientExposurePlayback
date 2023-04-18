@@ -10,7 +10,7 @@ import Foundation
 import iOSClientPlayer
 import AVFoundation
 
-internal protocol ContextStartTime: class {
+public protocol ContextStartTime: class {
     func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset
 }
 

@@ -50,7 +50,7 @@ class AssetPlayableSpec: QuickSpec {
             
             it("Should prepare source with valid entitlement response") {
                 let provider = MockedAssetEntitlementProvider()
-                provider.mockedRequestEntitlementV2 = { _,_,_,_,_,_,_,_,_ callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_,_,_,_,_,_,_, callback in
                     // EntitlementV2
                     guard let entitlementV2 = PlayBackEntitlementV2.validJson.decode(PlayBackEntitlementV2.self) else {
                         callback(nil, nil,ExposureError.generalError(error: MockedError.generalError), nil)
@@ -80,7 +80,7 @@ class AssetPlayableSpec: QuickSpec {
             
             it("Should fail to prepare source when encountering error") {
                 let provider = MockedAssetEntitlementProvider()
-                provider.mockedRequestEntitlementV2 = { _,_,_,_,_,_,_,_,_ callback in
+                provider.mockedRequestEntitlementV2 = { _,_,_,_,_,_,_,_,_, callback in
                     callback(nil,nil,ExposureError.generalError(error: MockedError.generalError), nil)
                 }
                 let playable = AssetPlayable(assetId: "assetId", assetType: nil, entitlementProvider: provider)

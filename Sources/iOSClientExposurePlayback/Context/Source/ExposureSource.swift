@@ -11,7 +11,7 @@ import iOSClientPlayer
 import iOSClientExposure
 
 /// `MediaSource` object defining the response from a successful playback request in the `ExposureContext`
-open class ExposureSource: MediaSource {
+open class ExposureSource: MediaSource, ContextStartTime {
     internal static let segmentLength: Int64 = 6000
     
     /// Connector used to process Analytics Events
@@ -136,6 +136,72 @@ open class ExposureSource: MediaSource {
     public func prepareSourceUrl(callback: @escaping (URL?) -> Void) {
         callback(nil)
     }
+    
+    
+    
+    /// Handle Start Time of Exposure Source : this will be override for Asset Source & Program Source , default will be used for Offline Media playback
+    /// - Parameters:
+    ///   - tech: tech
+    ///   - context: context
+    /// - Returns: start offset
+    public func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+         
+         switch context.playbackProperties.playFrom {
+         case .defaultBehaviour:
+             return defaultStartTime(for: tech, in: context)
+         case .beginning:
+             // Start from offset 0
+             return .startPosition(position: 0)
+         case .bookmark:
+             // Use *EMP* supplied bookmark, else default behaviour (ie nil bookmark)
+             guard let offset = entitlement.lastViewedOffset else { return defaultStartTime(for: tech, in: context) }
+             
+             guard !tech.isExternalPlaybackActive else {
+                 // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                 return .startPosition(position: Int64(offset))
+             }
+             
+             if check(offset: Int64(offset), inRanges: tech.seekableRanges) {
+                 return .startPosition(position: Int64(offset))
+             }
+             else {
+                 return defaultStartTime(for: tech, in: context)
+             }
+         case .customPosition(position: let offset):
+             guard !tech.isExternalPlaybackActive else {
+                 // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                 return .startPosition(position: offset)
+             }
+             
+             // Use the custom supplied offset
+             if check(offset: offset, inRanges: tech.seekableRanges) {
+                 return .startPosition(position: offset)
+             }
+             else {
+                 triggerInvalidStartTime(offset: offset, ranges: tech.seekableRanges, source: self, tech: tech)
+                 return defaultStartTime(for: tech, in: context)
+             }
+         case .customTime(timestamp: let offset ):
+             guard !tech.isExternalPlaybackActive else {
+                 // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
+                 return .startTime(time: offset)
+             }
+             
+             // Use the custom supplied offset
+             if check(offset: offset, inRanges: tech.seekableTimeRanges) {
+                 return .startTime(time: offset)
+             }
+             else {
+                 triggerInvalidStartTime(offset: offset, ranges: tech.seekableTimeRanges, source: self, tech: tech)
+                 return defaultStartTime(for: tech, in: context)
+             }
+         }
+     }
+     
+     private func defaultStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
+         // Default is to start from the beginning
+         return .defaultStartTime
+     }
 }
 
 extension ExposureSource {
@@ -187,6 +253,7 @@ extension ExposureSource {
             .queryParam(for: UnifiedPackageParams.timeshift.rawValue)
     }
 }
+
 
 extension ExposureSource: MediaSourceRequestHeaders { }
 extension ExposureSource: EntitlementSourceResponseHeaders { }
