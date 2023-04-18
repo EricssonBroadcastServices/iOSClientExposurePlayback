@@ -105,7 +105,7 @@ class CreatedSpec: QuickSpec {
                 expect(json["AssetId"] as? String).to(equal("vodAsset"))
                 expect(json["ChannelId"] as? String).to(beNil())
                 expect(json["ProgramId"] as? String).to(beNil())
-                expect(json.count).to(equal(16))
+                expect(json.count).to(equal(17))
             }
             
             it("Should produce correct Live jsonPayload") {
