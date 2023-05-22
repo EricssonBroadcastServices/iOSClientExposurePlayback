@@ -17,7 +17,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/EricssonBroadcastServices/iOSClientPlayer", from: "3.1.5"),
-        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.1.7"),
+        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.2.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "4.0.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.1.0"),
     ],
@@ -27,9 +27,6 @@ let package = Package(
         .target(
             name: "iOSClientExposurePlayback",
             dependencies: ["iOSClientExposure", "iOSClientPlayer"], exclude: ["Info.plist"]),
-        .target(
-            name: "iOSClientExposurePlaybackObjc",
-            dependencies: []),
         .testTarget(
             name: "iOSClientExposurePlaybackTests",
             dependencies: ["iOSClientExposurePlayback", "iOSClientExposure", "iOSClientPlayer","Quick", "Nimble"], exclude: ["Info.plist"]),

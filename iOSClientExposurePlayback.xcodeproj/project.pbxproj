@@ -210,8 +210,6 @@
 		783111BB27EC70C3009B3114 /* ProgramService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F227EC70C2009B3114 /* ProgramService.swift */; };
 		783111BC27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F327EC70C2009B3114 /* ServerTimeProvider.swift */; };
 		783111BD27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783110F327EC70C2009B3114 /* ServerTimeProvider.swift */; };
-		783111C027EC70CB009B3114 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 783111BF27EC70CB009B3114 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		783111C127EC70CB009B3114 /* ExposurePlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 783111BF27EC70CB009B3114 /* ExposurePlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		783111D127EC8307009B3114 /* iOSClientExposure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111D027EC8307009B3114 /* iOSClientExposure.framework */; };
 		783111EC27EC8AEA009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111EB27EC8AEA009B3114 /* iOSClientPlayer.framework */; };
 		783111F327EC8B21009B3114 /* iOSClientPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783111F227EC8B21009B3114 /* iOSClientPlayer.framework */; };
@@ -325,7 +323,6 @@
 		783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContractRestrictionsPolicy.swift; sourceTree = "<group>"; };
 		783110F227EC70C2009B3114 /* ProgramService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramService.swift; sourceTree = "<group>"; };
 		783110F327EC70C2009B3114 /* ServerTimeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTimeProvider.swift; sourceTree = "<group>"; };
-		783111BF27EC70CB009B3114 /* ExposurePlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExposurePlayback.h; sourceTree = "<group>"; };
 		783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KNOWN_LIMITATIONS.md; sourceTree = "<group>"; };
 		783111C427EC710E009B3114 /* live-and-catchup-playback.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "live-and-catchup-playback.md"; sourceTree = "<group>"; };
 		783111C527EC710E009B3114 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
@@ -384,7 +381,6 @@
 				783111C327EC710E009B3114 /* Documentation */,
 				783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */,
 				7831108027EC70C2009B3114 /* iOSClientExposurePlayback */,
-				783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */,
 				783111CF27EC8307009B3114 /* Frameworks */,
 				783111F927EC8B94009B3114 /* iOSClientExposurePlayback.framework */,
 				78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */,
@@ -615,15 +611,6 @@
 			path = ContractRestrictions;
 			sourceTree = "<group>";
 		};
-		783111BE27EC70CB009B3114 /* iOSClientExposurePlaybackObjc */ = {
-			isa = PBXGroup;
-			children = (
-				783111BF27EC70CB009B3114 /* ExposurePlayback.h */,
-			);
-			name = iOSClientExposurePlaybackObjc;
-			path = Sources/iOSClientExposurePlaybackObjc;
-			sourceTree = "<group>";
-		};
 		783111C327EC710E009B3114 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -666,7 +653,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				783111C127EC70CB009B3114 /* ExposurePlayback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +660,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				783111C027EC70CB009B3114 /* ExposurePlayback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1020,7 +1005,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.600;
+				MARKETING_VERSION = 3.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1050,7 +1035,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.600;
+				MARKETING_VERSION = 3.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1201,7 +1186,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.600;
+				MARKETING_VERSION = 3.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1232,7 +1217,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.4.600;
+				MARKETING_VERSION = 3.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
