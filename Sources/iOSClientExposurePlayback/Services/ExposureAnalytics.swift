@@ -63,9 +63,14 @@ public class ExposureAnalytics {
     /// `Dispatcher` takes care of delivering analytics payload.
     fileprivate(set) internal var dispatcher: Dispatcher?
     
+    /// `OfflineDispatcher` takes care of delivering analytics payload for offline playbacks
+    fileprivate(set) internal var offlineDispatcher: OfflineDispatcher?
+    
     public let cdn:CDNInfoFromEntitlement?
     
     public let analytics: AnalyticsFromEntitlement?
+    
+    internal var isOfflinePlayable: Bool = false
     
     public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, appName: String? = nil ) {
         self.environment = environment
@@ -218,14 +223,14 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         return false
     }
     
-    public func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source, playable: Playable) where Tech : PlaybackTech, Source : MediaSource {
-        
+    public func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source, playable: Playable, isOfflinePlayable: Bool ) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             /// 1. Created
-            let created = Playback.Created(timestamp: Date().millisecondsSince1970,
+            let created = Playback.Created(
+                timestamp: Date().millisecondsSince1970,
                                            version: version(for: "com.emp.ExposurePlayback"),
                                            exposureVersion: version(for: "com.emp.Exposure"), techVersion: version(for: "com.emp.Player"),
-                                           assetData: PlaybackIdentifier.from(playable: playable),
+                                           assetData: PlaybackIdentifier.from(playable: playable, offline: tech.isOfflinePlayable),
                                            autoPlay: autoplay(tech: tech), analyticsInfo: source.entitlement.analytics)
             
             
@@ -241,7 +246,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             /// 2. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
             /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), analyticsInfo: source.entitlement.analytics, appName: appName)
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName)
             
             /// 3. Store startup events
             var current = startupEvents
@@ -253,7 +258,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             let created = Playback.Created(timestamp: Date().millisecondsSince1970,
                                            version: version(for: "com.emp.ExposurePlayback"),
                                            exposureVersion: version(for: "com.emp.Exposure"), techVersion: version(for: "com.emp.Player"),
-                                           assetData: PlaybackIdentifier.from(playable: playable),
+                                           assetData: PlaybackIdentifier.from(playable: playable, offline: tech.isOfflinePlayable),
                                            autoPlay: autoplay(tech: tech), analyticsInfo: nil)
             
             
@@ -280,15 +285,17 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
+    public func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?, isOfflinePlayable: Bool) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
             let event = Playback.HandshakeStarted(timestamp: Date().millisecondsSince1970,
                                                   assetData: PlaybackIdentifier.from(source: source), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
             
             /// 3. Store startup events
             var current = startupEvents
-            current.append(event)
-            startup = .notStarted(events: current)
+            if isOfflinePlayable != true {
+                current.append(event)
+                startup = .notStarted(events: current)
+            }
         }
     }
     
@@ -301,7 +308,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     /// - parameter asset: *EMP* asset identifiers.
     /// - parameter entitlement: The entitlement this session concerns
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
-    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, analytics: AnalyticsFromEntitlement?, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
+    public func finalizePreparation<Tech, Source>(tech: Tech, source: Source, assetId: String, playSessionId: String, analytics: AnalyticsFromEntitlement?, isOfflinePlayable:Bool, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech : PlaybackTech, Source : MediaSource {
         let events = extractAndPrepareStartupEvents(source: source)
         
         if let tech = tech as? HLSNative<ExposureContext>, tech.isExternalPlaybackActive {
@@ -316,18 +323,27 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             self.shouldSendAnalytics(percentage: 100 )
         }
         
-        dispatcher = Dispatcher(environment: environment,
-                                sessionToken: sessionToken,
-                                playSessionId: playSessionId,
-                                analytics: analytics, startupEvents: events,
-                                heartbeatsProvider: heartbeatsProvider)
-        dispatcher?.requestId = extractRequestId(source: source)
-        dispatcher?.onExposureResponseMessage = { [weak self] message in
-            self?.onExposureResponseMessage(message)
+        self.isOfflinePlayable = isOfflinePlayable
+        
+        if isOfflinePlayable {
+            offlineDispatcher = OfflineDispatcher(environment: environment, sessionToken: sessionToken, assetId: assetId, playSessionId: playSessionId, analytics: analytics, startupEvents: events)
+            
+        } else {
+            dispatcher = Dispatcher(environment: environment,
+                                    sessionToken: sessionToken,
+                                    playSessionId: playSessionId,
+                                    analytics: analytics, startupEvents: events,
+                                    heartbeatsProvider: heartbeatsProvider)
+            dispatcher?.requestId = extractRequestId(source: source)
+            dispatcher?.onExposureResponseMessage = { [weak self] message in
+                self?.onExposureResponseMessage(message)
+            }
+            
+            dispatcher?.flushTrigger(enabled: true)
         }
-        dispatcher?.flushTrigger(enabled: true)
+        
+       
     }
-    
     
     public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource {
         if let programId = program?.programId, lastKnownProgramId != nil {
@@ -439,6 +455,59 @@ extension ExposureAnalytics {
 }
 
 extension ExposureAnalytics: AnalyticsProvider {
+    public func onAppDidEnterBackground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+        
+        if let source = source as? ExposureSource {
+            let event  = Playback.AppBackgrounded(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+        }
+    }
+    
+    public func onGracePeriodEnded<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+        
+        if let source = source as? ExposureSource {
+            
+            // Send the Playback.GracePeriodEnded event
+            let event  = Playback.GracePeriodEnded(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+            
+            /// Re intiate the satrtup events , Device.Info /  Playback.Created
+            ///
+            var events = [AnalyticsEvent]()
+            
+            /// 1. DeviceInfo
+            let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
+            let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName)
+            events.append(deviceInfo)
+            
+            /// 2. Created
+            let created = Playback.Created(
+                timestamp: Date().millisecondsSince1970,
+                                           version: version(for: "com.emp.ExposurePlayback"),
+                                           exposureVersion: version(for: "com.emp.Exposure"), techVersion: version(for: "com.emp.Player"),
+                                           assetData: PlaybackIdentifier.from(source: source, offline: tech.isOfflinePlayable),
+                                           autoPlay: autoplay(tech: tech), analyticsInfo: source.entitlement.analytics)
+            
+            events.append(created)
+            offlineDispatcher = OfflineDispatcher(environment: environment, sessionToken: sessionToken, assetId: source.assetId, playSessionId: source.entitlement.playSessionId, analytics: analytics, startupEvents: events)
+            
+        }
+    }
+    
+    public func onGracePeriodStarted<Tech, Source>(tech: Tech, source: Source?) where Tech : PlaybackTech, Source : MediaSource {
+        if let source = source as? ExposureSource {
+            
+            // Send the Playback.GracePeriodStarted event
+            let event  = Playback.GracePeriodStarted(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+        }
+    }
+    
+    
     public func onCreated<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         /// Created/DeviceInfo/Handshake will be sent before entitlement request
     }
@@ -473,7 +542,12 @@ extension ExposureAnalytics: AnalyticsProvider {
                                            segmentRequestId: segmentRequestId,
                                            cdnInfo: source.entitlement.cdn,
                                            analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            
+            // Exposure source can be offline or a regular playabck source
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+            
+            // dispatcher?.enqueue(event: event)
+            
         } else {
             let event = Playback.PlayReady(timestamp: Date().millisecondsSince1970,
                                            offsetTime: offsetTime(for: source, using: tech),
@@ -499,7 +573,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
-                                         assetData: PlaybackIdentifier.from(source: source),
+                                         assetData: PlaybackIdentifier.from(source: source, offline: tech.isOfflinePlayable),
                                          mediaLocator: source.entitlement.mediaLocator.absoluteString,
                                          offsetTime: offsetTime(for: source, using: tech),
                                          videoLength: tech.duration,
@@ -508,7 +582,11 @@ extension ExposureAnalytics: AnalyticsProvider {
                                          segmentRequestId: segmentRequestId,
                                          cdnInfo: source.entitlement.cdn,
                                          analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId ) : dispatcher?.enqueue(event: event)
+        
+            // dispatcher?.enqueue(event: event)
+            
             dispatcher?.heartbeat(enabled: true)
         }
     }
@@ -517,7 +595,8 @@ extension ExposureAnalytics: AnalyticsProvider {
         if let source = source as? ExposureSource {
             let event = Playback.Paused(timestamp: Date().millisecondsSince1970,
                                         offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
         } else {
             let event = Playback.Paused(timestamp: Date().millisecondsSince1970,
                                         offsetTime: offsetTime(for: source, using: tech))
@@ -530,7 +609,8 @@ extension ExposureAnalytics: AnalyticsProvider {
         if let source = source as? ExposureSource {
             let event = Playback.Resumed(timestamp: Date().millisecondsSince1970,
                                          offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
         } else {
             let event = Playback.Resumed(timestamp: Date().millisecondsSince1970,
                                          offsetTime: offsetTime(for: source, using: tech))
@@ -551,7 +631,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let source = source as? ExposureSource {
                 let event = Playback.StartAirplay(timestamp: Date().millisecondsSince1970,
                                                   offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-                dispatcher?.enqueue(event: event)
+                let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.StartAirplay(timestamp: Date().millisecondsSince1970,
                                                   offsetTime: offsetTime(for: source, using: tech))
@@ -561,7 +641,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let source = source as? ExposureSource {
                 let event = Playback.StopAirplay(timestamp: Date().millisecondsSince1970,
                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-                dispatcher?.enqueue(event: event)
+                let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.StopAirplay(timestamp: Date().millisecondsSince1970,
                                                  offsetTime: offsetTime(for: source, using: tech))
@@ -572,7 +652,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let source = source as? ExposureSource {
                 let event = Playback.StartCasting(timestamp: Date().millisecondsSince1970,
                                                   offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-                dispatcher?.enqueue(event: event)
+                let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.StartCasting(timestamp: Date().millisecondsSince1970,
                                                   offsetTime: offsetTime(for: source, using: tech))
@@ -582,7 +662,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let source = source as? ExposureSource {
                 let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-                dispatcher?.enqueue(event: event)
+                let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.StopCasting(timestamp: Date().millisecondsSince1970,
                                                  offsetTime: offsetTime(for: source, using: tech))
@@ -592,7 +672,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             if let source = source as? ExposureSource {
                 let event = Playback.Aborted(timestamp: Date().millisecondsSince1970,
                                              offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn , analyticsInfo: source.entitlement.analytics)
-                dispatcher?.enqueue(event: event)
+                let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.Aborted(timestamp: Date().millisecondsSince1970,
                                              offsetTime: offsetTime(for: source, using: tech))
@@ -607,11 +687,14 @@ extension ExposureAnalytics: AnalyticsProvider {
         if let source = source as? ExposureSource {
             let event = Playback.Completed(timestamp: Date().millisecondsSince1970,
                                            offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+
             dispatcher?.flushTrigger(enabled: false)
             dispatcher?.heartbeat(enabled: false)
             dispatcher = nil
             (tech as? HLSNative<ExposureContext>)?.stop()
+            
         } else {
             let event = Playback.Completed(timestamp: Date().millisecondsSince1970,
                                            offsetTime: offsetTime(for: source, using: tech))
@@ -630,7 +713,11 @@ extension ExposureAnalytics: AnalyticsProvider {
         }
         
         let event = buildPlaybackErrorEvent(tech: tech, source: source, error: error)
-        dispatcher.enqueue(event: event)
+
+        if let isOfflinePlayable = tech?.isOfflinePlayable {
+            let _ = isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: " On Error AssetId" ) : dispatcher.enqueue(event: event)
+        }
+
         dispatcher.heartbeat(enabled: false)
         dispatcher.flushTrigger(enabled: false)
         // Terminate the Dispatcher. This will cause no more events to be sent on this playback session.

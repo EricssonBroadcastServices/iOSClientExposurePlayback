@@ -35,7 +35,7 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
+    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?, isOfflinePlayable: Bool) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     

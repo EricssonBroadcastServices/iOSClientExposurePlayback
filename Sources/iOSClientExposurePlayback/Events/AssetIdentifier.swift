@@ -16,7 +16,7 @@ internal enum PlaybackIdentifier {
     case offline(assetId: String)
     case download(assetId: String)
     
-    static func from(source: ExposureSource) -> PlaybackIdentifier {
+    static func from(source: ExposureSource, offline: Bool = false) -> PlaybackIdentifier {
         if let source = source as? AssetSource {
             return .vod(assetId: source.assetId)
         }
@@ -26,10 +26,13 @@ internal enum PlaybackIdentifier {
         else if let source = source as? ChannelSource {
             return .live(channelId: source.assetId)
         }
+        else if offline == true {
+            return .offline(assetId: source.assetId)
+        }
         return .vod(assetId: source.assetId)
     }
     
-    static func from(playable: Playable) -> PlaybackIdentifier {
+    static func from(playable: Playable, offline: Bool = false ) -> PlaybackIdentifier {
         if let playable = playable as? AssetPlayable {
             return .vod(assetId: playable.assetId)
         }
@@ -38,6 +41,9 @@ internal enum PlaybackIdentifier {
         }
         else if let playable = playable as? ChannelPlayable {
             return .live(channelId: playable.assetId)
+        }
+        else if offline == true {
+            return .offline(assetId: playable.assetId)
         }
         return .vod(assetId: playable.assetId)
     }
