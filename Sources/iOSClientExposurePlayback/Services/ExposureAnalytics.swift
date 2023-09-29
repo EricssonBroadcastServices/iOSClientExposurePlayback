@@ -455,6 +455,15 @@ extension ExposureAnalytics {
 }
 
 extension ExposureAnalytics: AnalyticsProvider {
+    public func onAppDidEnterForeground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    
+        if let source = source as? ExposureSource {
+            let event  = Playback.AppResumed(timestamp: Date().millisecondsSince1970,
+                                                  offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+        }
+    }
+    
     public func onAppDidEnterBackground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
         
         if let source = source as? ExposureSource {
@@ -864,12 +873,12 @@ extension ExposureAnalytics: AnalyticsProvider {
         /// In order to fix this we simply disregard the supplied `offset` as this might be delivered as a zero-based buffer position for `ProgramSource` and `ChannelSource` playback. Instead, we try to extract the current offsetTime (based on the Source type ie playheadTime for ProgramSource and ChannelSource) which should be close to or equal to the requested offset.
         ///
         /// If no such offset is available, we dispatch no offset
-        
         if let source = source as? ExposureSource {
             let usedOffset = offsetTime(for: source, using: tech)
             let event = Playback.ScrubbedTo(timestamp: Date().millisecondsSince1970,
                                             offsetTime: usedOffset, cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
-            dispatcher?.enqueue(event: event)
+            let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
+            
         } else {
             let usedOffset = offsetTime(for: source, using: tech)
             let event = Playback.ScrubbedTo(timestamp: Date().millisecondsSince1970,
