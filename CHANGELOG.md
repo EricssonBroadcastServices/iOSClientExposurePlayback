@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.5.1` Release - [3.5.1](#351)
 * `3.5.0` Release - [3.5.0](#350)
 * `3.4.7` Release - [3.4.7](#347)
 * `3.4.60` Release - [3.4.600](#34600)
@@ -60,6 +61,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.5.1
+#### Bug Fixes
+* `EMP-17871` Fix issue that causes the cancellation of all URLSession tasks when canceling sprite downloading tasks
 
 ## 3.5.0
 #### Changes
