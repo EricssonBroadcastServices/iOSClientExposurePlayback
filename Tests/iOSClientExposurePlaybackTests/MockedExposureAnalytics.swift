@@ -13,7 +13,7 @@ import iOSClientPlayer
 @testable import iOSClientExposurePlayback
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
-    
+   
     required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, appName: String? = nil  ) {
         self.environment = environment
         self.sessionToken = sessionToken
@@ -119,5 +119,10 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     
     func onGracePeriodEnded<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
     }
+    
+    func onAppDidEnterForeground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    
     
 }
