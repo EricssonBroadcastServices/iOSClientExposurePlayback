@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.5.0` Release - [3.5.0](#350)
 * `3.4.7` Release - [3.4.7](#347)
 * `3.4.60` Release - [3.4.600](#34600)
 * `3.4.50` Release - [3.4.500](#34500)
@@ -59,6 +60,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.5.0
+#### Changes
+* `EMP-20039` Added functionality for analytics for offline playback.
+* `EMP-20039` Bumped up the minimum deployment version to `iOS/tvOS 12`.
 
 ## 3.4.7
 #### Changes

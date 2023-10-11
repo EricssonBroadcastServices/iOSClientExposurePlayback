@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "iOSClientExposurePlayback",
-    platforms: [.iOS(.v11),
+    platforms: [.iOS(.v12),
                 .tvOS(.v12)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -16,8 +16,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientPlayer", from: "3.1.5"),
-        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.2.0"),
+        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientPlayer", from: "3.2.0"),
+        .package(url: "https://github.com/EricssonBroadcastServices/iOSClientExposure", from: "3.3.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "4.0.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.1.0"),
     ],

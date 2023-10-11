@@ -11,6 +11,7 @@ import iOSClientPlayer
 import AVFoundation
 
 internal class AdServiceEventProvider: AnalyticsProvider, TimedMetadataProvider, SourceAbandonedEventProvider {
+
     internal unowned let adService: AdService
     
     internal init(adService: AdService) {
@@ -84,4 +85,13 @@ internal class AdServiceEventProvider: AnalyticsProvider, TimedMetadataProvider,
     func onSourcePreparationAbandoned<Tech, Source>(ofSource mediaSource: Source, byTech tech: Tech) where Tech : PlaybackTech, Source : MediaSource {
         adService.playbackEnded()
     }
+    
+    func onAppDidEnterBackground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {}
+    
+    func onAppDidEnterForeground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {}
+    
+    func onGracePeriodStarted<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {}
+    
+    func onGracePeriodEnded<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {}
+    
 }

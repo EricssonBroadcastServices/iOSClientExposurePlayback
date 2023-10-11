@@ -13,9 +13,7 @@ import iOSClientPlayer
 @testable import iOSClientExposurePlayback
 
 class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
-    
-    
-    
+   
     required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement?, analytics: AnalyticsFromEntitlement?, appName: String? = nil  ) {
         self.environment = environment
         self.sessionToken = sessionToken
@@ -35,7 +33,7 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
         
     }
     
-    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech : PlaybackTech, Source : MediaSource {
+    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?, isOfflinePlayable: Bool) where Tech : PlaybackTech, Source : MediaSource {
         
     }
     
@@ -106,4 +104,25 @@ class MockedExposureAnalytics: ExposureStreamingAnalyticsProvider {
     func onWarning<Tech, Source, Context>(tech: Tech, source: Source?, warning: PlayerWarning<Tech, Context>) where Tech : PlaybackTech, Source : MediaSource, Context : MediaContext {
         
     }
+    
+    func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source, playable: iOSClientExposurePlayback.Playable, isOfflinePlayable: Bool) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, assetId: String, playSessionId: String, analytics: iOSClientExposure.AnalyticsFromEntitlement?, isOfflinePlayable: Bool, heartbeatsProvider: @escaping () -> iOSClientExposure.AnalyticsEvent?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    func onAppDidEnterBackground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    func onGracePeriodStarted<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    func onGracePeriodEnded<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    func onAppDidEnterForeground<Tech, Source>(tech: Tech, source: Source?) where Tech : iOSClientPlayer.PlaybackTech, Source : iOSClientPlayer.MediaSource {
+    }
+    
+    
+    
 }

@@ -20,27 +20,31 @@
     
     extension ExposureContext {
         
-        
         /// Initiates a playback session with the supplied `OfflineMediaPlayable`
         /// - Parameters:
         ///   - offlineMediaPlayable: EMP `OfflineMediaPlayable` for which to downloaded asset to be play.
         ///   - properties: Properties specifying additional configuration for the playback
         ///   - tech: Tech to do the playback on
-        internal func startOfflineMediaPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>) {
+        internal func startOfflineMediaPlayback(offlineMediaPlayable: OfflineMediaPlayable, properties: PlaybackProperties, tech: HLSNative<ExposureContext>, providers: [AnalyticsProvider]? = nil ) {
 
+            // Generate the analytics providers
+            let providers = analyticsProviders(for: nil)
+            
             playbackProperties = properties
             
             let entitlementResponse = EnigmaPlayable.convertV2EntitlementToV1(entitlementV2: offlineMediaPlayable.entitlement, offlineMediaPlayable)
 
-            
             if let entitlement = entitlementResponse.0 {
-                
+
                 let source = ExposureSource(entitlement: entitlement, assetId: offlineMediaPlayable.assetId, response: nil, streamingInfo: offlineMediaPlayable.entitlement.streamInfo)
                 
-                // onEntitlementResponse(source.entitlement, source)
+                providers.forEach{
+                    if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
+                        exposureProvider.onEntitlementRequested(tech: tech, source: source, playable: AssetPlayable(assetId: offlineMediaPlayable.assetId), isOfflinePlayable: true )
+                    }
+                }
                 
-                /// Assign the providers : TODO
-                // source.analyticsConnector.providers = providers4
+                source.analyticsConnector.providers = providers
                 
                 /// Make sure StartTime is configured if specified by user
                 tech.startTime(byDelegate: self)
@@ -93,7 +97,7 @@
                 
                 
                 // TODO : Analytics
-                     /* source.analyticsConnector.providers.forEach{
+                     source.analyticsConnector.providers.forEach{
                          /// Analytics Session Invalidation Detection
                          if let exposureAnalytics = $0 as? ExposureAnalytics {
                              exposureAnalytics.onExposureResponseMessage = { [weak tech, weak source] reason in
@@ -113,8 +117,8 @@
 
                          /// EMP related startup analytics
                          if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                             exposureProvider.onHandshakeStarted(tech: tech, source: source)
-                             exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId) { [weak self, weak tech] in
+                             exposureProvider.onHandshakeStarted(tech: tech, source: source, analytics: source.entitlement.analytics, isOfflinePlayable: true)
+                             exposureProvider.finalizePreparation(tech: tech, source: source, assetId: offlineMediaPlayable.assetId, playSessionId: source.entitlement.playSessionId, analytics: source.entitlement.analytics, isOfflinePlayable: true) { [weak self, weak tech] in
                                  guard let `self` = self, let tech = tech else { return nil }
 
                                  guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }
@@ -122,7 +126,7 @@
                              }
                          }
 
-                     } */
+                     }
 
                      /// Hook connection changed analytics events
                      /* reachability?.onReachabilityChanged = { [weak tech, weak source] connection in
@@ -133,6 +137,24 @@
                          }
                      } */
                 
+            } else {
+                
+                print(" Entitlement response is nil ")
+                
+                let errorTemp = NSError(domain:"Entitlement is empty", code: 1001, userInfo:nil)
+                
+                /// Deliver error
+                let contextError = PlayerError<HLSNative<ExposureContext>, ExposureContext>.context(error: .exposure(reason: .generalError(error: errorTemp)))
+                let nilSource: ExposureSource? = nil
+                
+                providers.forEach{
+                    /// EMP-11667: If Exposure returned an error, (ie an ExposureResponseMessage, for example NOT_ENTITLED), no Source object is created. This means we need to set the `X-Request-Id` before we finalize the session.
+                    // ($0 as? ExposureAnalytics)?.exposureEntitlementHTTPURLResponse = exposureResponse
+                    $0.onError(tech: tech, source: nilSource, error: contextError)
+                }
+                
+                tech.stop()
+                tech.eventDispatcher.onError(tech, nilSource, contextError)
             }
             
         }

@@ -31,13 +31,13 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     ///
     /// - parameter tech: `PlaybackTech` to be used for playback
     /// - parameter request: *EMP* playable
-    func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source,playable: Playable) where Tech: PlaybackTech, Source : MediaSource 
+    func onEntitlementRequested<Tech, Source>(tech: Tech, source: Source,playable: Playable, isOfflinePlayable: Bool) where Tech: PlaybackTech, Source : MediaSource 
     
     /// Sent when the entitlement has been granted, right after loading of media sources has been initiated.
     ///
     /// - parameter tech: `PlaybackTech` to be used for playback
     /// - parameter source: `MediaSource` used to load the request
-    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource
+    func onHandshakeStarted<Tech, Source>(tech: Tech, source: Source, analytics: AnalyticsFromEntitlement?, isOfflinePlayable: Bool) where Tech: PlaybackTech, Source: MediaSource
     
     /// Should prepare and configure the remaining parts of the Analytics environment.
     /// This step is required because we are dependant on the response from Exposure with regards to the playSessionId.
@@ -48,7 +48,7 @@ public protocol ExposureStreamingAnalyticsProvider: AnalyticsProvider {
     /// - parameter source: `MediaSource` used to load the request
     /// - parameter playSessionId: Unique identifier for the current playback session.
     /// - parameter heartbeatsProvider: Will deliver heartbeats metadata during the session
-    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, playSessionId: String, analytics: AnalyticsFromEntitlement?, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech: PlaybackTech, Source: MediaSource
+    func finalizePreparation<Tech, Source>(tech: Tech, source: Source, assetId: String, playSessionId: String, analytics: AnalyticsFromEntitlement?, isOfflinePlayable: Bool, heartbeatsProvider: @escaping () -> AnalyticsEvent?) where Tech: PlaybackTech, Source: MediaSource
     
     /// Sent if the current program changes during the session.
     ///

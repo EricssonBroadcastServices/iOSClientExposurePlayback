@@ -101,7 +101,7 @@ extension ExposureContext {
             // Initial analytics
             providers?.forEach{
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                    exposureProvider.onEntitlementRequested(tech: tech, source: source, playable: playable)
+                    exposureProvider.onEntitlementRequested(tech: tech, source: source, playable: playable, isOfflinePlayable: false)
                 }
             }
             
@@ -239,8 +239,8 @@ extension ExposureContext {
                 
                 /// EMP related startup analytics
                 if let exposureProvider = $0 as? ExposureStreamingAnalyticsProvider {
-                    exposureProvider.onHandshakeStarted(tech: tech, source: source, analytics: source.entitlement.analytics)
-                    exposureProvider.finalizePreparation(tech: tech, source: source, playSessionId: source.entitlement.playSessionId, analytics: source.entitlement.analytics) { [weak self, weak tech] in
+                    exposureProvider.onHandshakeStarted(tech: tech, source: source, analytics: source.entitlement.analytics, isOfflinePlayable: false)
+                    exposureProvider.finalizePreparation(tech: tech, source: source, assetId: playable.assetId, playSessionId: source.entitlement.playSessionId, analytics: source.entitlement.analytics, isOfflinePlayable: false) { [weak self, weak tech] in
                         guard let `self` = self, let tech = tech else { return nil }
                         
                         guard let heartbeatsProvider = source as? HeartbeatsProvider else { return nil }

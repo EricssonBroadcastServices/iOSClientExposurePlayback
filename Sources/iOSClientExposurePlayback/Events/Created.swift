@@ -40,9 +40,8 @@ extension Playback {
         internal let analyticsInfo: AnalyticsFromEntitlement?
         
         /// One of the following: vod, live, offline
-        internal var playMode: String? {
-            guard let data = assetData else { return nil }
-            switch data {
+        internal var playMode: String {
+            switch requiredAssetData {
             case .vod(assetId: _): return "vod"
             case .live(channelId: _): return "live"
             case .program(programId: _, channelId: _): return "vod"
@@ -51,13 +50,16 @@ extension Playback {
             }
         }
         
-        internal let assetData: PlaybackIdentifier?
+        internal var assetData: PlaybackIdentifier? {
+            return requiredAssetData
+        }
+        internal let requiredAssetData: PlaybackIdentifier
         
-        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, techVersion: String, assetData: PlaybackIdentifier? = nil, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement? = nil ) {
+        internal init(timestamp: Int64, version: String, exposureVersion: String? = nil, techVersion: String, assetData: PlaybackIdentifier, autoPlay: Bool? = nil, analyticsInfo: AnalyticsFromEntitlement? = nil ) {
             self.timestamp = timestamp
             self.version = version
             self.exposureVersion = exposureVersion
-            self.assetData = assetData
+            self.requiredAssetData = assetData
             self.autoPlay = autoPlay
             self.analyticsInfo = analyticsInfo
             self.techVersion = techVersion
@@ -86,7 +88,6 @@ extension Playback.Created: AnalyticsEvent {
             JSONKeys.player.rawValue: player,
             JSONKeys.version.rawValue: version,
             JSONKeys.techVersion.rawValue: techVersion,
-            
             JSONKeys.deviceId.rawValue: device.deviceId,
             JSONKeys.deviceModel.rawValue: device.model,
             JSONKeys.os.rawValue: device.os,
@@ -104,10 +105,6 @@ extension Playback.Created: AnalyticsEvent {
         
         if let autoPlay = autoPlay {
             params[JSONKeys.autoPlay.rawValue] = autoPlay
-        }
-        
-        if let playMode = playMode {
-            params[JSONKeys.playMode.rawValue] = playMode
         }
         
         if let assetId = assetId {
