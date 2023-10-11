@@ -14,6 +14,8 @@ internal class SpriteImageDownloader {
     
     let queue = OperationQueue()
     let downloadSession = URLSession.shared
+
+    var tmpTaskIdentifierArray: [Int] = []
     
     let assetId: String
     init(assetId: String) {
@@ -34,8 +36,16 @@ internal class SpriteImageDownloader {
         let completion = BlockOperation {
             // print(" All images are downloaded ")
         }
+
+        // clear tmpTaskIdentifierArray
+        tmpTaskIdentifierArray.removeAll()
+        
         for url in urls {
-            queue.addOperation(DownloadOperation(session: downloadSession, url: url, assetId: assetId, qulaity: quality))
+            let downloadTask = DownloadOperation(session: downloadSession, url: url, assetId: assetId, qulaity: quality)
+            
+            // keep track of current download tasks
+            tmpTaskIdentifierArray.append(downloadTask.task.taskIdentifier)
+            queue.addOperation(downloadTask)
         }
         
         OperationQueue.main.addOperation(completion)
@@ -99,7 +109,7 @@ internal class SpriteImageDownloader {
         
         downloadSession.getAllTasks { tasks in
             for task in tasks {
-                task.cancel()
+                if self.tmpTaskIdentifierArray.contains(task.taskIdentifier) { task.cancel() }
             }
         }
         queue.cancelAllOperations()
