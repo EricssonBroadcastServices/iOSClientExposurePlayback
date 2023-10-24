@@ -1,2 +1,2 @@
-github "EricssonBroadcastServices/iOSClientExposure"
-github "EricssonBroadcastServices/iOSClientPlayer"
+github "EricssonBroadcastServices/iOSClientExposure" "v3.3.0"
+github "EricssonBroadcastServices/iOSClientPlayer" "v3.2.0"

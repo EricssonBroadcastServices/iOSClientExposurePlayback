@@ -469,6 +469,8 @@ extension ExposureAnalytics: AnalyticsProvider {
         if let source = source as? ExposureSource {
             let event  = Playback.AppBackgrounded(timestamp: Date().millisecondsSince1970,
                                                   offsetTime: offsetTime(for: source, using: tech), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+            
+            
             let _ = tech.isOfflinePlayable ? offlineDispatcher?.offlineEnqueue(event: event, assetId: source.assetId) : dispatcher?.enqueue(event: event)
         }
     }
@@ -501,8 +503,34 @@ extension ExposureAnalytics: AnalyticsProvider {
                                            autoPlay: autoplay(tech: tech), analyticsInfo: source.entitlement.analytics)
             
             events.append(created)
-            offlineDispatcher = OfflineDispatcher(environment: environment, sessionToken: sessionToken, assetId: source.assetId, playSessionId: source.entitlement.playSessionId, analytics: analytics, startupEvents: events)
             
+            if tech.isOfflinePlayable {
+                offlineDispatcher = OfflineDispatcher(environment: environment, sessionToken: sessionToken, assetId: source.assetId, playSessionId: source.entitlement.playSessionId, analytics: analytics, startupEvents: events)
+            } else {
+                if let heartbeatsProvider = dispatcher?.heartbeatsProvider{
+                    dispatcher = Dispatcher(environment: environment,
+                                            sessionToken: sessionToken,
+                                            playSessionId: source.entitlement.playSessionId,
+                                            analytics: analytics, startupEvents: events,
+                                            heartbeatsProvider: heartbeatsProvider)
+                    dispatcher?.requestId = extractRequestId(source: source)
+                    dispatcher?.onExposureResponseMessage = { [weak self] message in
+                        self?.onExposureResponseMessage(message)
+                    }
+                    dispatcher?.flushTrigger(enabled: true)
+                } else {
+                    dispatcher = Dispatcher(environment: environment,
+                                            sessionToken: sessionToken,
+                                            playSessionId: source.entitlement.playSessionId,
+                                            analytics: analytics, startupEvents: events,
+                                            heartbeatsProvider: { return nil })
+                    dispatcher?.requestId = extractRequestId(source: source)
+                    dispatcher?.onExposureResponseMessage = { [weak self] message in
+                        self?.onExposureResponseMessage(message)
+                    }
+                    dispatcher?.flushTrigger(enabled: true)
+                }
+            }
         }
     }
     

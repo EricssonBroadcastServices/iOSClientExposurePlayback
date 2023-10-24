@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68DED09C2AE7E25800FA50BF /* AppResumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED09B2AE7E25800FA50BF /* AppResumed.swift */; };
+		68DED09D2AE7E25800FA50BF /* AppResumed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED09B2AE7E25800FA50BF /* AppResumed.swift */; };
+		68DED09F2AE7E26200FA50BF /* AppBackgrounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED09E2AE7E26200FA50BF /* AppBackgrounded.swift */; };
+		68DED0A02AE7E26200FA50BF /* AppBackgrounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED09E2AE7E26200FA50BF /* AppBackgrounded.swift */; };
+		68DED0A22AE7E26F00FA50BF /* GracePeriodEnded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED0A12AE7E26F00FA50BF /* GracePeriodEnded.swift */; };
+		68DED0A32AE7E26F00FA50BF /* GracePeriodEnded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED0A12AE7E26F00FA50BF /* GracePeriodEnded.swift */; };
+		68DED0A52AE7E27300FA50BF /* GracePeriodStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED0A42AE7E27300FA50BF /* GracePeriodStarted.swift */; };
+		68DED0A62AE7E27300FA50BF /* GracePeriodStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DED0A42AE7E27300FA50BF /* GracePeriodStarted.swift */; };
 		767FB4B2217FC7B400BC087A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		782538A1282BDC3F00A60966 /* StopCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782538A0282BDC3F00A60966 /* StopCasting.swift */; };
 		782538A2282BDC3F00A60966 /* StopCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782538A0282BDC3F00A60966 /* StopCasting.swift */; };
@@ -221,6 +229,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68DED09B2AE7E25800FA50BF /* AppResumed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppResumed.swift; sourceTree = "<group>"; };
+		68DED09E2AE7E26200FA50BF /* AppBackgrounded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppBackgrounded.swift; sourceTree = "<group>"; };
+		68DED0A12AE7E26F00FA50BF /* GracePeriodEnded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GracePeriodEnded.swift; sourceTree = "<group>"; };
+		68DED0A42AE7E27300FA50BF /* GracePeriodStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GracePeriodStarted.swift; sourceTree = "<group>"; };
 		782538A0282BDC3F00A60966 /* StopCasting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopCasting.swift; sourceTree = "<group>"; };
 		7831108327EC70C2009B3114 /* ProgramSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramSource.swift; sourceTree = "<group>"; };
 		7831108427EC70C2009B3114 /* ExposureSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureSource.swift; sourceTree = "<group>"; };
@@ -498,6 +510,10 @@
 		783110AE27EC70C2009B3114 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				68DED0A42AE7E27300FA50BF /* GracePeriodStarted.swift */,
+				68DED0A12AE7E26F00FA50BF /* GracePeriodEnded.swift */,
+				68DED09E2AE7E26200FA50BF /* AppBackgrounded.swift */,
+				68DED09B2AE7E25800FA50BF /* AppResumed.swift */,
 				783110AF27EC70C2009B3114 /* Paused.swift */,
 				783110B027EC70C2009B3114 /* StopAirplay.swift */,
 				783110B127EC70C2009B3114 /* Playback.swift */,
@@ -812,6 +828,7 @@
 				7831118F27EC70C3009B3114 /* ServerSideAdService.swift in Sources */,
 				7831115D27EC70C2009B3114 /* AssetIdentifier.swift in Sources */,
 				7831117727EC70C2009B3114 /* Completed.swift in Sources */,
+				68DED0A32AE7E26F00FA50BF /* GracePeriodEnded.swift in Sources */,
 				7831117327EC70C2009B3114 /* InitCompleted.swift in Sources */,
 				783111AF27EC70C3009B3114 /* AsynchronousOperation.swift in Sources */,
 				7831111927EC70C2009B3114 /* HLSNative+ExposureContext+TrackSelectable.swift in Sources */,
@@ -823,6 +840,7 @@
 				7831114527EC70C2009B3114 /* Playback.swift in Sources */,
 				7831116127EC70C2009B3114 /* ConnectionChanged.swift in Sources */,
 				7831114D27EC70C2009B3114 /* AdFailed.swift in Sources */,
+				68DED0A02AE7E26200FA50BF /* AppBackgrounded.swift in Sources */,
 				7831112327EC70C2009B3114 /* AssetPlayable.swift in Sources */,
 				7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */,
 				7831110727EC70C2009B3114 /* HLSNative+ExposureContext+TimedMetadata.swift in Sources */,
@@ -864,7 +882,9 @@
 				7831110527EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7831115F27EC70C2009B3114 /* Trace.swift in Sources */,
 				7831111F27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */,
+				68DED0A62AE7E27300FA50BF /* GracePeriodStarted.swift in Sources */,
 				7831115B27EC70C2009B3114 /* Resumed.swift in Sources */,
+				68DED09D2AE7E25800FA50BF /* AppResumed.swift in Sources */,
 				7831117B27EC70C2009B3114 /* ExposureStreamingAnalyticsProvider.swift in Sources */,
 				7831110D27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				7831112927EC70C2009B3114 /* ChannelPlayable.swift in Sources */,
@@ -915,11 +935,13 @@
 				7831110027EC70C2009B3114 /* ExposureContext.swift in Sources */,
 				7831116227EC70C2009B3114 /* AdStarted.swift in Sources */,
 				783110FA27EC70C2009B3114 /* AssetSource.swift in Sources */,
+				68DED09F2AE7E26200FA50BF /* AppBackgrounded.swift in Sources */,
 				782538A1282BDC3F00A60966 /* StopCasting.swift in Sources */,
 				7831115627EC70C2009B3114 /* ScrubbedTo.swift in Sources */,
 				783111AC27EC70C3009B3114 /* ImageFileManager.swift in Sources */,
 				783111BA27EC70C3009B3114 /* ProgramService.swift in Sources */,
 				7831116C27EC70C2009B3114 /* HandshakeStarted.swift in Sources */,
+				68DED0A52AE7E27300FA50BF /* GracePeriodStarted.swift in Sources */,
 				7831113627EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift in Sources */,
 				7831115827EC70C2009B3114 /* Started.swift in Sources */,
 				7831113827EC70C2009B3114 /* String+Extensions.swift in Sources */,
@@ -951,6 +973,7 @@
 				7831111A27EC70C2009B3114 /* HLSNative+ExposureContext+OfflinePlayback.swift in Sources */,
 				7831119227EC70C3009B3114 /* AdServiceContractRestrictionsProvider.swift in Sources */,
 				7831115227EC70C2009B3114 /* DrmEvent.swift in Sources */,
+				68DED09C2AE7E25800FA50BF /* AppResumed.swift in Sources */,
 				7831114C27EC70C2009B3114 /* AdFailed.swift in Sources */,
 				783111BC27EC70C3009B3114 /* ServerTimeProvider.swift in Sources */,
 				7831112427EC70C2009B3114 /* EnigmaPlayable.swift in Sources */,
@@ -960,6 +983,7 @@
 				7831110827EC70C2009B3114 /* HLSNative+ExposureContext+Airplay.swift in Sources */,
 				7831112A27EC70C2009B3114 /* ExposureContext+Error.swift in Sources */,
 				7831119C27EC70C3009B3114 /* FairplayCertificateCache.swift in Sources */,
+				68DED0A22AE7E26F00FA50BF /* GracePeriodEnded.swift in Sources */,
 				7831112227EC70C2009B3114 /* AssetPlayable.swift in Sources */,
 				7831111E27EC70C2009B3114 /* ExposureContext+Warning.swift in Sources */,
 				7831116427EC70C2009B3114 /* DeviceInfo.swift in Sources */,
@@ -1005,7 +1029,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1035,7 +1059,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1186,7 +1210,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1217,7 +1241,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emp.ExposurePlayback;
 				PRODUCT_NAME = iOSClientExposurePlayback;
 				PROVISIONING_PROFILE_SPECIFIER = "";

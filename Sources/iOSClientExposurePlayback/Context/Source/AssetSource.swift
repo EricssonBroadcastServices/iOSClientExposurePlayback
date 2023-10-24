@@ -32,18 +32,14 @@ open class AssetSource: ExposureSource {
     
     public override func handleStartTime(for tech: HLSNative<ExposureContext>, in context: ExposureContext) -> StartOffset {
         
-        print(" Should handle start time " )
-        
+   
         switch context.playbackProperties.playFrom {
         case .defaultBehaviour:
-            print(" defaultBehaviour " )
             return defaultStartTime(for: tech, in: context)
         case .beginning:
             // Start from offset 0
-            print(" beginning " )
             return .startPosition(position: 0)
         case .bookmark:
-            print(" bookmark " )
             // Use *EMP* supplied bookmark, else default behaviour (ie nil bookmark)
             guard let offset = entitlement.lastViewedOffset else { return defaultStartTime(for: tech, in: context) }
             
@@ -59,7 +55,6 @@ open class AssetSource: ExposureSource {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customPosition(position: let offset):
-            print(" customPosition " )
             guard !tech.isExternalPlaybackActive else {
                 // EMP-11129 We cant check for invalidStartTime on Airplay events since the seekable ranges are not loaded yet.
                 return .startPosition(position: offset)
@@ -74,9 +69,6 @@ open class AssetSource: ExposureSource {
                 return defaultStartTime(for: tech, in: context)
             }
         case .customTime(timestamp: let offset ):
-            
-            print(" customTime ", offset )
-            
             // Use the custom supplied offset
             return defaultStartTime(for: tech, in: context)
         }
