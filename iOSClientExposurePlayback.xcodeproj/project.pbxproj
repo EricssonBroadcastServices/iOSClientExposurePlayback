@@ -336,14 +336,6 @@
 		783110F227EC70C2009B3114 /* ProgramService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramService.swift; sourceTree = "<group>"; };
 		783110F327EC70C2009B3114 /* ServerTimeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTimeProvider.swift; sourceTree = "<group>"; };
 		783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KNOWN_LIMITATIONS.md; sourceTree = "<group>"; };
-		783111C427EC710E009B3114 /* live-and-catchup-playback.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "live-and-catchup-playback.md"; sourceTree = "<group>"; };
-		783111C527EC710E009B3114 /* AdobePrimetimeMediaToken.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AdobePrimetimeMediaToken.md; sourceTree = "<group>"; };
-		783111C627EC710E009B3114 /* server-side-ad-insertion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "server-side-ad-insertion.md"; sourceTree = "<group>"; };
-		783111C727EC710E009B3114 /* sprites.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = sprites.md; sourceTree = "<group>"; };
-		783111C827EC710E009B3114 /* simple-player.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "simple-player.md"; sourceTree = "<group>"; };
-		783111C927EC710E009B3114 /* migrating-from-mrr.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "migrating-from-mrr.md"; sourceTree = "<group>"; };
-		783111CA27EC710E009B3114 /* download.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = download.md; sourceTree = "<group>"; };
-		783111CB27EC710E009B3114 /* error-handling-and-warning-messages.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "error-handling-and-warning-messages.md"; sourceTree = "<group>"; };
 		783111CC27EC7118009B3114 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		783111CD27EC711F009B3114 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		783111CE27EC712B009B3114 /* UPGRADE_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = UPGRADE_GUIDE.md; sourceTree = "<group>"; };
@@ -390,7 +382,6 @@
 				783111CD27EC711F009B3114 /* README.md */,
 				783111CC27EC7118009B3114 /* CHANGELOG.md */,
 				78BC171B29C1CE0400EE4D36 /* iOSClientExposurePlayback.podspec */,
-				783111C327EC710E009B3114 /* Documentation */,
 				783111C227EC7106009B3114 /* KNOWN_LIMITATIONS.md */,
 				7831108027EC70C2009B3114 /* iOSClientExposurePlayback */,
 				783111CF27EC8307009B3114 /* Frameworks */,
@@ -625,21 +616,6 @@
 				783110F127EC70C2009B3114 /* ContractRestrictionsPolicy.swift */,
 			);
 			path = ContractRestrictions;
-			sourceTree = "<group>";
-		};
-		783111C327EC710E009B3114 /* Documentation */ = {
-			isa = PBXGroup;
-			children = (
-				783111C427EC710E009B3114 /* live-and-catchup-playback.md */,
-				783111C527EC710E009B3114 /* AdobePrimetimeMediaToken.md */,
-				783111C627EC710E009B3114 /* server-side-ad-insertion.md */,
-				783111C727EC710E009B3114 /* sprites.md */,
-				783111C827EC710E009B3114 /* simple-player.md */,
-				783111C927EC710E009B3114 /* migrating-from-mrr.md */,
-				783111CA27EC710E009B3114 /* download.md */,
-				783111CB27EC710E009B3114 /* error-handling-and-warning-messages.md */,
-			);
-			path = Documentation;
 			sourceTree = "<group>";
 		};
 		783111CF27EC8307009B3114 /* Frameworks */ = {
