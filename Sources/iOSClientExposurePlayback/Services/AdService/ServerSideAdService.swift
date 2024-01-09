@@ -230,6 +230,11 @@ extension ServerSideAdService {
         
         // Note:This should be refactored at some point
         
+        // Reset the values
+        self.tempAdTimeLine.removeAll()
+        self.noOfAdsInAdBreak = 0
+        self.adIndexInAdBreak = 0
+        
         // temporary store values
         var rangeStart = startTime
         var rangeEnd = currentPlayheadPosition
@@ -362,12 +367,13 @@ extension ServerSideAdService {
                 
                 let _ = self.allTimelineContent.enumerated().compactMap { index, content in
                     if let start = content.timeRange.start.milliseconds , let end = content.timeRange.end.milliseconds, let timeInMil = time.milliseconds {
-                        
-                        if (start / 10 * 10) <= timeInMil && (end / 10 * 10) >= timeInMil && content.contentType == "ad" && !(self.tempAdTimeLine.contains(content)) {
+ 
+                        if (start / 10 * 10) <= timeInMil && (end / 10 * 10) + 10 >= timeInMil && content.contentType == "ad" && !(self.tempAdTimeLine.contains(content)) {
+                            
                             if let adClipIndex = self.allTimelineContent.firstIndex(where:  { content.timeRange.containsTimeRange($0.timeRange) }) {
                                 
                                 let duration = (end / 10 * 10) - (start / 10 * 10)
-                                
+    
                                 let clipFirstQuartile =  start + (duration)/4
                                 let clipMidpoint = start + ( duration)/2
                                 let clipThirdQuartile = start + ((duration) * 3/4)
@@ -375,6 +381,7 @@ extension ServerSideAdService {
                                 let clip = self.clips[adClipIndex]
 
                                 if (timeInMil / 10 * 10) == (clipFirstQuartile / 10 * 10)  {
+
                                     // Send firstQuartile tracking events
                                     if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
                                         if !self.alreadySentadTrackingUrls.contains(firstQuartileUrls) {
@@ -384,6 +391,7 @@ extension ServerSideAdService {
                                     }
     
                                 } else if (timeInMil / 10 * 10) == (clipMidpoint / 10 * 10) {
+
                                     // Send clipMidpoint tracking events
                                     if let midpointUrls = clip.trackingEvents?.midpoint {
                                         if !self.alreadySentadTrackingUrls.contains(midpointUrls) {
@@ -393,6 +401,7 @@ extension ServerSideAdService {
                                     }
                                     
                                 } else if (timeInMil / 10 * 10) == (clipThirdQuartile / 10 * 10)  {
+                                    
                                     // Send thirdQuartile tracking events
                                     if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
                                         if !self.alreadySentadTrackingUrls.contains(thirdQuartileUrls) {
@@ -401,7 +410,8 @@ extension ServerSideAdService {
                                         }
                                     }
                                     
-                                } else if (timeInMil / 10 * 10) == (end / 10 * 10)  {
+                                } else if ((timeInMil / 10 * 10) == (end / 10 * 10)) {
+                                    
                                     // Send complete tracking events
                                     if let completeUrls = clip.trackingEvents?.complete {
                                         if !self.alreadySentadTrackingUrls.contains(completeUrls) {
@@ -416,13 +426,14 @@ extension ServerSideAdService {
                                             .compactMap{ $0 as? ExposureAnalytics }
                                             .forEach{ $0.onAdCompleted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
                                     }
-                                    
+
                                     self.tempAdTimeLine.append(content)
                                     
                                     self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
                                     self.policy.rewindEnabled = self.source.entitlement.rwEnabled
                                     self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                                     self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
+
                                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
                                     
                                     
@@ -444,6 +455,8 @@ extension ServerSideAdService {
                                     /// Note :
                                     // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
                                     if (timeInMil / 10 * 10) + 10 == (start / 10 * 10) + 10 || (timeInMil / 10 * 10) + 10 > (start / 10 * 10) + 10 {
+                                        
+                                        // print("Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.")
 
                                         // This will prevent sending multiple satrt events
                                         if !(self.alreadyStartedAd.contains(content)) {
@@ -473,7 +486,7 @@ extension ServerSideAdService {
 
                                             
                                             self.calculateAdCounterValues(adClipIndex, end, start)
-                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, self.adIndexInAdBreak)
+                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, self.adIndexInAdBreak )
                                         }
                                     }
                                 }
@@ -565,11 +578,13 @@ extension ServerSideAdService {
                 adIndexInAdBreak = clipIndex
                 
             } else {
-                print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
+                // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
                 self.nextVodClipIndex = 0
                 self.previousVodClipIndex = 0
-                self.noOfAdsInAdBreak = 0
-                self.adIndexInAdBreak = 0
+                // self.noOfAdsInAdBreak = 0
+                
+                // Couldn't find the next vod clip , still keep adding the ad index assuming we have anothe ad
+                self.adIndexInAdBreak = clipIndex
             }
         } else {
             
@@ -634,11 +649,13 @@ extension ServerSideAdService {
                     noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
                     adIndexInAdBreak = clipIndex
                 } else {
-                    print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
+                    // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
                     self.nextVodClipIndex = 0
                     self.previousVodClipIndex = 0
-                    self.noOfAdsInAdBreak = 0
-                    self.adIndexInAdBreak = 0
+                    // self.noOfAdsInAdBreak = 0
+                    
+                    // Couldn't find the next vod clip , still keep adding the ad index assuming we have anothe ad
+                    self.adIndexInAdBreak = clipIndex
                 }
             }
         }
