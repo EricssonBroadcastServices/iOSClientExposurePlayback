@@ -366,7 +366,7 @@ extension ServerSideAdService {
                 rangeEnd = 0
                 
                 let _ = self.allTimelineContent.enumerated().compactMap { index, content in
-                    if let start = content.timeRange.start.milliseconds , let end = content.timeRange.end.milliseconds, var timeInMil = time.milliseconds {
+                    if let start = content.timeRange.start.milliseconds , let end = content.timeRange.end.milliseconds, let timeInMil = time.milliseconds {
  
                         if (start / 10 * 10) <= timeInMil && (end / 10 * 10) + 10 >= timeInMil && content.contentType == "ad" && !(self.tempAdTimeLine.contains(content)) {
                             
@@ -486,7 +486,7 @@ extension ServerSideAdService {
 
                                             
                                             self.calculateAdCounterValues(adClipIndex, end, start)
-                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, (index+1))
+                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, self.adIndexInAdBreak )
                                         }
                                     }
                                 }
@@ -582,7 +582,9 @@ extension ServerSideAdService {
                 self.nextVodClipIndex = 0
                 self.previousVodClipIndex = 0
                 // self.noOfAdsInAdBreak = 0
-                // self.adIndexInAdBreak = 0
+                
+                // Couldn't find the next vod clip , still keep adding the ad index assuming we have anothe ad
+                self.adIndexInAdBreak = clipIndex
             }
         } else {
             
@@ -651,7 +653,9 @@ extension ServerSideAdService {
                     self.nextVodClipIndex = 0
                     self.previousVodClipIndex = 0
                     // self.noOfAdsInAdBreak = 0
-                    // self.adIndexInAdBreak = 0
+                    
+                    // Couldn't find the next vod clip , still keep adding the ad index assuming we have anothe ad
+                    self.adIndexInAdBreak = clipIndex
                 }
             }
         }

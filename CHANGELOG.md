@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.6.1` Release - [3.6.1](#361)
 * `3.6.0` Release - [3.6.0](#360)
 * `3.5.1` Release - [3.5.1](#351)
 * `3.5.0` Release - [3.5.0](#350)
@@ -62,6 +63,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.6.1
+#### Bug Fixes
+* `EMP-21097` Bug Fix : SSAI Ad end events were not properly passed to the client. 
 
 ## 3.6.0
 #### Feature
