@@ -28,6 +28,8 @@ extension Playback {
         /// Example: 1458835_IkCMxd
         let programId: String
         
+        let programAssetId: String
+        
         /// Length in milliseconds of this program, according to the EPG
         let videoLength: Int64?
         
@@ -35,14 +37,16 @@ extension Playback {
         
         internal var analyticsInfo: AnalyticsFromEntitlement?
         
-        internal init(timestamp: Int64, offsetTime: Int64?, programId: String, videoLength: Int64? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
+        internal init(timestamp: Int64, offsetTime: Int64?, programId: String, programAssetId: String, videoLength: Int64? = nil, cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil) {
             self.timestamp = timestamp
             self.offsetTime = offsetTime
             self.programId = programId
+            self.programAssetId = programAssetId
             self.videoLength = videoLength
             
             self.cdnInfo = cdnInfo
             self.analyticsInfo = analyticsInfo
+            
         }
     }
 }
@@ -64,6 +68,7 @@ extension Playback.ProgramChanged: AnalyticsEvent {
             JSONKeys.eventType.rawValue: eventType,
             JSONKeys.timestamp.rawValue: timestamp,
             JSONKeys.programId.rawValue: programId,
+            JSONKeys.programAssetId.rawValue: programAssetId,
             JSONKeys.player.rawValue: player,
             
             JSONKeys.deviceId.rawValue: device.deviceId,
@@ -108,6 +113,7 @@ extension Playback.ProgramChanged: AnalyticsEvent {
         case timestamp = "Timestamp"
         case offsetTime = "OffsetTime"
         case programId = "ProgramId"
+        case programAssetId = "ProgramAssetId"
         case videoLength = "VideoLength"
         case player = "Player"
         
