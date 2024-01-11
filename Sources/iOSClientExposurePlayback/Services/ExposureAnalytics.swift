@@ -346,19 +346,23 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     }
     
     public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource {
-        if let programId = program?.programId, lastKnownProgramId != nil {
+
+        if let programId = program?.programId, lastKnownProgramId != nil, let programAssetId = program?.assetId {
             
             if let source = source as? ExposureSource {
                 let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
                                                     offsetTime: offsetTime(for: source, using: tech),
                                                     programId: programId,
+                                                    programAssetId: programAssetId,
                                                     videoLength: tech.duration, cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
                 dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
                                                     offsetTime: offsetTime(for: source, using: tech),
                                                     programId: programId,
+                                                    programAssetId: programAssetId,
                                                     videoLength: tech.duration)
+
                 dispatcher?.enqueue(event: event)
             }
             

@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.7.0` Release - [3.7.0](#370)
 * `3.6.1` Release - [3.6.1](#361)
 * `3.6.0` Release - [3.6.0](#360)
 * `3.5.1` Release - [3.5.1](#351)
@@ -63,6 +64,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.7.0
+#### Feature
+* `EMP-21056` New property has been added; `ProgramAssetId`, which contains the assetId for the program, to the analytics event `Playback.ProgramChanged`
 
 ## 3.6.1
 #### Bug Fixes
