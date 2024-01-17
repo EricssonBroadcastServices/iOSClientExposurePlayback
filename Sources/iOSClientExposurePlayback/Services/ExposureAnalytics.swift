@@ -346,15 +346,24 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
     }
     
     public func onProgramChanged<Tech, Source>(tech: Tech, source: Source, program: Program?, analytics: AnalyticsFromEntitlement?) where Tech: PlaybackTech, Source: MediaSource {
-
+        
         if let programId = program?.programId, lastKnownProgramId != nil, let programAssetId = program?.assetId {
             
             if let source = source as? ExposureSource {
+                
+                // Check if the videoLength becomes nil
+                var videoLength = tech.duration
+                if videoLength == nil {
+                    if let durationMiliseconds = source.entitlement.durationInMs {
+                        videoLength = Int64(durationMiliseconds)/1000
+                    }
+                }
+                
                 let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
                                                     offsetTime: offsetTime(for: source, using: tech),
                                                     programId: programId,
                                                     programAssetId: programAssetId,
-                                                    videoLength: tech.duration, cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
+                                                    videoLength: videoLength, cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics)
                 dispatcher?.enqueue(event: event)
             } else {
                 let event = Playback.ProgramChanged(timestamp: Date().millisecondsSince1970,
@@ -602,6 +611,7 @@ extension ExposureAnalytics: AnalyticsProvider {
     
     public func onStarted<Tech, Source>(tech: Tech, source: Source) where Tech : PlaybackTech, Source : MediaSource {
         if let source = source as? ExposureSource {
+
             /// EMP-11666: Send `X-Playback-Session-Id` as assigned by AVPlayer in order to track segment and manifest request
             let segmentRequestId = source.mediaSourceRequestHeaders["X-Playback-Session-Id"]
             
@@ -612,12 +622,20 @@ extension ExposureAnalytics: AnalyticsProvider {
                 bitrate = Int64(currentBitrate/1000)
             }
             
+            var videoLength = tech.duration
+            // Check if the video length is nil , if so use the duration from the entitlements 
+            if videoLength == nil {
+                if let durationMiliseconds = source.entitlement.durationInMs {
+                    videoLength = Int64(durationMiliseconds)/1000
+                }
+            }
+            
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source, offline: tech.isOfflinePlayable),
                                          mediaLocator: source.entitlement.mediaLocator.absoluteString,
                                          offsetTime: offsetTime(for: source, using: tech),
-                                         videoLength: tech.duration,
+                                         videoLength: videoLength,
                                          bitrate: tech.currentBitrate != nil ? bitrate : nil,
                                          referenceTime: referenceTime,
                                          segmentRequestId: segmentRequestId,
