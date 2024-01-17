@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.7.1` Release - [3.7.1](#371)
 * `3.7.0` Release - [3.7.0](#370)
 * `3.6.1` Release - [3.6.1](#361)
 * `3.6.0` Release - [3.6.0](#360)
@@ -64,6 +65,12 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.7.1
+#### Bug Fixes
+* `EMP-21115` Resolved the inconsistency in reporting VideoLength within `Playback.Started` events.
+* `EMP-21114` Fixed an issue related to duplicate offline analytics events
+*  Corrected the typo issue : `flushOfflineAnalytics()`
 
 ## 3.7.0
 #### Feature

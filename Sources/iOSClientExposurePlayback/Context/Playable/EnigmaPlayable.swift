@@ -60,7 +60,7 @@ public struct EnigmaPlayable {
             adMediaLocator: nil,
             cdn: entitlementV2.cdn ,
             analytics: entitlementV2.analytics,
-            liveDelay: format.liveDelay, epg: entitlementV2.epg )
+            liveDelay: format.liveDelay, epg: entitlementV2.epg, durationInMs: entitlementV2.durationInMs )
         
         return (playbackEntitlement, nil)
     }
