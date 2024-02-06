@@ -128,7 +128,7 @@ extension Playback.Error: AnalyticsEvent {
             JSONKeys.deviceId.rawValue: deviceId,
             JSONKeys.deviceModel.rawValue: deviceModel,
             JSONKeys.os.rawValue: os,
-            JSONKeys.appType.rawValue: os,
+            JSONKeys.appType.rawValue: "app",
             JSONKeys.osVersion.rawValue: osVersion,
             JSONKeys.manufacturer.rawValue: manufacturer,
             JSONKeys.player.rawValue: player,

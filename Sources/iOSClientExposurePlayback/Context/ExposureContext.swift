@@ -34,6 +34,8 @@ public class ExposureContext: MediaContext {
     
     public let appName: String?
     
+    public let appVersion: String?
+    
     /// Service that handles synchronization of local device time with server time
     public let monotonicTimeService: MonotonicTimeService
     
@@ -109,11 +111,14 @@ public class ExposureContext: MediaContext {
     ///
     /// - parameter environment: Exposure `Environment` to use
     /// - parameter sessionToken: Exposure `SessionToken` to use
-    public init(environment: Environment, sessionToken: SessionToken, appName: String? = nil ) {
+    /// - parameter appName: App Name
+    /// - parameter appVersion: App version
+    public init(environment: Environment, sessionToken: SessionToken, appName: String? = nil, appVersion: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.monotonicTimeService = MonotonicTimeService(environment: environment)
         self.appName = appName
+        self.appVersion = appVersion
         
         reachability = Reachability()
         do {

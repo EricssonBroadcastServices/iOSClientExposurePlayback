@@ -37,11 +37,13 @@ internal struct DeviceInfo {
     
     internal let appName: String?
     
+    internal let appVersion: String?
+    
     internal var cdnInfo: CDNInfoFromEntitlement?
     
     internal var analyticsInfo: AnalyticsFromEntitlement?
     
-    internal init(timestamp: Int64, connection: String, type: String? = nil, tech: String, techVersion: String,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil, appName: String? = nil ) {
+    internal init(timestamp: Int64, connection: String, type: String? = nil, tech: String, techVersion: String,  cdnInfo: CDNInfoFromEntitlement? = nil , analyticsInfo: AnalyticsFromEntitlement? = nil, appName: String? = nil, appVersion: String? = nil) {
         self.timestamp = timestamp
         self.connection = connection
         self.type = type
@@ -52,6 +54,7 @@ internal struct DeviceInfo {
         self.cdnInfo = cdnInfo
         self.analyticsInfo = analyticsInfo
         self.appName = appName
+        self.appVersion = appVersion
     }
 }
 
@@ -76,7 +79,7 @@ extension DeviceInfo: AnalyticsEvent {
             JSONKeys.deviceId.rawValue: device.deviceId,
             JSONKeys.deviceModel.rawValue: device.model,
             JSONKeys.os.rawValue: device.os,
-            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.appType.rawValue: "app",
             JSONKeys.osVersion.rawValue: device.osVersion,
             JSONKeys.manufacturer.rawValue: device.manufacturer,
             JSONKeys.connection.rawValue: connection,
@@ -87,6 +90,10 @@ extension DeviceInfo: AnalyticsEvent {
         
         if let appName = appName {
             params[JSONKeys.appName.rawValue] = appName
+        }
+        
+        if let appVersion = appVersion {
+            params[JSONKeys.appVersion.rawValue] = appVersion
         }
         
         if let cpuType = device.cpuType {
@@ -129,6 +136,8 @@ extension DeviceInfo: AnalyticsEvent {
         
         // the official name of the app
         case appName = "AppName"
+        
+        case appVersion = "AppVersion"
         
         case os = "OS"
         
