@@ -60,6 +60,8 @@ public class ExposureAnalytics {
     // the official name of the app
     public let appName: String?
     
+    public let appVersion: String?
+    
     /// `Dispatcher` takes care of delivering analytics payload.
     fileprivate(set) internal var dispatcher: Dispatcher?
     
@@ -72,12 +74,13 @@ public class ExposureAnalytics {
     
     internal var isOfflinePlayable: Bool = false
     
-    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, appName: String? = nil ) {
+    public required init(environment: Environment, sessionToken: SessionToken, cdn: CDNInfoFromEntitlement? = nil , analytics: AnalyticsFromEntitlement? = nil, appName: String? = nil, appVersion: String? = nil ) {
         self.environment = environment
         self.sessionToken = sessionToken
         self.cdn = cdn
         self.analytics = analytics
         self.appName = appName
+        self.appVersion = appVersion
     }
     
     public var onExposureResponseMessage: (ExposureResponseMessage) -> Void = { _ in }
@@ -246,7 +249,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             /// 2. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
             /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName)
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName, appVersion: appVersion)
             
             /// 3. Store startup events
             var current = startupEvents
@@ -274,7 +277,7 @@ extension ExposureAnalytics: ExposureStreamingAnalyticsProvider {
             /// 2. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
             /// EMP-11647: If this is an Airplay session, set `Playback.Device.Info.type = AirPlay`
-            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), analyticsInfo: nil, appName: appName)
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), analyticsInfo: nil, appName: appName, appVersion: appVersion)
             
             /// 3. Store startup events
             var current = startupEvents
@@ -504,7 +507,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             /// 1. DeviceInfo
             let connectionType = networkTech(connection: (Reachability()?.connection ?? Reachability.Connection.unknown))
             let techBundle = (tech is HLSNative<ExposureContext>) ? "com.emp.Player" : Bundle(for: type(of: tech)).bundleIdentifier
-            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName)
+            let deviceInfo = DeviceInfo(timestamp: Date().millisecondsSince1970, connection: connectionType, type: isAirplaySession, tech: String(describing: type(of: tech)),techVersion: version(for: techBundle), cdnInfo: source.entitlement.cdn, analyticsInfo: source.entitlement.analytics, appName: appName, appVersion: appVersion)
             events.append(deviceInfo)
             
             /// 2. Created
@@ -631,6 +634,7 @@ extension ExposureAnalytics: AnalyticsProvider {
             }
             
             let referenceTime:Int64? = source.isUnifiedPackager ? 0 : nil
+            
             let event = Playback.Started(timestamp: Date().millisecondsSince1970,
                                          assetData: PlaybackIdentifier.from(source: source, offline: tech.isOfflinePlayable),
                                          mediaLocator: source.entitlement.mediaLocator.absoluteString,

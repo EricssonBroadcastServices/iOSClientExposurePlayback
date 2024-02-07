@@ -64,7 +64,7 @@ extension Playback.Heartbeat: AnalyticsEvent {
             JSONKeys.deviceId.rawValue: device.deviceId,
             JSONKeys.deviceModel.rawValue: device.model,
             JSONKeys.os.rawValue: device.os,
-            JSONKeys.appType.rawValue: device.os,
+            JSONKeys.appType.rawValue: "app",
             JSONKeys.osVersion.rawValue: device.osVersion,
             JSONKeys.manufacturer.rawValue: device.manufacturer,
             JSONKeys.height.rawValue: device.height,

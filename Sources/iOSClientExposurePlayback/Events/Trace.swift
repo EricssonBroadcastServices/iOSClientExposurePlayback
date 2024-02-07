@@ -66,7 +66,7 @@ extension Playback.Trace: AnalyticsEvent {
         json[JSONKeys.deviceId.rawValue] = device.deviceId
         json[JSONKeys.deviceModel.rawValue] = device.model
         json[JSONKeys.os.rawValue] = device.os
-        json[JSONKeys.appType.rawValue] =  device.os
+        json[JSONKeys.appType.rawValue] =  "app"
         json[JSONKeys.osVersion.rawValue] = device.osVersion
         json[JSONKeys.manufacturer.rawValue] = device.manufacturer
         json[JSONKeys.height.rawValue] = device.height
