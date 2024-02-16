@@ -8,7 +8,7 @@
 import Foundation
 
 public struct URLPlayable {
-    let url: URL
+    public let url: URL
     
     public init(url: URL) {
         self.url = url
