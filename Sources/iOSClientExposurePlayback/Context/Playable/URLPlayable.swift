@@ -6,18 +6,11 @@
 //
 
 import Foundation
-import iOSClientExposure
-import iOSClientPlayer
 
 public struct URLPlayable {
     let url: URL
-    var player: Player<HLSNative<ManifestContext>>
     
-    public init(
-        url: URL,
-        player: Player<HLSNative<ManifestContext>>
-    ) {
+    public init(url: URL) {
         self.url = url
-        self.player = player
     }
 }
