@@ -229,7 +229,7 @@ public class ServerSideAdService: AdService {
     private func scrubbed(_ targetDestination: Int64 ) {
         if userInitiatedSeek == true {
             self.tech.removePeriodicTimeObserverToPlayer()
-            self.startPlayback(self.scrubbedFromPosition, self.scrubbedToPosition)
+            self.startPlayback(0, self.scrubbedToPosition)
         } else {
             self.userInitiatedSeek = true
         }
