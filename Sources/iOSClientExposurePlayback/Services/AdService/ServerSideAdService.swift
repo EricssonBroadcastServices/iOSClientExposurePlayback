@@ -30,7 +30,6 @@ fileprivate struct TimelineContent:Equatable {
     }
 }
 
-
 /**
  - Note: This class handles the playback behaviour for the streams which has server side insertions.
  
@@ -46,7 +45,10 @@ fileprivate struct TimelineContent:Equatable {
     - Hide timeline & don't let the user scrub/seek
     - Hide jump backwards and forward
     - If Chrome cast during an ad break, the time position before the ad break should be sent to the receiver.
-  */
+ 
+ -  Note: tvOS provides out of box implementation for the ads / Interstitial Content. ( https://developer.apple.com/documentation/avkit/working_with_interstitial_content ).
+          At the moment there is no support for the iOS. If Apple starts supporting Interstitial content for iOS in future, it will be a good idea to have a look at that.
+*/
 public class ServerSideAdService: AdService {
     
     let ads: Ads
