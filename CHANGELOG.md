@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.9.1` Release - [3.9.1](#391)
 * `3.9.0` Release - [3.9.0](#390)
 * `3.8.0` Release - [3.8.0](#380)
 * `3.7.1` Release - [3.7.1](#371)
@@ -67,6 +68,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.9.1
+#### Bug Fixes
+* `EMP-21164` Fixed an issue where seeking past ad breaks didn't return to the beginning of the nearest ad break. 
+* `EMP-21165` Fixed an issue where sometimes an ad break was not reported as ending.
 
 ## 3.9.0
 #### Changes

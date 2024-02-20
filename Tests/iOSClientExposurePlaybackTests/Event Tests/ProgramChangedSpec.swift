@@ -19,10 +19,11 @@ class ProgramChangedSpec: QuickSpec {
             let offset: Int64 = 10
             let type = "Playback.ProgramChanged"
             let programId = "programAsset"
+            let programAssetId = "programAssetId"
             let videoLength: Int64 = 10
             
             it("Should init and record complete structure") {
-                let event = Playback.ProgramChanged(timestamp: timeStamp, offsetTime: offset, programId: programId, videoLength: videoLength)
+                let event = Playback.ProgramChanged(timestamp: timeStamp, offsetTime: offset, programId: programId, programAssetId: programAssetId, videoLength: videoLength)
                 
                 expect(event.timestamp).to(equal(timeStamp))
                 expect(event.eventType).to(equal(type))
@@ -33,7 +34,7 @@ class ProgramChangedSpec: QuickSpec {
             }
             
             it("Should produce correct jsonPayload") {
-                let json = Playback.ProgramChanged(timestamp: timeStamp, offsetTime: offset, programId: programId, videoLength: videoLength).jsonPayload
+                let json = Playback.ProgramChanged(timestamp: timeStamp, offsetTime: offset, programId: programId, programAssetId: programAssetId, videoLength: videoLength).jsonPayload
                 
                 expect(json["EventType"] as? String).to(equal(type))
                 expect(json["Timestamp"] as? Int64).to(equal(timeStamp))

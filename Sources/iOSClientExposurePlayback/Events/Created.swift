@@ -95,8 +95,8 @@ extension Playback.Created: AnalyticsEvent {
             JSONKeys.osVersion.rawValue: device.osVersion,
             JSONKeys.manufacturer.rawValue: device.manufacturer,
             JSONKeys.height.rawValue: device.height,
-            JSONKeys.width.rawValue: device.width
-            
+            JSONKeys.width.rawValue: device.width,
+            JSONKeys.playMode.rawValue: playMode
         ]
         
         if let exposureVersion = exposureVersion {

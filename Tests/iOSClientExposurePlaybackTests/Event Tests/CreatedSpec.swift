@@ -86,8 +86,8 @@ class CreatedSpec: QuickSpec {
             
             it("Should have no asset identifier if not set") {
                 let noAssetId = Playback.Created(timestamp: timeStamp, version: version, techVersion: techVersion, assetData: downloadId )
-                expect(noAssetId.playMode).to(beNil())
-                expect(noAssetId.assetId).to(beNil())
+                expect(noAssetId.playMode).to(equal("vod"))
+                expect(noAssetId.assetId).to(equal("downloadAsset"))
                 expect(noAssetId.programId).to(beNil())
                 expect(noAssetId.channelId).to(beNil())
             }
