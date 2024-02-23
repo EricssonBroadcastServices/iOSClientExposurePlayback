@@ -165,7 +165,10 @@ extension ExposureContext {
             group.enter()
             queue.async {
                 if let adTrackingUrl = URL(string: url) {
-                    let task = URLSession.shared.dataTask(with: adTrackingUrl) { data, response, error in
+                    var adTrackingUrlRequest = URLRequest(url: adTrackingUrl)
+                    adTrackingUrlRequest.setValue(CustomUserAgent.stringValue, forHTTPHeaderField: "User-Agent")
+                    
+                    let task = URLSession.shared.dataTask(with: adTrackingUrlRequest) { data, response, error in
                         if let _ = response as? HTTPURLResponse {
                             // success
                         }
