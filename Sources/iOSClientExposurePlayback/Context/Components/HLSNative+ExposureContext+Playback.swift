@@ -134,6 +134,10 @@ extension ExposureContext {
             case let .custom(text: text, audio: audio):
                 tech.preferredTextLanguage = text
                 tech.preferredAudioLanguage = audio
+            case .userPreference:
+                tech.preferredAudioLanguage = UserDefaults.standard.string(forKey: "lastSelectedAudioTrackLanguageTag")
+                tech.preferredTextLanguage = UserDefaults.standard.string(forKey: "lastSelectedTextTrackLanguageTag")
+                tech.languageFallbackType = .localeThenStream
             }
             
             /// Create HLS configuration

@@ -65,7 +65,6 @@
                     // Keep the selected subtitle in the userdefaults for downloaded assets
                     // This is required for fast seeking as AVFoundation can loose the subtitle track sometimes.
                     UserDefaults.standard.set(locale , forKey: "prefferedMediaSelection")
-                    
                 case let .custom(text: text, audio: audio):
                     tech.preferredAudioLanguage = audio
                     tech.preferredTextLanguage = text
@@ -73,7 +72,14 @@
                     // Keep the selected subtitle in the userdefaults for downloaded assets
                     // This is required for fast seeking as AVFoundation can loose the subtitle track sometimes.
                     UserDefaults.standard.set(text , forKey: "prefferedMediaSelection")
+                case .userPreference:
+                    tech.preferredAudioLanguage = UserDefaults.standard.string(forKey: "lastSelectedAudioTrackLanguageTag")
+                    tech.preferredTextLanguage = UserDefaults.standard.string(forKey: "lastSelectedTextTrackLanguageTag")
+                    tech.languageFallbackType = .localeThenStream
                     
+                    // Keep the selected subtitle in the userdefaults for downloaded assets
+                    // This is required for fast seeking as AVFoundation can loose the subtitle track sometimes.
+                    UserDefaults.standard.set(tech.preferredTextLanguage , forKey: "prefferedMediaSelection")
                 }
                 
                 /// Create HLS configuration
