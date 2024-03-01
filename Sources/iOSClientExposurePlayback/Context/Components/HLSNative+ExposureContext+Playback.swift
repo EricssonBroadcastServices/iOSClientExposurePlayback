@@ -137,6 +137,7 @@ extension ExposureContext {
             case .userPreference:
                 tech.preferredAudioLanguage = UserDefaults.standard.string(forKey: "lastSelectedAudioTrackLanguageTag")
                 tech.preferredTextLanguage = UserDefaults.standard.string(forKey: "lastSelectedTextTrackLanguageTag")
+                tech.preferredTextType = AVMediaType(UserDefaults.standard.string(forKey: "lastSelectedTextTrackMediaType") ?? "")
                 tech.languageFallbackType = .localeThenStream
             }
             
