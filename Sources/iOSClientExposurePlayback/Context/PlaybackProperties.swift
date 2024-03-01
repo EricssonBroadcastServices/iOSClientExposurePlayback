@@ -92,5 +92,8 @@ public struct PlaybackProperties {
         ///
         /// The supplied language definitions should be *RFC 4646* compliant
         case custom(text: String?, audio: String?)
+        
+        /// Applies audio and subtitles based on user's preferred settings, device locale and available options
+        case userPreference
     }
 }
