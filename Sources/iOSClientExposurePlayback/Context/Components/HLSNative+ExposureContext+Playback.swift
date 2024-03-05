@@ -138,6 +138,8 @@ extension ExposureContext {
                 tech.preferredAudioLanguage = UserDefaults.standard.string(forKey: "lastSelectedAudioTrackLanguageTag")
                 tech.preferredTextLanguage = UserDefaults.standard.string(forKey: "lastSelectedTextTrackLanguageTag")
                 tech.preferredTextType = AVMediaType(UserDefaults.standard.string(forKey: "lastSelectedTextTrackMediaType") ?? "")
+                tech.isAudioDescriptionPreferred = UserDefaults.standard.bool(forKey: "doesLastSelectedAudioTrackDescribeVideo")
+                tech.isDialogTranscribePreferred = UserDefaults.standard.bool(forKey: "doesLastSelectedTextTrackTranscribeDialog")
                 tech.languageFallbackType = .localeThenStream
             }
             
