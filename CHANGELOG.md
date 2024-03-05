@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.11.0` Release - [3.11.0](#3110)
 * `3.10.0` Release - [3.10.0](#3100)
 * `3.9.1` Release - [3.9.1](#391)
 * `3.9.0` Release - [3.9.0](#390)
@@ -69,6 +70,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.11.0
+#### Changes
+* [EMP-17547] feat: User preferred audio and subtitles
 
 ## 3.10.0
 #### Changes
