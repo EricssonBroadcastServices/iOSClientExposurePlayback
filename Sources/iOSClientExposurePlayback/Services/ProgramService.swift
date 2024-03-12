@@ -126,7 +126,7 @@ public class ProgramService {
         ///   - environment: exposure environment 
         ///   - callback: callback to fire once the event is fired.
         func fetchNextProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
-            FetchEpg(environment: environment)
+            FetchEpg(environment: environment, version: .v2)
                 .next(programId: program.programId)
                 .request()
                 .validate()
@@ -143,7 +143,7 @@ public class ProgramService {
         ///   - environment: exposure enviornment
         ///   - callback: callback to fire once the event is fired.
         func fetchPreviousProgram(on program: Program, using environment: Environment, callback: @escaping (Program?, ExposureError?) -> Void) {
-            FetchEpg(environment: environment)
+            FetchEpg(environment: environment, version: .v2)
                 .previous(programId: program.programId)
                 .request()
                 .validate()
@@ -152,10 +152,41 @@ public class ProgramService {
             }
         }
         
+        @available(
+            *, deprecated,
+             message: "This function still uses old v1 FetchEpg endpoint. Please use fetchPrograms(on:onDate:startDate:endDate:using:callback:)"
+        )
         func fetchPrograms(on channelId: String, timestamp: Int64, using environment: Environment, callback: @escaping ([Program]?, ExposureError?) -> Void) {
             FetchEpg(environment: environment)
                 .channel(id: channelId)
                 .filter(starting: timestamp, ending: timestamp)
+                .filter(onlyPublished: true)
+                .request()
+                .validate()
+                .response{
+                    callback($0.value?.programs, $0.error)
+            }
+        }
+        
+        /// - Parameters:
+        ///   - channelId: channel id
+        ///   - programId: program id
+        ///   - onDate: A Date object representing the date for which programs are to be fetched. (program is being fetch for a full day).
+        ///   - startDate: An optional Date object representing the start date range for fetching programs (defaults to nil if not provided).
+        ///   - endDate: An optional Date object representing the end date range for fetching programs (defaults to nil if not provided).
+        ///   - environment: enviornment
+        ///   - callback: call back will return assetId, exposure error & response
+        func fetchPrograms(
+            on channelId: String,
+            onDate: Date,
+            startDate: Date? = nil,
+            endDate: Date? = nil,
+            using environment: Environment,
+            callback: @escaping ([Program]?, ExposureError?) -> Void
+        ) {
+            FetchEpg(environment: environment, date: onDate, version: .v2)
+                .channel(id: channelId)
+                .filter(startDate: startDate ?? onDate, endDate: endDate ?? onDate)
                 .filter(onlyPublished: true)
                 .request()
                 .validate()

@@ -70,7 +70,7 @@ public struct ProgramPlayable: Playable {
         ///   - callback: call back will return assetId, exposure error & response
         internal func getAssetId(environment: Environment, sessionToken: SessionToken, channelId: String, programId: String, callback: @escaping (String?, ExposureError?, HTTPURLResponse?) -> Void) {
             
-            FetchEpg(environment: environment)
+            FetchEpg(environment: environment, version: .v2)
                 .channel(id: channelId, programId: programId)
                 .request()
                 .validate()

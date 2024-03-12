@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/EricssonBroadcastServices/iOSClientExposure",
         "state": {
           "branch": null,
-          "revision": "3e6e95fa82b97897bc66f53f779e1a90d8f0a1d4",
-          "version": "3.6.0"
+          "revision": "d0b7e98b2f1f8b1cdb6bf2fd58d962ce1cab5b91",
+          "version": "3.7.0"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/EricssonBroadcastServices/iOSClientPlayer",
         "state": {
           "branch": null,
-          "revision": "3f1cd4537a74204238f8e964ee66e7e93ba9c9b7",
-          "version": "3.2.2"
+          "revision": "02ef2f0f7bac4d43212e802df840b525f8164a9b",
+          "version": "3.4.0"
         }
       },
       {
