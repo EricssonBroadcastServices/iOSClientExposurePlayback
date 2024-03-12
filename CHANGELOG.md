@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.12.0` Release - [3.12.0](#3120)
 * `3.11.0` Release - [3.11.0](#3110)
 * `3.10.0` Release - [3.10.0](#3100)
 * `3.9.1` Release - [3.9.1](#391)
@@ -70,6 +71,11 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.12.0
+#### Changes
+* [EMP-21261] feat: V2 endpoint for fetching the EPG data related to channels
+* [EMP-21286] feat: Add forced subtitle boolean parameter to the returned response for SubtitleTrack
 
 ## 3.11.0
 #### Changes
