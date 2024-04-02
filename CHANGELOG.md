@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.13.0` Release - [3.12.1](#3130)
 * `3.12.1` Release - [3.12.1](#3121)
 * `3.11.0` Release - [3.11.0](#3110)
 * `3.10.0` Release - [3.10.0](#3100)
@@ -71,6 +72,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.13.0
+#### Changes
+* [EMP-16154] feat: Add support for audio description / captions for hearing impaired
 
 ## 3.12.1
 #### Changes
