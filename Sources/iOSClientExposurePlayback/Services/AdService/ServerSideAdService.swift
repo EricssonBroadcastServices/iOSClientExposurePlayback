@@ -449,20 +449,14 @@ extension ServerSideAdService {
                             
                             
                             self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
-                            self.intendedScrubPosition = 0
                             
                             
                             // Check if all the ads are played , if so reset the temporary stored values for AdCounter
-                            if ( self.numberOfAdsInAdBreak - self.currentAdIndexInAdBreak )  == 0 {
-                                
+                            if (self.numberOfAdsInAdBreak - self.currentAdIndexInAdBreak) == 0 {
                                 self.nextVodClipIndex = 0
                                 self.previousVodClipIndex = 0
                                 self.numberOfAdsInAdBreak = 0
                                 self.currentAdIndexInAdBreak = 0
-                                self.intendedScrubPosition = 0
-                                
-                            } else {
-                                // Do nothing
                             }
                             
                             // remove the temporary stored adTracking urls
