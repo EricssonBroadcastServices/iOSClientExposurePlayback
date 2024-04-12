@@ -85,18 +85,12 @@ public class ServerSideAdService: AdService {
     /// Use this as a temporary to store user's scrubbed / seek destination. When there is an `ad` in between current location & scrubbed destination, sdk will first play the `ad` & then jump to this scrubbed destination
     private var intendedScrubPosition: Int64 = 0
     
-    /// Player should seek to this position
-    private var targetScrubPosition: Int64 = 0
-    
     /// Seek started from this position
     private var originalScrubPosition: Int64 = 0
     
-    /// Check if the playback is started initialy . Either playback has started from beginning or from a bookmark.
-    private var isPlaybackStartedFromBeginning = false
-    
     // Variables use for calculating AdCounter values
-    private var previousVodClipIndex : Array<TimelineContent>.Index = 0
-    private var nextVodClipIndex : Array<TimelineContent>.Index = 0
+    private var previousVodClipIndex: Array<TimelineContent>.Index = 0
+    private var nextVodClipIndex: Array<TimelineContent>.Index = 0
     private var numberOfAdsInAdBreak: Int = 0
     private var currentAdIndexInAdBreak: Int = 0
     
@@ -147,7 +141,6 @@ public class ServerSideAdService: AdService {
         self.adMarkerPositions.removeAll()
         self.intendedScrubPosition = 0
         self.originalScrubPosition = 0
-        self.targetScrubPosition = 0
         self.tech.removePeriodicTimeObserverToPlayer()
         self.isSeekUserInitiated = true
         self.previousVodClipIndex = 0
@@ -189,11 +182,7 @@ public class ServerSideAdService: AdService {
     /// Seek request Triggered / scrub ended
     /// - Parameter destination: withTargetPosition
     public func seekRequestTriggered(withTargetPosition destination: Int64) {
-
-        self.targetScrubPosition = 0
-        self.targetScrubPosition = destination
-        self.scrubbed(self.targetScrubPosition)
-        
+        self.scrubbed(destination)
     }
     
     public func playbackTimedMetadata(metaData: Any?) {
@@ -228,7 +217,7 @@ public class ServerSideAdService: AdService {
     }
     
     
-    private func scrubbed(_ targetDestination: Int64) {
+    private func scrubbed(_ targetScrubPosition: Int64) {
         guard isSeekUserInitiated else {
             self.isSeekUserInitiated = true
             return
@@ -236,7 +225,7 @@ public class ServerSideAdService: AdService {
         self.tech.removePeriodicTimeObserverToPlayer()
         self.startObservingPlayer(
             originalScrubPosition: self.originalScrubPosition,
-            targetScrubPosition: self.targetScrubPosition
+            targetScrubPosition: targetScrubPosition
         )
     }
 }
@@ -653,9 +642,6 @@ extension ServerSideAdService {
     
     /// Prepare Ad service with initial clips & timeline content
     private func prepareAdService() {
-        
-        self.isPlaybackStartedFromBeginning = true
-        
         var vodDuration: Int64 = 0
         var totalDuration: Int64  = 0
         var totalAdDuration: Int64 = 0
