@@ -256,142 +256,109 @@ extension ServerSideAdService {
 
         return num
     }
-
     
-    /// Started playback with Ads
+    /// Start observing playback with ads
     /// - Parameters:
-    ///   - startTime: start position. This will be 0
-    ///   - currentPlayheadPosition: current playhead position : This will be `zero` if the content started from beginning. Not `zero` if the content started from a bookmark
+    ///   - originalScrubPosition: Original scrub position
+    ///   - targetScrubPosition: Target scrub position
     private func startObservingPlayer(originalScrubPosition: Int64, targetScrubPosition: Int64) {
         var originalPosition = originalScrubPosition
         var targetPosition = targetScrubPosition
         
         // Add periodic time observer for the player
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
-            
-            guard let `self` = self else { return }
+            guard let `self` = self else {
+                return
+            }
             
             // Find if there are any ads in between playhead start position & start time
             // This is needed when a player starts from a bookmark to check if there any available ads before the bookmark
             if (targetPosition.rounded() != 0 && self.finalScrubPosition == 0) ||
                 (targetPosition == 0 && originalPosition != 0) {
                 
-                let range = CMTimeRange(start: CMTime(milliseconds: originalPosition), end: CMTime(milliseconds: targetPosition))
+                let range = CMTimeRange(
+                    start: CMTime(milliseconds: originalPosition),
+                    end: CMTime(milliseconds: targetPosition)
+                )
                 
-  
-                if let adBreakIndex = self.adMarkerPositions.lastIndex(where: {
-                    if let startOffset = $0.offset , let endOffset = $0.endOffset {
-
-                        let adRange = CMTimeRange(start: CMTime(milliseconds: Int64(startOffset)), end: CMTime(milliseconds:  Int64(endOffset)))
-
-                        return range.containsTimeRange(adRange)
-                    }
-                    return false
-                }) {
-                    if let offset = self.adMarkerPositions[adBreakIndex].offset {
-                        
-                        if let adClipIndex = self.allAds.firstIndex(where: {
-                            if $0.contentStartTime.rounded() == offset.rounded() &&
-                                $0.contentType == "ad" {
-                                return true
-                            } else {
-                                return false
-                            }
-                        }) {
-                            let adClip = self.allAds[adClipIndex]
-                            
-                            // Check if the Ad is already played or not
-                            //
-                            // Ad is not played before. Store the target destination & seek to the Ad
-                            if(!(self.alreadyPlayedAds.contains(adClip))) {
-   
-                                // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
-                                self.finalScrubPosition = targetPosition
-                                
-                                // Find the adClip from all timeline content
-                                let adClip = self.allAds[adClipIndex]
-                                
-                                // reset temporary stored values
-                                originalPosition = 0
-                                targetPosition = 0
-                              
-                                // Make it as SDK initiated seek.
-                                self.isSeekUserInitiated = false
-                                self.context.onServerSideAdShouldSkip( Int64(adClip.contentStartTime + 100) )
-                                
-                            }
-                            
-                            // Ad was played before. Should skipped to the next clip
-                            else {
-                                // Check if we have a previously assigned destination
-                                if self.finalScrubPosition != 0 {
-
-                                    // Make it as a user initiated seek
-                                    self.isSeekUserInitiated = true
-                                    
-                                    let tempDestination = self.finalScrubPosition
-
-                                    // Reset oldScrubbedDestination value
-                                    self.finalScrubPosition = 0
-                                    
-                                    // reset temporary stored values
-                                    originalPosition = 0
-                                    targetPosition = 0
-                                
-                                    // Inform the player that , it should seek to this position
-                                    self.context.onServerSideAdShouldSkip(tempDestination)
-                                    
-                                } else {
-                                    
-                                    // This will prevent from always start from the beginning of next vodclip after an Ad break
-                                    #if TARGET_OS_TV
-                                        self.userInitiatedSeek = true
-                                        rangeStart = 0
-                                        rangeEnd = 0
-                                        
-                                    #else
-                                    
-                                    // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
-                                    if let vodClipIndex = self.allAds.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
-                                        let vodClip = self.allAds[vodClipIndex]
-                                        
-                                        // Make it as a SDK initiated seek
-                                        self.isSeekUserInitiated = false
-                                        
-                                        // reset temporary stored values
-                                        originalPosition = 0
-                                        targetPosition = 0
-                                        
-                                        self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
-                                    } else {
-                                        originalPosition = 0
-                                        targetPosition = 0
-                                       
-                                        self.isSeekUserInitiated = true
-                                    }
-                                    #endif
-                                }
-                            }
-                            
-                        } else {
-                            // An `AdBreak` was found, but could not find an ad clip in the main timeline. ( Should not happen) , but as a fall back keep playing the content
-                            self.isSeekUserInitiated = true
-                            originalPosition = 0
-                            targetPosition = 0
-                        }
-                    } else {
-                        // No ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
-                        self.isSeekUserInitiated = true
-                        originalPosition = 0
-                        targetPosition = 0
-                    }
-                } else {
-                    // No `AdBreak` was found, keep playing the content
+                guard let adBreakIndex = findAdBreakIndex(for: range),
+                      let offset = self.adMarkerPositions[adBreakIndex].offset,
+                      let adClipIndex = findAdClipIndex(for: offset)
+                else {
                     self.isSeekUserInitiated = true
                     originalPosition = 0
                     targetPosition = 0
+                    return
                 }
                 
+                let adClip = self.allAds[adClipIndex]
+                
+                // Ad was not played before. Store the target destination & seek to the Ad
+                if !self.alreadyPlayedAds.contains(adClip) {
+                    // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
+                    self.finalScrubPosition = targetPosition
+                    
+                    // Find the adClip from all timeline content
+                    let adClip = self.allAds[adClipIndex]
+                    
+                    // reset temporary stored values
+                    originalPosition = 0
+                    targetPosition = 0
+                    
+                    // Make it as SDK initiated seek.
+                    self.isSeekUserInitiated = false
+                    self.context.onServerSideAdShouldSkip( Int64(adClip.contentStartTime + 100) )
+                    
+                }
+                // Ad was played before. Should skipped to the next clip
+                else {
+                    // Check if we have a previously assigned destination
+                    if self.finalScrubPosition != 0 {
+                        
+                        // Make it as a user initiated seek
+                        self.isSeekUserInitiated = true
+                        
+                        let tempDestination = self.finalScrubPosition
+                        
+                        // Reset oldScrubbedDestination value
+                        self.finalScrubPosition = 0
+                        
+                        // reset temporary stored values
+                        originalPosition = 0
+                        targetPosition = 0
+                        
+                        // Inform the player that , it should seek to this position
+                        self.context.onServerSideAdShouldSkip(tempDestination)
+                        
+                    } else {
+                        
+                        // This will prevent from always start from the beginning of next vodclip after an Ad break
+                        #if TARGET_OS_TV
+                        self.userInitiatedSeek = true
+                        rangeStart = 0
+                        rangeEnd = 0
+                        #else
+                        // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
+                        if let vodClipIndex = self.allAds.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
+                            let vodClip = self.allAds[vodClipIndex]
+                            
+                            // Make it as a SDK initiated seek
+                            self.isSeekUserInitiated = false
+                            
+                            // reset temporary stored values
+                            originalPosition = 0
+                            targetPosition = 0
+                            
+                            self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
+                        } else {
+                            originalPosition = 0
+                            targetPosition = 0
+                            
+                            self.isSeekUserInitiated = true
+                        }
+                        #endif
+                    }
+                }
             } else {
                 
                 originalPosition = 0
@@ -582,6 +549,27 @@ extension ServerSideAdService {
                 }
             }
             
+        }
+    }
+    
+    fileprivate func findAdBreakIndex(for range: CMTimeRange) -> Array<MarkerPoint>.Index? {
+        return self.adMarkerPositions.lastIndex {
+            guard let startOffset = $0.offset , let endOffset = $0.endOffset else {
+                return false
+            }
+            
+            let adRange = CMTimeRange(
+                start: CMTime(milliseconds: Int64(startOffset)),
+                end: CMTime(milliseconds:  Int64(endOffset))
+            )
+            
+            return range.containsTimeRange(adRange)
+        }
+    }
+    
+    fileprivate func findAdClipIndex(for offset: Int) -> Array<TimelineContent>.Index? {
+        return self.allAds.firstIndex {
+            $0.contentStartTime.rounded() == offset.rounded() && $0.contentType == "ad"
         }
     }
 }
