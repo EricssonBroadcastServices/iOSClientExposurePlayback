@@ -178,7 +178,7 @@ public class ServerSideAdService: AdService {
         // Note : Player sends multiple seek events when scrubbing through the tvOS timeline. This cause the bug that prevent player seek to mid roll ads, if a user seek beyond already unwatched ad.
         // To fix this issue, assume that `scrubbedFromPosition` is always zero when seeking in tvOS.
         #if TARGET_OS_TV
-            self.scrubbedFromPosition = 0
+            self.originalScrubPosition = 0
         #else
             self.originalScrubPosition = 0
             self.originalScrubPosition = origin
@@ -321,9 +321,9 @@ extension ServerSideAdService {
         } else {
             // This will prevent from always start from the beginning of next vodclip after an Ad break
             #if TARGET_OS_TV
-            self.userInitiatedSeek = true
-            rangeStart = 0
-            rangeEnd = 0
+            self.isSeekUserInitiated = true
+            originalPosition = 0
+            targetPosition = 0
             #else
             let nonAdClipIndex = self.allTimelineContent.firstIndex {
                 $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime)
