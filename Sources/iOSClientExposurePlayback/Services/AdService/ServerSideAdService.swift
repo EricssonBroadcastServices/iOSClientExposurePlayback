@@ -60,16 +60,16 @@ public class ServerSideAdService: AdService {
     
     let policy = ContractRestrictionsPolicy()
     
-    fileprivate var allTimelineContent : [TimelineContent] = []
+    fileprivate var allAds: [TimelineContent] = []
     
     /// This will store all the ads that are already played during the current session
-    fileprivate var tempAdTimeLine: [TimelineContent] = []
+    fileprivate var alreadyPlayedAds: [TimelineContent] = []
     
-    
-    fileprivate var alreadyStartedAd: [TimelineContent] = []
+	/// This property keep track of already started ads
+    fileprivate var alreadyStartedAds: [TimelineContent] = []
     
     /// Temporary store all adTracking urls of an Ad to prevent sending multiple trackings events to the backend
-    fileprivate var alreadySentadTrackingUrls: [[String]] = []
+    fileprivate var alreadySentAdTrackingUrls: [[String]] = []
     
     /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
@@ -80,25 +80,25 @@ public class ServerSideAdService: AdService {
     private var tempAdMarkerPositions: [MarkerPoint] = []
     
     /// When seek / scrub is initiated it will check if the seek is initiated by the user or by the sdk.
-    private var userInitiatedSeek:Bool = true
+    private var isSeekUserInitiated: Bool = true
     
-    /// Use this as a temporary to store user's scrubbed / seek destination. When there is an `ad` in between current location & scrubbed destination , sdk will first play the `ad` & then jump to this scrubbed destination
-    private var oldScrubbedDestination: Int64 = 0
+    /// Use this as a temporary to store user's scrubbed / seek destination. When there is an `ad` in between current location & scrubbed destination, sdk will first play the `ad` & then jump to this scrubbed destination
+    private var finalScrubPosition: Int64 = 0
     
     /// Player should seek to this position
-    private var scrubbedToPosition: Int64 = 0
+    private var playerScrubPosition: Int64 = 0
     
     /// Seek started from this position
-    private var scrubbedFromPosition: Int64 = 0
+    private var originalScrubPosition: Int64 = 0
     
     /// Check if the playback is started initialy . Either playback has started from beginning or from a bookmark.
-    private var initialPlayback = false
+    private var isPlaybackStartedFromBeginning = false
     
     // Variables use for calculating AdCounter values
     private var previousVodClipIndex : Array<TimelineContent>.Index = 0
     private var nextVodClipIndex : Array<TimelineContent>.Index = 0
-    private var noOfAdsInAdBreak: Int = 0
-    private var adIndexInAdBreak: Int = 0
+    private var numberOfAdsInAdBreak: Int = 0
+    private var currentAdIndexInAdBreak: Int = 0
     
     public init(ads: Ads, clips:[AdClips], context: ExposureContext, source: ExposureSource, durationInMs: Double, tech: HLSNative<ExposureContext>) {
         self.ads = ads
@@ -140,20 +140,20 @@ public class ServerSideAdService: AdService {
     
     /// Clear & de allocate
     private func deallocAll() {
-        self.tempAdTimeLine.removeAll()
-        self.alreadyStartedAd.removeAll()
-        self.alreadySentadTrackingUrls.removeAll()
-        self.allTimelineContent.removeAll()
+        self.alreadyPlayedAds.removeAll()
+        self.alreadyStartedAds.removeAll()
+        self.alreadySentAdTrackingUrls.removeAll()
+        self.allAds.removeAll()
         self.adMarkerPositions.removeAll()
-        self.oldScrubbedDestination = 0
-        self.scrubbedFromPosition = 0
-        self.scrubbedToPosition = 0
+        self.finalScrubPosition = 0
+        self.originalScrubPosition = 0
+        self.playerScrubPosition = 0
         self.tech.removePeriodicTimeObserverToPlayer()
-        self.userInitiatedSeek = true
+        self.isSeekUserInitiated = true
         self.previousVodClipIndex = 0
         self.nextVodClipIndex = 0
-        self.noOfAdsInAdBreak = 0
-        self.adIndexInAdBreak = 0
+        self.numberOfAdsInAdBreak = 0
+        self.currentAdIndexInAdBreak = 0
     }
     
     
@@ -180,8 +180,8 @@ public class ServerSideAdService: AdService {
         #if TARGET_OS_TV
             self.scrubbedFromPosition = 0
         #else
-            self.scrubbedFromPosition = 0
-            self.scrubbedFromPosition = origin
+            self.originalScrubPosition = 0
+            self.originalScrubPosition = origin
         #endif
             
     }
@@ -190,9 +190,9 @@ public class ServerSideAdService: AdService {
     /// - Parameter destination: withTargetPosition
     public func seekRequestTriggered(withTargetPosition destination: Int64) {
 
-        self.scrubbedToPosition = 0
-        self.scrubbedToPosition = destination
-        self.scrubbed(self.scrubbedToPosition)
+        self.playerScrubPosition = 0
+        self.playerScrubPosition = destination
+        self.scrubbed(self.playerScrubPosition)
         
     }
     
@@ -227,11 +227,11 @@ public class ServerSideAdService: AdService {
     
     
     private func scrubbed(_ targetDestination: Int64 ) {
-        if userInitiatedSeek == true {
+        if isSeekUserInitiated == true {
             self.tech.removePeriodicTimeObserverToPlayer()
-            self.startPlayback(0, self.scrubbedToPosition)
+            self.startPlayback(0, self.playerScrubPosition)
         } else {
-            self.userInitiatedSeek = true
+            self.isSeekUserInitiated = true
         }
     }
 }
@@ -273,7 +273,7 @@ extension ServerSideAdService {
             
             // Find if there are any ads in between playhead start position & start time
             // This is needed when a player starts from a bookmark to check if there any available ads before the bookmark
-            if ((rangeEnd / 10 * 10) != 0 && self.oldScrubbedDestination == 0) || (rangeEnd == 0 && rangeStart != 0)  {
+            if ((rangeEnd / 10 * 10) != 0 && self.finalScrubPosition == 0) || (rangeEnd == 0 && rangeStart != 0)  {
                 
                 let range = CMTimeRange(start: CMTime(milliseconds: rangeStart), end: CMTime(milliseconds: rangeEnd))
                 
@@ -289,32 +289,32 @@ extension ServerSideAdService {
                 }) {
                     if let offset = self.adMarkerPositions[adBreakIndex].offset {
                         
-                        if let adClipIndex = self.allTimelineContent.firstIndex(where: {
+                        if let adClipIndex = self.allAds.firstIndex(where: {
                             if Int($0.contentStartTime / 10 * 10)  == (offset / 10 * 10) && $0.contentType == "ad"  {
                                 return true
                             } else {
                                 return false
                             }
                         }) {
-                            let adClip = self.allTimelineContent[adClipIndex]
+                            let adClip = self.allAds[adClipIndex]
                             
                             // Check if the Ad is already played or not
                             //
                             // Ad is not played before. Store the target destination & seek to the Ad
-                            if(!(self.tempAdTimeLine.contains(adClip))) {
+                            if(!(self.alreadyPlayedAds.contains(adClip))) {
    
                                 // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
-                                self.oldScrubbedDestination = rangeEnd
+                                self.finalScrubPosition = rangeEnd
                                 
                                 // Find the adClip from all timeline content
-                                let adClip = self.allTimelineContent[adClipIndex]
+                                let adClip = self.allAds[adClipIndex]
                                 
                                 // reset temporary stored values
                                 rangeStart = 0
                                 rangeEnd = 0
                               
                                 // Make it as SDK initiated seek.
-                                self.userInitiatedSeek = false
+                                self.isSeekUserInitiated = false
                                 self.context.onServerSideAdShouldSkip( Int64(adClip.contentStartTime + 100) )
                                 
                             }
@@ -322,15 +322,15 @@ extension ServerSideAdService {
                             // Ad was played before. Should skipped to the next clip
                             else {
                                 // Check if we have a previously assigned destination
-                                if self.oldScrubbedDestination != 0 {
+                                if self.finalScrubPosition != 0 {
 
                                     // Make it as a user initiated seek
-                                    self.userInitiatedSeek = true
+                                    self.isSeekUserInitiated = true
                                     
-                                    let tempDestination = self.oldScrubbedDestination
+                                    let tempDestination = self.finalScrubPosition
 
                                     // Reset oldScrubbedDestination value
-                                    self.oldScrubbedDestination = 0
+                                    self.finalScrubPosition = 0
                                     
                                     // reset temporary stored values
                                     rangeStart = 0
@@ -350,11 +350,11 @@ extension ServerSideAdService {
                                     #else
                                     
                                     // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
-                                    if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
-                                        let vodClip = self.allTimelineContent[vodClipIndex]
+                                    if let vodClipIndex = self.allAds.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime) }) {
+                                        let vodClip = self.allAds[vodClipIndex]
                                         
                                         // Make it as a SDK initiated seek
-                                        self.userInitiatedSeek = false
+                                        self.isSeekUserInitiated = false
                                         
                                         // reset temporary stored values
                                         rangeStart = 0
@@ -365,7 +365,7 @@ extension ServerSideAdService {
                                         rangeStart = 0
                                         rangeEnd = 0
                                        
-                                        self.userInitiatedSeek = true
+                                        self.isSeekUserInitiated = true
                                     }
                                     #endif
                                 }
@@ -373,19 +373,19 @@ extension ServerSideAdService {
                             
                         } else {
                             // An `AdBreak` was found, but could not find an ad clip in the main timeline. ( Should not happen) , but as a fall back keep playing the content
-                            self.userInitiatedSeek = true
+                            self.isSeekUserInitiated = true
                             rangeStart = 0
                             rangeEnd = 0
                         }
                     } else {
                         // No ad clip offset was found, Should not happen.( This should not happen ) , but as a fall back keep playing the content
-                        self.userInitiatedSeek = true
+                        self.isSeekUserInitiated = true
                         rangeStart = 0
                         rangeEnd = 0
                     }
                 } else {
                     // No `AdBreak` was found, keep playing the content
-                    self.userInitiatedSeek = true
+                    self.isSeekUserInitiated = true
                     rangeStart = 0
                     rangeEnd = 0
                 }
@@ -395,16 +395,16 @@ extension ServerSideAdService {
                 rangeStart = 0
                 rangeEnd = 0
                 
-                let _ = self.allTimelineContent.enumerated().compactMap { index, content in
+                let _ = self.allAds.enumerated().compactMap { index, content in
                     if var start = content.timeRange.start.milliseconds , var end = content.timeRange.end.milliseconds, var timeInMil = time.milliseconds {
                         
                         timeInMil = self.makeLastDigitZero(timeInMil)
                         start = self.makeLastDigitZero(start)
                         end = self.makeLastDigitZero(end)
  
-                        if (start / 10 * 10) <= timeInMil && (end / 10 * 10) + 10 >= timeInMil && content.contentType == "ad" && !(self.tempAdTimeLine.contains(content)) {
+                        if (start / 10 * 10) <= timeInMil && (end / 10 * 10) + 10 >= timeInMil && content.contentType == "ad" && !(self.alreadyPlayedAds.contains(content)) {
                             
-                            if let adClipIndex = self.allTimelineContent.firstIndex(where:  { content.timeRange.containsTimeRange($0.timeRange) }) {
+                            if let adClipIndex = self.allAds.firstIndex(where:  { content.timeRange.containsTimeRange($0.timeRange) }) {
                                 
                                 let duration = (end / 10 * 10) - (start / 10 * 10)
     
@@ -418,9 +418,9 @@ extension ServerSideAdService {
     
                                     // Send firstQuartile tracking events
                                     if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
-                                        if !self.alreadySentadTrackingUrls.contains(firstQuartileUrls) {
+                                        if !self.alreadySentAdTrackingUrls.contains(firstQuartileUrls) {
                                             self.context.trackAds(adTrackingUrls: firstQuartileUrls)
-                                            self.alreadySentadTrackingUrls.append( firstQuartileUrls )
+                                            self.alreadySentAdTrackingUrls.append( firstQuartileUrls )
                                         }
                                     }
     
@@ -428,9 +428,9 @@ extension ServerSideAdService {
 
                                     // Send clipMidpoint tracking events
                                     if let midpointUrls = clip.trackingEvents?.midpoint {
-                                        if !self.alreadySentadTrackingUrls.contains(midpointUrls) {
+                                        if !self.alreadySentAdTrackingUrls.contains(midpointUrls) {
                                             self.context.trackAds(adTrackingUrls: midpointUrls)
-                                            self.alreadySentadTrackingUrls.append( midpointUrls )
+                                            self.alreadySentAdTrackingUrls.append( midpointUrls )
                                         }
                                     }
                                     
@@ -438,9 +438,9 @@ extension ServerSideAdService {
 
                                     // Send thirdQuartile tracking events
                                     if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
-                                        if !self.alreadySentadTrackingUrls.contains(thirdQuartileUrls) {
+                                        if !self.alreadySentAdTrackingUrls.contains(thirdQuartileUrls) {
                                             self.context.trackAds(adTrackingUrls: thirdQuartileUrls)
-                                            self.alreadySentadTrackingUrls.append( thirdQuartileUrls )
+                                            self.alreadySentAdTrackingUrls.append( thirdQuartileUrls )
                                         }
                                     }
                                     
@@ -448,9 +448,9 @@ extension ServerSideAdService {
 
                                     // Send complete tracking events
                                     if let completeUrls = clip.trackingEvents?.complete {
-                                        if !self.alreadySentadTrackingUrls.contains(completeUrls) {
+                                        if !self.alreadySentAdTrackingUrls.contains(completeUrls) {
                                             self.context.trackAds(adTrackingUrls: completeUrls)
-                                            self.alreadySentadTrackingUrls.append( completeUrls )
+                                            self.alreadySentAdTrackingUrls.append( completeUrls )
                                         }
                                     }
                                     
@@ -461,7 +461,7 @@ extension ServerSideAdService {
                                             .forEach{ $0.onAdCompleted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
                                     }
 
-                                    self.tempAdTimeLine.append(content)
+                                    self.alreadyPlayedAds.append(content)
                                     
                                     self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
                                     self.policy.rewindEnabled = self.source.entitlement.rwEnabled
@@ -470,24 +470,24 @@ extension ServerSideAdService {
 
 
                                     self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
-                                    self.oldScrubbedDestination = 0
+                                    self.finalScrubPosition = 0
                                     
                                     
                                     // Check if all the ads are played , if so reset the temporary stored values for AdCounter
-                                    if ( self.noOfAdsInAdBreak - self.adIndexInAdBreak )  == 0 {
+                                    if ( self.numberOfAdsInAdBreak - self.currentAdIndexInAdBreak )  == 0 {
                                         
                                         self.nextVodClipIndex = 0
                                         self.previousVodClipIndex = 0
-                                        self.noOfAdsInAdBreak = 0
-                                        self.adIndexInAdBreak = 0
-                                        self.oldScrubbedDestination = 0
+                                        self.numberOfAdsInAdBreak = 0
+                                        self.currentAdIndexInAdBreak = 0
+                                        self.finalScrubPosition = 0
                                         
                                     } else {
                                         // Do nothing
                                     }
                                    
                                     // remove the temporary stored adTracking urls
-                                    self.alreadySentadTrackingUrls.removeAll()
+                                    self.alreadySentAdTrackingUrls.removeAll()
                                 } else {
                                     
                                     /// Note :
@@ -495,7 +495,7 @@ extension ServerSideAdService {
                                     if (timeInMil / 10 * 10) + 10 == (start / 10 * 10) + 10 || (timeInMil / 10 * 10) + 10 > (start / 10 * 10) + 10 {
 
                                         // This will prevent sending multiple start events
-                                        if !(self.alreadyStartedAd.contains(content)) {
+                                        if !(self.alreadyStartedAds.contains(content)) {
                                             
                                             // Send load tracking events
                                             self.context.trackAds(adTrackingUrls: clip.trackingEvents?.load ?? [] )
@@ -518,11 +518,11 @@ extension ServerSideAdService {
                                             }
                                             
                                             // Keep track of already started ads
-                                            self.alreadyStartedAd.append(content)
+                                            self.alreadyStartedAds.append(content)
 
                                             
                                             self.calculateAdCounterValues(adClipIndex, end, start)
-                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.noOfAdsInAdBreak, self.adIndexInAdBreak )
+                                            self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.numberOfAdsInAdBreak, self.currentAdIndexInAdBreak )
                                         }
                                     }
                                 }
@@ -530,20 +530,20 @@ extension ServerSideAdService {
                         }
                         
                         // Ad is already watched
-                        else if (start / 10 * 10) <= (timeInMil / 10 * 10) && (end / 10 * 10) >= (timeInMil / 10 * 10) && content.contentType == "ad" && (self.tempAdTimeLine.contains(content)) {
+                        else if (start / 10 * 10) <= (timeInMil / 10 * 10) && (end / 10 * 10) >= (timeInMil / 10 * 10) && content.contentType == "ad" && (self.alreadyPlayedAds.contains(content)) {
 
                             // Check if we have a previously assigned destination
-                            if self.oldScrubbedDestination != 0 {
+                            if self.finalScrubPosition != 0 {
                                 // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
-                                if ( index != (self.allTimelineContent.count - 1) && self.allTimelineContent[index+1].contentType != "ad" ) {
+                                if ( index != (self.allAds.count - 1) && self.allAds[index+1].contentType != "ad" ) {
 
                                     // Make it as a user initiated seek
-                                    self.userInitiatedSeek = true
+                                    self.isSeekUserInitiated = true
                                     
-                                    let tempDestination = self.oldScrubbedDestination
+                                    let tempDestination = self.finalScrubPosition
                                     
                                     // Reset oldScrubbedDestination value
-                                    self.oldScrubbedDestination = 0
+                                    self.finalScrubPosition = 0
                                     
                                     // Inform the player that , it should seek to this position
                                     self.context.onServerSideAdShouldSkip(tempDestination)
@@ -553,16 +553,16 @@ extension ServerSideAdService {
                                 
                             } else {
                                 // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
-                                if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }) {
+                                if let vodClipIndex = self.allAds.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }) {
                                     
-                                    let vodClip = self.allTimelineContent[vodClipIndex]
+                                    let vodClip = self.allAds[vodClipIndex]
                                     
                                     // Make it as a SDK intiated seek
-                                    self.userInitiatedSeek = false
+                                    self.isSeekUserInitiated = false
                                     
                                     self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
                                 } else {
-                                    self.userInitiatedSeek = true
+                                    self.isSeekUserInitiated = true
                                 }
                             }
                         }
@@ -600,7 +600,7 @@ extension ServerSideAdService {
             }
             
             // Find the next vod clip index
-            if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
+            if let next = self.allAds.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
                 
                 // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
                 if nextVodClipIndex == 0 {
@@ -608,10 +608,10 @@ extension ServerSideAdService {
                 }
                 
                 // Calculate the number of Ads in the ad break
-                noOfAdsInAdBreak = nextVodClipIndex - adClipIndex
+                numberOfAdsInAdBreak = nextVodClipIndex - adClipIndex
                 
                 // Find the ad clip index inside the ad break
-                adIndexInAdBreak = clipIndex
+                currentAdIndexInAdBreak = clipIndex
                 
             } else {
                 // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
@@ -620,12 +620,12 @@ extension ServerSideAdService {
                 // self.noOfAdsInAdBreak = 0
                 
                 // Couldn't find the next vod clip , still keep adding the ad index assuming we have another ad
-                self.adIndexInAdBreak = clipIndex
+                self.currentAdIndexInAdBreak = clipIndex
             }
         } else {
             
             // adClipIndex is not `0` , This can  still be a pre roll ad break or mid roll ad break
-            if let previous = self.allTimelineContent.firstIndex(where:  { Int64($0.contentEndTime ) < ( start + 10 ) && $0.contentType != "ad" }) {
+            if let previous = self.allAds.firstIndex(where:  { Int64($0.contentEndTime ) < ( start + 10 ) && $0.contentType != "ad" }) {
 
                 // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
                 // use adClipIndex as previousVodClipIndex as it should be the same as previous VodClip (or clipIndex - 1 )
@@ -634,14 +634,14 @@ extension ServerSideAdService {
                 }
 
                 // Find the next vod clip index
-                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
+                if let next = self.allAds.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
  
                     // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or reset after playing an full Ad Break
                     if nextVodClipIndex == 0 {
                         nextVodClipIndex = next
                     }
-                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    adIndexInAdBreak =  clipIndex - previousVodClipIndex
+                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    currentAdIndexInAdBreak =  clipIndex - previousVodClipIndex
                     
                 } else {
                     
@@ -654,11 +654,11 @@ extension ServerSideAdService {
                         previousVodClipIndex = adClipIndex
                         
                         // Assign the last index as the nextVodClipIndex
-                        nextVodClipIndex = self.allTimelineContent.count
+                        nextVodClipIndex = self.allAds.count
                     }
                     
-                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    adIndexInAdBreak =  clipIndex - previousVodClipIndex
+                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    currentAdIndexInAdBreak =  clipIndex - previousVodClipIndex
                     
                 }
                 
@@ -674,7 +674,7 @@ extension ServerSideAdService {
                 }
                 
                 // Find the next vod clip index
-                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime) > end && $0.contentType != "ad" }) {
+                if let next = self.allAds.firstIndex(where:  { Int64($0.contentStartTime) > end && $0.contentType != "ad" }) {
                     
                     
                     // Assign value to nextVodClipIndex only if nextVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
@@ -682,8 +682,8 @@ extension ServerSideAdService {
                         nextVodClipIndex = next
                     }
                     
-                    noOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    adIndexInAdBreak = clipIndex
+                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+                    currentAdIndexInAdBreak = clipIndex
                 } else {
                     // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
                     self.nextVodClipIndex = 0
@@ -691,7 +691,7 @@ extension ServerSideAdService {
                     // self.noOfAdsInAdBreak = 0
                     
                     // Couldn't find the next vod clip , still keep adding the ad index assuming we have another ad
-                    self.adIndexInAdBreak = clipIndex
+                    self.currentAdIndexInAdBreak = clipIndex
                 }
             }
         }
@@ -704,7 +704,7 @@ extension ServerSideAdService {
     /// Prepare Ad service with initial clips & timeline content
     private func prepareAdService() {
         
-        self.initialPlayback = true
+        self.isPlaybackStartedFromBeginning = true
         
         var vodDuration: Int64 = 0
         var totalDuration: Int64  = 0
@@ -739,7 +739,7 @@ extension ServerSideAdService {
                     
                     let timelineContent = TimelineContent(contentType: clip.category, contentTitle: clip.title, contentStartTime: clipStartTime, contentEndTime: clipEndTime, timeRange: timeRange)
                     
-                    allTimelineContent.append(timelineContent)
+                    allAds.append(timelineContent)
                     
                     // Clips is an ad, should add an adMarker to the timeLine on ad starting point
                     if clip.category == "ad" {
