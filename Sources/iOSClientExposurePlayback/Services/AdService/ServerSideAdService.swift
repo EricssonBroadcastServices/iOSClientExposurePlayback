@@ -86,7 +86,7 @@ public class ServerSideAdService: AdService {
     private var finalScrubPosition: Int64 = 0
     
     /// Player should seek to this position
-    private var playerScrubPosition: Int64 = 0
+    private var targetScrubPosition: Int64 = 0
     
     /// Seek started from this position
     private var originalScrubPosition: Int64 = 0
@@ -147,7 +147,7 @@ public class ServerSideAdService: AdService {
         self.adMarkerPositions.removeAll()
         self.finalScrubPosition = 0
         self.originalScrubPosition = 0
-        self.playerScrubPosition = 0
+        self.targetScrubPosition = 0
         self.tech.removePeriodicTimeObserverToPlayer()
         self.isSeekUserInitiated = true
         self.previousVodClipIndex = 0
@@ -190,9 +190,9 @@ public class ServerSideAdService: AdService {
     /// - Parameter destination: withTargetPosition
     public func seekRequestTriggered(withTargetPosition destination: Int64) {
 
-        self.playerScrubPosition = 0
-        self.playerScrubPosition = destination
-        self.scrubbed(self.playerScrubPosition)
+        self.targetScrubPosition = 0
+        self.targetScrubPosition = destination
+        self.scrubbed(self.targetScrubPosition)
         
     }
     
@@ -227,12 +227,12 @@ public class ServerSideAdService: AdService {
     
     
     private func scrubbed(_ targetDestination: Int64 ) {
-        if isSeekUserInitiated == true {
-            self.tech.removePeriodicTimeObserverToPlayer()
-            self.startPlayback(0, self.playerScrubPosition)
-        } else {
+        guard isSeekUserInitiated else {
             self.isSeekUserInitiated = true
+            return
         }
+        self.tech.removePeriodicTimeObserverToPlayer()
+        self.startPlayback(self.originalScrubPosition, self.targetScrubPosition)
     }
 }
 
@@ -273,7 +273,8 @@ extension ServerSideAdService {
             
             // Find if there are any ads in between playhead start position & start time
             // This is needed when a player starts from a bookmark to check if there any available ads before the bookmark
-            if ((rangeEnd / 10 * 10) != 0 && self.finalScrubPosition == 0) || (rangeEnd == 0 && rangeStart != 0)  {
+            if (rangeEnd.rounded() != 0 && self.finalScrubPosition == 0) ||
+                (rangeEnd == 0 && rangeStart != 0) {
                 
                 let range = CMTimeRange(start: CMTime(milliseconds: rangeStart), end: CMTime(milliseconds: rangeEnd))
                 
@@ -290,7 +291,8 @@ extension ServerSideAdService {
                     if let offset = self.adMarkerPositions[adBreakIndex].offset {
                         
                         if let adClipIndex = self.allAds.firstIndex(where: {
-                            if Int($0.contentStartTime / 10 * 10)  == (offset / 10 * 10) && $0.contentType == "ad"  {
+                            if $0.contentStartTime.rounded() == offset.rounded() &&
+                                $0.contentType == "ad" {
                                 return true
                             } else {
                                 return false
@@ -402,11 +404,14 @@ extension ServerSideAdService {
                         start = self.makeLastDigitZero(start)
                         end = self.makeLastDigitZero(end)
  
-                        if (start / 10 * 10) <= timeInMil && (end / 10 * 10) + 10 >= timeInMil && content.contentType == "ad" && !(self.alreadyPlayedAds.contains(content)) {
+                        if start.rounded() <= timeInMil &&
+                            end.rounded() + 10 >= timeInMil &&
+                            content.contentType == "ad" &&
+                            !self.alreadyPlayedAds.contains(content) {
                             
                             if let adClipIndex = self.allAds.firstIndex(where:  { content.timeRange.containsTimeRange($0.timeRange) }) {
                                 
-                                let duration = (end / 10 * 10) - (start / 10 * 10)
+                                let duration = end.rounded() - start.rounded()
     
                                 let clipFirstQuartile =  start + (duration)/4
                                 let clipMidpoint = start + ( duration)/2
@@ -414,7 +419,7 @@ extension ServerSideAdService {
                                 
                                 let clip = self.clips[adClipIndex]
 
-                                if (timeInMil / 10 * 10) == (clipFirstQuartile / 10 * 10)  {
+                                if timeInMil.rounded() == clipFirstQuartile.rounded()  {
     
                                     // Send firstQuartile tracking events
                                     if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
@@ -424,7 +429,7 @@ extension ServerSideAdService {
                                         }
                                     }
     
-                                } else if (timeInMil / 10 * 10) == (clipMidpoint / 10 * 10) {
+                                } else if timeInMil.rounded() == clipMidpoint.rounded() {
 
                                     // Send clipMidpoint tracking events
                                     if let midpointUrls = clip.trackingEvents?.midpoint {
@@ -434,7 +439,7 @@ extension ServerSideAdService {
                                         }
                                     }
                                     
-                                } else if (timeInMil / 10 * 10) == (clipThirdQuartile / 10 * 10)  {
+                                } else if timeInMil.rounded() == clipThirdQuartile.rounded()  {
 
                                     // Send thirdQuartile tracking events
                                     if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
@@ -444,7 +449,7 @@ extension ServerSideAdService {
                                         }
                                     }
                                     
-                                } else if ((timeInMil / 10 * 10) == (end / 10 * 10)) {
+                                } else if timeInMil.rounded() == end.rounded() {
 
                                     // Send complete tracking events
                                     if let completeUrls = clip.trackingEvents?.complete {
@@ -492,7 +497,8 @@ extension ServerSideAdService {
                                     
                                     /// Note :
                                     // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
-                                    if (timeInMil / 10 * 10) + 10 == (start / 10 * 10) + 10 || (timeInMil / 10 * 10) + 10 > (start / 10 * 10) + 10 {
+                                    if timeInMil.rounded() + 10 == start.rounded() + 10 ||
+                                        timeInMil.rounded() + 10 > start.rounded() + 10 {
 
                                         // This will prevent sending multiple start events
                                         if !(self.alreadyStartedAds.contains(content)) {
@@ -530,8 +536,11 @@ extension ServerSideAdService {
                         }
                         
                         // Ad is already watched
-                        else if (start / 10 * 10) <= (timeInMil / 10 * 10) && (end / 10 * 10) >= (timeInMil / 10 * 10) && content.contentType == "ad" && (self.alreadyPlayedAds.contains(content)) {
-
+                        else if start.rounded() <= timeInMil.rounded() &&
+                                    end.rounded() >= timeInMil.rounded() &&
+                                    content.contentType == "ad" &&
+                                    self.alreadyPlayedAds.contains(content) {
+                            
                             // Check if we have a previously assigned destination
                             if self.finalScrubPosition != 0 {
                                 // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
@@ -803,5 +812,26 @@ extension ServerSideAdService {
             }
             context.onPlaybackStartWithAds(vodDuration,totalAdDuration, totalDuration, adMarkerPositions )
         }
+    }
+}
+
+// MARK: - Helper extensions
+/// The purpose of these extensions is to essentially remove the last digit of integer part
+/// and replace it with a zero, effectively rounding down to the nearest multiple of 10.
+fileprivate extension Double {
+    func rounded() -> Int {
+        Int(self) / 10 * 10
+    }
+}
+
+fileprivate extension Int {
+    func rounded() -> Self {
+        self / 10 * 10
+    }
+}
+
+fileprivate extension Int64 {
+    func rounded() -> Self {
+        self / 10 * 10
     }
 }
