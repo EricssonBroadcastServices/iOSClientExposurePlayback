@@ -297,7 +297,7 @@ extension ServerSideAdService {
         let wasAdPlayedBefore = self.alreadyPlayedAds.contains(adClip)
         
         if !wasAdPlayedBefore {
-            seekToAd(adClip, &targetPosition, &originalPosition)
+            seekToAd(adClip, &originalPosition, &targetPosition)
         } else {
             // Check if we have a previously assigned destination
             if self.intendedScrubPosition != 0 {
@@ -351,8 +351,8 @@ extension ServerSideAdService {
     
     fileprivate func seekToAd(
         _ adClip: TimelineContent,
-        _ targetPosition: inout Int64,
-        _ originalPosition: inout Int64
+        _ originalPosition: inout Int64,
+        _ targetPosition: inout Int64
     ) {
         // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
         self.intendedScrubPosition = targetPosition
