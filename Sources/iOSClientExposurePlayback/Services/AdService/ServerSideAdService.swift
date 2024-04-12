@@ -83,7 +83,7 @@ public class ServerSideAdService: AdService {
     private var isSeekUserInitiated: Bool = true
     
     /// Use this as a temporary to store user's scrubbed / seek destination. When there is an `ad` in between current location & scrubbed destination, sdk will first play the `ad` & then jump to this scrubbed destination
-    private var finalScrubPosition: Int64 = 0
+    private var intendedScrubPosition: Int64 = 0
     
     /// Player should seek to this position
     private var targetScrubPosition: Int64 = 0
@@ -145,7 +145,7 @@ public class ServerSideAdService: AdService {
         self.alreadySentAdTrackingUrls.removeAll()
         self.allAds.removeAll()
         self.adMarkerPositions.removeAll()
-        self.finalScrubPosition = 0
+        self.intendedScrubPosition = 0
         self.originalScrubPosition = 0
         self.targetScrubPosition = 0
         self.tech.removePeriodicTimeObserverToPlayer()
@@ -265,7 +265,7 @@ extension ServerSideAdService {
                 return
             }
             
-            let isNonScrubbedSeek = targetPosition.rounded() != 0 && self.finalScrubPosition == 0
+            let isNonScrubbedSeek = targetPosition.rounded() != 0 && self.intendedScrubPosition == 0
             let isResumingFromBookmark = targetPosition == 0 && originalPosition != 0
             let shouldSeekToScrubbedPosition = isNonScrubbedSeek || isResumingFromBookmark
             
@@ -298,7 +298,7 @@ extension ServerSideAdService {
         // Ad was not played before. Store the target destination & seek to the Ad
         if !self.alreadyPlayedAds.contains(adClip) {
             // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
-            self.finalScrubPosition = targetPosition
+            self.intendedScrubPosition = targetPosition
             
             // Find the adClip from all timeline content
             let adClip = self.allAds[adClipIndex]
@@ -309,21 +309,20 @@ extension ServerSideAdService {
             
             // Make it as SDK initiated seek.
             self.isSeekUserInitiated = false
-            self.context.onServerSideAdShouldSkip( Int64(adClip.contentStartTime + 100) )
-            
+            self.context.onServerSideAdShouldSkip(Int64(adClip.contentStartTime + 100))
         }
         // Ad was played before. Should skipped to the next clip
         else {
             // Check if we have a previously assigned destination
-            if self.finalScrubPosition != 0 {
+            if self.intendedScrubPosition != 0 {
                 
                 // Make it as a user initiated seek
                 self.isSeekUserInitiated = true
                 
-                let tempDestination = self.finalScrubPosition
+                let tempDestination = self.intendedScrubPosition
                 
                 // Reset oldScrubbedDestination value
-                self.finalScrubPosition = 0
+                self.intendedScrubPosition = 0
                 
                 // reset temporary stored values
                 originalPosition = 0
@@ -445,7 +444,7 @@ extension ServerSideAdService {
                             
                             
                             self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
-                            self.finalScrubPosition = 0
+                            self.intendedScrubPosition = 0
                             
                             
                             // Check if all the ads are played , if so reset the temporary stored values for AdCounter
@@ -455,7 +454,7 @@ extension ServerSideAdService {
                                 self.previousVodClipIndex = 0
                                 self.numberOfAdsInAdBreak = 0
                                 self.currentAdIndexInAdBreak = 0
-                                self.finalScrubPosition = 0
+                                self.intendedScrubPosition = 0
                                 
                             } else {
                                 // Do nothing
@@ -512,17 +511,17 @@ extension ServerSideAdService {
                             self.alreadyPlayedAds.contains(content) {
                     
                     // Check if we have a previously assigned destination
-                    if self.finalScrubPosition != 0 {
+                    if self.intendedScrubPosition != 0 {
                         // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
                         if ( index != (self.allAds.count - 1) && self.allAds[index+1].contentType != "ad" ) {
                             
                             // Make it as a user initiated seek
                             self.isSeekUserInitiated = true
                             
-                            let tempDestination = self.finalScrubPosition
+                            let tempDestination = self.intendedScrubPosition
                             
                             // Reset oldScrubbedDestination value
-                            self.finalScrubPosition = 0
+                            self.intendedScrubPosition = 0
                             
                             // Inform the player that , it should seek to this position
                             self.context.onServerSideAdShouldSkip(tempDestination)
