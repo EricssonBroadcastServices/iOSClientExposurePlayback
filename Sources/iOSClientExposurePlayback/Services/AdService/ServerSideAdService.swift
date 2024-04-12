@@ -296,56 +296,57 @@ extension ServerSideAdService {
         let adClip = self.allTimelineContent[adClipIndex]
         let wasAdPlayedBefore = self.alreadyPlayedAds.contains(adClip)
         
-        if !wasAdPlayedBefore {
+        guard wasAdPlayedBefore else {
             seekToAd(adClip, &originalPosition, &targetPosition)
+            return
+        }
+        
+        // Check if we have a previously assigned destination
+        if self.intendedScrubPosition != 0 {
+            
+            // Make it as a user initiated seek
+            self.isSeekUserInitiated = true
+            
+            let tempDestination = self.intendedScrubPosition
+            
+            // Reset oldScrubbedDestination value
+            self.intendedScrubPosition = 0
+            
+            // reset temporary stored values
+            originalPosition = 0
+            targetPosition = 0
+            
+            // Inform the player that, it should seek to this position
+            self.context.onServerSideAdShouldSkip(tempDestination)
         } else {
-            // Check if we have a previously assigned destination
-            if self.intendedScrubPosition != 0 {
-                
-                // Make it as a user initiated seek
-                self.isSeekUserInitiated = true
-                
-                let tempDestination = self.intendedScrubPosition
-                
-                // Reset oldScrubbedDestination value
-                self.intendedScrubPosition = 0
-                
-                // reset temporary stored values
-                originalPosition = 0
-                targetPosition = 0
-                
-                // Inform the player that , it should seek to this position
-                self.context.onServerSideAdShouldSkip(tempDestination)
-            } else {
-                // This will prevent from always start from the beginning of next vodclip after an Ad break
-                #if TARGET_OS_TV
-                self.userInitiatedSeek = true
-                rangeStart = 0
-                rangeEnd = 0
-                #else
-                let nonAdClipIndex = self.allTimelineContent.firstIndex {
-                    $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime)
-                }
-                
-                guard let nonAdClipIndex else {
-                    originalPosition = 0
-                    targetPosition = 0
-                    self.isSeekUserInitiated = true
-                    return
-                }
-                
-                let nonAdClip = self.allTimelineContent[nonAdClipIndex]
-                
-                // Make it as a SDK initiated seek
-                self.isSeekUserInitiated = false
-                
-                // reset temporary stored values
-                originalPosition = 0
-                targetPosition = 0
-                
-                self.context.onServerSideAdShouldSkip( Int64(nonAdClip.contentStartTime + 1000) )
-                #endif
+            // This will prevent from always start from the beginning of next vodclip after an Ad break
+            #if TARGET_OS_TV
+            self.userInitiatedSeek = true
+            rangeStart = 0
+            rangeEnd = 0
+            #else
+            let nonAdClipIndex = self.allTimelineContent.firstIndex {
+                $0.contentType != "ad" && ($0.contentStartTime + 10 > adClip.contentEndTime)
             }
+            
+            guard let nonAdClipIndex else {
+                originalPosition = 0
+                targetPosition = 0
+                self.isSeekUserInitiated = true
+                return
+            }
+            
+            let nonAdClip = self.allTimelineContent[nonAdClipIndex]
+            
+            // Make it as a SDK initiated seek
+            self.isSeekUserInitiated = false
+            
+            // reset temporary stored values
+            originalPosition = 0
+            targetPosition = 0
+            
+            self.context.onServerSideAdShouldSkip( Int64(nonAdClip.contentStartTime + 1000) )
+            #endif
         }
     }
     
