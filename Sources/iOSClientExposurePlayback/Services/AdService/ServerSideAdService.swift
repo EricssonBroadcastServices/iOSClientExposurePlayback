@@ -256,22 +256,15 @@ extension ServerSideAdService {
         return num
     }
     
-    /// Start observing playback with ads
-    /// - Parameters:
-    ///   - originalScrubPosition: Original scrub position
-    ///   - targetScrubPosition: Target scrub position
     private func startObservingPlayer(originalScrubPosition: Int64, targetScrubPosition: Int64) {
         var originalPosition = originalScrubPosition
         var targetPosition = targetScrubPosition
         
-        // Add periodic time observer for the player
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
             guard let `self` = self else {
                 return
             }
             
-            // Find if there are any ads in between playhead start position & start time
-            // This is needed when a player starts from a bookmark to check if there any available ads before the bookmark
             let isNonScrubbedSeek = targetPosition.rounded() != 0 && self.finalScrubPosition == 0
             let isResumingFromBookmark = targetPosition == 0 && originalPosition != 0
             let shouldSeekToScrubbedPosition = isNonScrubbedSeek || isResumingFromBookmark
