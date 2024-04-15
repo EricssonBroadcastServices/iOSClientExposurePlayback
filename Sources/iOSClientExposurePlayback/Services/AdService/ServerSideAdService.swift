@@ -463,115 +463,73 @@ extension ServerSideAdService {
     ///   - adClipIndex: adClipIndex
     ///   - end: end
     ///   - start: start
-    fileprivate func calculateAdCounterValues(_ adClipIndex: Array<TimelineContent>.Index, _ end: Int64, _ start: Int64) {
-        // Store current playing clip Index ( Add + 1 as indexing start from 0 )
-        // ( Index from all the allTimelineContent array )
-        let clipIndex = adClipIndex + 1
-        
-        // adClipIndex == 0 : => Playing a preroll ad
-        if adClipIndex == 0 {
-            
-            // Make the previousVodClipIndex to 0 , as there are no any VodClips before the preroll Ad
-            // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or reset after playing an full Ad Break
-            if previousVodClipIndex == 0 {
-                previousVodClipIndex = 0
-            }
-            
-            // Find the next vod clip index
-            if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
-                
-                // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
-                if nextVodClipIndex == 0 {
-                    nextVodClipIndex = next
-                }
-                
-                // Calculate the number of Ads in the ad break
-                numberOfAdsInAdBreak = nextVodClipIndex - adClipIndex
-                
-                // Find the ad clip index inside the ad break
-                currentAdIndexInAdBreak = clipIndex
-                
-            } else {
-                // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
-                self.nextVodClipIndex = 0
-                self.previousVodClipIndex = 0
-                // self.noOfAdsInAdBreak = 0
-                
-                // Couldn't find the next vod clip , still keep adding the ad index assuming we have another ad
-                self.currentAdIndexInAdBreak = clipIndex
-            }
+    fileprivate func calculateAdCounterValues(
+        _ adClipIndex: Array<TimelineContent>.Index,
+        _ end: Int64,
+        _ start: Int64
+    ) {
+        if adClipIndex == 0 || findPreviousNonAdClipIndex(before: start) == nil {
+            calculateAdCounterValuesForFirstAd(adClipIndex, end)
         } else {
-            
-            // adClipIndex is not `0` , This can  still be a pre roll ad break or mid roll ad break
-            if let previous = self.allTimelineContent.firstIndex(where:  { Int64($0.contentEndTime ) < ( start + 10 ) && $0.contentType != "ad" }) {
-
-                // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
-                // use adClipIndex as previousVodClipIndex as it should be the same as previous VodClip (or clipIndex - 1 )
-                if previousVodClipIndex == 0 {
-                    previousVodClipIndex = adClipIndex
-                }
-
-                // Find the next vod clip index
-                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime + 10 ) > end && $0.contentType != "ad" }) {
- 
-                    // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or reset after playing an full Ad Break
-                    if nextVodClipIndex == 0 {
-                        nextVodClipIndex = next
-                    }
-                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    currentAdIndexInAdBreak =  clipIndex - previousVodClipIndex
-                    
-                } else {
-                    
-                    // Couldn't find any Vod Clip as the nextVodClip
-                    // There was a previous vod clip but no next vod clip . Should be a post roll ad break
-                    // Assign value to nextVodClipIndex only if  nextVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
-                    if nextVodClipIndex == 0 {
-                        
-                        // Assume the previous clip index is the same as current playing first ad of the post roll ad break
-                        previousVodClipIndex = adClipIndex
-                        
-                        // Assign the last index as the nextVodClipIndex
-                        nextVodClipIndex = self.allTimelineContent.count
-                    }
-                    
-                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    currentAdIndexInAdBreak =  clipIndex - previousVodClipIndex
-                    
-                }
-                
-                
-            } else {
-                
-                // Couldn't find any previous vod clips : So still a pre roll ad break
-                
-                // Make the previousVodClipIndex to 0 , as there are no any VodClips before the preroll Ad
-                // Assign value to previousVodClipIndex only if  previousVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
-                if previousVodClipIndex == 0 {
-                    previousVodClipIndex = 0
-                }
-                
-                // Find the next vod clip index
-                if let next = self.allTimelineContent.firstIndex(where:  { Int64($0.contentStartTime) > end && $0.contentType != "ad" }) {
-                    
-                    
-                    // Assign value to nextVodClipIndex only if nextVodClipIndex == 0 means, no value has been assigned or reseted after playing an full Ad Break
-                    if nextVodClipIndex == 0 {
-                        nextVodClipIndex = next
-                    }
-                    
-                    numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-                    currentAdIndexInAdBreak = clipIndex
-                } else {
-                    // print(" Couldn't find the next vod clip : Should not happen as after a preroll ad break there has to be a VodClip ")
-                    self.nextVodClipIndex = 0
-                    self.previousVodClipIndex = 0
-                    // self.noOfAdsInAdBreak = 0
-                    
-                    // Couldn't find the next vod clip , still keep adding the ad index assuming we have another ad
-                    self.currentAdIndexInAdBreak = clipIndex
-                }
+            calculateAdCounterValuesForNonFirstAd(adClipIndex, end)
+        }
+    }
+    
+    fileprivate func calculateAdCounterValuesForFirstAd(
+        _ adClipIndex: Array<TimelineContent>.Index,
+        _ end: Int64
+    ) {
+        if let next = findNextNonAdClipIndex(after: end) {
+            if nextVodClipIndex == 0 {
+                nextVodClipIndex = next
             }
+            numberOfAdsInAdBreak = nextVodClipIndex - adClipIndex
+        } else {
+            // Couldn't find the next vod clip: Should not happen as after a preroll ad break there has to be a VodClip
+            self.nextVodClipIndex = 0
+            self.previousVodClipIndex = 0
+        }
+        currentAdIndexInAdBreak = adClipIndex + 1
+    }
+    
+    fileprivate func calculateAdCounterValuesForNonFirstAd(
+        _ adClipIndex: Array<TimelineContent>.Index,
+        _ end: Int64
+    ) {
+        if previousVodClipIndex == 0 {
+            previousVodClipIndex = adClipIndex
+        }
+        
+        // Find the next vod clip index
+        if let next = findNextNonAdClipIndex(after: end) {
+            if nextVodClipIndex == 0 {
+                nextVodClipIndex = next
+            }
+            numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+            currentAdIndexInAdBreak =  adClipIndex + 1 - previousVodClipIndex
+        }
+        // There was a previous vod clip but no next vod clip. Should be a post roll ad break
+        else {
+            if nextVodClipIndex == 0 {
+                // Assume the previous clip index is the same as current playing first ad of the post roll ad break
+                previousVodClipIndex = adClipIndex + 1
+                // Assign the last index as the nextVodClipIndex
+                nextVodClipIndex = self.allTimelineContent.count
+            }
+            numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
+            currentAdIndexInAdBreak = adClipIndex + 1 - previousVodClipIndex
+        }
+    }
+    
+    fileprivate func findNextNonAdClipIndex(after time: Int64) -> Int? {
+        return self.allTimelineContent.firstIndex {
+            Int64($0.contentStartTime + 10 ) > time && $0.contentType != "ad"
+        }
+    }
+    
+    fileprivate func findPreviousNonAdClipIndex(before time: Int64) -> Int? {
+        return self.allTimelineContent.lastIndex {
+            Int64($0.contentEndTime ) < (time + 10) && $0.contentType != "ad"
         }
     }
 }
