@@ -290,118 +290,109 @@ extension ServerSideAdService {
             
             let duration = end.rounded() - start.rounded()
             
-            let clipFirstQuartile =  start + (duration)/4
-            let clipMidpoint = start + ( duration)/2
-            let clipThirdQuartile = start + ((duration) * 3/4)
+            let clipFirstQuartile = (start + duration / 4).rounded()
+            let clipMidpoint = (start + duration / 2).rounded()
+            let clipThirdQuartile = (start + duration * 3/4).rounded()
+            let clipEnd = end.rounded()
             
             let clip = self.clips[adClipIndex]
             
-            if timeInMil.rounded() == clipFirstQuartile.rounded()  {
+            switch timeInMil.rounded() {
+            case clipFirstQuartile:
+                sendTrackingEvents(clip.trackingEvents?.firstQuartile)
+            case clipMidpoint:
+                sendTrackingEvents(clip.trackingEvents?.midpoint)
+            case clipThirdQuartile:
+                sendTrackingEvents(clip.trackingEvents?.thirdQuartile)
+            case clipEnd:
+                sendTrackingEvents(clip.trackingEvents?.complete)
+                handleAdEnd(clip, content)
+            default:
+                handleAdStartWithDelay(timeInMil, start, end, content, clip, adClipIndex)
+            }
+        }
+    }
+    
+    fileprivate func sendTrackingEvents(_ point: [String]?) {
+        guard let point,
+              !self.alreadySentAdTrackingUrls.contains(point)
+        else {
+            return
+        }
+        
+        self.context.trackAds(adTrackingUrls: point)
+        self.alreadySentAdTrackingUrls.append(point)
+    }
+    
+    fileprivate func handleAdEnd(_ clip: AdClips, _ content: TimelineContent) {
+        // Send EMP analytics
+        if let adMediaId = clip.titleId {
+            self.tech.currentSource?.analyticsConnector.providers
+                .compactMap{ $0 as? ExposureAnalytics }
+                .forEach{ $0.onAdCompleted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
+        }
+        
+        self.alreadyPlayedAds.append(content)
+        
+        self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
+        self.policy.rewindEnabled = self.source.entitlement.rwEnabled
+        self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
+        self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
+        
+        self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
+        
+        // Check if all the ads are played, if so reset the temporary stored values for AdCounter
+        if (self.numberOfAdsInAdBreak - self.currentAdIndexInAdBreak) == 0 {
+            self.nextVodClipIndex = 0
+            self.previousVodClipIndex = 0
+            self.numberOfAdsInAdBreak = 0
+            self.currentAdIndexInAdBreak = 0
+        }
+        
+        // remove the temporary stored adTracking urls
+        self.alreadySentAdTrackingUrls.removeAll()
+    }
+    
+    fileprivate func handleAdStartWithDelay(
+        _ timeInMil: Int64,
+        _ start: Int64,
+        _ end: Int64,
+        _ content: TimelineContent,
+        _ clip: AdClips,
+        _ adClipIndex: Array<TimelineContent>.Index
+    ) {
+        // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
+        if timeInMil.rounded() + 10 == start.rounded() + 10 ||
+            timeInMil.rounded() + 10 > start.rounded() + 10 {
+            
+            // This will prevent sending multiple start events
+            if !(self.alreadyStartedAds.contains(content)) {
                 
-                // Send firstQuartile tracking events
-                if let firstQuartileUrls = clip.trackingEvents?.firstQuartile {
-                    if !self.alreadySentAdTrackingUrls.contains(firstQuartileUrls) {
-                        self.context.trackAds(adTrackingUrls: firstQuartileUrls)
-                        self.alreadySentAdTrackingUrls.append( firstQuartileUrls )
-                    }
-                }
+                // Send load tracking events
+                self.context.trackAds(adTrackingUrls: clip.trackingEvents?.load ?? [] )
                 
-            } else if timeInMil.rounded() == clipMidpoint.rounded() {
+                // Send start tracking events
+                self.context.trackAds(adTrackingUrls: clip.trackingEvents?.start ?? [] )
                 
-                // Send clipMidpoint tracking events
-                if let midpointUrls = clip.trackingEvents?.midpoint {
-                    if !self.alreadySentAdTrackingUrls.contains(midpointUrls) {
-                        self.context.trackAds(adTrackingUrls: midpointUrls)
-                        self.alreadySentAdTrackingUrls.append( midpointUrls )
-                    }
-                }
-                
-            } else if timeInMil.rounded() == clipThirdQuartile.rounded()  {
-                
-                // Send thirdQuartile tracking events
-                if let thirdQuartileUrls = clip.trackingEvents?.thirdQuartile {
-                    if !self.alreadySentAdTrackingUrls.contains(thirdQuartileUrls) {
-                        self.context.trackAds(adTrackingUrls: thirdQuartileUrls)
-                        self.alreadySentAdTrackingUrls.append( thirdQuartileUrls )
-                    }
-                }
-                
-            } else if timeInMil.rounded() == end.rounded() {
-                
-                // Send complete tracking events
-                if let completeUrls = clip.trackingEvents?.complete {
-                    if !self.alreadySentAdTrackingUrls.contains(completeUrls) {
-                        self.context.trackAds(adTrackingUrls: completeUrls)
-                        self.alreadySentAdTrackingUrls.append( completeUrls )
-                    }
-                }
-                
-                // Send EMP analytics
-                if let adMediaId = clip.titleId {
-                    self.tech.currentSource?.analyticsConnector.providers
-                        .compactMap{ $0 as? ExposureAnalytics }
-                        .forEach{ $0.onAdCompleted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
-                }
-                
-                self.alreadyPlayedAds.append(content)
-                
-                self.policy.fastForwardEnabled = self.source.entitlement.ffEnabled
-                self.policy.rewindEnabled = self.source.entitlement.rwEnabled
+                self.policy.fastForwardEnabled = false
+                self.policy.rewindEnabled = false
                 self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
                 self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
                 
+                self.context.trackAds(adTrackingUrls: clip.impressionUrlTemplates ?? [] )
                 
-                self.context.onDidPresentInterstitial(self.source.contractRestrictionsService)
                 
-                
-                // Check if all the ads are played , if so reset the temporary stored values for AdCounter
-                if (self.numberOfAdsInAdBreak - self.currentAdIndexInAdBreak) == 0 {
-                    self.nextVodClipIndex = 0
-                    self.previousVodClipIndex = 0
-                    self.numberOfAdsInAdBreak = 0
-                    self.currentAdIndexInAdBreak = 0
+                if let adMediaId = clip.titleId {
+                    self.tech.currentSource?.analyticsConnector.providers
+                        .compactMap{ $0 as? ExposureAnalytics }
+                        .forEach{ $0.onAdStarted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
                 }
                 
-                // remove the temporary stored adTracking urls
-                self.alreadySentAdTrackingUrls.removeAll()
-            } else {
+                // Keep track of already started ads
+                self.alreadyStartedAds.append(content)
                 
-                /// Note :
-                // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
-                if timeInMil.rounded() + 10 == start.rounded() + 10 ||
-                    timeInMil.rounded() + 10 > start.rounded() + 10 {
-                    
-                    // This will prevent sending multiple start events
-                    if !(self.alreadyStartedAds.contains(content)) {
-                        
-                        // Send load tracking events
-                        self.context.trackAds(adTrackingUrls: clip.trackingEvents?.load ?? [] )
-                        
-                        // Send start tracking events
-                        self.context.trackAds(adTrackingUrls: clip.trackingEvents?.start ?? [] )
-                        
-                        self.policy.fastForwardEnabled = false
-                        self.policy.rewindEnabled = false
-                        self.policy.timeshiftEnabled = self.source.entitlement.timeshiftEnabled
-                        self.source.contractRestrictionsService.contractRestrictionsPolicy = self.policy
-                        
-                        self.context.trackAds(adTrackingUrls: clip.impressionUrlTemplates ?? [] )
-                        
-                        
-                        if let adMediaId = clip.titleId {
-                            self.tech.currentSource?.analyticsConnector.providers
-                                .compactMap{ $0 as? ExposureAnalytics }
-                                .forEach{ $0.onAdStarted(tech: self.tech, source: self.source, adMediaId: adMediaId) }
-                        }
-                        
-                        // Keep track of already started ads
-                        self.alreadyStartedAds.append(content)
-                        
-                        
-                        self.calculateAdCounterValues(adClipIndex, end, start)
-                        self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.numberOfAdsInAdBreak, self.currentAdIndexInAdBreak )
-                    }
-                }
+                self.calculateAdCounterValues(adClipIndex, end, start)
+                self.context.onWillPresentInterstitial(self.source.contractRestrictionsService , clip.videoClicks?.clickThroughUrl, clip.videoClicks?.clickTrackingUrls, Int64(clip.duration ?? 0), self.numberOfAdsInAdBreak, self.currentAdIndexInAdBreak )
             }
         }
     }
