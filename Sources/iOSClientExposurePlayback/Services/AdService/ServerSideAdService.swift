@@ -106,10 +106,6 @@ public class ServerSideAdService: AdService {
         
     }
     
-    public func playbackReady() {
-        // print(" Play back ready ")
-    }
-    
     public func playbackStarted() {
         deallocAll()
         self.prepareAdService()
@@ -122,14 +118,6 @@ public class ServerSideAdService: AdService {
     
     public func playbackEnded() {
         deallocAll()
-    }
-    
-    public func playbackPaused() {
-        // self.timer?.invalidate()
-    }
-    
-    public func playbackResumed() {
-        // playbackResumed
     }
     
     /// Clear & de allocate
@@ -155,15 +143,6 @@ public class ServerSideAdService: AdService {
         deallocAll()
     }
     
-    public func playbackBufferingStarted() {
-        // print(" playbackBufferingStarted")
-    }
-    
-    public func playbackBufferingEnded() {
-        // print("playbackBufferingEnded")
-        
-    }
-    
     /// Seek request initiated / scrubbing started
     /// - Parameter origin: fromPosition
     public func seekRequestInitiated(fromPosition origin: Int64) {
@@ -173,7 +152,6 @@ public class ServerSideAdService: AdService {
         #if TARGET_OS_TV
             self.originalScrubPosition = 0
         #else
-            self.originalScrubPosition = 0
             self.originalScrubPosition = origin
         #endif
             
@@ -185,23 +163,7 @@ public class ServerSideAdService: AdService {
         self.scrubbed(destination)
     }
     
-    public func playbackTimedMetadata(metaData: Any?) {
-        // print(" playbackTimedMetadata " , (metaData: Any?) )
-    }
-    
     public var playerProxy: AdPlayerProxy?
-    
-    public func prepareAsset(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareAsset")
-    }
-    
-    public func prepareProgram(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareProgram")
-    }
-    
-    public func prepareChannel(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareChannel")
-    }
     
     public var contractRestrictionsService: ContractRestrictionsService?
     
@@ -739,6 +701,46 @@ extension ServerSideAdService {
             }
             context.onPlaybackStartWithAds(vodDuration,totalAdDuration, totalDuration, adMarkerPositions )
         }
+    }
+}
+
+// MARK: - Unused AdService protocol methods
+extension ServerSideAdService {
+    public func playbackReady() {
+        // print(" Play back ready ")
+    }
+    
+    public func playbackPaused() {
+        // self.timer?.invalidate()
+    }
+    
+    public func playbackResumed() {
+        // playbackResumed
+    }
+    
+    public func playbackBufferingStarted() {
+        // print(" playbackBufferingStarted")
+    }
+    
+    public func playbackBufferingEnded() {
+        // print("playbackBufferingEnded")
+        
+    }
+    
+    public func playbackTimedMetadata(metaData: Any?) {
+        // print(" playbackTimedMetadata " , (metaData: Any?) )
+    }
+    
+    public func prepareAsset(source: URL, callback: @escaping (URL) -> Void) {
+        // print(" prepareAsset")
+    }
+    
+    public func prepareProgram(source: URL, callback: @escaping (URL) -> Void) {
+        // print(" prepareProgram")
+    }
+    
+    public func prepareChannel(source: URL, callback: @escaping (URL) -> Void) {
+        // print(" prepareChannel")
     }
 }
 
