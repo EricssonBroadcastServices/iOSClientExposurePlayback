@@ -149,7 +149,7 @@ public class ServerSideAdService: AdService {
     
     public var contractRestrictionsService: ContractRestrictionsService?
     
-    private func getNextClip( index:Int,_ completion: @escaping (Int?) -> Void) { }
+    private func getNextClip(index: Int, _ completion: @escaping (Int?) -> Void) {}
     
     /// Start Ad service when play back starts
     private func startAdService() {
@@ -174,17 +174,6 @@ public class ServerSideAdService: AdService {
 
 // MARK: Playback
 extension ServerSideAdService {
-    private func makeLastDigitZero(_ number: Int64?) -> Int64 {
-        guard var number, number != 0 else {
-            return 0
-        }
-        let lastDigit = number % 10
-        if lastDigit != 0 {
-            number -= lastDigit
-        }
-        return number
-    }
-    
     private func startObservingPlayer(originalScrubPosition: Int64, targetScrubPosition: Int64) {
         var originalPosition = originalScrubPosition
         var targetPosition = targetScrubPosition
@@ -256,16 +245,18 @@ extension ServerSideAdService {
         originalPosition = 0
         targetPosition = 0
         
-        self.allTimelineContent.enumerated().forEach { index, content in
-            let start = makeLastDigitZero(content.timeRange.start.milliseconds)
-            let end = makeLastDigitZero(content.timeRange.end.milliseconds)
-            let timeInMil = makeLastDigitZero(time.milliseconds)
-            
-            guard start.rounded() <= timeInMil.rounded(),
-                  end.rounded() >= timeInMil.rounded(),
+        guard let timeInMil = time.milliseconds?.rounded() else {
+            return
+        }
+        
+        for (index, content) in self.allTimelineContent.enumerated() {
+            guard let start = content.timeRange.start.milliseconds?.rounded(),
+                  let end = content.timeRange.end.milliseconds?.rounded(),
+                  start <= timeInMil,
+                  end >= timeInMil,
                   content.contentType == "ad"
             else {
-                return
+                continue
             }
             
             if !self.alreadyPlayedAds.contains(content) {
