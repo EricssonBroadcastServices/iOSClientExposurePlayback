@@ -395,35 +395,37 @@ extension ServerSideAdService {
         // Check if we have a previously assigned destination
         if self.intendedScrubPosition != 0 {
             // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
-            if ( index != (self.allTimelineContent.count - 1) && self.allTimelineContent[index+1].contentType != "ad" ) {
-                
-                // Make it as a user initiated seek
-                self.isSeekUserInitiated = true
-                
-                let tempDestination = self.intendedScrubPosition
-                
-                // Reset oldScrubbedDestination value
-                self.intendedScrubPosition = 0
-                
-                // Inform the player that , it should seek to this position
-                self.context.onServerSideAdShouldSkip(tempDestination)
-            } else {
-                // print(" Still timeline is playing an Ad")
+            guard index != self.allTimelineContent.count - 1,
+                  self.allTimelineContent[index+1].contentType != "ad"
+            else {
+                return
             }
             
+            // Make it as a user initiated seek
+            self.isSeekUserInitiated = true
+            
+            let tempDestination = self.intendedScrubPosition
+            
+            // Reset oldScrubbedDestination value
+            self.intendedScrubPosition = 0
+            
+            // Inform the player that , it should seek to this position
+            self.context.onServerSideAdShouldSkip(tempDestination)
         } else {
             // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
-            if let vodClipIndex = self.allTimelineContent.firstIndex(where:  { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }) {
-                
-                let vodClip = self.allTimelineContent[vodClipIndex]
-                
-                // Make it as a SDK intiated seek
-                self.isSeekUserInitiated = false
-                
-                self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
-            } else {
+            guard let vodClipIndex = self.allTimelineContent.firstIndex(
+                where: { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }
+            ) else {
                 self.isSeekUserInitiated = true
+                return
             }
+            
+            let vodClip = self.allTimelineContent[vodClipIndex]
+            
+            // Make it as a SDK intiated seek
+            self.isSeekUserInitiated = false
+            
+            self.context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
         }
     }
     
