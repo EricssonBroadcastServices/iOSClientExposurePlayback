@@ -11,25 +11,6 @@ import iOSClientExposure
 import iOSClientPlayer
 import AVKit
 
-
-fileprivate struct TimelineContent:Equatable {
-    let contentType: String?
-    let contentTitle: String?
-    let contentStartTime: Double
-    let contentEndTime: Double
-    var isWatched: Bool
-    let timeRange: CMTimeRange
-    
-    init(contentType: String? = nil, contentTitle: String? = nil , contentStartTime: Double, contentEndTime:Double, isWatched: Bool = false, timeRange: CMTimeRange) {
-        self.contentType = contentType
-        self.contentTitle = contentTitle
-        self.contentStartTime = contentStartTime
-        self.contentEndTime = contentEndTime
-        self.isWatched = isWatched
-        self.timeRange = timeRange
-    }
-}
-
 /**
  - Note: This class handles the playback behaviour for the streams which has server side insertions.
  
@@ -478,9 +459,8 @@ extension ServerSideAdService {
     }
 }
 
+// MARK: - Ad counter values
 extension ServerSideAdService {
-    
-    
     /// Calculate the ad counter values : No of Ads in a ad break & ad index of currently playing ad
     /// - Parameters:
     ///   - adClipIndex: adClipIndex
@@ -601,7 +581,6 @@ extension ServerSideAdService {
 
 // MARK: Preparation
 extension ServerSideAdService {
-    
     /// Prepare Ad service with initial clips & timeline content
     private func prepareAdService() {
         var vodDuration: Int64 = 0
@@ -745,8 +724,10 @@ extension ServerSideAdService {
 }
 
 // MARK: - Helper extensions
-/// The purpose of these extensions is to essentially remove the last digit of integer part
-/// and replace it with a zero, effectively rounding down to the nearest multiple of 10.
+/**
+The purpose of these extensions is to essentially remove the last digit of integer part
+and replace it with a zero, effectively rounding down to the nearest multiple of 10.
+ **/
 fileprivate extension Double {
     func rounded() -> Int {
         Int(self) / 10 * 10

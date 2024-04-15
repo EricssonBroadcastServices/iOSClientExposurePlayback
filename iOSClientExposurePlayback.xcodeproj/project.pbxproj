@@ -226,6 +226,8 @@
 		7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
 		78FD660628E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
 		78FD660728E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
+		DCD475992BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
+		DCD4759A2BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -350,6 +352,7 @@
 		78BC171B29C1CE0400EE4D36 /* iOSClientExposurePlayback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = iOSClientExposurePlayback.podspec; sourceTree = "<group>"; };
 		78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FD660528E2E72D0074B31E /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		DCD475982BCD028A00144496 /* TimelineContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -576,6 +579,7 @@
 			children = (
 				783110D927EC70C2009B3114 /* ServerSideAdService.swift */,
 				783110DA27EC70C2009B3114 /* AdService.swift */,
+				DCD475982BCD028A00144496 /* TimelineContent.swift */,
 				783110DB27EC70C2009B3114 /* AdServiceContractRestrictionsProvider.swift */,
 				783110DC27EC70C2009B3114 /* AdPlayerProxy.swift */,
 				783110DD27EC70C2009B3114 /* AdServiceEventProvider.swift */,
@@ -851,6 +855,7 @@
 				7831113B27EC70C2009B3114 /* UIImage+Extension.swift in Sources */,
 				7831117F27EC70C2009B3114 /* ExposureFairplayRequester.swift in Sources */,
 				7831116527EC70C2009B3114 /* DeviceInfo.swift in Sources */,
+				DCD4759A2BCD028A00144496 /* TimelineContent.swift in Sources */,
 				7831112527EC70C2009B3114 /* EnigmaPlayable.swift in Sources */,
 				783111A727EC70C3009B3114 /* WebVTTParser.swift in Sources */,
 				7831115927EC70C2009B3114 /* Started.swift in Sources */,
@@ -971,6 +976,7 @@
 				7831110C27EC70C2009B3114 /* HLSNative+ExposureContext+Timeshift.swift in Sources */,
 				783111AA27EC70C3009B3114 /* DownloadOperation.swift in Sources */,
 				7831118627EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */,
+				DCD475992BCD028A00144496 /* TimelineContent.swift in Sources */,
 				7831110427EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7831113427EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */,
 				7831114227EC70C2009B3114 /* StopAirplay.swift in Sources */,
