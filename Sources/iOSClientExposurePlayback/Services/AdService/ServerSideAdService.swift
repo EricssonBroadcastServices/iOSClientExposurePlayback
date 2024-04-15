@@ -176,8 +176,8 @@ public class ServerSideAdService: AdService {
 
 // MARK: Playback
 extension ServerSideAdService {
-    func makeLastDigitZero(_ number: Int64) -> Int64 {
-        guard number != 0 else {
+    func makeLastDigitZero(_ number: Int64?) -> Int64 {
+        guard let number, number != 0 else {
             return 0
         }
         var num = number
@@ -258,27 +258,22 @@ extension ServerSideAdService {
         originalPosition = 0
         targetPosition = 0
         
-        let _ = self.allTimelineContent.enumerated().compactMap { index, content in
-            if var start = content.timeRange.start.milliseconds,
-               var end = content.timeRange.end.milliseconds,
-               var timeInMil = time.milliseconds {
-                
-                timeInMil = self.makeLastDigitZero(timeInMil)
-                start = self.makeLastDigitZero(start)
-                end = self.makeLastDigitZero(end)
-                
-                guard start.rounded() <= timeInMil.rounded(),
-                      end.rounded() >= timeInMil.rounded(),
-                      content.contentType == "ad"
-                else {
-                    return
-                }
-                
-                if !self.alreadyPlayedAds.contains(content) {
-                    handleNotWatchedYetAd(content, start, end, timeInMil)
-                } else {
-                    handleAlreadyWatchedAd(index, content)
-                }
+        self.allTimelineContent.enumerated().forEach { index, content in
+            let start = makeLastDigitZero(content.timeRange.start.milliseconds)
+            let end = makeLastDigitZero(content.timeRange.end.milliseconds)
+            let timeInMil = makeLastDigitZero(time.milliseconds)
+            
+            guard start.rounded() <= timeInMil.rounded(),
+                  end.rounded() >= timeInMil.rounded(),
+                  content.contentType == "ad"
+            else {
+                return
+            }
+            
+            if !self.alreadyPlayedAds.contains(content) {
+                handleNotWatchedYetAd(content, start, end, timeInMil)
+            } else {
+                handleAlreadyWatchedAd(index, content)
             }
         }
     }
@@ -287,7 +282,6 @@ extension ServerSideAdService {
         if let adClipIndex = self.allTimelineContent.firstIndex(
             where: { content.timeRange.containsTimeRange($0.timeRange) }
         ) {
-            
             let duration = end.rounded() - start.rounded()
             
             let clipFirstQuartile = (start + duration / 4).rounded()
