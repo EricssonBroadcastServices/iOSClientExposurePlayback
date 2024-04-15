@@ -176,7 +176,7 @@ public class ServerSideAdService: AdService {
 
 // MARK: Playback
 extension ServerSideAdService {
-    func makeLastDigitZero(_ number: Int64?) -> Int64 {
+    private func makeLastDigitZero(_ number: Int64?) -> Int64 {
         guard let number, number != 0 else {
             return 0
         }
@@ -567,7 +567,7 @@ extension ServerSideAdService {
         context.onPlaybackStartWithAds(vodDuration, totalAdDuration, totalDuration, adMarkerPositions)
     }
     
-     func prepareTimeline(_ clips: [AdClips], _ totalDuration: Int64, _ vodDuration: inout Int64) {
+    private func prepareTimeline(_ clips: [AdClips], _ totalDuration: Int64, _ vodDuration: inout Int64) {
         var currentDuration: Float = 0
         
         for (index, clip) in clips.enumerated() {
