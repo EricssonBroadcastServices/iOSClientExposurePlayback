@@ -194,19 +194,19 @@ extension ServerSideAdService {
                 return
             }
             
-            let isNonScrubbedSeek = targetPosition.rounded() != 0 && self.intendedScrubPosition == 0
-            let isResumingFromBookmark = targetPosition == 0 && originalPosition != 0
-            let shouldSeekToScrubbedPosition = isNonScrubbedSeek || isResumingFromBookmark
+            let isTargetPositionSet = targetPosition.rounded() != 0 && self.intendedScrubPosition == 0
+            let isOriginalPositionSet = originalPosition != 0 && targetPosition == 0
+            let shouldCheckSeekRangeForAds = isTargetPositionSet || isOriginalPositionSet
             
-            if shouldSeekToScrubbedPosition {
-                seekToScrubbedPosition(&originalPosition, &targetPosition)
+            if shouldCheckSeekRangeForAds {
+                checkSeekRangeForAds(&originalPosition, &targetPosition)
             } else {
-                checkForAds(time, &originalPosition, &targetPosition)
+                checkCurrentTimeForAds(time, &originalPosition, &targetPosition)
             }
         }
     }
     
-    private func seekToScrubbedPosition(_ originalPosition: inout Int64, _ targetPosition: inout Int64) {
+    private func checkSeekRangeForAds(_ originalPosition: inout Int64, _ targetPosition: inout Int64) {
         let range = CMTimeRange(
             start: CMTime(milliseconds: originalPosition),
             end: CMTime(milliseconds: targetPosition)
@@ -252,7 +252,7 @@ extension ServerSideAdService {
         self.context.onServerSideAdShouldSkip(Int64(adClip.contentStartTime + 100))
     }
     
-    private func checkForAds(_ time: CMTime, _ originalPosition: inout Int64, _ targetPosition: inout Int64) {
+    private func checkCurrentTimeForAds(_ time: CMTime, _ originalPosition: inout Int64, _ targetPosition: inout Int64) {
         originalPosition = 0
         targetPosition = 0
         
