@@ -31,7 +31,6 @@ import AVKit
           At the moment there is no support for the iOS. If Apple starts supporting Interstitial content for iOS in future, it will be a good idea to have a look at that.
 */
 public class ServerSideAdService: AdService {
-    
     let ads: Ads
     let clips:[AdClips]
     let context: ExposureContext
@@ -46,7 +45,7 @@ public class ServerSideAdService: AdService {
     /// This will store all the ads that are already played during the current session
     private var alreadyPlayedAds: [TimelineContent] = []
     
-	/// This property keep track of already started ads
+    /// This property keep track of already started ads
     private var alreadyStartedAds: [TimelineContent] = []
     
     /// Temporary store all adTracking urls of an Ad to prevent sending multiple trackings events to the backend
@@ -69,13 +68,20 @@ public class ServerSideAdService: AdService {
     /// Seek started from this position
     private var originalScrubPosition: Int64 = 0
     
-    // Variables use for calculating AdCounter values
+    /// Variables used for calculating AdCounter values
     private var previousVodClipIndex: Array<TimelineContent>.Index = 0
     private var nextVodClipIndex: Array<TimelineContent>.Index = 0
     private var numberOfAdsInAdBreak: Int = 0
     private var currentAdIndexInAdBreak: Int = 0
     
-    public init(ads: Ads, clips:[AdClips], context: ExposureContext, source: ExposureSource, durationInMs: Double, tech: HLSNative<ExposureContext>) {
+    public init(
+        ads: Ads,
+        clips: [AdClips],
+        context: ExposureContext,
+        source: ExposureSource,
+        durationInMs: Double,
+        tech: HLSNative<ExposureContext>
+    ) {
         self.ads = ads
         self.context = context
         self.source = source
@@ -84,7 +90,6 @@ public class ServerSideAdService: AdService {
         self.clips = clips
         
         self.deallocAll()
-        
     }
     
     public func playbackStarted() {
@@ -118,8 +123,6 @@ public class ServerSideAdService: AdService {
         self.currentAdIndexInAdBreak = 0
     }
     
-    
-    
     public func playbackFailed(error: NSError) {
         deallocAll()
     }
@@ -127,15 +130,13 @@ public class ServerSideAdService: AdService {
     /// Seek request initiated / scrubbing started
     /// - Parameter origin: fromPosition
     public func seekRequestInitiated(fromPosition origin: Int64) {
-
         // Note : Player sends multiple seek events when scrubbing through the tvOS timeline. This cause the bug that prevent player seek to mid roll ads, if a user seek beyond already unwatched ad.
         // To fix this issue, assume that `scrubbedFromPosition` is always zero when seeking in tvOS.
         #if TARGET_OS_TV
-            self.originalScrubPosition = 0
+        self.originalScrubPosition = 0
         #else
-            self.originalScrubPosition = origin
+        self.originalScrubPosition = origin
         #endif
-            
     }
     
     /// Seek request Triggered / scrub ended
@@ -150,7 +151,6 @@ public class ServerSideAdService: AdService {
     
     private func getNextClip( index:Int,_ completion: @escaping (Int?) -> Void) { }
     
-    
     /// Start Ad service when play back starts
     private func startAdService() {
         self.startObservingPlayer(
@@ -158,7 +158,6 @@ public class ServerSideAdService: AdService {
             targetScrubPosition: self.tech.playheadPosition
         )
     }
-    
     
     private func scrubbed(_ targetScrubPosition: Int64) {
         guard isSeekUserInitiated else {
@@ -173,19 +172,17 @@ public class ServerSideAdService: AdService {
     }
 }
 
-
 // MARK: Playback
 extension ServerSideAdService {
     private func makeLastDigitZero(_ number: Int64?) -> Int64 {
-        guard let number, number != 0 else {
+        guard var number, number != 0 else {
             return 0
         }
-        var num = number
-        let lastDigit = num % 10
-        
-        if lastDigit != 0 { num -= lastDigit }
-
-        return num
+        let lastDigit = number % 10
+        if lastDigit != 0 {
+            number -= lastDigit
+        }
+        return number
     }
     
     private func startObservingPlayer(originalScrubPosition: Int64, targetScrubPosition: Int64) {
@@ -242,7 +239,8 @@ extension ServerSideAdService {
         _ originalPosition: inout Int64,
         _ targetPosition: inout Int64
     ) {
-        // temporary store the previously assigned playhead time. After the ads are played, player will seek to this position
+        // Temporary store the previously assigned playhead time.
+        // After the ads are played, player will seek to this position
         self.intendedScrubPosition = targetPosition
         
         // reset temporary stored values
@@ -419,7 +417,7 @@ extension ServerSideAdService {
         } else {
             // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
             guard let vodClipIndex = self.allTimelineContent.firstIndex(
-                where: { $0.contentType != "ad" && ($0.contentStartTime + 10  > content.contentEndTime) }
+                where: { $0.contentType != "ad" && ($0.contentStartTime + 10 > content.contentEndTime) }
             ) else {
                 self.isSeekUserInitiated = true
                 return
@@ -442,7 +440,7 @@ extension ServerSideAdService {
             
             let adRange = CMTimeRange(
                 start: CMTime(milliseconds: Int64(startOffset)),
-                end: CMTime(milliseconds:  Int64(endOffset))
+                end: CMTime(milliseconds: Int64(endOffset))
             )
             
             return range.containsTimeRange(adRange)
@@ -506,7 +504,7 @@ extension ServerSideAdService {
                 nextVodClipIndex = next
             }
             numberOfAdsInAdBreak = nextVodClipIndex - previousVodClipIndex
-            currentAdIndexInAdBreak =  adClipIndex + 1 - previousVodClipIndex
+            currentAdIndexInAdBreak = adClipIndex + 1 - previousVodClipIndex
         }
         // There was a previous vod clip but no next vod clip. Should be a post roll ad break
         else {
@@ -539,7 +537,7 @@ extension ServerSideAdService {
     /// Prepare Ad service with initial clips & timeline content
     private func prepareAdService() {
         var vodDuration: Int64 = 0
-        var totalDuration: Int64  = 0
+        var totalDuration: Int64 = 0
         var totalAdDuration: Int64 = 0
         
         // Reset admarker arrays
@@ -549,7 +547,7 @@ extension ServerSideAdService {
         guard let clips = self.ads.clips else {
             return
         }
-            
+        
         // Total Duration in milliseconds
         let totalclipDuration = clips.compactMap { ($0.duration ?? 0) }.reduce(0, +)
         
@@ -579,7 +577,10 @@ extension ServerSideAdService {
             let clipStartTime = Double(currentDuration)
             let clipEndTime = Double(currentDuration + duration )
             
-            let timeRange = CMTimeRange(start: CMTime(milliseconds: Int64(clipStartTime)), end: CMTime(milliseconds: Int64(clipEndTime)))
+            let timeRange = CMTimeRange(
+                start: CMTime(milliseconds: Int64(clipStartTime)),
+                end: CMTime(milliseconds: Int64(clipEndTime))
+            )
             
             let timelineContent = TimelineContent(
                 contentType: clip.category,
@@ -602,8 +603,13 @@ extension ServerSideAdService {
                 // Clip is not an AD: Create a new ad marker if the tempAdMarkerPositions is not empty
                 // Check if there are any values in tempAdMarkerPositions.
                 // If so create a new adMarker with offset value of the first element & endoffset value from the last element
-                if let offset = tempAdMarkerPositions.first?.offset, let endOffset = tempAdMarkerPositions.last?.endOffset {
-                    let markerPoint = MarkerPoint(type: "Ad", offset: offset, endOffset: endOffset)
+                if let offset = tempAdMarkerPositions.first?.offset,
+                   let endOffset = tempAdMarkerPositions.last?.endOffset {
+                    let markerPoint = MarkerPoint(
+                        type: "Ad",
+                        offset: offset,
+                        endOffset: endOffset
+                    )
                     self.adMarkerPositions.append(markerPoint)
                     tempAdMarkerPositions.removeAll()
                 }
@@ -611,23 +617,45 @@ extension ServerSideAdService {
         }
     }
     
-    private func addAdMarkerOnTimeline(_ index: Int, _ duration: Float, _ currentDuration: inout Float, _ clips: [AdClips], _ totalDuration: Int64) {
+    private func addAdMarkerOnTimeline(
+        _ index: Int,
+        _ duration: Float,
+        _ currentDuration: inout Float,
+        _ clips: [AdClips],
+        _ totalDuration: Int64
+    ) {
         switch index {
         case 0:
-            let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
+            let markerPoint = MarkerPoint(
+                type: "Ad",
+                offset: 0,
+                endOffset: Int(duration)
+            )
             self.tempAdMarkerPositions.append(markerPoint)
             currentDuration = currentDuration + duration
         case 1 ..< clips.count - 1:
-            let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(currentDuration + duration))
+            let markerPoint = MarkerPoint(
+                type: "Ad",
+                offset: Int(currentDuration),
+                endOffset: Int(currentDuration + duration)
+            )
             currentDuration = currentDuration + duration
             self.tempAdMarkerPositions.append(markerPoint)
         case clips.count - 1:
             // If the last clip is an Ad, we check the tempAdMarkerPositions to find if there are any elements/ads before the last ad clip. If so, get the offSet value from the first element & use the totalDuration value as the endOffset
             if let offset = tempAdMarkerPositions.first?.offset {
-                let markerPoint = MarkerPoint(type: "Ad", offset: offset, endOffset: Int(totalDuration))
+                let markerPoint = MarkerPoint(
+                    type: "Ad",
+                    offset: offset,
+                    endOffset: Int(totalDuration)
+                )
                 self.adMarkerPositions.append(markerPoint)
             } else {
-                let markerPoint = MarkerPoint(type: "Ad", offset: Int(currentDuration), endOffset: Int(totalDuration))
+                let markerPoint = MarkerPoint(
+                    type: "Ad",
+                    offset: Int(currentDuration),
+                    endOffset: Int(totalDuration)
+                )
                 self.adMarkerPositions.append(markerPoint)
             }
             tempAdMarkerPositions.removeAll()
@@ -640,48 +668,29 @@ extension ServerSideAdService {
 
 // MARK: - Unused AdService protocol methods
 extension ServerSideAdService {
-    public func playbackReady() {
-        // print(" Play back ready ")
-    }
+    public func playbackReady() {}
     
-    public func playbackPaused() {
-        // self.timer?.invalidate()
-    }
+    public func playbackPaused() {}
     
-    public func playbackResumed() {
-        // playbackResumed
-    }
+    public func playbackResumed() {}
     
-    public func playbackBufferingStarted() {
-        // print(" playbackBufferingStarted")
-    }
+    public func playbackBufferingStarted() {}
     
-    public func playbackBufferingEnded() {
-        // print("playbackBufferingEnded")
-        
-    }
+    public func playbackBufferingEnded() {}
     
-    public func playbackTimedMetadata(metaData: Any?) {
-        // print(" playbackTimedMetadata " , (metaData: Any?) )
-    }
+    public func playbackTimedMetadata(metaData: Any?) {}
     
-    public func prepareAsset(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareAsset")
-    }
+    public func prepareAsset(source: URL, callback: @escaping (URL) -> Void) {}
     
-    public func prepareProgram(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareProgram")
-    }
+    public func prepareProgram(source: URL, callback: @escaping (URL) -> Void) {}
     
-    public func prepareChannel(source: URL, callback: @escaping (URL) -> Void) {
-        // print(" prepareChannel")
-    }
+    public func prepareChannel(source: URL, callback: @escaping (URL) -> Void) {}
 }
 
 // MARK: - Helper extensions
 /**
-The purpose of these extensions is to essentially remove the last digit of integer part
-and replace it with a zero, effectively rounding down to the nearest multiple of 10.
+ The purpose of these extensions is to essentially remove the last digit of integer part
+ and replace it with a zero, effectively rounding down to the nearest multiple of 10.
  **/
 private extension Double {
     func rounded() -> Int {
