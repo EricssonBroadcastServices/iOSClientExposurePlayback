@@ -41,16 +41,16 @@ public class ServerSideAdService: AdService {
     
     let policy = ContractRestrictionsPolicy()
     
-    fileprivate var allTimelineContent: [TimelineContent] = []
+    private var allTimelineContent: [TimelineContent] = []
     
     /// This will store all the ads that are already played during the current session
-    fileprivate var alreadyPlayedAds: [TimelineContent] = []
+    private var alreadyPlayedAds: [TimelineContent] = []
     
 	/// This property keep track of already started ads
-    fileprivate var alreadyStartedAds: [TimelineContent] = []
+    private var alreadyStartedAds: [TimelineContent] = []
     
     /// Temporary store all adTracking urls of an Ad to prevent sending multiple trackings events to the backend
-    fileprivate var alreadySentAdTrackingUrls: [[String]] = []
+    private var alreadySentAdTrackingUrls: [[String]] = []
     
     /// Whenver content type is not an`ad` append the first item from `tempAdMarkerPositions` & reset `tempAdMarkerPositions` array.
     private var adMarkerPositions: [MarkerPoint] = []
@@ -237,7 +237,7 @@ extension ServerSideAdService {
         seekToAd(adClip, &originalPosition, &targetPosition)
     }
     
-    fileprivate func seekToAd(
+    private func seekToAd(
         _ adClip: TimelineContent,
         _ originalPosition: inout Int64,
         _ targetPosition: inout Int64
@@ -278,7 +278,7 @@ extension ServerSideAdService {
         }
     }
     
-    fileprivate func handleNotWatchedYetAd(_ content: TimelineContent, _ start: Int64, _ end: Int64, _ timeInMil: Int64) {
+    private func handleNotWatchedYetAd(_ content: TimelineContent, _ start: Int64, _ end: Int64, _ timeInMil: Int64) {
         if let adClipIndex = self.allTimelineContent.firstIndex(
             where: { content.timeRange.containsTimeRange($0.timeRange) }
         ) {
@@ -307,7 +307,7 @@ extension ServerSideAdService {
         }
     }
     
-    fileprivate func sendTrackingEvents(_ point: [String]?) {
+    private func sendTrackingEvents(_ point: [String]?) {
         guard let point,
               !self.alreadySentAdTrackingUrls.contains(point)
         else {
@@ -318,7 +318,7 @@ extension ServerSideAdService {
         self.alreadySentAdTrackingUrls.append(point)
     }
     
-    fileprivate func handleAdEnd(_ clip: AdClips, _ content: TimelineContent) {
+    private func handleAdEnd(_ clip: AdClips, _ content: TimelineContent) {
         // Send EMP analytics
         if let adMediaId = clip.titleId {
             self.tech.currentSource?.analyticsConnector.providers
@@ -347,7 +347,7 @@ extension ServerSideAdService {
         self.alreadySentAdTrackingUrls.removeAll()
     }
     
-    fileprivate func handleAdStartWithDelay(
+    private func handleAdStartWithDelay(
         _ content: TimelineContent,
         _ start: Int64,
         _ end: Int64,
@@ -396,7 +396,7 @@ extension ServerSideAdService {
         )
     }
     
-    fileprivate func handleAlreadyWatchedAd(_ index: Int, _ content: TimelineContent) {
+    private func handleAlreadyWatchedAd(_ index: Int, _ content: TimelineContent) {
         // Check if we have a previously assigned destination
         if self.intendedScrubPosition != 0 {
             // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
@@ -463,7 +463,7 @@ extension ServerSideAdService {
     ///   - adClipIndex: adClipIndex
     ///   - end: end
     ///   - start: start
-    fileprivate func calculateAdCounterValues(
+    private func calculateAdCounterValues(
         _ adClipIndex: Array<TimelineContent>.Index,
         _ end: Int64,
         _ start: Int64
@@ -475,7 +475,7 @@ extension ServerSideAdService {
         }
     }
     
-    fileprivate func calculateAdCounterValuesForFirstAd(
+    private func calculateAdCounterValuesForFirstAd(
         _ adClipIndex: Array<TimelineContent>.Index,
         _ end: Int64
     ) {
@@ -492,7 +492,7 @@ extension ServerSideAdService {
         currentAdIndexInAdBreak = adClipIndex + 1
     }
     
-    fileprivate func calculateAdCounterValuesForNonFirstAd(
+    private func calculateAdCounterValuesForNonFirstAd(
         _ adClipIndex: Array<TimelineContent>.Index,
         _ end: Int64
     ) {
@@ -521,13 +521,13 @@ extension ServerSideAdService {
         }
     }
     
-    fileprivate func findNextNonAdClipIndex(after time: Int64) -> Int? {
+    private func findNextNonAdClipIndex(after time: Int64) -> Int? {
         return self.allTimelineContent.firstIndex {
             Int64($0.contentStartTime + 10 ) > time && $0.contentType != "ad"
         }
     }
     
-    fileprivate func findPreviousNonAdClipIndex(before time: Int64) -> Int? {
+    private func findPreviousNonAdClipIndex(before time: Int64) -> Int? {
         return self.allTimelineContent.lastIndex {
             Int64($0.contentEndTime ) < (time + 10) && $0.contentType != "ad"
         }
@@ -567,7 +567,7 @@ extension ServerSideAdService {
         context.onPlaybackStartWithAds(vodDuration, totalAdDuration, totalDuration, adMarkerPositions)
     }
     
-    fileprivate func prepareTimeline(_ clips: [AdClips], _ totalDuration: Int64, _ vodDuration: inout Int64) {
+     func prepareTimeline(_ clips: [AdClips], _ totalDuration: Int64, _ vodDuration: inout Int64) {
         var currentDuration: Float = 0
         
         for (index, clip) in clips.enumerated() {
@@ -611,7 +611,7 @@ extension ServerSideAdService {
         }
     }
     
-    fileprivate func addAdMarkerOnTimeline(_ index: Int, _ duration: Float, _ currentDuration: inout Float, _ clips: [AdClips], _ totalDuration: Int64) {
+    private func addAdMarkerOnTimeline(_ index: Int, _ duration: Float, _ currentDuration: inout Float, _ clips: [AdClips], _ totalDuration: Int64) {
         switch index {
         case 0:
             let markerPoint = MarkerPoint(type: "Ad", offset: 0, endOffset: (Int(duration)) )
@@ -683,19 +683,19 @@ extension ServerSideAdService {
 The purpose of these extensions is to essentially remove the last digit of integer part
 and replace it with a zero, effectively rounding down to the nearest multiple of 10.
  **/
-fileprivate extension Double {
+private extension Double {
     func rounded() -> Int {
         Int(self) / 10 * 10
     }
 }
 
-fileprivate extension Int {
+private extension Int {
     func rounded() -> Self {
         self / 10 * 10
     }
 }
 
-fileprivate extension Int64 {
+private extension Int64 {
     func rounded() -> Self {
         self / 10 * 10
     }
