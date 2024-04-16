@@ -679,24 +679,31 @@ extension ServerSideAdService {
 }
 
 // MARK: - Helper extensions
-/**
- The purpose of these extensions is to essentially remove the last digit of integer part
- and replace it with a zero, effectively rounding down to the nearest multiple of 10.
- **/
+// The purpose of these extensions is to round number to the nearest multiple of 10.
 private extension Double {
     func rounded() -> Int {
-        Int(self) / 10 * 10
+        Int(self.rounded(.toNearestOrAwayFromZero))
     }
 }
 
 private extension Int {
     func rounded() -> Self {
-        self / 10 * 10
+        let lastDigit = self % 10
+        if lastDigit < 5 {
+            return self - lastDigit
+        } else {
+            return self + 10 - lastDigit
+        }
     }
 }
 
 private extension Int64 {
     func rounded() -> Self {
-        self / 10 * 10
+        let lastDigit = self % 10
+        if lastDigit < 5 {
+            return self - lastDigit
+        } else {
+            return self + 10 - lastDigit
+        }
     }
 }
