@@ -238,22 +238,22 @@ extension ServerSideAdService {
         originalPosition = 0
         targetPosition = 0
         
-        guard let timeInMil = time.milliseconds?.rounded() else {
+        guard let timeInMiliseconds = time.milliseconds?.rounded() else {
             return
         }
         
         for (index, content) in allTimelineContent.enumerated() {
             guard let start = content.timeRange.start.milliseconds?.rounded(),
                   let end = content.timeRange.end.milliseconds?.rounded(),
-                  start <= timeInMil,
-                  end >= timeInMil,
+                  start <= timeInMiliseconds,
+                  end >= timeInMiliseconds,
                   content.contentType == "ad"
             else {
                 continue
             }
             
             if !alreadyPlayedAds.contains(content) {
-                handleNotWatchedYetAd(content, start, end, timeInMil)
+                handleNotWatchedYetAd(content, start, end, timeInMiliseconds)
             } else {
                 handleAlreadyWatchedAd(index, content)
             }
@@ -350,8 +350,7 @@ extension ServerSideAdService {
         _ timeInMiliseconds: Int64,
         _ adClipIndex: Array<TimelineContent>.Index
     ) {
-        // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
-        guard timeInMiliseconds.rounded() + 10 >= start.rounded() + 10,
+        guard timeInMiliseconds.rounded() >= start.rounded(),
               !alreadyStartedAds.contains(content)
         else {
             return
