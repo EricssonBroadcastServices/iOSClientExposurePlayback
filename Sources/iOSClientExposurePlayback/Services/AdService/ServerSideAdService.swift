@@ -332,15 +332,15 @@ extension ServerSideAdService {
             previousVodClipIndex = 0
             numberOfAdsInAdBreak = 0
             currentAdIndexInAdBreak = 0
+            
+            seekToIntendedScrubPosition()
         }
         
         // remove the temporary stored adTracking urls
         alreadySentAdTrackingUrls.removeAll()
-        
-        seekToIntendedScrubPositionIfNeeded()
     }
     
-    private func seekToIntendedScrubPositionIfNeeded() {
+    private func seekToIntendedScrubPosition() {
         guard let intendedScrubPosition else {
             return
         }
@@ -357,8 +357,7 @@ extension ServerSideAdService {
         _ adClipIndex: Array<TimelineContent>.Index
     ) {
         // Some content may not have the `timeInMil` 0 when start. It seems like `PeriodicTimeObserverToPlayer` may have a slight delay and then timeInMil may be higher than the `start`. [ Add a second condition to check if timeInMil is larger than start :=> Ad has already started] . But this will only run once when the ad has started.
-        guard timeInMiliseconds.rounded() + 10 == start.rounded() + 10 ||
-                timeInMiliseconds.rounded() + 10 > start.rounded() + 10,
+        guard timeInMiliseconds.rounded() + 10 >= start.rounded() + 10,
               !alreadyStartedAds.contains(content)
         else {
             return
@@ -503,13 +502,13 @@ extension ServerSideAdService {
     
     private func findNextNonAdClipIndex(after time: Int64) -> Int? {
         return allTimelineContent.firstIndex {
-            Int64($0.contentStartTime + 10 ) > time && $0.contentType != "ad"
+            Int64($0.contentStartTime + 10) > time && $0.contentType != "ad"
         }
     }
     
     private func findPreviousNonAdClipIndex(before time: Int64) -> Int? {
         return allTimelineContent.lastIndex {
-            Int64($0.contentEndTime ) < (time + 10) && $0.contentType != "ad"
+            Int64($0.contentEndTime) < (time + 10) && $0.contentType != "ad"
         }
     }
 }
