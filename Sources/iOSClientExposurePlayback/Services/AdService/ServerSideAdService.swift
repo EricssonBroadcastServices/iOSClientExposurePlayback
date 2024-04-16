@@ -63,7 +63,7 @@ public class ServerSideAdService: AdService {
     private var isSeekUserInitiated: Bool = true
     
     /// Use this as a temporary to store user's scrubbed / seek destination. When there is an `ad` in between current location & scrubbed destination, sdk will first play the `ad` & then jump to this scrubbed destination
-    private var intendedScrubPosition: Int64 = 0
+    private var intendedScrubPosition: Int64?
     
     /// Seek started from this position
     private var originalScrubPosition: Int64 = 0
@@ -113,7 +113,7 @@ public class ServerSideAdService: AdService {
         alreadySentAdTrackingUrls.removeAll()
         allTimelineContent.removeAll()
         adMarkerPositions.removeAll()
-        intendedScrubPosition = 0
+        intendedScrubPosition = nil
         originalScrubPosition = 0
         tech.removePeriodicTimeObserverToPlayer()
         isSeekUserInitiated = true
@@ -234,7 +234,6 @@ extension ServerSideAdService {
         originalPosition = 0
         targetPosition = 0
         
-        // Make it as SDK initiated seek.
         isSeekUserInitiated = false
         context.onServerSideAdShouldSkip(Int64(adClip.contentStartTime + 100))
     }
@@ -337,6 +336,17 @@ extension ServerSideAdService {
         
         // remove the temporary stored adTracking urls
         alreadySentAdTrackingUrls.removeAll()
+        
+        seekToIntendedScrubPositionIfNeeded()
+    }
+    
+    private func seekToIntendedScrubPositionIfNeeded() {
+        guard let intendedScrubPosition else {
+            return
+        }
+        isSeekUserInitiated = true
+        context.onServerSideAdShouldSkip(intendedScrubPosition)
+        self.intendedScrubPosition = nil
     }
     
     private func handleAdStartWithDelay(
@@ -390,41 +400,18 @@ extension ServerSideAdService {
     }
     
     private func handleAlreadyWatchedAd(_ index: Int, _ content: TimelineContent) {
-        // Check if we have a previously assigned destination
-        if intendedScrubPosition != 0 {
-            // Check if the next content is an Ad or not , if it's not assign the `tempDestination` & seek to that destination after the ad
-            guard index != allTimelineContent.count - 1,
-                  allTimelineContent[index+1].contentType != "ad"
-            else {
-                return
-            }
-            
-            // Make it as a user initiated seek
+        // Find the next `Non Ad` clip & seek to that
+        guard let vodClipIndex = allTimelineContent.firstIndex(
+            where: { $0.contentType != "ad" && ($0.contentStartTime + 10 > content.contentEndTime) }
+        ) else {
             isSeekUserInitiated = true
-            
-            let tempDestination = intendedScrubPosition
-            
-            // Reset oldScrubbedDestination value
-            intendedScrubPosition = 0
-            
-            // Inform the player that , it should seek to this position
-            context.onServerSideAdShouldSkip(tempDestination)
-        } else {
-            // There is no previously assigned destination. Find the next `Non Ad` clip & seek to that
-            guard let vodClipIndex = allTimelineContent.firstIndex(
-                where: { $0.contentType != "ad" && ($0.contentStartTime + 10 > content.contentEndTime) }
-            ) else {
-                isSeekUserInitiated = true
-                return
-            }
-            
-            let vodClip = allTimelineContent[vodClipIndex]
-            
-            // Make it as a SDK intiated seek
-            isSeekUserInitiated = false
-            
-            context.onServerSideAdShouldSkip( Int64(vodClip.contentStartTime + 1000) )
+            return
         }
+        
+        let vodClip = allTimelineContent[vodClipIndex]
+        
+        isSeekUserInitiated = false
+        context.onServerSideAdShouldSkip(Int64(vodClip.contentStartTime + 1000))
     }
     
     private func findAdBreakIndex(for range: CMTimeRange) -> Array<MarkerPoint>.Index? {
