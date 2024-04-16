@@ -226,6 +226,8 @@
 		7850406428AE1D020035D509 /* AVAudioSession+Airplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7850406228AE1D020035D509 /* AVAudioSession+Airplay.swift */; };
 		78FD660628E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
 		78FD660728E2E72D0074B31E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FD660528E2E72D0074B31E /* Version.swift */; };
+		DC40D4D72BCE90DB00976648 /* Collection+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */; };
+		DC40D4D82BCE90DB00976648 /* Collection+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */; };
 		DCD475992BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
 		DCD4759A2BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
 /* End PBXBuildFile section */
@@ -352,6 +354,7 @@
 		78BC171B29C1CE0400EE4D36 /* iOSClientExposurePlayback.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = iOSClientExposurePlayback.podspec; sourceTree = "<group>"; };
 		78FD660428E2E7150074B31E /* iOSClientExposurePlayback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSClientExposurePlayback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78FD660528E2E72D0074B31E /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+SafeIndex.swift"; sourceTree = "<group>"; };
 		DCD475982BCD028A00144496 /* TimelineContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -491,6 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				783110A827EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift */,
+				DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */,
 				783110A927EC70C2009B3114 /* PlaybackEntitlement+Extensions.swift */,
 				783110AA27EC70C2009B3114 /* String+Extensions.swift */,
 				783110AB27EC70C2009B3114 /* UIImage+Extension.swift */,
@@ -802,6 +806,7 @@
 				7831118327EC70C2009B3114 /* HeartbeatsProvider.swift in Sources */,
 				7831116327EC70C2009B3114 /* AdStarted.swift in Sources */,
 				7831114127EC70C2009B3114 /* Paused.swift in Sources */,
+				DC40D4D82BCE90DB00976648 /* Collection+SafeIndex.swift in Sources */,
 				7831110F27EC70C2009B3114 /* HLSNative+ExposureContext+Sprites.swift in Sources */,
 				783111B927EC70C3009B3114 /* ContractRestrictionsPolicy.swift in Sources */,
 				7831115527EC70C2009B3114 /* StartAirplay.swift in Sources */,
@@ -977,6 +982,7 @@
 				783111AA27EC70C3009B3114 /* DownloadOperation.swift in Sources */,
 				7831118627EC70C2009B3114 /* EntitlementSourceResponseHeaders.swift in Sources */,
 				DCD475992BCD028A00144496 /* TimelineContent.swift in Sources */,
+				DC40D4D72BCE90DB00976648 /* Collection+SafeIndex.swift in Sources */,
 				7831110427EC70C2009B3114 /* HLSNative+ExposureContext+Entitlements.swift in Sources */,
 				7831113427EC70C2009B3114 /* PlaybackEntitlementV2+Extension.swift in Sources */,
 				7831114227EC70C2009B3114 /* StopAirplay.swift in Sources */,
