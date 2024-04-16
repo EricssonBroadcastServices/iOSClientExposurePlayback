@@ -177,17 +177,15 @@ extension ServerSideAdService {
     private func startObservingPlayer(originalScrubPosition: Int64, targetScrubPosition: Int64) {
         var originalPosition = originalScrubPosition
         var targetPosition = targetScrubPosition
+        var isFirstTick = true
         
         self.tech.addPeriodicTimeObserverToPlayer { [weak self] time in
             guard let `self` = self else {
                 return
             }
             
-            let isTargetPositionSet = targetPosition.rounded() != 0 && self.intendedScrubPosition == 0
-            let isOriginalPositionSet = originalPosition != 0 && targetPosition == 0
-            let shouldCheckSeekRangeForAds = isTargetPositionSet || isOriginalPositionSet
-            
-            if shouldCheckSeekRangeForAds {
+            if isFirstTick {
+                isFirstTick = false
                 checkSeekRangeForAds(&originalPosition, &targetPosition)
             } else {
                 checkCurrentTimeForAds(time, &originalPosition, &targetPosition)
