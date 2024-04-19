@@ -230,6 +230,8 @@
 		DC40D4D82BCE90DB00976648 /* Collection+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */; };
 		DCD475992BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
 		DCD4759A2BCD028A00144496 /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD475982BCD028A00144496 /* TimelineContent.swift */; };
+		DCE67BC12BD27BA00059D6EC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DCE67BC02BD27BA00059D6EC /* PrivacyInfo.xcprivacy */; };
+		DCE67BC22BD27BA00059D6EC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DCE67BC02BD27BA00059D6EC /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -356,6 +358,7 @@
 		78FD660528E2E72D0074B31E /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		DC40D4D62BCE90DB00976648 /* Collection+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+SafeIndex.swift"; sourceTree = "<group>"; };
 		DCD475982BCD028A00144496 /* TimelineContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContent.swift; sourceTree = "<group>"; };
+		DCE67BC02BD27BA00059D6EC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -405,6 +408,7 @@
 				783110AE27EC70C2009B3114 /* Events */,
 				783110CB27EC70C2009B3114 /* Protocols */,
 				78FD660528E2E72D0074B31E /* Version.swift */,
+				DCE67BC02BD27BA00059D6EC /* PrivacyInfo.xcprivacy */,
 				783110D627EC70C2009B3114 /* Info.plist */,
 				783110D727EC70C2009B3114 /* Services */,
 			);
@@ -750,6 +754,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCE67BC22BD27BA00059D6EC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,6 +762,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCE67BC12BD27BA00059D6EC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

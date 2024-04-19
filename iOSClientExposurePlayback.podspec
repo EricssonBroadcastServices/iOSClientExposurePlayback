@@ -11,5 +11,6 @@ spec.source       = { :git => "https://github.com/EricssonBroadcastServices/iOSC
 spec.source_files  = "Sources/iOSClientExposurePlayback/**/*.swift"
 spec.dependency 'iOSClientExposure', '~>  3.7.0'
 spec.dependency 'iOSClientPlayer', '~>  3.5.0'
+spec.resource_bundles = { "iOSClientExposurePlayback.git" => ["Sources/iOSClientExposurePlayback/PrivacyInfo.xcprivacy"] }
 end
 
