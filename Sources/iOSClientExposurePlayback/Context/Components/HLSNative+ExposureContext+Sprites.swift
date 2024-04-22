@@ -37,7 +37,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             if let url = matchedSprite?.vtt {
                 spritesDownloader.removeData(fileType: .spritesData)
       
-                var spritedata = [SpriteData]()
+                var spriteDataArray = [SpriteData]()
                 
                     if let url = URL(string: url) {
                         
@@ -58,18 +58,16 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                                 
                                                 if let frame = cue.frame, let imageUrl = cue.imageUrl {
                                                     let sprite = SpriteData(duration: cue.duration, timelinePosition: cue.timing.start, startTime: cue.timeStart, endTime: cue.timeEnd, spriteImage: imageUrl, frame: frame)
-                                                    spritedata.append(sprite)
+                                                    spriteDataArray.append(sprite)
                                                     
                                                     imageUrls.append(imageUrl)
                                                 }
                                             }
                                             
                                             spritesDownloader.downloadImagesInQue(urlStrings: imageUrls, quality: quality)
-                                            
                                             self.listenToPlayBackAbort(assetId)
- 
-                                            spritesDownloader.save(object: spritedata, fileType: .spritesData)
-          
+                                            spritesDownloader.save(object: spriteDataArray, fileType: .spritesData)
+                                            callback(spriteDataArray, nil)
                                         } catch {
                                             callback(nil, ExposureError.generalError(error: error))
                                         }

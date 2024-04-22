@@ -114,9 +114,8 @@ extension SpriteImageDownloader {
     }
     
     public func save<T: Encodable>(object: T?, fileType: FileNameType) {
-        guard
-            let object,
-            let data = try? PropertyListEncoder().encode(object)
+        guard let object,
+              let data = try? PropertyListEncoder().encode(object)
         else {
             return
         }
