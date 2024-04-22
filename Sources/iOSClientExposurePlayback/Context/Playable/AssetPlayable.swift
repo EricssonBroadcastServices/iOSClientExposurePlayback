@@ -152,10 +152,7 @@ extension AssetPlayable {
                 // Dynamic catchup as live : treated as an `AssetSource`
                 else if value.streamInfo?.staticProgram == false && value.streamInfo?.start != nil {
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites,ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
@@ -164,10 +161,7 @@ extension AssetPlayable {
                 // Static catch up as live : treated as an `AssetSource`
                 else if value.streamInfo?.staticProgram == true && value.streamInfo?.end != nil {
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId,  streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads,  durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
@@ -177,10 +171,7 @@ extension AssetPlayable {
                 // Catchup :  treated as an `AssetSource`
                 else if value.streamInfo?.live == false && value.streamInfo?.staticProgram == false {
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads, durationInMs: value.durationInMs)
                     source.response = response
                     callback(source, nil)
@@ -190,10 +181,7 @@ extension AssetPlayable {
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites, ads: value.ads, durationInMs: value.durationInMs)
                     
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     source.response = response
                     callback(source, nil)
 
@@ -248,10 +236,7 @@ extension AssetPlayable {
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     
                     source.response = response
                     callback(source, nil, response)
@@ -262,10 +247,7 @@ extension AssetPlayable {
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     
                     source.response = response
                     callback(source, nil, response)
@@ -284,10 +266,7 @@ extension AssetPlayable {
                     let source = ProgramSource(entitlement: playbackEntitlement, assetId: self.assetId, channelId: value.streamInfo?.channelId ?? "", streamingInfo: value.streamInfo, sprites: value.sprites)
                     
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     
                     source.response = response
                     callback(source, nil, response)
@@ -298,10 +277,7 @@ extension AssetPlayable {
                     let source = AssetSource(entitlement: playbackEntitlement, assetId: self.assetId, streamingInfo: value.streamInfo, sprites: value.sprites)
 
                     // Add Sprites to userdefaults , so the sdk can use the cached sprites when user pass only the width
-                    SpriteImageDownloader(assetId: assetId).save(
-                        data: try? PropertyListEncoder().encode(value.sprites),
-                        fileType: .sprites
-                    )
+                    SpriteImageDownloader(assetId: assetId).save(object: value.sprites, fileType: .sprites)
                     
                     source.response = response
                     callback(source, nil, response)

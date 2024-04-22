@@ -71,10 +71,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                             self.listenToPlayBackAbort(assetId)
  
                                             // sets all the spritesData in to the userDefaults
-                                            SpriteImageDownloader(assetId: assetId).save(
-                                                data: try? PropertyListEncoder().encode(spritedata),
-                                                fileType: .spritesData
-                                            )
+                                            SpriteImageDownloader(assetId: assetId).save(object: spritedata, fileType: .spritesData)
           
                                         } catch {
                                             callback(nil, ExposureError.generalError(error: error))
