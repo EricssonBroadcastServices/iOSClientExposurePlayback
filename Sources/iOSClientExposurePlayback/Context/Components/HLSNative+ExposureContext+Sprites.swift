@@ -23,7 +23,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
     public func activateSprites(assetId: String, width: Int? = nil, quality: JPEGQuality = .highest, callback: @escaping ([SpriteData]?, Error?) -> Void) -> Self   {
         
         /// Find if there is any vtt file with the given resolution / width
-        if let data = UserDefaults.standard.value(forKey:"sprites") as? Data {
+        if let data = SpriteImageDownloader(assetId: assetId).getData(fileType: .sprites) {
             
             let sprites = try? PropertyListDecoder().decode(Array<Sprites>.self, from: data)
             
@@ -36,7 +36,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             if let url = matchedSprite?.vtt {
 
                 // Remove any spritesData cache available in the UserDefaults
-                UserDefaults.standard.removeObject(forKey: "spritesData")
+                SpriteImageDownloader(assetId: assetId).removeData(fileType: .spritesData)
       
                 var spritedata = [SpriteData]()
                 
@@ -71,7 +71,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                             self.listenToPlayBackAbort(assetId)
  
                                             // sets all the spritesData in to the userDefaults
-                                            UserDefaults.standard.set(try? PropertyListEncoder().encode(spritedata), forKey:"spritesData")
+                                            SpriteImageDownloader(assetId: assetId).save(
+                                                data: try? PropertyListEncoder().encode(spritedata),
+                                                fileType: .spritesData
+                                            )
           
                                         } catch {
                                             callback(nil, ExposureError.generalError(error: error))
@@ -120,7 +123,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let timelineTime = time.convertToTimeInterval()
 
             // get the cached sprites from the userdefaults
-            guard let data = UserDefaults.standard.value(forKey:"spritesData") as? Data else {
+            guard let data = SpriteImageDownloader(assetId: assetId).getData(fileType: .spritesData) else {
                 callback(nil, nil, nil )
                 return self
             }
