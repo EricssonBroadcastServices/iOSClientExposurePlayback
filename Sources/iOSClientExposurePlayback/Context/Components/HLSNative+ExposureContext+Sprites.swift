@@ -35,8 +35,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let matchedSprite = sprites?.first(where: { $0.width == spriteWidth })
 
             if let url = matchedSprite?.vtt {
-
-                // Remove any spritesData cache available in the UserDefaults
                 spritesDownloader.removeData(fileType: .spritesData)
       
                 var spritedata = [SpriteData]()
@@ -70,7 +68,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                             
                                             self.listenToPlayBackAbort(assetId)
  
-                                            // sets all the spritesData in to the userDefaults
                                             spritesDownloader.save(object: spritedata, fileType: .spritesData)
           
                                         } catch {
@@ -119,7 +116,6 @@ extension Player where Tech == HLSNative<ExposureContext> {
             let spritesDownloader = SpriteImageDownloader(assetId: assetId)
             let timelineTime = time.convertToTimeInterval()
 
-            // get the cached sprites from the userdefaults
             guard let data = spritesDownloader.getData(fileType: .spritesData) else {
                 callback(nil, nil, nil )
                 return self
