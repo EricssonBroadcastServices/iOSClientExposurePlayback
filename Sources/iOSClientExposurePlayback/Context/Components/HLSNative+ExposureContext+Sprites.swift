@@ -21,9 +21,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - callback: completion SpriteData array
     /// - Returns: self
     public func activateSprites(assetId: String, width: Int? = nil, quality: JPEGQuality = .highest, callback: @escaping ([SpriteData]?, Error?) -> Void) -> Self   {
+        let spritesDownloader = SpriteImageDownloader(assetId: assetId)
         
         /// Find if there is any vtt file with the given resolution / width
-        if let data = SpriteImageDownloader(assetId: assetId).getData(fileType: .sprites) {
+        if let data = spritesDownloader.getData(fileType: .sprites) {
             
             let sprites = try? PropertyListDecoder().decode(Array<Sprites>.self, from: data)
             
@@ -36,7 +37,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
             if let url = matchedSprite?.vtt {
 
                 // Remove any spritesData cache available in the UserDefaults
-                SpriteImageDownloader(assetId: assetId).removeData(fileType: .spritesData)
+                spritesDownloader.removeData(fileType: .spritesData)
       
                 var spritedata = [SpriteData]()
                 
@@ -65,13 +66,12 @@ extension Player where Tech == HLSNative<ExposureContext> {
                                                 }
                                             }
                                             
-                                            let imageDownloader = SpriteImageDownloader(assetId: assetId)
-                                            imageDownloader.downloadImagesInQue(urlStrings: imageUrls, quality: quality)
+                                            spritesDownloader.downloadImagesInQue(urlStrings: imageUrls, quality: quality)
                                             
                                             self.listenToPlayBackAbort(assetId)
  
                                             // sets all the spritesData in to the userDefaults
-                                            SpriteImageDownloader(assetId: assetId).save(object: spritedata, fileType: .spritesData)
+                                            spritesDownloader.save(object: spritedata, fileType: .spritesData)
           
                                         } catch {
                                             callback(nil, ExposureError.generalError(error: error))
@@ -116,11 +116,11 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - callback: completion : sprite image
     /// - Returns: self
         public func getSprite(time: String, assetId: String, callback: @escaping (UIImage?, TimeInterval? , TimeInterval? ) -> Void) -> Self  {
-            
+            let spritesDownloader = SpriteImageDownloader(assetId: assetId)
             let timelineTime = time.convertToTimeInterval()
 
             // get the cached sprites from the userdefaults
-            guard let data = SpriteImageDownloader(assetId: assetId).getData(fileType: .spritesData) else {
+            guard let data = spritesDownloader.getData(fileType: .spritesData) else {
                 callback(nil, nil, nil )
                 return self
             }
@@ -134,8 +134,7 @@ extension Player where Tech == HLSNative<ExposureContext> {
                 return self
             }
             
-            let imageDownloader = SpriteImageDownloader(assetId: assetId)
-            imageDownloader.loadImage(url: imageUrl, completion: { image , error in
+            spritesDownloader.loadImage(url: imageUrl, completion: { image , error in
                 if let image = image {
                         guard let newCGImage = image.cgImage?.cropping(to: CGRect(x: x, y: y, width: width, height: height)) else { return }
                         
@@ -156,10 +155,10 @@ extension Player where Tech == HLSNative<ExposureContext> {
     /// - Parameter assetId: assetId
     public func listenToPlayBackAbort(_ assetId: String) {
         self.onPlaybackAborted(callback: {_,_ in
-            let imageDownloader = SpriteImageDownloader(assetId: assetId)
-            imageDownloader.removeDownloadedSprites()
-            imageDownloader.cleanTmpCache()
-            imageDownloader.cancelAllDownloads()
+            let spritesDownloader = SpriteImageDownloader(assetId: assetId)
+            spritesDownloader.removeDownloadedSprites()
+            spritesDownloader.cleanTmpCache()
+            spritesDownloader.cancelAllDownloads()
         })
     }
 }
