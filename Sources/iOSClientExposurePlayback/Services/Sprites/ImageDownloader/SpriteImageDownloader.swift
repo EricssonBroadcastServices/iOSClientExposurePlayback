@@ -121,7 +121,6 @@ extension SpriteImageDownloader {
         }
         
         let imageFileManager = ImageFileManager(assetId: assetId)
-        
         imageFileManager.createDirectory()
         
         guard let directoryURL = imageFileManager.getDirectoryUrl() else {
@@ -146,6 +145,7 @@ extension SpriteImageDownloader {
             return
         }
         let fileURL =  directoryURL.appendingPathComponent(fileType.rawValue)
+        
         try? FileManager.default.removeItem(at: fileURL)
     }
 }
