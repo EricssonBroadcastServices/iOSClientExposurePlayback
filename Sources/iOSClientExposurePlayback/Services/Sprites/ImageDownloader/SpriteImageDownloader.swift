@@ -113,7 +113,7 @@ extension SpriteImageDownloader {
         case sprites
     }
     
-    public func save<T: Encodable>(object: T?, fileType: FileNameType) {
+    func save<T: Encodable>(object: T?, fileType: FileNameType) {
         guard let object,
               let data = try? PropertyListEncoder().encode(object)
         else {
@@ -132,7 +132,7 @@ extension SpriteImageDownloader {
         try? data.write(to: fileURL)
     }
     
-    public func getData(fileType: FileNameType) -> Data? {
+    func getData(fileType: FileNameType) -> Data? {
         guard let directoryURL = ImageFileManager(assetId: assetId).getDirectoryUrl() else {
             return nil
         }
@@ -141,7 +141,7 @@ extension SpriteImageDownloader {
         return try? Data(contentsOf: fileURL)
     }
     
-    public func removeData(fileType: FileNameType) {
+    func removeData(fileType: FileNameType) {
         guard let directoryURL = ImageFileManager(assetId: assetId).getDirectoryUrl() else {
             return
         }
