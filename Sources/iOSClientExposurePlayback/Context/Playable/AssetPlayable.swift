@@ -120,8 +120,10 @@ extension AssetPlayable {
     }
     
     internal func prepareAssetSource(environment: Environment, sessionToken: SessionToken, adsOptions:AdsOptions?, adobePrimetimeMediaToken: String?, materialProfile: String?, customAdParams: [String:Any]?, metadataIdentifiers: [String]?, deviceMake:String?, deviceModel: String?, callback: @escaping (ExposureSource?, ExposureError?) -> Void) {
-        let spritesDownloader = SpriteImageDownloader(assetId: assetId)
+        // Remove values that were stored in UserDefaults before migration to FileManager
+        UserDefaults.standard.removeObject(forKey: "sprites")
         
+        let spritesDownloader = SpriteImageDownloader(assetId: assetId)
         spritesDownloader.removeData(fileType: .sprites)
         
         entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel) { entitlementV1, entitlementV2, error, response in
@@ -204,8 +206,10 @@ extension AssetPlayable {
 
 extension AssetPlayable {
     public func prepareSourceWithResponse(environment: Environment, sessionToken: SessionToken, adsOptions: AdsOptions?, adobePrimetimeMediaToken:String?, materialProfile: String?, customAdParams: [String:Any]?, deviceMake:String?, deviceModel: String?, metadataIdentifiers: [String], activateSprite callback: @escaping (ExposureSource?, ExposureError?, HTTPURLResponse?) -> Void) {
-        let spritesDownloader = SpriteImageDownloader(assetId: assetId)
+        // Remove values that were stored in UserDefaults before migration to FileManager
+        UserDefaults.standard.removeObject(forKey: "sprites")
         
+        let spritesDownloader = SpriteImageDownloader(assetId: assetId)
         spritesDownloader.removeData(fileType: .sprites)
         
         entitlementProvider.requestEntitlementV2(assetId: assetId, using: sessionToken, in: environment, include: adsOptions, adobePrimetimeMediaToken: adobePrimetimeMediaToken, materialProfile: materialProfile, customAdParams: customAdParams, deviceMake: deviceMake, deviceModel: deviceModel) { entitlementV1, entitlementV2, error, response in

@@ -21,6 +21,9 @@ extension Player where Tech == HLSNative<ExposureContext> {
     ///   - callback: completion SpriteData array
     /// - Returns: self
     public func activateSprites(assetId: String, width: Int? = nil, quality: JPEGQuality = .highest, callback: @escaping ([SpriteData]?, Error?) -> Void) -> Self   {
+        // Remove values that were stored in UserDefaults before migration to FileManager
+        UserDefaults.standard.removeObject(forKey: "spritesData")
+        
         let spritesDownloader = SpriteImageDownloader(assetId: assetId)
         
         /// Find if there is any vtt file with the given resolution / width
