@@ -106,10 +106,46 @@ internal class SpriteImageDownloader {
     }
 }
 
-
-
-
-
-
-
-
+// MARK: - Saving and loading data
+extension SpriteImageDownloader {
+    enum FileNameType: String {
+        case spritesData
+        case sprites
+    }
+    
+    func save<T: Encodable>(object: T?, fileType: FileNameType) {
+        guard let object,
+              let data = try? PropertyListEncoder().encode(object)
+        else {
+            return
+        }
+        
+        let imageFileManager = ImageFileManager(assetId: assetId)
+        imageFileManager.createDirectory()
+        
+        guard let directoryURL = imageFileManager.getDirectoryUrl() else {
+            return
+        }
+        let fileURL = directoryURL.appendingPathComponent(fileType.rawValue)
+        
+        try? data.write(to: fileURL)
+    }
+    
+    func getData(fileType: FileNameType) -> Data? {
+        guard let directoryURL = ImageFileManager(assetId: assetId).getDirectoryUrl() else {
+            return nil
+        }
+        let fileURL =  directoryURL.appendingPathComponent(fileType.rawValue)
+        
+        return try? Data(contentsOf: fileURL)
+    }
+    
+    func removeData(fileType: FileNameType) {
+        guard let directoryURL = ImageFileManager(assetId: assetId).getDirectoryUrl() else {
+            return
+        }
+        let fileURL =  directoryURL.appendingPathComponent(fileType.rawValue)
+        
+        try? FileManager.default.removeItem(at: fileURL)
+    }
+}
