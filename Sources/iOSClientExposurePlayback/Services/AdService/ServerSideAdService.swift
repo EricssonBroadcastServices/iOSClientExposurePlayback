@@ -231,7 +231,8 @@ extension ServerSideAdService {
         targetPosition = 0
         
         isSeekUserInitiated = false
-        context.onServerSideAdShouldSkip(Int64(adClip.contentStartTime + 100))
+        
+        context.onServerSideAdShouldSkip(Int64(adClip.contentStartTime))
     }
     
     private func checkCurrentTimeForAds(_ time: CMTime, _ originalPosition: inout Int64, _ targetPosition: inout Int64) {
