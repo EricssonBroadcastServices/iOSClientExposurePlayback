@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* `3.15.1` Release - [3.15.1](#3151)
 * `3.15.0` Release - [3.15.0](#3150)
 * `3.14.0` Release - [3.14.0](#3140)
 * `3.13.0` Release - [3.13.0](#3130)
@@ -74,6 +75,10 @@
 * `2.0.79` Release - [2.0.79](#2079)
 * `2.0.78` Release - [2.0.78](#2078)
 * `0.77.x` Releases - [0.77.0](#0770)
+
+## 3.15.1
+#### Changes
+* [EMP-21873] fix: Ads playback issues and next episode bug
 
 ## 3.15.0
 #### Changes
